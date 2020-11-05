@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "503042129134",
+    "firebase_url": "https://plansplit.firebaseio.com",
+    "project_id": "plansplit",
+    "storage_bucket": "plansplit.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:503042129134:android:e499fee4e25b5d126587ff",
+        "android_client_info": {
+          "package_name": "com.example.plansplit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "503042129134-0263duru9jp3anv0n42etuu4gjc03hks.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.plansplit",
+            "certificate_hash": "4cc82d0c53a9fe1b77b7bdd6335bfef495f94ed6"
+          }
+        },
+        {
+          "client_id": "503042129134-h3kphilhs7ofn5i2njqvgnnrnmr3l9ba.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDNDbSFGvksP0tmfqaswil9KPHtcz48bDY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "503042129134-h3kphilhs7ofn5i2njqvgnnrnmr3l9ba.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
