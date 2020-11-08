@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">PlanSplit</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_app">Plan &amp; Split</string>
+    <string name="title_personal">Kişisel</string>
+    <string name="title_friends">Arkadaşlar</string>
+    <string name="settings">Ayarlar</string>
+    <string name="title_notifications">Bildirimler</string>
 </resources>
