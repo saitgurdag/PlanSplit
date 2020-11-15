@@ -62,7 +62,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
 
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_friends, R.id.navigation_personal,R.id.navigation_groups, R.id.navigation_notifications)
+                R.id.navigation_personal, R.id.navigation_friends, R.id.navigation_groups, R.id.navigation_notifications)
 
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
