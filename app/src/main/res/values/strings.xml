@@ -14,5 +14,17 @@
     <string name="navigation_drawer_close"> Close navigation drawer</string>
     <string name="navigation_drawer_open"> Open navigation drawer</string>
     <string name="title_app">Plan &amp; Split</string>
+    <string name="personal_debt">Borç</string>
+    <string name="personal_due">Alacak</string>
+    <string name="total">Toplam</string>
+    <string name="expense_desc">Harcama Açıklaması</string>
+    <string name="expense_count">Harcama Miktarı</string>
+    <string name="payer">Ödeyen</string>
+    <string name="partition_method">Paylaşma Yöntemi</string>
+    <string name="save">Kaydet</string>
+    <string name="persons_groups">Kişiler veya Gruplar:</string>
+    <string name="persons_groups_inexpense">Harcamaya dahil olan kişiler veya grupları seçiniz</string>
+    <string name="calendar">Takvim</string>
+    <string name="note">Not</string>
     <string name="title_logout">Log Out</string>
 </resources>

@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
+
+    <item
+        android:id="@+id/navigation_friends"
+        android:icon="@drawable/ic_dashboard_black_24dp"
+        android:title="@string/title_friends" />
+
     <item
         android:id="@+id/navigation_friends"
         android:icon="@drawable/ic_friends_24px"
@@ -13,9 +19,11 @@
         android:id="@+id/navigation_groups"
         android:icon="@drawable/groups_24px"
         android:title="@string/title_groups" />
+
     <item
         android:id="@+id/navigation_notifications"
         android:icon="@drawable/ic_notifications_black_24dp"
         android:title="@string/title_notifications" />
+
 
 </menu>

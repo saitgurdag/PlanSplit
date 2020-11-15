@@ -17,4 +17,10 @@
     <color name="black">#000000</color>
     <color name="red">#EA3864</color>
     <color name="blue">#2496EF</color>
+    <color name="white">#FFFFFF</color>
+    <color name="button_green">#8CC2BB</color>
+    <color name="line_grey">#E8ECF2</color>
+    <color name="shadow_text">#B5BFD0</color>
+    <color name="group_border_red">#FF5D5D</color>
+    <color name="group_border_green">#28DF99</color>
 </resources>
