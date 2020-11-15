@@ -18,7 +18,7 @@
             android:id="@+id/myToolBar"
             android:layout_width="match_parent"
             android:layout_height="88dp"
-            android:background="@drawable/ic__actionbar_background"
+            android:background="@drawable/ic_actionbar_background"
             android:gravity="center"
             android:minHeight="?attr/actionBarSize"
             android:textAlignment="center"
@@ -43,16 +43,17 @@
             app:layout_constraintRight_toRightOf="parent"
             app:menu="@menu/bottom_nav_menu" />
 
-    <fragment
-        android:id="@+id/nav_host_fragment"
-        android:name="androidx.navigation.fragment.NavHostFragment"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:defaultNavHost="true"
-        app:layout_constraintBottom_toTopOf="@id/nav_view"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:navGraph="@navigation/mobile_navigation" />
+        <fragment
+            android:id="@+id/nav_host_fragment"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:defaultNavHost="true"
+            app:layout_constraintBottom_toTopOf="@id/nav_view"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/myToolBar"
+            app:navGraph="@navigation/mobile_navigation" />
 
 
 
@@ -62,7 +63,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-
+        android:id="@+id/nav_draw_view"
         app:headerLayout="@layout/nav_header"
         app:layout_constraintStart_toStartOf="@+id/nav_host_fragment"
         app:menu="@menu/nav_drawer_menu" />
