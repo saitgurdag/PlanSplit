@@ -23,6 +23,7 @@
         android:label="@string/title_groups"
         tools:layout="@layout/fragment_groups" />
 
+
     <fragment
         android:id="@+id/navigation_notifications"
         android:name="com.example.plansplit.ui.notifications.NotificationsFragment"

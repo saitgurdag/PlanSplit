@@ -6,8 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.friends.FriendsFragment">
 
-
-
     <TextView
         android:id="@+id/text_friends"
         android:layout_width="match_parent"

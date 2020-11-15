@@ -13,7 +13,6 @@
         android:id="@+id/navigation_groups"
         android:icon="@drawable/groups_24px"
         android:title="@string/title_groups" />
-
     <item
         android:id="@+id/navigation_notifications"
         android:icon="@drawable/ic_notifications_black_24dp"
