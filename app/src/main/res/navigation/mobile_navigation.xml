@@ -3,7 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_personal">
+    app:startDestination="@+id/navigation_friends">
+
+    <fragment
+        android:id="@+id/navigation_friends"
+        android:name="com.example.plansplit.ui.friends.FriendsFragment"
+        android:label="@string/title_friends"
+        tools:layout="@layout/fragment_friends" />
 
     <fragment
         android:id="@+id/navigation_personal"
@@ -12,10 +18,11 @@
         tools:layout="@layout/fragment_personal" />
 
     <fragment
-        android:id="@+id/navigation_friends"
-        android:name="com.example.plansplit.ui.friends.FriendsFragment"
-        android:label="@string/title_friends"
-        tools:layout="@layout/fragment_friends" />
+        android:id="@+id/navigation_groups"
+        android:name="com.example.plansplit.ui.groups.GroupsFragment"
+        android:label="@string/title_groups"
+        tools:layout="@layout/fragment_groups" />
+
 
     <fragment
         android:id="@+id/navigation_notifications"
