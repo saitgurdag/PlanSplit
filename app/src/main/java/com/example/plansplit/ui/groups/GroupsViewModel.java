@@ -1,11 +1,11 @@
 package com.example.plansplit.ui.groups;
 
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 public class GroupsViewModel extends ViewModel {
-
     private MutableLiveData<String> mText;
 
     public GroupsViewModel() {

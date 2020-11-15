@@ -8,13 +8,16 @@
         android:title="@string/title_friends" />
 
     <item
+        android:id="@+id/navigation_friends"
+        android:icon="@drawable/ic_friends_24px"
+        android:title="@string/title_friends" />
+    <item
         android:id="@+id/navigation_personal"
         android:icon="@drawable/ic_home_black_24dp"
         android:title="@string/title_personal" />
-
     <item
         android:id="@+id/navigation_groups"
-        android:icon="@drawable/ic_baseline_group_24"
+        android:icon="@drawable/groups_24px"
         android:title="@string/title_groups" />
 
     <item

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="1024dp"
+    android:height="662dp"
+    android:viewportWidth="1024"
+    android:viewportHeight="662">
+
+    <path
+        android:name="Union_1-2"
+        android:fillColor="#056676"
+        android:pathData="M-4665,654 L-4665,388.243 C-4783.34,375.505,-4885.39,352.163,-4959,321.937
+L-4959,93.081 C-4845.05,46.292,-4662.97,16,-4457.79,16
+C-4254.06,16,-4073.1,45.868,-3959,92.092 L-3959,322.926
+C-4032.93,352.878,-4134.92,375.961,-4253,388.502 L-4253,654 Z" />
+</vector>
