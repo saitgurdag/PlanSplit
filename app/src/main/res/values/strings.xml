@@ -5,4 +5,17 @@
     <string name="title_friends">Arkadaşlar</string>
     <string name="settings">Ayarlar</string>
     <string name="title_notifications">Bildirimler</string>
+    <string name="title_groups">Gruplar</string>
+    <string name="personal_debt">Borç</string>
+    <string name="personal_due">Alacak</string>
+    <string name="total">Toplam</string>
+    <string name="expense_desc">Harcama Açıklaması</string>
+    <string name="expense_count">Harcama Miktarı</string>
+    <string name="payer">Ödeyen</string>
+    <string name="partition_method">Paylaşma Yöntemi</string>
+    <string name="save">Kaydet</string>
+    <string name="persons_groups">Kişiler veya Gruplar:</string>
+    <string name="persons_groups_inexpense">Harcamaya dahil olan kişiler veya grupları seçiniz</string>
+    <string name="calendar">Takvim</string>
+    <string name="note">Not</string>
 </resources>
