@@ -1,4 +1,4 @@
-package com.example.plansplit.ui.notifications;
+package com.example.plansplit.ui.ShareMethod;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -14,14 +14,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.plansplit.Adapters.ShareMethodAdapter;
 import com.example.plansplit.R;
-import com.example.plansplit.ui.personal.ShareMethodPerson;
+import com.example.plansplit.Objects.ShareMethodPerson;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ShareMethodFragment extends Fragment {
     private static final String TAG = "ShareMethodFragment";
-    private com.example.plansplit.ui.notifications.ShareMethodViewModel ShareMethodViewModel;
+    private com.example.plansplit.ui.ShareMethod.ShareMethodViewModel ShareMethodViewModel;
     RecyclerView recyclerView;
     ShareMethodAdapter adapter;
     List<ShareMethodPerson> ShareGroupsPersonList;
@@ -30,7 +30,7 @@ public class ShareMethodFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
 
         ShareMethodViewModel =
-                ViewModelProviders.of(this).get(ShareMethodViewModel.class);
+                ViewModelProviders.of(this).get(com.example.plansplit.ui.ShareMethod.ShareMethodViewModel.class);
         View root = inflater.inflate(R.layout.fragment_dialog_share_method, container, false);
 
         recyclerView = (RecyclerView) root.findViewById(R.id.recycler_share_method);

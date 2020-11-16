@@ -34,4 +34,6 @@
     <string name="calendar">Takvim</string>
     <string name="note">Not</string>
     <string name="title_logout">Log Out</string>
+    <string name="friend_amount_user_owes">Borçlusun</string>
+    <string name="friend_amount_friend_owes">Borçlu</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.example.plansplit.ui.notifications;
+package com.example.plansplit.ui.addgroups;
 
 
 import androidx.lifecycle.LiveData;

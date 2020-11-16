@@ -1,4 +1,4 @@
-package com.example.plansplit.ui.notifications;
+package com.example.plansplit.ui.ShareMethod;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

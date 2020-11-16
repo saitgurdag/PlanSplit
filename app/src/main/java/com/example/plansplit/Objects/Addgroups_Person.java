@@ -1,4 +1,4 @@
-package com.example.plansplit.ui;
+package com.example.plansplit.Objects;
 
 public class Addgroups_Person {
     private String name;
