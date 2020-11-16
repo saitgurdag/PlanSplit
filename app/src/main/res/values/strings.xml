@@ -14,6 +14,13 @@
     <string name="navigation_drawer_close"> Close navigation drawer</string>
     <string name="navigation_drawer_open"> Open navigation drawer</string>
     <string name="title_app">Plan &amp; Split</string>
+    <string-array name="shareMethodSpinnerItems">
+        <item>Eşit paylaşım</item>
+        <item>Düzensiz paylaşım</item>
+        <item>Yüzdeliğe göre paylaşım</item>
+        <item>Paya göre paylaşım</item>
+        <item>Fazlalığa göre paylaşım</item>
+    </string-array>
     <string name="personal_debt">Borç</string>
     <string name="personal_due">Alacak</string>
     <string name="total">Toplam</string>

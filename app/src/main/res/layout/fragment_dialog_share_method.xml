@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/dialog_bg">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_share_method"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingHorizontal="5dp"
+        android:layout_marginTop="150dp"
+        android:layout_marginBottom="100dp"
+        tools:listitem="@layout/item_share_method_persons">
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <Spinner
+        android:id="@+id/shareMethodSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/recycler_share_method"
+        android:entries="@array/shareMethodSpinnerItems"
+
+        />
+
+    <Button
+        android:id="@+id/buttonShareMethodOk"
+        android:layout_width="76dp"
+        android:layout_height="38dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="36dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:text="Ok"
+        android:textColor="#4CAF50"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recycler_share_method" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
