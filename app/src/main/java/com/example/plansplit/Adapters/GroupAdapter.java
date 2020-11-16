@@ -9,7 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.plansplit.Groups;
+import com.example.plansplit.Objects.Groups;
 import com.example.plansplit.R;
 
 import java.util.ArrayList;

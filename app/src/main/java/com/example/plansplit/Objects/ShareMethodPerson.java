@@ -1,4 +1,4 @@
-package com.example.plansplit.ui.personal;
+package com.example.plansplit.Objects;
 
 public class ShareMethodPerson {
     private String name;

@@ -10,7 +10,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.plansplit.R;
-import com.example.plansplit.ui.Addgroups_Person;
+import com.example.plansplit.Objects.Addgroups_Person;
 
 import java.util.List;
 

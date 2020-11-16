@@ -1,4 +1,4 @@
-package com.example.plansplit.ui.notifications;
+package com.example.plansplit.ui.addgroups;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.plansplit.Adapters.AddGroupsAdapter;
 import com.example.plansplit.R;
-import com.example.plansplit.ui.Addgroups_Person;
+import com.example.plansplit.Objects.Addgroups_Person;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +22,7 @@ import java.util.List;
 public class AddGroupsFragment extends Fragment {
 
     private static final String TAG = "AddGroupsFragment";
-    private com.example.plansplit.ui.notifications.AddGroupsViewModel AddGroupsViewModel;
+    private com.example.plansplit.ui.addgroups.AddGroupsViewModel AddGroupsViewModel;
     RecyclerView recyclerView;
     AddGroupsAdapter adapter;
     List<Addgroups_Person> AddGroupsPersonList;
@@ -31,7 +31,7 @@ public class AddGroupsFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
 
         AddGroupsViewModel =
-                ViewModelProviders.of(this).get(AddGroupsViewModel.class);
+                ViewModelProviders.of(this).get(com.example.plansplit.ui.addgroups.AddGroupsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_addgroups, container, false);
 
         recyclerView = (RecyclerView) root.findViewById(R.id.recycler_addgroups);

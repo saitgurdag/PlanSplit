@@ -1,4 +1,4 @@
-package com.example.plansplit;
+package com.example.plansplit.Objects;
 
 public class Groups {
     private int group_id;

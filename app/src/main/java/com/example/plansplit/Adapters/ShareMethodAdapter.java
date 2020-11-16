@@ -12,7 +12,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.plansplit.R;
-import com.example.plansplit.ui.personal.ShareMethodPerson;
+import com.example.plansplit.Objects.ShareMethodPerson;
 
 import java.util.List;
 
