@@ -7,5 +7,9 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
     </style>
+<style name="LoginTheme"
+    parent="Theme.AppCompat.Light.NoActionBar"
+    >
 
+</style>
 </resources>

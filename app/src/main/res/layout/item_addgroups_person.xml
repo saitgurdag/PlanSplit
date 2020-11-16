@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:gravity="center"
+    android:layout_marginBottom="3dp"
+    android:layout_marginTop="3dp"
+    android:layout_marginHorizontal="5dp">
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_addgroups_person"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="3dp"
+        app:cardUseCompatPadding="true">
+
+        <RelativeLayout
+            android:layout_width="386dp"
+            android:layout_height="61dp"
+            android:padding="8dp">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView_addgroupsPicture"
+                android:layout_width="43dp"
+                android:layout_height="39dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="3dp"
+                android:foreground="@drawable/addgroups_ustekran"
+                app:cardCornerRadius="50dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textViewName"
+                android:layout_width="231dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="5dp"
+                android:layout_toRightOf="@+id/cardView_addgroupsPicture"
+                android:text="Name"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/textViewMail"
+                android:layout_width="232dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="14dp"
+                android:layout_marginTop="30dp"
+                android:layout_toRightOf="@+id/cardView_addgroupsPicture"
+                android:text="Email"
+                android:textSize="8sp" />
+
+
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>

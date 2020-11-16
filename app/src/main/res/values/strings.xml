@@ -5,4 +5,11 @@
     <string name="title_friends">Arkadaşlar</string>
     <string name="settings">Ayarlar</string>
     <string name="title_notifications">Bildirimler</string>
+    <string-array name="shareMethodSpinnerItems">
+        <item>Eşit paylaşım</item>
+        <item>Düzensiz paylaşım</item>
+        <item>Yüzdeliğe göre paylaşım</item>
+        <item>Paya göre paylaşım</item>
+        <item>Fazlalığa göre paylaşım</item>
+    </string-array>
 </resources>
