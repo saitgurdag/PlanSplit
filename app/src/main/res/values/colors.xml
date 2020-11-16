@@ -15,8 +15,4 @@
     <color name="black">#000000</color>
     <color name="red">#EA3864</color>
     <color name="blue">#2496EF</color>
-    <color name="plan_split_light_blue">#8CC2BB</color>
-    <color name="plan_split_dark_blue">#056676</color>
-    <color name="plan_split_red">#EA3864</color>
-    <color name="plan_split_green">#28E88E</color>
 </resources>
