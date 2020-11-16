@@ -6,20 +6,28 @@
     app:startDestination="@+id/navigation_personal">
 
     <fragment
-        android:id="@+id/navigation_personal"
-        android:name="com.example.plansplit.ui.personal.PersonalFragment"
-        android:label="@string/title_personal"
-        tools:layout="@layout/fragment_personal" />
-
-    <fragment
         android:id="@+id/navigation_friends"
         android:name="com.example.plansplit.ui.friends.FriendsFragment"
         android:label="@string/title_friends"
         tools:layout="@layout/fragment_friends" />
 
     <fragment
+        android:id="@+id/navigation_personal"
+        android:name="com.example.plansplit.ui.personal.PersonalFragment"
+        android:label="@string/title_personal"
+        tools:layout="@layout/fragment_personal" />
+
+    <fragment
+        android:id="@+id/navigation_groups"
+        android:name="com.example.plansplit.ui.groups.GroupsFragment"
+        android:label="@string/title_groups"
+        tools:layout="@layout/fragment_groups" />
+
+
+    <fragment
         android:id="@+id/navigation_notifications"
         android:name="com.example.plansplit.ui.notifications.NotificationsFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_notifications" />
+
 </navigation>
