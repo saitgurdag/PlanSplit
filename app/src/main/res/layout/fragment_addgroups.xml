@@ -31,8 +31,7 @@
         android:layout_width="50dp"
         android:layout_height="20dp"
         android:layout_marginStart="12dp"
-        android:layout_marginBottom="2dp"
-        app:layout_constraintBottom_toTopOf="@+id/imageView8"
+        app:layout_constraintBottom_toTopOf="@+id/buttonMakeGroup"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.422"
         app:layout_constraintStart_toEndOf="@+id/textView10" />
@@ -42,9 +41,8 @@
         android:layout_width="181dp"
         android:layout_height="19dp"
         android:layout_marginStart="8dp"
-        android:layout_marginBottom="6dp"
         android:text="Çift doğrulamalı ödeme"
-        app:layout_constraintBottom_toTopOf="@+id/imageView8"
+        app:layout_constraintBottom_toTopOf="@+id/buttonMakeGroup"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
@@ -174,15 +172,6 @@
         app:layout_constraintBottom_toTopOf="@+id/textView10"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <ImageView
-        android:id="@+id/imageView8"
-        android:layout_width="407dp"
-        android:layout_height="57dp"
-        android:scaleType="fitXY"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/addgroups_bottom" />
-
     <Button
         android:id="@+id/buttonMakeGroup"
         android:layout_width="246dp"
@@ -202,7 +191,7 @@
         android:layout_marginStart="16dp"
 
         android:layout_marginTop="16dp"
-        android:foreground="@drawable/addgroups_ustekran"
+        android:foreground="@drawable/denemeresim"
         app:cardCornerRadius="50dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">

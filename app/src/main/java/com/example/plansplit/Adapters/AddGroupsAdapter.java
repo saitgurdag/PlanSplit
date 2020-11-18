@@ -10,13 +10,13 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.plansplit.R;
-import com.example.plansplit.Objects.Addgroups_Person;
+import com.example.plansplit.Objects.Person;
 
 import java.util.List;
 
 public class AddGroupsAdapter extends RecyclerView.Adapter<AddGroupsAdapter.AddGroupViewHolder> {
 
-    private List<Addgroups_Person> addgroups_personList;
+    private List<Person> addgroups_personList;
     Context nCtx;
     AddGroupsAdapter.OnItemClickListener nListener;
 
@@ -26,7 +26,7 @@ public class AddGroupsAdapter extends RecyclerView.Adapter<AddGroupsAdapter.AddG
     public void setOnItemClickListener(AddGroupsAdapter.OnItemClickListener listener){
         nListener = listener;
     }
-    public AddGroupsAdapter(Context nCtx, List<Addgroups_Person> addgroups_personList) {
+    public AddGroupsAdapter(Context nCtx, List<Person> addgroups_personList) {
         this.nCtx=nCtx;
         this.addgroups_personList=addgroups_personList;
     }
@@ -41,7 +41,7 @@ public class AddGroupsAdapter extends RecyclerView.Adapter<AddGroupsAdapter.AddG
 
     @Override
     public void onBindViewHolder(@NonNull AddGroupViewHolder holder, int position) {
-       Addgroups_Person addgroups_person = addgroups_personList.get(position);
+       Person addgroups_person = addgroups_personList.get(position);
        holder.Name.setText(addgroups_person.getName());
         holder.Mail.setText(addgroups_person.getMail());
        holder.cardView_addgroups.setForeground(nCtx.getResources().getDrawable(addgroups_person.getCardView_addgroupsPicture()));

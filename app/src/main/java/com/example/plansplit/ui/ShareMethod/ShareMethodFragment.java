@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.plansplit.Adapters.ShareMethodAdapter;
 import com.example.plansplit.R;
-import com.example.plansplit.Objects.ShareMethodPerson;
+import com.example.plansplit.Objects.Person;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +24,7 @@ public class ShareMethodFragment extends Fragment {
     private com.example.plansplit.ui.ShareMethod.ShareMethodViewModel ShareMethodViewModel;
     RecyclerView recyclerView;
     ShareMethodAdapter adapter;
-    List<ShareMethodPerson> ShareGroupsPersonList;
+    List<Person> ShareGroupsPersonList;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -39,14 +39,10 @@ public class ShareMethodFragment extends Fragment {
         recyclerView.setLayoutManager(mLayoutManager);
         ShareGroupsPersonList = new ArrayList<>();
 
-        ShareGroupsPersonList.add(new ShareMethodPerson("ali",R.drawable.addgroups_ustekran,0));
-        ShareGroupsPersonList.add(new ShareMethodPerson("veli",R.drawable.addgroups_ustekran,0));
-        ShareGroupsPersonList.add(new ShareMethodPerson("osman",R.drawable.addgroups_ustekran,0));
-        ShareGroupsPersonList.add(new ShareMethodPerson("mahmut",R.drawable.addgroups_ustekran,0));
-        ShareGroupsPersonList.add(new ShareMethodPerson("hüseyin",R.drawable.addgroups_ustekran,0));
-        ;
+        ShareGroupsPersonList.add(new Person("ali",R.drawable.denemeresim,0));
+        ShareGroupsPersonList.add(new Person("veli",R.drawable.denemeresim,0));
+        ShareGroupsPersonList.add(new Person("osman",R.drawable.denemeresim,0));
 
-        Log.d(TAG, "BURADA");
 
        adapter =new ShareMethodAdapter(this.getContext(),ShareGroupsPersonList);
        recyclerView.setAdapter(adapter);

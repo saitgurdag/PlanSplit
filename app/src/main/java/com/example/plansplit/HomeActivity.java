@@ -76,11 +76,14 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         }
 
         //----------------------------------------------------------------------
-        //firebase 'i denemek ve id yi realtime a kaydetmek için alt kısım
+        //firebase'e ilk girişte mail isim soyisim kayıt yapılıyor.
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
+
         DatabaseReference dbRef = database.getReference("users").child(personId);
-        dbRef.child("id").setValue("11111111");
+        dbRef.child("name").setValue(acct.getGivenName());
+        dbRef.child("surname").setValue(acct.getFamilyName());
+        dbRef.child("email").setValue(acct.getEmail());
 
         //----------------------------------------------------------------------
 

@@ -14,7 +14,7 @@
                 android:translateY="-9">
                 <path
                     android:pathData="M-4665 654V388.243c-118.336 -12.738 -220.388 -36.08 -294 -66.306V93.081C-4845.048 46.292 -4662.968 16 -4457.786 16 -4254.06 16 -4073.1 45.868 -3959 92.092V322.926c-73.932 29.952 -175.924 53.035 -294 65.576V654Z"
-                    android:fillColor="@color/plan_split_dark_blue" />
+                    android:fillColor="@color/darkGreen" />
             </group>
         </group>
     </group>
