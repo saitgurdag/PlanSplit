@@ -21,14 +21,14 @@ public class Friend{
         //fixme: firebasede borç pozitif mi negatif mi karar vermek lazım
         //eğer kullanıcı arkadaşa borçlu ise
         if(amount <= 0){
-            this.layout_background = R.drawable.friend_item_background_red;
+            this.layout_background = R.drawable.itemview_bg_border_red;
             this.image_background = R.drawable.circle_background_red;
-            this.color = R.color.plan_split_red;
+            this.color = R.color.red;
             this.amount_text =  R.string.friend_amount_user_owes;//borçlusun
         }else {
-            this.layout_background = R.drawable.friend_item_background_green;
+            this.layout_background = R.drawable.itemview_bg_border_green;
             this.image_background = R.drawable.circle_background_green;
-            this.color = R.color.plan_split_green;
+            this.color = R.color.brightGreen;
             this.amount_text = R.string.friend_amount_friend_owes;//borçlu
         }
     }

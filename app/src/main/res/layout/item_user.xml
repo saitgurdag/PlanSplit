@@ -19,7 +19,7 @@
         android:id="@+id/user_layout_friend"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/friend_item_background_red">
+        android:background="@drawable/itemview_bg_border_red">
 
         <FrameLayout
             android:id="@+id/user_frame_friend"

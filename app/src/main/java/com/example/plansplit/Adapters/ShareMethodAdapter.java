@@ -12,13 +12,13 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.plansplit.R;
-import com.example.plansplit.Objects.ShareMethodPerson;
+import com.example.plansplit.Objects.Person;
 
 import java.util.List;
 
 public class ShareMethodAdapter extends RecyclerView.Adapter<ShareMethodAdapter.ShareMethodViewHolder> {
 
-    List<ShareMethodPerson> shareMethodPersonList;
+    List<Person> shareMethodPersonList;
     Context kCtx;
     ShareMethodAdapter.OnItemClickListener kListener ;
 
@@ -30,7 +30,7 @@ public class ShareMethodAdapter extends RecyclerView.Adapter<ShareMethodAdapter.
         kListener = listener;
     }
 
-    public ShareMethodAdapter(Context kCtx,List<ShareMethodPerson> shareMethodPersonList ){
+    public ShareMethodAdapter(Context kCtx,List<Person> shareMethodPersonList ){
         this.kCtx = kCtx;
         this.shareMethodPersonList=shareMethodPersonList;
     }
@@ -48,7 +48,7 @@ public class ShareMethodAdapter extends RecyclerView.Adapter<ShareMethodAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ShareMethodViewHolder holder, int position) {
-    ShareMethodPerson shareMethodPerson = shareMethodPersonList.get(position);
+    Person shareMethodPerson = shareMethodPersonList.get(position);
     holder.checkButton.setActivated(false);
 
         holder.Name.setText(shareMethodPerson.getName());

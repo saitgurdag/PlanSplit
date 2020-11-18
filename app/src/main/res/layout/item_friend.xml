@@ -15,7 +15,7 @@
         android:id="@+id/friend_background_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/friend_item_background_red">
+        android:background="@drawable/itemview_bg_border_red">
 
         <FrameLayout
             android:id="@+id/friend_frame"
@@ -60,7 +60,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:padding="5dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:layout_marginRight="8dp">
 
                 <TextView
                     android:id="@+id/friend_amount"

@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.plansplit.Adapters.AddGroupsAdapter;
 import com.example.plansplit.R;
-import com.example.plansplit.Objects.Addgroups_Person;
+import com.example.plansplit.Objects.Person;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,7 @@ public class AddGroupsFragment extends Fragment {
     private com.example.plansplit.ui.addgroups.AddGroupsViewModel AddGroupsViewModel;
     RecyclerView recyclerView;
     AddGroupsAdapter adapter;
-    List<Addgroups_Person> AddGroupsPersonList;
+    List<Person> AddGroupsPersonList;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -40,9 +40,9 @@ public class AddGroupsFragment extends Fragment {
         recyclerView.setLayoutManager(mLayoutManager);
         AddGroupsPersonList = new ArrayList<>();
 
-        AddGroupsPersonList.add(new Addgroups_Person("Curie","qwewq",R.drawable.addgroups_ustekran));
-        AddGroupsPersonList.add(new Addgroups_Person("Albert","qwewq",R.drawable.addgroups_ustekran));
-        AddGroupsPersonList.add(new Addgroups_Person("Benjamin","qwewq",R.drawable.addgroups_ustekran));
+        AddGroupsPersonList.add(new Person("Curie","qwewq",R.drawable.denemeresim));
+        AddGroupsPersonList.add(new Person("Albert","qwewq",R.drawable.denemeresim));
+        AddGroupsPersonList.add(new Person("Benjamin","qwewq",R.drawable.denemeresim));
 
         Log.d(TAG, "BURADA");
 
