@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/mygroup_group_options"
+        android:title="@string/group_settings"
+        android:icon="@drawable/ic_menu_line"
+        app:showAsAction="never"/>
+    <item android:id="@+id/mygroup_table_export"
+        android:title="@string/as_table_export"
+        app:showAsAction="never"/>
+    <item android:id="@+id/mygroup_quick_add"
+        android:title="@string/quick_add"
+        app:showAsAction="never"/>
+</menu>

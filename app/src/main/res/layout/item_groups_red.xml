@@ -29,7 +29,7 @@
                 android:layout_width="45dp"
                 android:layout_height="45dp"
                 android:id="@+id/imageIv"
-                android:src="@drawable/ic_home_black_24dp"
+                android:src="@drawable/ic_home_black_radius"
                 android:background="@drawable/group_itemview_bg_profil_red"
             />
 

@@ -1,5 +1,6 @@
 package com.example.plansplit.ui.groups;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.plansplit.Adapters.GroupAdapter;
+import com.example.plansplit.MyGroup;
 import com.example.plansplit.Objects.Groups;
 import com.example.plansplit.R;
 
@@ -25,6 +27,7 @@ public class GroupsFragment extends Fragment {
     private ArrayList<Groups> groups;
     private RecyclerView recyclerView;
     private GroupAdapter groupAdapter;
+    private GroupAdapter.RecyclerViewClickListener mListener;
 
     @Nullable
     @Override
@@ -34,31 +37,37 @@ public class GroupsFragment extends Fragment {
 
         recyclerView = (RecyclerView) root.findViewById(R.id.recyclerGroups);
         recyclerView.setHasFixedSize(true);
-        groupAdapter = new GroupAdapter(groups);
+        setOnClickListener();
+        groupAdapter = new GroupAdapter(groups, mListener);
         recyclerView.setAdapter(groupAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
         groups = new ArrayList<>();
 
-        groups.add(new Groups(1,"Ev","Ev",R.drawable.ic_home_black_24dp,R.drawable.debt_remind,10));
-        groups.add(new Groups(2,"Ev","Ev",R.drawable.ic_home_black_24dp,R.drawable.debt_remind,20));
-        groups.add(new Groups(4,"Ev","Ev",R.drawable.ic_home_black_24dp,R.drawable.debt_remind,30));
-        groups.add(new Groups(3,"Ev","Ev",R.drawable.ic_home_black_24dp,R.drawable.debt_remind,30));
-        groups.add(new Groups(5,"Ev","Ev",R.drawable.ic_home_black_24dp,R.drawable.debt_remind,30));
-        groups.add(new Groups(6,"Ev","Ev",R.drawable.ic_home_black_24dp,R.drawable.debt_remind,30));
-        groups.add(new Groups(7,"Ev","Ev",R.drawable.ic_home_black_24dp,R.drawable.debt_remind,30));
+        groups.add(new Groups(1,"Ev","Ev",R.drawable.ic_home_black_radius,R.drawable.debt_remind,10));
+        groups.add(new Groups(2,"İŞ","İş",R.drawable.ic_suitcase_radius,R.drawable.debt_remind,20));
+        groups.add(new Groups(4,"Ev","Ev",R.drawable.ic_home_page,R.drawable.debt_remind,30));
+        groups.add(new Groups(3,"Ev","Ev",R.drawable.ic_home_page,R.drawable.debt_remind,30));
+        groups.add(new Groups(5,"Ev","Ev",R.drawable.ic_home_page,R.drawable.debt_remind,30));
+        groups.add(new Groups(6,"Ev","Ev",R.drawable.ic_home_page,R.drawable.debt_remind,30));
+        groups.add(new Groups(7,"Ev","Ev",R.drawable.ic_home_page,R.drawable.debt_remind,30));
 
         Log.d(TAG, "BURADA");
 
-        groupAdapter = new GroupAdapter(groups);
+        groupAdapter = new GroupAdapter(groups, mListener);
         recyclerView.setAdapter(groupAdapter);
 
-        groupAdapter.setOnItemClickListener(new GroupAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(int position) {
-
-            }
-        });
-
         return root;
+    }
+
+    private void setOnClickListener() {
+        mListener = new GroupAdapter.RecyclerViewClickListener() {
+            @Override
+            public void onClick(View v, int position) {
+                Intent intent = new Intent(getParentFragment().getContext(), MyGroup.class);
+                intent.putExtra("group_title", groups.get(position).getGroup_name());
+                intent.putExtra("group_image", groups.get(position).getGroup_photo());
+                startActivity(intent);
+            }
+        };
     }
 }
