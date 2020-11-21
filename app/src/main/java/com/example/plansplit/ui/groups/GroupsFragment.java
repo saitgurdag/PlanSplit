@@ -6,10 +6,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,6 +22,8 @@ import com.example.plansplit.Adapters.GroupAdapter;
 import com.example.plansplit.MyGroup;
 import com.example.plansplit.Objects.Groups;
 import com.example.plansplit.R;
+import com.example.plansplit.ui.addgroups.AddGroupsFragment;
+import com.example.plansplit.ui.mygroup.EventsFragment;
 
 import java.util.ArrayList;
 
@@ -28,6 +34,8 @@ public class GroupsFragment extends Fragment {
     private RecyclerView recyclerView;
     private GroupAdapter groupAdapter;
     private GroupAdapter.RecyclerViewClickListener mListener;
+    private ImageView add_expense;
+    private Button add_new_group;
 
     @Nullable
     @Override
@@ -55,6 +63,32 @@ public class GroupsFragment extends Fragment {
 
         groupAdapter = new GroupAdapter(groups, mListener);
         recyclerView.setAdapter(groupAdapter);
+
+        add_expense=root.findViewById(R.id.add_expense);
+        add_new_group=root.findViewById(R.id.add_new_group);
+        add_expense.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GroupExpenseFragment expenseFragment = new GroupExpenseFragment();
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.nav_host_fragment, expenseFragment);
+                fragmentTransaction.commit();
+            }
+        });
+
+        add_new_group.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AddGroupsFragment addGroupsFragment = new AddGroupsFragment();
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.nav_host_fragment, addGroupsFragment);
+                fragmentTransaction.commit();
+            }
+        });
+
+
 
         return root;
     }
