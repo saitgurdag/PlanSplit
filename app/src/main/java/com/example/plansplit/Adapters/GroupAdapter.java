@@ -20,10 +20,11 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     final int type_green = 2;
 
     private ArrayList<Groups> groups;
-    OnItemClickListener mListener;
+    RecyclerViewClickListener mListener;
 
-    public GroupAdapter(ArrayList<Groups> groups) {
+    public GroupAdapter(ArrayList<Groups> groups, RecyclerViewClickListener mListener) {
         this.groups = groups;
+        this.mListener = mListener;
     }
 
     @NonNull
@@ -34,10 +35,10 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         switch (viewType) {
             case 0:
-                GroupAdapter.MyViewHolder myViewHolder0 = new GroupAdapter.MyViewHolder(view, mListener);
+                GroupAdapter.MyViewHolder myViewHolder0 = new GroupAdapter.MyViewHolder(view);
                 return myViewHolder0;
             case 2:
-                GroupAdapter.MyViewHolder2 myViewHolder2 = new GroupAdapter.MyViewHolder2(view2, mListener);
+                GroupAdapter.MyViewHolder2 myViewHolder2 = new GroupAdapter.MyViewHolder2(view2);
                 return myViewHolder2;
         }
         return null;
@@ -69,14 +70,6 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         return groups.size();
     }
 
-    public interface OnItemClickListener{
-        void onItemClick(int position);
-    }
-
-    public void setOnItemClickListener(GroupAdapter.OnItemClickListener listener) {
-        mListener = listener;
-    }
-
     @Override
     public int getItemViewType(int position) {
         if(groups.get(position).getGroup_id() % 2 == 0){
@@ -85,12 +78,12 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         return type_green;
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder{
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         ImageView mImageView, mImageView_extra;
         TextView mTitle, mCost;
 
-        public MyViewHolder(@NonNull View itemView, final GroupAdapter.OnItemClickListener listener){
+        public MyViewHolder(@NonNull View itemView){
 
             super(itemView);
 
@@ -98,28 +91,21 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             this.mImageView_extra = itemView.findViewById(R.id.imageIv_extra);
             this.mTitle = itemView.findViewById(R.id.group_titleTv);
             this.mCost = itemView.findViewById(R.id.costTv);
+            itemView.setOnClickListener(this);
+        }
 
-            itemView.findViewById(R.id.card_group).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if ( listener != null) {
-                        int position = getAdapterPosition();
-                        if (position != RecyclerView.NO_POSITION) {
-                            listener.onItemClick(position);
-                        }
-                    }
-                }
-            });
-
+        @Override
+        public void onClick(View view) {
+            mListener.onClick(itemView, getAdapterPosition());
         }
     }
 
-    public class MyViewHolder2 extends RecyclerView.ViewHolder{
+    public class MyViewHolder2 extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         ImageView mImageView, mImageView_extra;
         TextView mTitle, mCost;
 
-        public MyViewHolder2(@NonNull View itemView, final GroupAdapter.OnItemClickListener listener) {
+        public MyViewHolder2(@NonNull View itemView) {
 
             super(itemView);
 
@@ -127,20 +113,18 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             this.mImageView_extra = itemView.findViewById(R.id.imageIv_extra);
             this.mTitle = itemView.findViewById(R.id.group_titleTv);
             this.mCost = itemView.findViewById(R.id.costTv);
-
-            itemView.findViewById(R.id.card_group_green).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if ( listener != null) {
-                        int position = getAdapterPosition();
-                        if (position != RecyclerView.NO_POSITION) {
-                            listener.onItemClick(position);
-                        }
-                    }
-                }
-            });
-
+            itemView.setOnClickListener(this);
         }
+
+        @Override
+        public void onClick(View view) {
+            mListener.onClick(itemView, getAdapterPosition());
+        }
+    }
+
+    public interface RecyclerViewClickListener{
+        void onClick(View v, int position);
+
     }
 
 }

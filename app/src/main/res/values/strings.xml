@@ -14,6 +14,7 @@
     <string name="navigation_drawer_close"> Close navigation drawer</string>
     <string name="navigation_drawer_open"> Open navigation drawer</string>
     <string name="title_app">Plan &amp; Split</string>
+    <string name="group_title">Group Title</string>
     <string-array name="shareMethodSpinnerItems">
         <item>Eşit paylaşım</item>
         <item>Düzensiz paylaşım</item>
@@ -36,4 +37,10 @@
     <string name="title_logout">Log Out</string>
     <string name="friend_amount_user_owes">Borçlusun</string>
     <string name="friend_amount_friend_owes">Borçlu</string>
+    <string name="list">Liste</string>
+    <string name="events">Olaylar</string>
+    <string name="group_operations">Grup İşlemleri</string>
+    <string name="group_settings">Grup Ayarları</string>
+    <string name="as_table_export">Tablo Olarak Çıkar</string>
+    <string name="quick_add">Hızlı Ekle</string>
 </resources>
