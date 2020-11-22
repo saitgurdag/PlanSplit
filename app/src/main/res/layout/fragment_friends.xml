@@ -20,7 +20,7 @@
             android:background="@drawable/friend_fragment_background">
 
             <RelativeLayout
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="5dp"
                 android:id="@+id/friend_top_buttons"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -45,32 +45,53 @@
             </RelativeLayout>
 
             <LinearLayout
-                android:id="@+id/linear_layout_recycler"
+                android:id="@+id/linear_layout_friends_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@+id/friend_top_buttons"
-                android:layout_above="@+id/friend_add_button"
+                android:layout_above="@+id/linear_layout_friends_add"
                 android:orientation="vertical">
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler_friends"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingHorizontal="20dp"
+                    android:paddingHorizontal="10dp"
                     tools:listitem="@layout/item_friend"/>
             </LinearLayout>
 
-            <Button
-                android:id="@+id/friend_add_button"
-                android:fontFamily="@font/avenir"
-                android:text="Arkadaş ekle"
-                android:background="@drawable/button_smooth_corner"
+            <LinearLayout
+                android:id="@+id/linear_layout_friends_add"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginVertical="30dp"
+                android:orientation="horizontal"
                 android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"/>
+                android:layout_centerHorizontal="true"
+                android:layout_marginHorizontal="30dp"
+                android:layout_marginVertical="10dp">
+
+                <EditText
+                    android:id="@+id/friends_add_email"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:minEms="10"
+                    android:layout_weight="1"
+                    android:inputType="textEmailAddress"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="20dp"
+                    />
+
+                <Button
+                    android:id="@+id/friend_add_button"
+                    android:fontFamily="@font/avenir"
+                    android:text="Arkadaş ekle"
+                    android:background="@drawable/button_smooth_corner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:minHeight="30dp"
+                    android:paddingHorizontal="15dp"/>
+            </LinearLayout>
         </RelativeLayout>
     </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
