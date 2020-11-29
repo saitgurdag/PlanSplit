@@ -4,6 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -19,6 +22,11 @@ public class MainActivity extends AppCompatActivity {
     GoogleSignInClient mGoogleSignInClient;
     int RC_SIGN_IN = 0;
     private static final String TAG = "MainActivity";
+
+    //Berkay Animasyon
+
+    ImageView loginWalletAnimation;
+    Animation frombottomLoginWallet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +55,13 @@ public class MainActivity extends AppCompatActivity {
         // Build a GoogleSignInClient with the options specified by gso.
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
+        //Berkay Animasyon devamı
+        frombottomLoginWallet = AnimationUtils.loadAnimation(this,R.anim.login_frombottom);
+        loginWalletAnimation =(ImageView)findViewById(R.id.imageViewLoginWallet);
+        loginWalletAnimation.setAnimation(frombottomLoginWallet);
+
+
+        //berkay animasyon bitiş
 
     }
 
