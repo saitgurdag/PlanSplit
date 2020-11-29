@@ -21,4 +21,10 @@
     <color name="shadow_text">#B5BFD0</color>
     <color name="group_border_red">#FF5D5D</color>
     <color name="group_border_green">#28DF99</color>
+    <color name="icon_border_gray">#707070</color>
+    <color name="pastel_orange">#F2D0A4</color>
+    <color name="light_black">#1F363D</color>
+    <color name="button_gray">#6D7A85</color>
+    <color name="button_green">#1DAE6A</color>
+    <color name="red_save">#DB324D</color>
 </resources>

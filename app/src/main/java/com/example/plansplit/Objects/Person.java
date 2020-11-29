@@ -19,6 +19,9 @@ public class Person {
         return checkBox_shareMethodPersonCheckBox;
     }
 
+    public Person(String name) {
+        this.name = name;
+    }
 
     public Person(String name, int cardView_shareMethodPersonPicture, int checkBox_shareMethodPersonCheckBox){
         this.name = name;
