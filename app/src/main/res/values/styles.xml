@@ -13,4 +13,8 @@
 
 </style>
 
+    <style name="CheckColor">
+        <item name="colorAccent">#1DAE6A</item>
+    </style>
+
 </resources>

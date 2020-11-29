@@ -1,42 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/dialog_bg">
+    android:padding="16dp">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_share_method"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="250dp"
+        android:layout_marginTop="8dp"
         android:paddingHorizontal="5dp"
-        android:layout_marginTop="150dp"
-        android:layout_marginBottom="100dp"
-        tools:listitem="@layout/item_share_method_persons">
-    </androidx.recyclerview.widget.RecyclerView>
+        app:layout_constraintTop_toBottomOf="@+id/shareMethodSpinner"
+        tools:listitem="@layout/item_share_method_persons"></androidx.recyclerview.widget.RecyclerView>
 
     <Spinner
         android:id="@+id/shareMethodSpinner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/recycler_share_method"
-        android:entries="@array/shareMethodSpinnerItems"
+        android:layout_width="250dp"
+        android:layout_height="30dp"
 
-        />
+        android:layout_marginTop="24dp"
+        android:background="@drawable/popup_menu_background"
+        android:entries="@array/shareMethodSpinnerItems"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/shareMethodExitButton" />
 
     <Button
         android:id="@+id/buttonShareMethodOk"
         android:layout_width="76dp"
         android:layout_height="38dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="36dp"
         android:background="?android:attr/selectableItemBackground"
-        android:text="Ok"
+        android:text="@android:string/ok"
+        android:textAlignment="textEnd"
         android:textColor="#4CAF50"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/recycler_share_method" />
+
+    <Button
+        android:id="@+id/shareMethodExitButton"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:background="@drawable/close_menu_24px"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

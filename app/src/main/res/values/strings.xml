@@ -43,4 +43,17 @@
     <string name="group_settings">Grup Ayarları</string>
     <string name="as_table_export">Tablo Olarak Çıkar</string>
     <string name="quick_add">Hızlı Ekle</string>
+    <string name="enter_note">enter note</string>
+    <string name="group_expense_note_dialog_title">Enter Note</string>
+    <string name="group_expense_note_dialog_negative">Back</string>
+    <string name="group_expense_note_dialog_positive">Save</string>
+    <string name="select_payer">Payer</string>
+    <string name="select_date">Select Date</string>
+    <string name="date_picker_menu_for_once">For Once</string>
+    <string name="date_picker_menu_weekly_repeat">Weekly Repeat</string>
+    <string name="date_picker_menu_monthly_repeat">Monthly Repeat</string>
+    <string name="date_picker_menu_yearly_repeat">Yearly Repeat</string>
+
+
+
 </resources>
