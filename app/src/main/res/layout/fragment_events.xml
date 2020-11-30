@@ -5,11 +5,70 @@
     android:layout_height="match_parent"
     tools:context=".ui.mygroup.EventsFragment">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="Hello"
-        android:background="@color/white"/>
+   <RelativeLayout
+       android:id="@+id/w"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent">
+
+       <RelativeLayout
+           android:id="@+id/q"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content">
+
+           <include
+               android:id="@+id/item_user_layout"
+               layout="@layout/item_group_events_user"
+               />
+
+           <ImageButton
+
+               android:id="@+id/friend_filter"
+               android:background="@android:color/transparent"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_alignTop="@+id/item_user_layout"
+               android:layout_alignBottom="@+id/item_user_layout"
+               android:layout_alignParentEnd="true"
+               android:layout_marginTop="20dp"
+               android:layout_marginEnd="14dp"
+               android:layout_marginBottom="20dp"
+               android:foregroundGravity="center_vertical"
+               android:src="@drawable/filter"/>
+
+       </RelativeLayout>
+
+       <RelativeLayout
+           android:id="@+id/events_date"
+           android:layout_below="@+id/q"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:layout_marginTop="5dp">
+
+           <TextView
+               android:id="@+id/textDateGroupEvents"
+               android:layout_width="match_parent"
+               android:layout_height="30dp"
+               android:text="tarih"
+               android:layout_marginLeft="30dp">
+
+           </TextView>
+
+       </RelativeLayout>
+
+       <RelativeLayout
+           android:id="@+id/relativeLayoutRecyclerViewGroupEvents"
+           android:layout_marginTop="5dp"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:layout_below="@+id/events_date"
+           >
+           <androidx.recyclerview.widget.RecyclerView
+               android:id="@+id/RecyclerViewGroupEvents"
+               android:layout_width="match_parent"
+               android:layout_height="match_parent"
+               />
+       </RelativeLayout>
+
+   </RelativeLayout>
 
 </FrameLayout>

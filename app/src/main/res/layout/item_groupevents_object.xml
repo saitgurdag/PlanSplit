@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/user_card_friend"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:clickable="true"
+    android:focusable="true"
+    app:cardUseCompatPadding="true"
+    app:cardCornerRadius="10dp">
+
+    <RelativeLayout
+        android:id="@+id/user_layout_friend"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+       >
+        <FrameLayout
+            android:id="@+id/user_frame_friend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:padding="10dp">
+
+            <ImageView
+                android:id="@+id/user_image_background_item"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:background="@drawable/bg_rectangle"
+                android:padding="5dp" />
+
+            <ImageView
+                android:id="@+id/group_events_object_image"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:padding="5dp"
+                app:srcCompat="@drawable/wallet2" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_toEndOf="@+id/user_frame_friend"
+            android:baselineAligned="false"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="15"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+                    <LinearLayout
+                        android:id="@+id/lin1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:id="@+id/groups_events_object_name"
+                            android:layout_marginTop="10dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/avenir"
+                            android:text="TextView"
+                            android:textAlignment="center" />
+                    </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_marginTop="10dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/lin1"
+                            >
+                            <TextView
+                                android:id="@+id/group_events_object_payer_name"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/avenir"
+                                android:gravity="center"
+                                android:text="TextView"
+                                android:textAlignment="center" />
+                            <TextView
+                                android:id="@+id/group_events_object_coast"
+                                android:layout_width="wrap_content"
+                                android:layout_marginLeft="5dp"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/avenir"
+                                android:gravity="center"
+                                android:text="TextView"
+                                android:textAlignment="center" />
+                            <TextView
+                                android:id="@+id/group_events_object_payOrpayed_Text"
+                                android:layout_width="wrap_content"
+                                android:layout_marginLeft="5dp"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/avenir"
+                                android:gravity="center"
+                                android:text="TextView"
+                                android:textAlignment="center" />
+
+
+                        </LinearLayout>
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="5"
+                android:padding="5dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/group_events_object_user_depth"
+                    android:fontFamily="@font/avenir"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:textAlignment="center"
+                    android:gravity="center"
+                    android:textColor="@color/red"
+                    android:text="TextView" />
+
+                <TextView
+                    android:id="@+id/group_events_object_user_depth_status"
+                    android:fontFamily="@font/avenir"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:textAlignment="center"
+                    android:gravity="center"
+                    android:textColor="@color/red"
+                    android:text="TextView" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

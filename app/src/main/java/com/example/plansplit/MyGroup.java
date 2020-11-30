@@ -12,6 +12,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import com.example.plansplit.ui.mygroup.EventsFragment;
 import com.example.plansplit.ui.mygroup.GroupOperationsFragment;
@@ -72,44 +74,35 @@ public class MyGroup extends AppCompatActivity {
         ImageButton groupOpBttn = (ImageButton) findViewById(R.id.groupOpButton);
         ImageButton backBttn = (ImageButton) findViewById(R.id.mygroup_back_button);
 
-        getSupportFragmentManager().beginTransaction().add(R.id.fragment_place_mygroup, new EventsFragment());
+        final NavController navController = Navigation.findNavController(this, R.id.fragment_place_mygroup);
 
         listBttn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                FragmentTransaction fr = getSupportFragmentManager().beginTransaction();
-                fr.replace(R.id.fragment_place_mygroup, new ListFragment());
-                fr.addToBackStack(null);
+            public void onClick(View v) {
+                navController.navigate(R.id.navi_todo_list);
                 list_titleTv.setVisibility(View.VISIBLE);
                 events_titleTv.setVisibility(View.GONE);
                 group_op_titletV.setVisibility(View.GONE);
-                fr.commit();
             }
         });
 
         eventsBttn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                FragmentTransaction fr = getSupportFragmentManager().beginTransaction();
-                fr.replace(R.id.fragment_place_mygroup, new EventsFragment());
-                fr.addToBackStack(null);
+            public void onClick(View v) {
+                navController.navigate(R.id.navi_events);
                 events_titleTv.setVisibility(View.VISIBLE);
                 list_titleTv.setVisibility(View.GONE);
                 group_op_titletV.setVisibility(View.GONE);
-                fr.commit();
             }
         });
 
         groupOpBttn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                FragmentTransaction fr = getSupportFragmentManager().beginTransaction();
-                fr.replace(R.id.fragment_place_mygroup, new GroupOperationsFragment());
-                fr.addToBackStack(null);
+            public void onClick(View v) {
+                navController.navigate(R.id.navi_operation);
                 group_op_titletV.setVisibility(View.VISIBLE);
                 events_titleTv.setVisibility(View.GONE);
                 list_titleTv.setVisibility(View.GONE);
-                fr.commit();
             }
         });
 

@@ -43,7 +43,11 @@ public class AddGroupsFragment extends Fragment {
         AddGroupsPersonList.add(new Person("Curie","qwewq",R.drawable.denemeresim));
         AddGroupsPersonList.add(new Person("Albert","qwewq",R.drawable.denemeresim));
         AddGroupsPersonList.add(new Person("Benjamin","qwewq",R.drawable.denemeresim));
-
+        AddGroupsPersonList.add(new Person("Sait","qwewq",R.drawable.denemeresim));
+        AddGroupsPersonList.add(new Person("Tuncay","qwewq",R.drawable.denemeresim));
+        AddGroupsPersonList.add(new Person("Arda","qwewq",R.drawable.denemeresim));
+        AddGroupsPersonList.add(new Person("Oguzhan","qwewq",R.drawable.denemeresim));
+        AddGroupsPersonList.add(new Person("Berkay","qwewq",R.drawable.denemeresim));
         Log.d(TAG, "BURADA");
 
         adapter = new AddGroupsAdapter(this.getContext(),AddGroupsPersonList);

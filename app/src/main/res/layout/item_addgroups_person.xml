@@ -37,6 +37,7 @@
             <TextView
                 android:id="@+id/textViewName"
                 android:layout_width="231dp"
+                android:fontFamily="@font/avenir"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="5dp"
@@ -47,6 +48,7 @@
             <TextView
                 android:id="@+id/textViewMail"
                 android:layout_width="232dp"
+                android:fontFamily="@font/avenir"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="14dp"
                 android:layout_marginTop="30dp"
@@ -60,3 +62,4 @@
     </androidx.cardview.widget.CardView>
 
 </RelativeLayout>
+
