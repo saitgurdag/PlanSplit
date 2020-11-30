@@ -37,6 +37,10 @@
     <string name="title_logout">Log Out</string>
     <string name="friend_amount_user_owes">Borçlusun</string>
     <string name="friend_amount_friend_owes">Borçlu</string>
+    <string name="group_events_object_depth_status_owes">Borçlusun</string>
+    <string name="group_events_object_depth_status_claimant">Alacaklısın</string>
+    <string name="group_events_object_payOrpayed_payed">TL ödedi</string>
+    <string name="group_events_object_payOrpayed_pay">TL ödedin</string>
     <string name="list">Liste</string>
     <string name="events">Olaylar</string>
     <string name="group_operations">Grup İşlemleri</string>
@@ -53,7 +57,6 @@
     <string name="date_picker_menu_weekly_repeat">Weekly Repeat</string>
     <string name="date_picker_menu_monthly_repeat">Monthly Repeat</string>
     <string name="date_picker_menu_yearly_repeat">Yearly Repeat</string>
-
-
-
+    <string name="expenses">Harcamalar</string>
+    <string name="add_expense">Harcama Ekle</string>
 </resources>
