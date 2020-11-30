@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="start">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="#ffffff"
+            android:clipToPadding="false"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="3dp"
+            app:cardMaxElevation="3dp"
+            app:cardUseCompatPadding="true">
+
+            <ImageView
+                android:id="@+id/ImagePayer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|start|center_vertical"
+                android:layout_margin="10dp"
+                app:srcCompat="@drawable/denemeresim" />
+
+            <TextView
+                android:id="@+id/payer_name_text"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="end"
+                android:layout_margin="10dp"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="@android:string/ok"
+                android:textAllCaps="false"
+                android:textColor="#000"
+                android:textSize="14sp" />
+
+        </androidx.cardview.widget.CardView>
+
+
+    </LinearLayout>
+
+</RelativeLayout>

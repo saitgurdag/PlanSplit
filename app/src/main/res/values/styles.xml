@@ -12,15 +12,17 @@
     >
 
 </style>
+  
+  <style name="CheckColor">
+      <item name="colorAccent">#1DAE6A</item>
+  <style name="CircularDeterminateProgressBar">
+      <item name="android:indeterminateOnly">false</item>
+      <item name="android:progressDrawable">@drawable/progressbar_custom</item>
+  </style>
 
-    <style name="CircularDeterminateProgressBar">
-        <item name="android:indeterminateOnly">false</item>
-        <item name="android:progressDrawable">@drawable/progressbar_custom</item>
-    </style>
-
-    <style parent="@android:style/Widget.Spinner" name="SpinnerWithoutArrow">
+  <style parent="@android:style/Widget.Spinner" name="SpinnerWithoutArrow">
         <item name="android:background">@android:color/transparent</item>
         <item name="android:textColor">@color/red</item>
-    </style>
+  </style>
 
 </resources>
