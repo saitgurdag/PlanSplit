@@ -67,10 +67,19 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 R.id.navigation_personal, R.id.navigation_friends, R.id.navigation_groups, R.id.navigation_notifications)
 
                 .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        final NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
+        navView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener(){
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item){
+                Bundle bundle = new Bundle();
+                bundle.putString("person_id", personId);
+                navController.navigate(item.getItemId(), bundle);
+                return true;
+            }
+        });
         navigationView=findViewById(R.id.nav_draw_view);
 
         GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
