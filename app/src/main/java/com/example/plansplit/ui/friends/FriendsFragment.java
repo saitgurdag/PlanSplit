@@ -24,6 +24,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class FriendsFragment extends Fragment {
     private static final String TAG = "FriendsFragment";
@@ -32,41 +33,32 @@ public class FriendsFragment extends Fragment {
     private RecyclerView.LayoutManager m_LayoutManager;
     private DatabaseReference db_ref = FirebaseDatabase.getInstance().getReference();
     private DatabaseReference user_ref = db_ref.child("users");
+    private String person_id;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         final View root = inflater.inflate(R.layout.fragment_friends, container, false);
+        Log.d(TAG, "BURADA");
 
         Button add_friend_button = root.findViewById(R.id.friend_add_button);
         final EditText add_friend_email_text = root.findViewById(R.id.friends_add_email);
 
-        final String person_id = getArguments().get("person_id").toString();
-
-        ArrayList<Friend> friends_list = new ArrayList<>();
-        friends_list.add(new Friend(R.drawable.denemeresim, "Marie Curie", 30));
-        friends_list.add(new Friend(R.drawable.denemeresim, "Marie Curie", -50));
-        friends_list.add(new Friend(R.drawable.denemeresim, "Marie Curie",40));
+        person_id = getArguments().get("person_id").toString();
 
         m_RecyclerView = root.findViewById(R.id.recycler_friends);
         m_RecyclerView.setHasFixedSize(true);
-        m_Adapter = new FriendsAdapter(friends_list);
         m_LayoutManager = new LinearLayoutManager(getActivity());
         m_RecyclerView.setLayoutManager(m_LayoutManager);
+        m_Adapter = new FriendsAdapter(getContext(), person_id, m_RecyclerView);
         m_RecyclerView.setAdapter(m_Adapter);
-
 
         add_friend_button.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 String email = add_friend_email_text.getText().toString();
-                sendFriendRequest(email, person_id, new FireBaseCallBack(){
-                    @Override
-                    public void onCallBack(String key, ArrayList<String> friend_reqs){
-                        user_ref.child(key).child("friend_reqs").setValue(friend_reqs);
-                        Toast.makeText(getContext(),
-                                "Friend request sent.", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                sendFriendRequest(email, person_id, callBack);
+                Log.i(TAG, "friend request email: " + email);
+                Log.i(TAG, "users own id: " + person_id);
             }
         });
         return root;
@@ -74,66 +66,204 @@ public class FriendsFragment extends Fragment {
 
     private interface FireBaseCallBack{
         void onCallBack(String key, ArrayList<String> friend_reqs);
+        void onAddCallBack(ArrayList<String> friends, ArrayList<String> friend_reqs, String req_id);
+        void onFriendsAddCallBack(ArrayList<String> friends, ArrayList<String> friend_reqs, String req_id);
     }
+    private final FireBaseCallBack callBack = new FireBaseCallBack(){
+        @Override
+        public void onCallBack(String key, ArrayList<String> friend_reqs){
+            user_ref.child(key).child("friend_reqs").setValue(friend_reqs);
+            Toast.makeText(getContext(),
+                    "Arkadaşlık isteği gönderildi", Toast.LENGTH_SHORT).show();
+            Log.i(TAG, "sent friend request");
+        }
 
+        @Override
+        public void onAddCallBack(ArrayList<String> friends, ArrayList<String> friend_reqs, String req_id){
+            friends.add(req_id);
+            friend_reqs.remove(req_id);
+            user_ref.child(person_id).child("friends").setValue(friends);
+            user_ref.child(person_id).child("friend_reqs").setValue(friend_reqs);
+            Toast.makeText(getContext(),
+                    "İkinizde birbirinize istek yollamışsınız, artık arkadaşsınız!",
+                    Toast.LENGTH_SHORT).show();
+            Log.i(TAG, "added as friend");
+        }
+
+        @Override
+        public void onFriendsAddCallBack(ArrayList<String> friends, ArrayList<String> friend_reqs, String req_id){
+            friends.add(person_id);
+            friend_reqs.remove(person_id);
+            user_ref.child(req_id).child("friends").setValue(friends);
+            user_ref.child(req_id).child("friend_reqs").setValue(friend_reqs);
+        }
+    };
+
+    //kör olma garantili okuyana kolay gelsin -arda
+    //when i wrote this only god and i understood what i was doing now god only knows
     private void sendFriendRequest(String email, final String person_id, final FireBaseCallBack callBack){
-
         user_ref.orderByChild("email").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener(){
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot){
                 if(snapshot.exists()){
                     if(person_id.equals(snapshot.getChildren().iterator().next().getKey())){
                         Toast.makeText(getContext(),
-                                "You are trying to add yourself!", Toast.LENGTH_SHORT).show();
+                                "Kendini eklemeye çalışıyorsun!", Toast.LENGTH_SHORT).show();
                         return;
                     }
+                    final String friend_key = snapshot.getChildren().iterator().next().getKey();
                     DataSnapshot friends_snapshot
                             = snapshot.getChildren().iterator().next().child("friends");
+                    //eğer karşıdakinin arkadaş listesi boş değilse
                     if(friends_snapshot.getChildrenCount() != 0){
+                        //karşıdaki kullanıcının friends listesinde var mıyız?
                         boolean user_already_added = false;
                         for(DataSnapshot friend_ss: friends_snapshot.getChildren()){
-                            if(person_id.equals(friend_ss.getKey())){
+                            if(person_id.equals(Objects.requireNonNull(friend_ss.getValue()).toString())){
                                 user_already_added = true;
                             }
                         }
+                        //eğer arkadaş değilsek
                         if(!user_already_added){
+                            //onun friend_reqs listesinde keyimiz var mı, varsa yollama
+                            //bizim friend_reqs listemizde keyi var mı, varsa direkt arakdaş ekle
+
+                            //onun arkadaş listesine daha önce istek yollanmış mı?
+                            DataSnapshot friend_reqs_ss = snapshot.getChildren().iterator().next()
+                                    .child("friend_reqs");
+                            boolean user_already_added_to_list = false;
+                            for(DataSnapshot friend_req_ss: friend_reqs_ss.getChildren()){
+                                if(person_id.equals(Objects.requireNonNull(friend_req_ss.getValue()).toString())){
+                                    user_already_added_to_list = true;
+                                }
+                            }
+                            if(user_already_added_to_list){
+                                Toast.makeText(getContext(),
+                                        "Daha önce istek gönderdin!",
+                                        Toast.LENGTH_SHORT).show();
+                            }else{
+                                //karşıdaki bize daha önce arkadaşlık isteği yolladı mı?
+                                //yolladıysa direkt arkadaş ekle, yollamadıysa sadece istek yolla
+                                checkOwnFriendRequests(person_id, friend_key, callBack);
+                            }
                             //add to friend req list
                             @SuppressWarnings("unchecked")
-                            ArrayList<String> friend_reqs = snapshot.getChildren().iterator().next()
-                                    .child("friend_reqs").getValue(ArrayList.class);
-                            if(friend_reqs != null){
-                                friend_reqs.add(person_id);
-                            }else{
+                            ArrayList<String> friend_reqs = (ArrayList<String>)
+                                    snapshot.getChildren().iterator().next()
+                                            .child("friend_reqs").getValue();
+                            if(friend_reqs == null){
                                 friend_reqs = new ArrayList<>();
-                                friend_reqs.add(person_id);
                             }
+                            friend_reqs.add(person_id);
                             callBack.onCallBack(snapshot.getChildren().iterator().next().getKey(), friend_reqs);
                         }else{
+                            //eğer zaten arkadaşsak
                             Toast.makeText(getContext(),
-                                    "Person has already been added to your friend list",
+                                    "Zaten arkadaşsınız!",
                                     Toast.LENGTH_SHORT).show();
                         }
                     }else{
-                        //add to friend req list
-                        @SuppressWarnings("unchecked")
-                        ArrayList<String> friend_reqs = snapshot.getChildren().iterator().next()
-                                .child("friend_reqs").getValue(ArrayList.class);
-                        if(friend_reqs != null){
-                            friend_reqs.add(person_id);
+                        //eğer karşıdakinin arkadaşları yoksa:
+                        DataSnapshot friend_reqs_ss = snapshot.getChildren().iterator().next()
+                                .child("friend_reqs");
+                        //arkadaşlık istekleri de sıfır değilse
+                        if(friend_reqs_ss.getChildrenCount() != 0){
+                            //arkadaşlık isteği daha önce gönderdik mi
+                            boolean user_already_added = false;
+                            for(DataSnapshot friend_req_ss: friend_reqs_ss.getChildren()){
+                                if(person_id.equals(friend_req_ss.getValue().toString())){
+                                    user_already_added = true;
+                                }
+                            }
+                            if(!user_already_added){
+                                checkOwnFriendRequests(person_id, friend_key, callBack);
+                            }else {
+                                Toast.makeText(getContext(),
+                                        "Daha önce istek gönderdin!",
+                                        Toast.LENGTH_SHORT).show();
+                            }
                         }else{
-                            friend_reqs = new ArrayList<>();
-                            friend_reqs.add(person_id);
+                            //karşıdakinin arkadaşları yok ve arkadaşlık isteği yok
+                            checkOwnFriendRequests(person_id, friend_key, callBack);
                         }
-                        callBack.onCallBack(snapshot.getChildren().iterator().next().getKey(), friend_reqs);
                     }
                 }else{
+                    //eğer bu maile sahip biri yoksa
                     Toast.makeText(getContext(),
-                            "This mail address belongs no one", Toast.LENGTH_SHORT).show();
+                            "Bu mail adresine sahip kayıtlı kullanıcı yok!", Toast.LENGTH_SHORT).show();
                 }
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error){
-                Log.d(TAG, error.getMessage());
+                Log.e(TAG, error.getMessage());
+                Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void checkOwnFriendRequests(final String person_id, final String friend_key, final FireBaseCallBack callBack){
+        user_ref.child(person_id).child("friend_reqs").addListenerForSingleValueEvent(new ValueEventListener(){
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot){
+                if(snapshot.exists()){
+                    boolean user_already_added_to_own_list = false;
+                    for(DataSnapshot friend_req_ss: snapshot.getChildren()){
+                        if(friend_key.equals(Objects.requireNonNull(friend_req_ss.getValue()).toString())){
+                            user_already_added_to_own_list = true;
+                        }
+                    }
+                    //bizim ark istek listemizde karşnının keyi var
+                    if(user_already_added_to_own_list){
+                        //arkadaş ekle
+                        @SuppressWarnings("unchecked")
+                        ArrayList<String> friends_own = (ArrayList<String>)
+                                snapshot.getChildren().iterator().next()
+                                        .child("friends").getValue();
+                        @SuppressWarnings("unchecked")
+                        ArrayList<String> requests_own = (ArrayList<String>)
+                                snapshot.getChildren().iterator().next()
+                                        .child("friend_reqs").getValue();
+                        if(friends_own == null){
+                            friends_own = new ArrayList<>();
+                        }
+                        if(requests_own == null){
+                            requests_own = new ArrayList<>();
+                        }
+                        callBack.onAddCallBack(friends_own, requests_own, friend_key);
+                        @SuppressWarnings("unchecked")
+                        ArrayList<String> friends = (ArrayList<String>)
+                                snapshot.getChildren().iterator().next()
+                                        .child("friends").getValue();
+                        @SuppressWarnings("unchecked")
+                        ArrayList<String> requests = (ArrayList<String>)
+                                snapshot.getChildren().iterator().next()
+                                        .child("friend_reqs").getValue();
+                        if(friends == null){
+                            friends = new ArrayList<>();
+                        }
+                        if(requests == null){
+                            requests = new ArrayList<>();
+                        }
+                        callBack.onFriendsAddCallBack(friends, requests, friend_key);
+                    }else{
+                        //arkadaşlık isteği yolla
+                        @SuppressWarnings("unchecked")
+                        ArrayList<String> friend_reqs = (ArrayList<String>)
+                                snapshot.getChildren().iterator().next()
+                                        .child("friend_reqs").getValue();
+                        if(friend_reqs == null){
+                            friend_reqs = new ArrayList<>();
+                        }
+                        friend_reqs.add(person_id);
+                        callBack.onCallBack(snapshot.getChildren().iterator().next().getKey(), friend_reqs);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error){
+                Log.e(TAG, error.getMessage());
+                Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
