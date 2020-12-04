@@ -142,21 +142,13 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendsV
                                              */
 
                                             //fixme borçların database'de tutulma yöntemi geçici, acilen değişmeli
-                                            long amount = 0;
-                                            @SuppressWarnings("unchecked")
-                                            HashMap<String, Long> debts = (HashMap<String, Long>) snapshot.getChildren().iterator().next().child("debt").getValue();
-                                            for(String debt: debts.keySet()){
-                                                if(person_id.equals(debt)){
-                                                    amount = debts.get(debt) * -1;
-                                                }
-                                            }
                                             Friend friend = new Friend(
                                                     R.drawable.denemeresim,
                                                     snapshot.getChildren().iterator().next().child("name")
                                                             .getValue().toString() + " "
                                                             + snapshot.getChildren().iterator().next().child("surname")
                                                             .getValue().toString(),
-                                                    (int) amount,
+                                                    0,
                                                     snapshot.getChildren().iterator().next().getKey()
                                             );
                                             friendsCallBack.onFriendsCallBack(friend);

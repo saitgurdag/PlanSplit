@@ -22,7 +22,7 @@ public class Friend{
 
         //fixme: firebasede borç pozitif mi negatif mi karar vermek lazım
         //eğer kullanıcı arkadaşa borçlu ise
-        if(amount <= 0){
+        if(amount < 0){
             this.layout_background = R.drawable.itemview_bg_border_red;
             this.image_background = R.drawable.circle_background_red;
             this.color = R.color.red;
