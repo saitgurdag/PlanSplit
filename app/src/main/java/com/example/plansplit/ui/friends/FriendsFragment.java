@@ -101,7 +101,7 @@ public class FriendsFragment extends Fragment {
 
     //kör olma garantili okuyana kolay gelsin -arda
     //when i wrote this only god and i understood what i was doing now god only knows
-    private void sendFriendRequest(String email, final String person_id, final FireBaseCallBack callBack){
+    private void sendFriendRequest(final String email, final String person_id, final FireBaseCallBack callBack){
         user_ref.orderByChild("email").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener(){
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot){
@@ -178,12 +178,14 @@ public class FriendsFragment extends Fragment {
                             if(!user_already_added){
                                 checkOwnFriendRequests(person_id, friend_key, callBack);
                             }else {
+                                Log.d(TAG, "önceden bu maile istek yollanmış: " + email);
                                 Toast.makeText(getContext(),
                                         "Daha önce istek gönderdin!",
                                         Toast.LENGTH_SHORT).show();
                             }
                         }else{
                             //karşıdakinin arkadaşları yok ve arkadaşlık isteği yok
+                            Log.d(TAG, "karşıdakinin arkadaşları yok ve arkadaşlık isteği yok");
                             checkOwnFriendRequests(person_id, friend_key, callBack);
                         }
                     }
@@ -191,6 +193,7 @@ public class FriendsFragment extends Fragment {
                     //eğer bu maile sahip biri yoksa
                     Toast.makeText(getContext(),
                             "Bu mail adresine sahip kayıtlı kullanıcı yok!", Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, "bu maile sahip biri yok: " + email);
                 }
             }
             @Override
@@ -247,16 +250,15 @@ public class FriendsFragment extends Fragment {
                         callBack.onFriendsAddCallBack(friends, requests, friend_key);
                     }else{
                         //arkadaşlık isteği yolla
-                        @SuppressWarnings("unchecked")
-                        ArrayList<String> friend_reqs = (ArrayList<String>)
-                                snapshot.getChildren().iterator().next()
-                                        .child("friend_reqs").getValue();
-                        if(friend_reqs == null){
-                            friend_reqs = new ArrayList<>();
-                        }
+                        ArrayList<String> friend_reqs = new ArrayList<>();
                         friend_reqs.add(person_id);
-                        callBack.onCallBack(snapshot.getChildren().iterator().next().getKey(), friend_reqs);
+                        callBack.onCallBack(friend_key, friend_reqs);
                     }
+                }else{
+                    ArrayList<String> friend_reqs = new ArrayList<>();
+                    friend_reqs.add(person_id);
+                    callBack.onCallBack(friend_key, friend_reqs);
+                    Log.d(TAG, snapshot.toString() + "\n \"person_id\"friend_reqs ile ilişkili veri bulamadı, snapshot yok");
                 }
             }
 

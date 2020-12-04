@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:gravity="center"
+    android:layout_marginBottom="3dp"
+    android:layout_marginTop="3dp"
+    android:layout_marginHorizontal="5dp">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/notification_card"
+        android:layout_width="match_parent"
+        android:layout_height="78dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:orientation="vertical"
+        app:cardCornerRadius="5dp">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:background="@drawable/shadow_bg">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:layout_marginStart="10dp">
+
+                        <ImageView
+                            android:id="@+id/notification_image"
+                            android:layout_width="56dp"
+                            android:layout_height="56dp"
+                            tools:srcCompat="@tools:sample/avatars" />
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:gravity="center">
+
+                        <TextView
+                            android:id="@+id/notification_main_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Tesla, Ev grubuna harcama ekledi: Küçük Alışveriş, 20 TL"
+                            android:textColor="@color/black"
+                            android:fontFamily="@font/avenir"
+                            android:textSize="14sp"
+                            android:gravity="center_horizontal"/>
+
+                        <TextView
+                            android:id="@+id/notification_second_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="10 TL borçlusun"
+                            android:textColor="@color/red"
+                            android:fontFamily="@font/avenir"
+                            android:textSize="14sp"
+                            android:gravity="center_horizontal"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="72dp"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:background="@drawable/shadow_bg_left">
+
+                    <TextView
+                        android:id="@+id/notification_date_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="20.10.2020"
+                        android:textColor="@color/grey"
+                        android:fontFamily="@font/avenir"
+                        android:textSize="10sp"
+                        android:gravity="center_horizontal"
+                        android:layout_marginVertical="2dp"/>
+
+                    <TextView
+                        android:id="@+id/notification_clock_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="20.45"
+                        android:textColor="@color/grey"
+                        android:fontFamily="@font/avenir"
+                        android:textSize="10sp"
+                        android:gravity="center_horizontal"
+                        android:layout_marginVertical="2dp"/>
+                </LinearLayout>
+            </RelativeLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>

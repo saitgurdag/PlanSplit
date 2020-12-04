@@ -13,7 +13,6 @@
         <item name="colorControlHighlight">@color/green</item>
     </style>
 
-    <style name="LoginTheme" parent="Theme.AppCompat.Light.NoActionBar">
     <style name="LoginTheme" parent="Theme.AppCompat.Light.NoActionBar"/>
   
     <style name="CheckColor">
