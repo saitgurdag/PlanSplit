@@ -10,5 +10,5 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingHorizontal="5dp"
-        tools:listitem="@layout/item_notificaiton" />
+        tools:listitem="@layout/item_notification" />
 </androidx.constraintlayout.widget.ConstraintLayout>

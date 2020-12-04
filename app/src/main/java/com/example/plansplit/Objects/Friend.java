@@ -10,10 +10,12 @@ public class Friend{
     private int layout_background;
     private int image_background;
     private int color;
+    private String key;
 
-    public Friend(int person_image, String name, int amount){
+    public Friend(int person_image, String name, int amount, String key){
         this.person_image = person_image;
         this.name = name;
+        this.key = key;
 
         //todo: ileride birim eklenirse değişmesi lazım
         this.amount = amount + " TL";

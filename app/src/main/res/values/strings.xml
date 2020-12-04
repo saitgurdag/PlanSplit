@@ -47,6 +47,7 @@
     <string name="group_settings">Grup Ayarları</string>
     <string name="as_table_export">Tablo Olarak Çıkar</string>
     <string name="quick_add">Hızlı Ekle</string>
+    <string name="enter_mail_address">mail adresini giriniz</string>
     <string name="requirement_list">İhtiyaç Listesi</string>
     <string name="requierement_desc">İhtiyaç Tanımı</string>
     <string name="added_by">Curie ekledi</string>

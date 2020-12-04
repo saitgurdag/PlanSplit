@@ -4,6 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -42,7 +45,7 @@ public class GroupsFragment extends Fragment {
         groupsViewModel = ViewModelProviders.of(this).get(GroupsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_groups, container, false);
 
-        recyclerView = (RecyclerView) root.findViewById(R.id.recyclerGroups);
+        recyclerView = root.findViewById(R.id.recyclerGroups);
         recyclerView.setHasFixedSize(true);
         setOnClickListener();
         groupAdapter = new GroupAdapter(groups, mListener);
