@@ -12,13 +12,15 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import com.example.plansplit.ui.mygroup.EventsFragment;
 import com.example.plansplit.ui.mygroup.GroupOperationsFragment;
 import com.example.plansplit.ui.mygroup.ListFragment;
 
 public class MyGroup extends AppCompatActivity {
-
+    //NavigationView navigationView;
 
     public void showPopup(View v) {
         PopupMenu popup = new PopupMenu(MyGroup.this, v);
@@ -48,6 +50,7 @@ public class MyGroup extends AppCompatActivity {
         final TextView list_titleTv = findViewById(R.id.list_buttonTv);
         final TextView events_titleTv = findViewById(R.id.events_buttonTv);
         final TextView group_op_titletV = findViewById(R.id.group_op_buttonTv);
+        //BottomNavigationView navView = findViewById(R.id.nav_view_mygroup);
         list_titleTv.setVisibility(View.GONE);
         events_titleTv.setVisibility(View.VISIBLE);
         group_op_titletV.setVisibility(View.GONE);
@@ -66,52 +69,42 @@ public class MyGroup extends AppCompatActivity {
         groupnameTv.setText(group_title);
 
 
-
         ImageButton listBttn = (ImageButton) findViewById(R.id.task_listButton);
         ImageButton eventsBttn = (ImageButton) findViewById(R.id.eventsButton);
         ImageButton groupOpBttn = (ImageButton) findViewById(R.id.groupOpButton);
         ImageButton backBttn = (ImageButton) findViewById(R.id.mygroup_back_button);
 
+        final NavController navController = Navigation.findNavController(this, R.id.fragment_place_mygroup);
+
         listBttn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                FragmentTransaction fr = getSupportFragmentManager().beginTransaction();
-                fr.replace(R.id.fragment_place_mygroup, new ListFragment());
-                fr.addToBackStack(null);
+            public void onClick(View v) {
+                navController.navigate(R.id.navi_todo_list);
                 list_titleTv.setVisibility(View.VISIBLE);
                 events_titleTv.setVisibility(View.GONE);
                 group_op_titletV.setVisibility(View.GONE);
-                fr.commit();
             }
         });
 
         eventsBttn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                FragmentTransaction fr = getSupportFragmentManager().beginTransaction();
-                fr.replace(R.id.fragment_place_mygroup, new EventsFragment());
-                fr.addToBackStack(null);
+            public void onClick(View v) {
+                navController.navigate(R.id.navi_events);
                 events_titleTv.setVisibility(View.VISIBLE);
                 list_titleTv.setVisibility(View.GONE);
                 group_op_titletV.setVisibility(View.GONE);
-                fr.commit();
             }
         });
 
         groupOpBttn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                FragmentTransaction fr = getSupportFragmentManager().beginTransaction();
-                fr.replace(R.id.fragment_place_mygroup, new GroupOperationsFragment());
-                fr.addToBackStack(null);
+            public void onClick(View v) {
+                navController.navigate(R.id.navi_operation);
                 group_op_titletV.setVisibility(View.VISIBLE);
                 events_titleTv.setVisibility(View.GONE);
                 list_titleTv.setVisibility(View.GONE);
-                fr.commit();
             }
         });
-
-
 
         backBttn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,5 +113,18 @@ public class MyGroup extends AppCompatActivity {
             }
         });
 
+/*
+        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
+                R.id.navigation_personal, R.id.navigation_friends, R.id.navigation_groups, R.id.navigation_notifications)
+
+                .build();
+        NavController navController = Navigation.findNavController(MyGroup.this, R.id.nav_host_fragment);
+        NavigationUI.setupActionBarWithNavController(MyGroup.this, navController, appBarConfiguration);
+        NavigationUI.setupWithNavController(navView, navController);
+
+        navigationView=findViewById(R.id.nav_draw_view);
+*/
     }
+
+
 }

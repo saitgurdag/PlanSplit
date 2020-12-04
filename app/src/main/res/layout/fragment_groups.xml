@@ -24,6 +24,7 @@
             android:elevation="5dp"
             android:layout_marginBottom="0dp"/>
         <RelativeLayout
+            android:id="@+id/recycler_viewRL2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="bottom|end"
@@ -32,9 +33,10 @@
             >
             <ImageView
                 android:id="@+id/add_expense"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:srcCompat="@drawable/add_circle"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                app:srcCompat="@drawable/ic_plus_button"
+                android:layout_margin="10dp"
                 />
         </RelativeLayout>
     </RelativeLayout>
@@ -47,7 +49,7 @@
         android:gravity="center"
         android:text="Gruplar"
         android:textColor="@color/darkGreen"
-        android:textSize="25dp"
+        android:textSize="25sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/recyclerRelative"
         app:layout_constraintEnd_toEndOf="parent"
@@ -207,7 +209,6 @@
 
     </RelativeLayout>
 
-
     <Button
         android:id="@+id/add_new_group"
         android:layout_width="310dp"
@@ -247,4 +248,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

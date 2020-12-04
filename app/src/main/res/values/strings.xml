@@ -37,6 +37,10 @@
     <string name="title_logout">Log Out</string>
     <string name="friend_amount_user_owes">Borçlusun</string>
     <string name="friend_amount_friend_owes">Borçlu</string>
+    <string name="group_events_object_depth_status_owes">Borçlusun</string>
+    <string name="group_events_object_depth_status_claimant">Alacaklısın</string>
+    <string name="group_events_object_payOrpayed_payed">TL ödedi</string>
+    <string name="group_events_object_payOrpayed_pay">TL ödedin</string>
     <string name="list">Liste</string>
     <string name="events">Olaylar</string>
     <string name="group_operations">Grup İşlemleri</string>
@@ -44,4 +48,26 @@
     <string name="as_table_export">Tablo Olarak Çıkar</string>
     <string name="quick_add">Hızlı Ekle</string>
     <string name="enter_mail_address">mail adresini giriniz</string>
+    <string name="requirement_list">İhtiyaç Listesi</string>
+    <string name="requierement_desc">İhtiyaç Tanımı</string>
+    <string name="added_by">Curie ekledi</string>
+    <string name="purchased_by">Einstein alacak</string>
+    <string name="waiting">Bekliyor</string>
+    <string name="add_requierement">İhtiyaç ekleyiniz</string>
+    <string name="back">Geri Dön</string>
+    <string name="resp_question">Bu ihtiyacı karşılamak istiyor musunuz?</string>
+    <string name="cancel_resp">Bu ihtiyacı karşılamayı iptal istiyor musunuz?</string>
+    <string name="yes">Evet</string>
+    <string name="enter_note">enter note</string>
+    <string name="group_expense_note_dialog_title">Enter Note</string>
+    <string name="group_expense_note_dialog_negative">Back</string>
+    <string name="group_expense_note_dialog_positive">Save</string>
+    <string name="select_payer">Payer</string>
+    <string name="select_date">Select Date</string>
+    <string name="date_picker_menu_for_once">For Once</string>
+    <string name="date_picker_menu_weekly_repeat">Weekly Repeat</string>
+    <string name="date_picker_menu_monthly_repeat">Monthly Repeat</string>
+    <string name="date_picker_menu_yearly_repeat">Yearly Repeat</string>
+    <string name="expenses">Harcamalar</string>
+    <string name="add_expense">Harcama Ekle</string>
 </resources>

@@ -26,7 +26,6 @@ import com.example.plansplit.MyGroup;
 import com.example.plansplit.Objects.Groups;
 import com.example.plansplit.R;
 import com.example.plansplit.ui.addgroups.AddGroupsFragment;
-import com.example.plansplit.ui.mygroup.EventsFragment;
 
 import java.util.ArrayList;
 
