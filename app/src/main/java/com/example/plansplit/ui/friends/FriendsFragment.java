@@ -107,6 +107,7 @@ public class FriendsFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot snapshot){
                 if(snapshot.exists()){
                     if(person_id.equals(snapshot.getChildren().iterator().next().getKey())){
+                        Log.d(TAG, "kendini eklemeye çalışıyor");
                         Toast.makeText(getContext(),
                                 "Kendini eklemeye çalışıyorsun!", Toast.LENGTH_SHORT).show();
                         return;
@@ -138,9 +139,11 @@ public class FriendsFragment extends Fragment {
                                 }
                             }
                             if(user_already_added_to_list){
+                                Log.d(TAG, "önceden bu maile istek yollanmış: " + email);
                                 Toast.makeText(getContext(),
                                         "Daha önce istek gönderdin!",
                                         Toast.LENGTH_SHORT).show();
+                                return;
                             }else{
                                 //karşıdaki bize daha önce arkadaşlık isteği yolladı mı?
                                 //yolladıysa direkt arkadaş ekle, yollamadıysa sadece istek yolla
