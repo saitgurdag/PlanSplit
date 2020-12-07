@@ -100,15 +100,17 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemSele
     @Override
     public void onClick(View v) {
         if(v.getId()==addExpense.getId()){
-            String name = String.valueOf(expenseName.getText());
-            int p = Integer.parseInt(String.valueOf(price.getText()));
-            expenseList.add(new Expense(name,type,p));
-            totExpense+=p;
-            progressBar.setProgress(totExpense);
-            adapter = new ExpensesAdapter(this.getContext(), expenseList);
-            adapter.notifyDataSetChanged();
-            recyclerView.setAdapter(adapter);
-            kalanButce.setText("Kalan Bütçe : " + String.valueOf(butce-totExpense) + " TL");
+            if(!price.getText().toString().matches("") && !expenseName.getText().toString().matches("")) {
+                String name = String.valueOf(expenseName.getText());
+                int p = Integer.parseInt(String.valueOf(price.getText()));
+                expenseList.add(new Expense(name, type, p));
+                totExpense += p;
+                progressBar.setProgress(totExpense);
+                adapter = new ExpensesAdapter(this.getContext(), expenseList);
+                adapter.notifyDataSetChanged();
+                recyclerView.setAdapter(adapter);
+                kalanButce.setText("Kalan Bütçe : " + String.valueOf(butce - totExpense) + " TL");
+            }
         }
     }
 }
