@@ -1,0 +1,254 @@
+package com.example.plansplit.Controllers.FragmentControllers.groups;
+
+import androidx.lifecycle.ViewModelProvider;
+
+import android.app.Dialog;
+import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.PopupMenu;
+
+import com.example.plansplit.Controllers.Adapters.CustomDialogAdapter;
+import com.example.plansplit.Models.Objects.Person;
+import com.example.plansplit.R;
+import com.example.plansplit.Controllers.FragmentControllers.ShareMethod.ShareMethodFragment;
+
+import java.util.ArrayList;
+
+public class GroupExpenseFragment extends Fragment {
+
+    private int startYear, startMonth, startDay;
+    public static Dialog dialog;
+    public static Button dialogBtn;
+    private Button calenderBtn;
+    private Button dpexitBtn;
+    private Button noteBtn;
+    private Button dpmenuBtn;
+    private String repetition;
+    public static String sharemethod;
+    public static Button shareBtn;
+    private Button dpokBtn;
+    private  String payer_name;
+    private String note;
+    private String date;
+    private ArrayList myImageNameList;
+
+    public static GroupExpenseFragment newInstance() {
+        return new GroupExpenseFragment();
+    }
+
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        final View root = inflater.inflate(R.layout.fragment_expense, container, false);
+
+        myImageNameList = new ArrayList<>();
+
+        myImageNameList.add(new Person("ali", R.drawable.denemeresim,0));
+        myImageNameList.add(new Person("veli", R.drawable.denemeresim, 0));
+        myImageNameList.add(new Person("osman", R.drawable.denemeresim, 0));
+
+        dialogBtn = root.findViewById(R.id.payer_button);
+        calenderBtn = root.findViewById(R.id.calendarButton);
+        noteBtn = root.findViewById(R.id.noteButton);
+        shareBtn=root.findViewById(R.id.method_button);
+        noteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openNoteDialog();
+            }
+        });
+
+        dialogBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openPayerDialog(GroupExpenseFragment.this);
+            }
+        });
+        shareBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openShareMethodDialog();
+
+            }
+        });
+
+
+
+        calenderBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDatePicker();
+
+            }
+        });
+
+        return root;
+
+    }
+
+    public void openNoteDialog() {
+        GroupExpenseNoteDialog groupExpenseNoteDialog = new GroupExpenseNoteDialog();
+        groupExpenseNoteDialog.show(getParentFragmentManager(), "group note dialog");
+
+    }
+
+    public void openShareMethodDialog() {
+       ShareMethodFragment shareDialog = new ShareMethodFragment();
+        shareDialog.show(getParentFragmentManager(), "group share method dialog");
+
+
+
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+    }
+
+    public void openPayerDialog(GroupExpenseFragment activity) {
+
+        dialog = new Dialog(getContext(), R.style.Theme_AppCompat_DayNight_Dialog_MinWidth);
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.dialog_recycler_select_payer);
+
+
+
+        Button btndialog = (Button) dialog.findViewById(R.id.buttonExitPayerSelection);
+        btndialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                dialog.dismiss();
+            }
+        });
+
+        RecyclerView recyclerView = dialog.findViewById(R.id.recyclerPayer);
+        CustomDialogAdapter adapterRe = new CustomDialogAdapter(getContext(), myImageNameList);
+        recyclerView.setAdapter(adapterRe);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+
+        recyclerView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        dialog.show();
+
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
+
+
+    public String getPayer_name() {
+        return payer_name;
+    }
+
+    public void setPayer_name(String payer_name) {
+        this.payer_name = payer_name;
+    }
+
+    public void showDatePicker() {
+
+
+
+
+
+        dialog = new Dialog(getContext(), R.style.Theme_AppCompat_DayNight_Dialog_MinWidth);
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.dialog_datepicker_layout);
+        final DatePicker dp = (DatePicker) dialog.findViewById(R.id.dp_group_expense);
+        dpmenuBtn=dialog.findViewById(R.id.dpMenuButton);
+        dpokBtn=dialog.findViewById(R.id.dpOKButton);
+        dpexitBtn=dialog.findViewById(R.id.dpExitButton);
+        dpokBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startYear = dp.getYear();
+                startMonth = dp.getMonth() + 1;
+                startDay = dp.getDayOfMonth();
+                date = startDay + "/" + startMonth + "/" + startYear;
+                calenderBtn.setText(date);
+                dialog.dismiss();
+            }
+        });
+
+
+
+        dpexitBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        dpmenuBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                PopupMenu popup = new PopupMenu(getContext(), dpmenuBtn);
+                //popup.getMenuInflater().inflate(R.menu.date_picker_menu,popup.getMenu());
+                popup.inflate(R.menu.date_picker_menu);
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem) {
+                        switch(menuItem.getItemId()){
+                            case R.id.date_picker_menu_for_once:
+                                repetition="For Once";
+
+                                break;
+                            case R.id.date_picker_menu_weekly_repeat:
+                                repetition="Weekly Repeat";
+                                break;
+                            case R.id.date_picker_menu_monthly_repeat:
+                                repetition="Monthly Repeat";
+                                break;
+                            case R.id.date_picker_menu_yearly_repeat:
+                               repetition="Yearly Repeat";
+                                break;
+                        }
+                        dpmenuBtn.setText(repetition);
+                        return false;
+                    }
+                });
+                popup.show();
+            }
+        });
+
+
+
+        // Create and show the dialog
+        dialog.show();
+       // builder.create().show();
+    }
+}
+
+
+
+
+
+
+
+   /* @Override
+    public void applyTexts(String note) {
+         noteBtn.setText(note);
+    }*/

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:layout_gravity="center"
     android:orientation="vertical"
-    tools:context=".ui.mygroup.ListFragment">
+    tools:context=".Controllers.FragmentControllers.mygroup.ListFragment">
 
 
     <LinearLayout
