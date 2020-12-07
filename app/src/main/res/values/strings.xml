@@ -70,4 +70,5 @@
     <string name="date_picker_menu_yearly_repeat">Yearly Repeat</string>
     <string name="expenses">Harcamalar</string>
     <string name="add_expense">Harcama Ekle</string>
+    <string name="remove_friend">Sil</string>
 </resources>

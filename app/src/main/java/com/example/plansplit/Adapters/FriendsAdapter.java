@@ -1,6 +1,7 @@
 package com.example.plansplit.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.plansplit.MyGroup;
 import com.example.plansplit.R;
 import com.example.plansplit.Objects.Friend;
 import com.google.firebase.database.DataSnapshot;
@@ -21,6 +23,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -98,6 +101,19 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendsV
                         //todo arkadaş detaylar ve arkadaş sil dialog seçeneği
                     }
                     return true;
+                }
+            });
+
+            itemView.findViewById(R.id.friend_card).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int p = getAdapterPosition();
+                    System.out.println("pozisyonn : " + getAdapterPosition());
+                    Intent intent = new Intent(mCtx, MyGroup.class);
+                    Gson gson = new Gson();
+                    String json = gson.toJson(friends.get(p));
+                    intent.putExtra("friend", json);
+                    mCtx.startActivity(intent);
                 }
             });
         }
