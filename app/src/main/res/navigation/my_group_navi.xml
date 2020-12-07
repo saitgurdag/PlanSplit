@@ -7,20 +7,20 @@
 
     <fragment
         android:id="@+id/navi_events"
-        android:name="com.example.plansplit.ui.mygroup.EventsFragment"
+        android:name="com.example.plansplit.Controllers.FragmentControllers.mygroup.EventsFragment"
         android:label="@string/events"
         tools:layout="@layout/fragment_events" />
 
     <fragment
         android:id="@+id/navi_operation"
         android:label="@string/group_operations"
-        android:name="com.example.plansplit.ui.mygroup.GroupOperationsFragment"
+        android:name="com.example.plansplit.Controllers.FragmentControllers.mygroup.GroupOperationsFragment"
         tools:layout="@layout/fragment_group_operations" />
 
     <fragment
         android:id="@+id/navi_todo_list"
         android:label="@string/list"
-        android:name="com.example.plansplit.ui.mygroup.ListFragment"
+        android:name="com.example.plansplit.Controllers.FragmentControllers.mygroup.ListFragment"
         tools:layout="@layout/fragment_list" />
 
 </navigation>
