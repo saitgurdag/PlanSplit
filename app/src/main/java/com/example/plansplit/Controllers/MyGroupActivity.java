@@ -22,7 +22,7 @@ import com.google.gson.Gson;
 
 public class MyGroupActivity extends AppCompatActivity {
     //NavigationView navigationView;
-    Database db = new Database();
+    Database db = Database.getInstance();
     boolean ctrlType=false;             //eğer friend'den geliyorsa true, gruptan geliyorsa false
 
     public void showPopup(View v) {
