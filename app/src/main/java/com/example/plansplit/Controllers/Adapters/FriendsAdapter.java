@@ -16,6 +16,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.plansplit.Controllers.MyGroupActivity;
+import com.example.plansplit.Models.Database;
 import com.example.plansplit.R;
 import com.example.plansplit.Models.Objects.Friend;
 import com.google.firebase.database.DataSnapshot;
@@ -31,8 +32,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendsV
     private static final String TAG = "FriendsAdapter";
     private ArrayList<Friend> friends;
     private Context mCtx;
-    private DatabaseReference db_ref = FirebaseDatabase.getInstance().getReference();
-    private DatabaseReference user_ref = db_ref.child("users");
+    private Database database = Database.getInstance();
     private String person_id;
     private RecyclerView m_RecyclerView;
 
@@ -41,8 +41,33 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendsV
         this.person_id = person_id;
         this.m_RecyclerView = m_RecyclerView;
         this.friends = new ArrayList<>();
-        getFriends(friendsCallBack);
+        database.getFriends(person_id, friendsCallBack);
     }
+
+    public void Refresh(){
+        friends = new ArrayList<>();
+        database.getFriends(person_id, friendsCallBack);
+    }
+
+    private Database.FireBaseFriendCallBack friendsCallBack = new Database.FireBaseFriendCallBack() {
+        @Override
+        public void onFriendRetrieveSuccess(Friend friend) {
+            friends.add(friend);
+            notifyDataSetChanged();
+            m_RecyclerView.setAdapter(FriendsAdapter.this);
+        }
+
+        @Override
+        public void onEmptyListError() {
+            notifyDataSetChanged();
+            m_RecyclerView.setAdapter(FriendsAdapter.this);
+        }
+
+        @Override
+        public void onError(String error) {
+            Log.e(TAG, error);
+        }
+    };
 
     @NonNull
     @Override
@@ -116,83 +141,5 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendsV
                 }
             });
         }
-    }
-
-    //**********************************************************************************************
-
-    private interface FireBaseFriendsCallBack{
-        void onFriendsCallBack(Friend friend);
-    }
-
-    private final FireBaseFriendsCallBack friendsCallBack = new FireBaseFriendsCallBack(){
-        @Override
-        public void onFriendsCallBack(Friend friend){
-            friends.add(friend);
-            notifyDataSetChanged();
-            m_RecyclerView.setAdapter(FriendsAdapter.this);
-        }
-    };
-
-    private void getFriends(final FireBaseFriendsCallBack friendsCallBack){
-        user_ref.orderByKey().equalTo(person_id).addListenerForSingleValueEvent(new ValueEventListener(){
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot){
-                if(snapshot.exists()){
-                    if(person_id.equals(snapshot.getChildren().iterator().next().getKey())){
-                        @SuppressWarnings("unchecked")
-                        ArrayList<String> friends = (ArrayList<String>)
-                                snapshot.getChildren().iterator().next()
-                                        .child("friends").getValue();
-                        if(friends == null){
-                            friends = new ArrayList<>();
-                        }
-                        for(final String friend_key: friends){
-                            user_ref.orderByKey().equalTo(friend_key).addListenerForSingleValueEvent(new ValueEventListener(){
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot snapshot){
-                                    if(snapshot.exists()){
-                                        if(friend_key.equals(snapshot.getChildren().iterator().next().getKey())){
-                                            /*fixme: kayıt sırasında resim almadığımızdan
-                                                rastgele resim koydum
-                                             */
-
-                                            //fixme borçların database'de tutulma yöntemi geçici, acilen değişmeli
-                                            Friend friend = new Friend(
-                                                    R.drawable.denemeresim,
-                                                    snapshot.getChildren().iterator().next().child("name")
-                                                            .getValue().toString() + " "
-                                                            + snapshot.getChildren().iterator().next().child("surname")
-                                                            .getValue().toString(),
-                                                    0,
-                                                    snapshot.getChildren().iterator().next().getKey()
-                                            );
-                                            friendsCallBack.onFriendsCallBack(friend);
-                                        }
-                                    }
-                                }
-
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError error){
-                                    Log.e(TAG, error.getMessage());
-                                    Toast.makeText(mCtx, error.getMessage(), Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        }
-                    }else{
-                        Toast.makeText(mCtx, "something went wrong \n" + snapshot.toString(), Toast.LENGTH_SHORT).show();
-                        Log.d(TAG, snapshot.toString() + "\n \"person_id\" ile ilişkili veri bulamadı, snapshot yok");
-                    }
-                }else{
-                    Toast.makeText(mCtx, "something went wrong \n" + snapshot.toString(), Toast.LENGTH_SHORT).show();
-                    Log.d(TAG, snapshot.toString() + "\n \"person_id\" ile ilişkili veri bulamadı, snapshot yok");
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error){
-                Log.e(TAG, error.getMessage());
-                Toast.makeText(mCtx, error.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 }
