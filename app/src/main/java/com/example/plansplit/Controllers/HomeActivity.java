@@ -43,6 +43,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     NavigationView navigationView;
     FirebaseAuth mAuth;
 
+    public String getPersonId() {
+        return personId;
+    }
+
     //denememee
 
     @Override

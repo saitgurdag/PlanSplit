@@ -91,6 +91,7 @@ public class MyGroupActivity extends AppCompatActivity {
             removeFriendBttn.setVisibility(View.VISIBLE);
             l.setVisibility(View.VISIBLE);
             menu.setVisibility(View.INVISIBLE);
+
             ctrlType=true;
         }
 
