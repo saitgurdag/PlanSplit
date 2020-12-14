@@ -107,8 +107,6 @@ public class AddGroupsAdapter extends RecyclerView.Adapter<AddGroupsAdapter.AddG
                     }
                 }
             });
-
         }
-
     }
 }

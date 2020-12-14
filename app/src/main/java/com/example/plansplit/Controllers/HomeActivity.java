@@ -20,6 +20,7 @@ import androidx.navigation.ui.NavigationUI;
 import android.view.View;
 import android.widget.AdapterView;
 import com.example.plansplit.Controllers.FragmentControllers.groups.GroupExpenseFragment;
+import com.example.plansplit.Models.Database;
 import com.example.plansplit.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -42,6 +43,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout drawerLayout;
     NavigationView navigationView;
     FirebaseAuth mAuth;
+    Database db = new Database();
 
     public String getPersonId() {
         return personId;
@@ -103,7 +105,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         }
 
         System.out.println(acct.getId());
-        System.out.println(personId);
         System.out.println(acct.getGivenName());
         System.out.println(acct.getDisplayName());
         //----------------------------------------------------------------------
@@ -125,7 +126,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 //it's possible to do more actions on several items, if there is a large amount of items I prefer switch(){case} instead of if()
                 if (id==R.id.navigation_logout){
                     if (id == R.id.navigation_logout) {
-                        Log.d(TAG, "burda222");
                         signOut();
 
                         Intent intent = new Intent(HomeActivity.this, MainActivity.class);
