@@ -1,6 +1,7 @@
 package com.example.plansplit.Controllers;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,7 +23,10 @@ import com.google.gson.Gson;
 
 public class MyGroupActivity extends AppCompatActivity {
     //NavigationView navigationView;
-    Database db = Database.getInstance();
+    private static final String TAG = "MyGroupActivity";
+    Database database = Database.getInstance();
+    private String person_id = "";
+    private Friend friend;
     boolean ctrlType=false;             //eğer friend'den geliyorsa true, gruptan geliyorsa false
 
     public void showPopup(View v) {
@@ -57,10 +61,10 @@ public class MyGroupActivity extends AppCompatActivity {
         //BottomNavigationView navView = findViewById(R.id.nav_view_mygroup);
         LinearLayout l = findViewById(R.id.remove_friend_linear);
         ImageView groupPhotoIv = findViewById(R.id.group_pictureIv);
-        ImageButton listBttn = (ImageButton) findViewById(R.id.task_listButton);
-        ImageButton eventsBttn = (ImageButton) findViewById(R.id.eventsButton);
-        ImageButton groupOpBttn = (ImageButton) findViewById(R.id.groupOpButton);
-        ImageButton backBttn = (ImageButton) findViewById(R.id.mygroup_back_button);
+        ImageButton listBttn = findViewById(R.id.task_listButton);
+        ImageButton eventsBttn = findViewById(R.id.eventsButton);
+        ImageButton groupOpBttn = findViewById(R.id.groupOpButton);
+        ImageButton backBttn = findViewById(R.id.mygroup_back_button);
         ImageButton removeFriendBttn = findViewById(R.id.removeFriendButton);
         ImageButton menu = findViewById(R.id.mygroup_menuline_button);
 
@@ -83,7 +87,10 @@ public class MyGroupActivity extends AppCompatActivity {
         }else if(extras != null && extras.keySet().contains("friend")){
             Gson gson = new Gson();
             String json = extras.getString("friend");
-            Friend friend = gson.fromJson(json, Friend.class);
+            friend = gson.fromJson(json, Friend.class);
+            if(extras.keySet().contains("person_id")){
+                person_id = extras.getString("person_id");
+            }
             groupPhotoIv.setImageResource(friend.getPerson_image());
             group_title = friend.getName();
             System.out.println("friend" + friend.getName());
@@ -137,7 +144,19 @@ public class MyGroupActivity extends AppCompatActivity {
             removeFriendBttn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    db.removeFriend();
+                    database.removeFriend(person_id, friend.getKey(), new Database.DatabaseCallBack() {
+                        @Override
+                        public void onSuccess(String success) {
+                            Log.i(TAG, success);
+                            Toast.makeText(getBaseContext(), "Arkadaş silindi", Toast.LENGTH_SHORT).show();
+                            onBackPressed();
+                        }
+
+                        @Override
+                        public void onError(String error_tag, String error) {
+                            Log.e(TAG, error_tag + ": " + error);
+                        }
+                    });
                 }
             });
         }
