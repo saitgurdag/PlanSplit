@@ -121,6 +121,7 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemSele
                                 break;
                             case R.id.filter_hygiene:
                                 selectedFilter=getResources().getString(R.string.title_hygiene);
+                                break;
                             case R.id.filter_others:
                                 selectedFilter=getResources().getString(R.string.title_others);
                                 break;
