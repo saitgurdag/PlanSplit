@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -15,6 +16,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -49,8 +52,10 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemSele
     ProgressBar progressBar;
     TextView progressText, kalanbudget;
     Button addExpense;
+    ImageView filter;
     EditText expenseName, price;
     String type;
+    String selectedFilter;
     Spinner spin;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -70,6 +75,7 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemSele
         ArrayAdapter aa = new ArrayAdapter(this.getContext(), simple_spinner_item, country);
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spin.setAdapter(aa);
+        filter=root.findViewById(R.id.filter);
 
         progressBar = root.findViewById(R.id.progressBar);
         progressBar.setProgress(totExpense);
@@ -92,7 +98,70 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemSele
         addExpense.setOnClickListener(this);
         progressText.setOnClickListener(this);
 
+        filter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                PopupMenu popup = new PopupMenu(getContext(), filter);
+                //popup.getMenuInflater().inflate(R.menu.date_picker_menu,popup.getMenu());
+                popup.inflate(R.menu.filter_menu_personal);
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem) {
+                        switch(menuItem.getItemId()){
+                            case R.id.filter_food:
+                                selectedFilter=getResources().getString(R.string.title_food);
+
+                                break;
+                            case R.id.filter_wear:
+                                selectedFilter=getResources().getString(R.string.title_wear);
+                                break;
+                            case R.id.filter_stationery:
+                                selectedFilter=getResources().getString(R.string.title_stationery);
+                                break;
+                            case R.id.filter_hygiene:
+                                selectedFilter=getResources().getString(R.string.title_hygiene);
+                            case R.id.filter_others:
+                                selectedFilter=getResources().getString(R.string.title_others);
+                                break;
+                            case R.id.filter_all:
+                                selectedFilter=getResources().getString(R.string.title_all);
+                                break;
+
+                        }
+                        filterList(selectedFilter);
+                        return false;
+                    }
+                });
+                popup.show();
+
+
+               //
+            }
+        });
+
         return root;
+    }
+
+    private void filterList(String status){
+        if(!status.equals(getResources().getString(R.string.title_all))) {
+            selectedFilter = status;
+            ArrayList filteredList = new ArrayList<>();
+            for (Expense expense : expenseList) {
+                if (expense.getExpense_type().toLowerCase().contains(status)) {
+                    filteredList.add(expense);
+                }
+
+            }
+            adapter = new ExpensesAdapter(this.getContext(), filteredList);
+            recyclerView.setAdapter(adapter);
+        }
+        else{
+            adapter = new ExpensesAdapter(this.getContext(), expenseList);
+            recyclerView.setAdapter(adapter);
+        }
+
+
     }
 
     @Override
@@ -103,6 +172,7 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemSele
     @Override
     public void onNothingSelected(AdapterView<?> arg0) {
     }
+
 
     @Override
     public void onClick(View v) {

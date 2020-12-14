@@ -72,5 +72,11 @@
     <string name="add_expense">Harcama Ekle</string>
     <string name="remove_friend">Sil</string>
     <string name="pay">Ödeme yap</string>
+    <string name="title_wear">giyecek</string>
+    <string name="title_food">yiyecek</string>
+    <string name="title_others">diğer</string>
+    <string name="title_stationery">kırtasiye</string>
+    <string name="title_hygiene">temizlik</string>
+    <string name="title_all">hepsi</string>
     <string name="add_budget_text">Lütfen Aylık Bütçenizi Giriniz.</string>
 </resources>
