@@ -72,4 +72,6 @@ public class Friend{
     public int getColor(){
         return color;
     }
+
+    public String getKey(){return  this.key;}
 }

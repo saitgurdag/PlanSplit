@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -19,7 +21,6 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-
 import android.view.View;
 import android.widget.AdapterView;
 
@@ -39,7 +40,6 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.gson.Gson;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemSelectedListener {
 
@@ -52,6 +52,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     String navigation_key;
 
     FirebaseAuth mAuth;
+    private static final Database database = Database.getInstance();
     Database db = new Database();
 
     public String getPersonId() {
@@ -65,12 +66,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         BottomNavigationView navView = findViewById(R.id.nav_view);
-        Gson gson = new Gson();
-//        mAuth = gson.fromJson(getIntent().getStringExtra("FirebaseAuth"), FirebaseAuth.class);
         mAuth = FirebaseAuth.getInstance();
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken("503042129134-h3kphilhs7ofn5i2njqvgnnrnmr3l9ba.apps.googleusercontent.com")
+                .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
 
@@ -120,16 +119,30 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         System.out.println(acct.getId());
         System.out.println(acct.getGivenName());
         System.out.println(acct.getDisplayName());
+      
         //----------------------------------------------------------------------
+
         //firebase'e ilk girişte mail isim soyisim kayıt yapılıyor.
+        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
+        if (acct != null) {
+            personId = acct.getId();
+            String name = acct.getDisplayName();
+            if (name == null){
+                name = "No name";
+            }
+            String email = acct.getEmail();
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
+            //todo:kod çökmesin diye bir süre daha soyisim çekicez
+            // ama uygulama içi kullanım en kısa zamanda sıfırlanmalı
+            String surname = acct.getFamilyName();
+            if (surname == null){
+                surname = "No surname";
+            }
 
-        DatabaseReference dbRef = database.getReference("users").child(personId);
-        dbRef.child("name").setValue(acct.getGivenName());
-        dbRef.child("surname").setValue(acct.getFamilyName());
-        dbRef.child("email").setValue(acct.getEmail());
-
+            database.registerUser(personId, name, email, surname);
+            Log.d(TAG, "user registered with this email: " + email + "\n" + "and this key: " + personId);
+        }
+      
         Bundle extras = getIntent().getExtras();
         if(extras != null && extras.keySet().contains("navigation")) {
             navigation_key = extras.getString("navigation");
@@ -152,6 +165,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             }
         }
 
+      
         //----------------------------------------------------------------------
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -161,6 +175,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 //it's possible to do more actions on several items, if there is a large amount of items I prefer switch(){case} instead of if()
                 if (id==R.id.navigation_logout){
                     if (id == R.id.navigation_logout) {
+                      
+                        Log.d(TAG, "SignOut yapıldı");
                         signOut();
 
                         Intent intent = new Intent(HomeActivity.this, MainActivity.class);
