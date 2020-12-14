@@ -6,6 +6,7 @@ public class Person {
     private String mail;
     private int cardView_shareMethodPersonPicture;
     private int checkBox_shareMethodPersonCheckBox;
+    private int cardView_addgroupsPicture;
 
     public String getName() {
         return name;
@@ -42,8 +43,6 @@ public class Person {
     public int getCardView_addgroupsPicture() {
         return cardView_addgroupsPicture;
     }
-
-    private int cardView_addgroupsPicture;
 
 
 

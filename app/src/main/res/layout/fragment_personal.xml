@@ -80,6 +80,7 @@
             android:fontFamily="@font/avenir"
             android:textSize="28sp"
             android:textColor="@color/black"
+            android:clickable="true"
             app:layout_constraintBottom_toBottomOf="@+id/relativeLayout2"
             app:layout_constraintEnd_toEndOf="@+id/relativeLayout2"
             app:layout_constraintStart_toStartOf="@+id/relativeLayout2"

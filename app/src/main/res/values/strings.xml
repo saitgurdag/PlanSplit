@@ -78,4 +78,5 @@
     <string name="title_stationery">kırtasiye</string>
     <string name="title_hygiene">temizlik</string>
     <string name="title_all">hepsi</string>
+    <string name="add_budget_text">Lütfen Aylık Bütçenizi Giriniz.</string>
 </resources>

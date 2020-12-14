@@ -25,7 +25,7 @@ import com.google.gson.Gson;
 
 public class MyGroupActivity extends AppCompatActivity {
     //NavigationView navigationView;
-    Database db = new Database();
+    Database db = Database.getInstance();
     boolean ctrlType=false;             //eğer friend'den geliyorsa true, gruptan geliyorsa false
 
     public void showPopup(View v) {
@@ -137,6 +137,7 @@ public class MyGroupActivity extends AppCompatActivity {
             removeFriendBttn.setVisibility(View.VISIBLE);
             l.setVisibility(View.VISIBLE);
             menu.setVisibility(View.INVISIBLE);
+
             ctrlType=true;
         }
 

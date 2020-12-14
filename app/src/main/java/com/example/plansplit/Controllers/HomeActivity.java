@@ -26,6 +26,7 @@ import android.widget.AdapterView;
 import com.example.plansplit.Controllers.FragmentControllers.friends.FriendsFragment;
 import com.example.plansplit.Controllers.FragmentControllers.groups.GroupExpenseFragment;
 import com.example.plansplit.Controllers.FragmentControllers.personal.PersonalFragment;
+import com.example.plansplit.Models.Database;
 import com.example.plansplit.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -35,8 +36,10 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.gson.Gson;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemSelectedListener {
 
@@ -48,6 +51,12 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     Bundle bundle;
     String navigation_key;
 
+    FirebaseAuth mAuth;
+    Database db = new Database();
+
+    public String getPersonId() {
+        return personId;
+    }
 
     //denememee
 
@@ -56,8 +65,12 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         BottomNavigationView navView = findViewById(R.id.nav_view);
+        Gson gson = new Gson();
+//        mAuth = gson.fromJson(getIntent().getStringExtra("FirebaseAuth"), FirebaseAuth.class);
+        mAuth = FirebaseAuth.getInstance();
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken("503042129134-h3kphilhs7ofn5i2njqvgnnrnmr3l9ba.apps.googleusercontent.com")
                 .requestEmail()
                 .build();
 
@@ -99,8 +112,14 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
         if (acct != null) {
             personId=acct.getId();
+            System.out.println("acct not null");
+        }else{
+            System.out.println("acct null");
         }
 
+        System.out.println(acct.getId());
+        System.out.println(acct.getGivenName());
+        System.out.println(acct.getDisplayName());
         //----------------------------------------------------------------------
         //firebase'e ilk girişte mail isim soyisim kayıt yapılıyor.
 
@@ -142,7 +161,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 //it's possible to do more actions on several items, if there is a large amount of items I prefer switch(){case} instead of if()
                 if (id==R.id.navigation_logout){
                     if (id == R.id.navigation_logout) {
-                        Log.d(TAG, "burda222");
                         signOut();
 
                         Intent intent = new Intent(HomeActivity.this, MainActivity.class);
@@ -158,11 +176,13 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void signOut() {
+        mAuth.signOut();
+
         mGoogleSignInClient.signOut()
                 .addOnCompleteListener(this, new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        Toast.makeText(HomeActivity.this, "Uygulamadan başarıyla çıkış yapıldı!", Toast.LENGTH_SHORT);
+                        Toast.makeText(HomeActivity.this, "Uygulamadan başarıyla çıkış yapıldı!", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
