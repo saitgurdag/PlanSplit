@@ -213,17 +213,17 @@ public class GroupExpenseFragment extends Fragment {
                     public boolean onMenuItemClick(MenuItem menuItem) {
                         switch(menuItem.getItemId()){
                             case R.id.date_picker_menu_for_once:
-                                repetition="For Once";
+                                repetition=getResources().getString(R.string.date_picker_menu_for_once);
 
                                 break;
                             case R.id.date_picker_menu_weekly_repeat:
-                                repetition="Weekly Repeat";
+                                repetition=getResources().getString(R.string.date_picker_menu_weekly_repeat);
                                 break;
                             case R.id.date_picker_menu_monthly_repeat:
-                                repetition="Monthly Repeat";
+                                repetition=getResources().getString(R.string.date_picker_menu_monthly_repeat);
                                 break;
                             case R.id.date_picker_menu_yearly_repeat:
-                               repetition="Yearly Repeat";
+                                repetition=getResources().getString(R.string.date_picker_menu_yearly_repeat);
                                 break;
                         }
                         dpmenuBtn.setText(repetition);
@@ -233,10 +233,6 @@ public class GroupExpenseFragment extends Fragment {
                 popup.show();
             }
         });
-
-
-
-        // Create and show the dialog
         dialog.show();
        // builder.create().show();
     }

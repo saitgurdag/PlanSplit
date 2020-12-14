@@ -12,6 +12,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -19,7 +22,10 @@ import androidx.navigation.ui.NavigationUI;
 
 import android.view.View;
 import android.widget.AdapterView;
+
+import com.example.plansplit.Controllers.FragmentControllers.friends.FriendsFragment;
 import com.example.plansplit.Controllers.FragmentControllers.groups.GroupExpenseFragment;
+import com.example.plansplit.Controllers.FragmentControllers.personal.PersonalFragment;
 import com.example.plansplit.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -36,9 +42,12 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     GoogleSignInClient mGoogleSignInClient;
     private static final String TAG = "HomeActivity";
-    private String personId=null;
+    private String personId;
     private DrawerLayout drawerLayout;
     NavigationView navigationView;
+    Bundle bundle;
+    String navigation_key;
+
 
     //denememee
 
@@ -72,10 +81,14 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
+
+
+
+
         navView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener(){
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item){
-                Bundle bundle = new Bundle();
+               bundle = new Bundle();
                 bundle.putString("person_id", personId);
                 navController.navigate(item.getItemId(), bundle);
                 return true;
@@ -97,6 +110,28 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         dbRef.child("name").setValue(acct.getGivenName());
         dbRef.child("surname").setValue(acct.getFamilyName());
         dbRef.child("email").setValue(acct.getEmail());
+
+        Bundle extras = getIntent().getExtras();
+        if(extras != null && extras.keySet().contains("navigation")) {
+            navigation_key = extras.getString("navigation");
+            bundle = new Bundle();
+            bundle.putString("person_id", personId);
+            switch (navigation_key) {
+                case "personal":
+                    navController.navigate(R.id.navigation_personal, bundle);
+                    break;
+                case "friends":
+                    navController.navigate(R.id.navigation_friends, bundle);
+                    break;
+                case "groups":
+                    navController.navigate(R.id.navigation_groups, bundle);
+                    break;
+                case "notifications":
+                    navController.navigate(R.id.navigation_notifications, bundle);
+                    break;
+
+            }
+        }
 
         //----------------------------------------------------------------------
 

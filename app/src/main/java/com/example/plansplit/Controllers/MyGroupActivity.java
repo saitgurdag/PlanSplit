@@ -1,5 +1,6 @@
 package com.example.plansplit.Controllers;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -11,6 +12,7 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -18,6 +20,7 @@ import androidx.navigation.Navigation;
 import com.example.plansplit.Models.Database;
 import com.example.plansplit.Models.Objects.Friend;
 import com.example.plansplit.R;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
 
 public class MyGroupActivity extends AppCompatActivity {
@@ -44,6 +47,13 @@ public class MyGroupActivity extends AppCompatActivity {
         popup.show();
     }
 
+    public void loadActivity(String key) {
+        Intent intent=new Intent(this,HomeActivity.class);
+        intent.putExtra("navigation",key);
+        startActivity(intent);
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,12 +74,47 @@ public class MyGroupActivity extends AppCompatActivity {
         ImageButton removeFriendBttn = findViewById(R.id.removeFriendButton);
         ImageButton menu = findViewById(R.id.mygroup_menuline_button);
 
+
+        BottomNavigationView navView = findViewById(R.id.nav_view2);
+        //navView.getMenu().getItem(2).setChecked(true);
+        navView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener(){
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item){
+
+                String fragmentKey = null;
+
+                switch (item.getItemId()) {
+                    case R.id.navigation_personal:
+                        fragmentKey = "personal";
+
+                        break;
+                    case R.id.navigation_friends:
+                        fragmentKey = "friends";
+                        break;
+                    case R.id.navigation_groups:
+                        fragmentKey = "groups";
+                        break;
+                    case R.id.navigation_notifications:
+                        fragmentKey = "notifications";
+                        break;
+                }
+                loadActivity(fragmentKey);
+                return true;
+            }
+
+
+
+        });
+
+
+
         final NavController navController = Navigation.findNavController(this, R.id.fragment_place_mygroup);
 
         String group_title = "Group title";
 
         Bundle extras = getIntent().getExtras();
         if(extras != null && extras.keySet().contains("group_title")){
+            navView.getMenu().getItem(2).setChecked(true);
             group_title = extras.getString("group_title");
             int resid = extras.getInt("group_image");
             groupPhotoIv.setImageResource(resid);
@@ -81,6 +126,7 @@ public class MyGroupActivity extends AppCompatActivity {
 
             ctrlType=false;
         }else if(extras != null && extras.keySet().contains("friend")){
+            navView.getMenu().getItem(1).setChecked(true);
             Gson gson = new Gson();
             String json = extras.getString("friend");
             Friend friend = gson.fromJson(json, Friend.class);
