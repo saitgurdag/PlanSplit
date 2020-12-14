@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/filter_wear"
+        android:title="@string/title_wear" />
+
+    <item
+        android:id="@+id/filter_food"
+        android:title="@string/title_food" />
+    <item
+        android:id="@+id/filter_stationery"
+        android:title="@string/title_stationery" />
+    <item
+        android:id="@+id/filter_hygiene"
+        android:title="@string/title_hygiene" />
+
+    <item
+        android:id="@+id/filter_others"
+        android:title="@string/title_others" />
+    <item
+        android:id="@+id/filter_all"
+        android:title="@string/title_all" />
+</menu>

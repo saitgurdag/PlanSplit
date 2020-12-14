@@ -13,8 +13,12 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.plansplit.Controllers.Adapters.AddGroupsAdapter;
+import com.example.plansplit.Controllers.Adapters.FriendsAdapter;
+import com.example.plansplit.Controllers.HomeActivity;
 import com.example.plansplit.R;
 import com.example.plansplit.Models.Objects.Person;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,33 +28,26 @@ public class AddGroupsFragment extends Fragment {
     private static final String TAG = "AddGroupsFragment";
     RecyclerView recyclerView;
     AddGroupsAdapter adapter;
-    List<Person> AddGroupsPersonList;
+    private DatabaseReference db_ref = FirebaseDatabase.getInstance().getReference();
+    private DatabaseReference user_ref = db_ref.child("users");
+    private String person_id;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_addgroups, container, false);
+        HomeActivity home = (HomeActivity) getContext();
 
-        recyclerView = (RecyclerView) root.findViewById(R.id.recycler_addgroups);
+        person_id = home.getPersonId();
+
+        recyclerView = root.findViewById(R.id.recycler_addgroups);
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this.getContext(),1);
         recyclerView.setLayoutManager(mLayoutManager);
-        AddGroupsPersonList = new ArrayList<>();
-
-        AddGroupsPersonList.add(new Person("Curie","qwewq",R.drawable.denemeresim));
-        AddGroupsPersonList.add(new Person("Albert","qwewq",R.drawable.denemeresim));
-        AddGroupsPersonList.add(new Person("Benjamin","qwewq",R.drawable.denemeresim));
-        AddGroupsPersonList.add(new Person("Sait","qwewq",R.drawable.denemeresim));
-        AddGroupsPersonList.add(new Person("Tuncay","qwewq",R.drawable.denemeresim));
-        AddGroupsPersonList.add(new Person("Arda","qwewq",R.drawable.denemeresim));
-        AddGroupsPersonList.add(new Person("Oguzhan","qwewq",R.drawable.denemeresim));
-        AddGroupsPersonList.add(new Person("Berkay","qwewq",R.drawable.denemeresim));
-        Log.d(TAG, "BURADA");
-
-        adapter = new AddGroupsAdapter(this.getContext(),AddGroupsPersonList);
+        adapter = new AddGroupsAdapter(getContext(), person_id, recyclerView);
         recyclerView.setAdapter(adapter);
-
 
         return root;
     }
+
 }

@@ -8,6 +8,6 @@
         />
     <stroke
         android:color="@color/group_border_red"
-        android:width="3dp"
+        android:width="2dp"
         />
 </shape>

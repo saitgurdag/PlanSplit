@@ -14,12 +14,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+import android.view.View;
+import android.widget.AdapterView;
 
+import com.example.plansplit.Controllers.FragmentControllers.friends.FriendsFragment;
 import com.example.plansplit.Controllers.FragmentControllers.groups.GroupExpenseFragment;
+import com.example.plansplit.Controllers.FragmentControllers.personal.PersonalFragment;
 import com.example.plansplit.Models.Database;
 import com.example.plansplit.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -38,11 +45,19 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     GoogleSignInClient mGoogleSignInClient;
     private static final String TAG = "HomeActivity";
-    private String personId=null;
+    private String personId;
     private DrawerLayout drawerLayout;
     NavigationView navigationView;
+    Bundle bundle;
+    String navigation_key;
+
     FirebaseAuth mAuth;
     private static final Database database = Database.getInstance();
+    Database db = new Database();
+
+    public String getPersonId() {
+        return personId;
+    }
 
     //denememee
 
@@ -78,10 +93,14 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
+
+
+
+
         navView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener(){
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item){
-                Bundle bundle = new Bundle();
+               bundle = new Bundle();
                 bundle.putString("person_id", personId);
                 navController.navigate(item.getItemId(), bundle);
                 return true;
@@ -89,6 +108,18 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         });
         navigationView=findViewById(R.id.nav_draw_view);
 
+        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
+        if (acct != null) {
+            personId=acct.getId();
+            System.out.println("acct not null");
+        }else{
+            System.out.println("acct null");
+        }
+
+        System.out.println(acct.getId());
+        System.out.println(acct.getGivenName());
+        System.out.println(acct.getDisplayName());
+      
         //----------------------------------------------------------------------
 
         //firebase'e ilk girişte mail isim soyisim kayıt yapılıyor.
@@ -111,6 +142,30 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             database.registerUser(personId, name, email, surname);
             Log.d(TAG, "user registered with this email: " + email + "\n" + "and this key: " + personId);
         }
+      
+        Bundle extras = getIntent().getExtras();
+        if(extras != null && extras.keySet().contains("navigation")) {
+            navigation_key = extras.getString("navigation");
+            bundle = new Bundle();
+            bundle.putString("person_id", personId);
+            switch (navigation_key) {
+                case "personal":
+                    navController.navigate(R.id.navigation_personal, bundle);
+                    break;
+                case "friends":
+                    navController.navigate(R.id.navigation_friends, bundle);
+                    break;
+                case "groups":
+                    navController.navigate(R.id.navigation_groups, bundle);
+                    break;
+                case "notifications":
+                    navController.navigate(R.id.navigation_notifications, bundle);
+                    break;
+
+            }
+        }
+
+      
         //----------------------------------------------------------------------
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -120,6 +175,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 //it's possible to do more actions on several items, if there is a large amount of items I prefer switch(){case} instead of if()
                 if (id==R.id.navigation_logout){
                     if (id == R.id.navigation_logout) {
+                      
                         Log.d(TAG, "SignOut yapıldı");
                         signOut();
 

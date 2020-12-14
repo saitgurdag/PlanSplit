@@ -18,7 +18,7 @@
         android:clickable="true"
         android:focusable="true"
         android:orientation="vertical"
-        app:cardCornerRadius="14dp">
+        app:cardCornerRadius="12dp">
 
         <RelativeLayout
             android:id="@+id/friend_background_layout"
@@ -56,21 +56,30 @@
                 android:layout_toEndOf="@+id/friend_frame"
                 android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/friend_name"
-                    android:fontFamily="@font/avenir"
+                <RelativeLayout
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:text="TextView" />
+                    android:layout_height="match_parent"
+                    android:layout_weight="1.6"
+                    android:layout_gravity="center"
+                    android:gravity="center">
+                    <TextView
+                        android:id="@+id/friend_name"
+                        android:fontFamily="@font/avenir"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:textSize="20sp"
+                        android:layout_gravity="center_vertical"
+                        android:textColor="@color/black"
+                        android:text="TextView" />
+                </RelativeLayout>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:padding="5dp"
+                    android:padding="20dp"
                     android:orientation="vertical"
-                    android:layout_marginRight="8dp">
+                    android:layout_marginRight="10dp">
 
                     <TextView
                         android:id="@+id/friend_amount"
@@ -81,6 +90,7 @@
                         android:textAlignment="center"
                         android:gravity="center"
                         android:textColor="@color/red"
+                        android:textSize="20sp"
                         android:text="TextView" />
 
                     <TextView
@@ -92,6 +102,7 @@
                         android:textAlignment="center"
                         android:gravity="center"
                         android:textColor="@color/red"
+                        android:textSize="15sp"
                         android:text="TextView" />
                 </LinearLayout>
             </LinearLayout>

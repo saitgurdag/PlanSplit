@@ -47,6 +47,7 @@ public class FriendsFragment extends Fragment {
 
         person_id = getArguments().get("person_id").toString();
 
+
         m_RecyclerView = root.findViewById(R.id.recycler_friends);
         m_RecyclerView.setHasFixedSize(true);
         m_LayoutManager = new LinearLayoutManager(getActivity());
