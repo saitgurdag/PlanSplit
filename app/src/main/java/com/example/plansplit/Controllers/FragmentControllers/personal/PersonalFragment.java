@@ -1,9 +1,16 @@
 package com.example.plansplit.Controllers.FragmentControllers.personal;
 
+import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -18,25 +25,29 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.plansplit.Controllers.Adapters.ExpensesAdapter;
+import com.example.plansplit.Models.Database;
 import com.example.plansplit.Models.Objects.Expense;
 import com.example.plansplit.R;
 
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static android.R.layout.simple_spinner_item;
 
 public class PersonalFragment extends Fragment implements AdapterView.OnItemSelectedListener, View.OnClickListener {
 
     String[] country;
+    Database db;
     private static final String TAG = "PersonalFragment";
     RecyclerView recyclerView;
     ExpensesAdapter adapter;
-    int butce;                        //butçe progressBar'da 360 dereceye denk gelecek
+    int budget;                        //butçe progressBar'da 360 dereceye denk gelecek
     int totExpense;                   //toplam harcamayı gösteriyor.
-    List<Expense> expenseList;
+    ArrayList<Expense> expenseList;
     ProgressBar progressBar;
-    TextView progressText, kalanButce;
+    TextView progressText, kalanbudget;
     Button addExpense;
     EditText expenseName, price;
     String type;
@@ -45,45 +56,41 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemSele
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_personal, container, false);
+        db = new Database(this.getContext(), this);
+        db.getBudget();
+        expenseList = new ArrayList<>();
+        expenseList.clear();
+        totExpense = 0;
+        expenseList = db.getExpenses();
+        totExpense = db.getTotExpense();
 
-        country = new String[]{"Yiyecek", "Giyecek", "Diğer"};
-        butce=3000;         //örnek olarak bu değerler eklendi.
-
+        country = new String[]{"Yiyecek", "Giyecek", "Kırtasiye", "Temizlik" , "Diğer"};
         spin = (Spinner) root.findViewById(R.id.spinner);
         spin.setOnItemSelectedListener(this);
-
         ArrayAdapter aa = new ArrayAdapter(this.getContext(), simple_spinner_item, country);
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spin.setAdapter(aa);
 
         progressBar = root.findViewById(R.id.progressBar);
+        progressBar.setProgress(totExpense);
         progressText = root.findViewById(R.id.progress_text);
         addExpense = root.findViewById(R.id.add_expense);
         price = root.findViewById(R.id.price);
         expenseName = root.findViewById(R.id.name);
-        kalanButce = root.findViewById(R.id.kalan_butce);
+        kalanbudget = root.findViewById(R.id.kalan_butce);
 
         recyclerView = (RecyclerView) root.findViewById(R.id.recycler_expense);
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this.getContext(),1);
         recyclerView.setLayoutManager(mLayoutManager);
-        expenseList = new ArrayList<>();
 
-        expenseList.add(new Expense("Kıyafet Alışverişi", "Giyecek", 50));  //ÖRNEKKKK
-        expenseList.add(new Expense("Yemekhane Ücreti", "Yiyecek", 150));   //ÖRNEKKKK
-        totExpense+=50;             //ÖRNEKKKK
-        totExpense+=150;            //ÖRNEKKKK
-        kalanButce.setText("Kalan Bütçe : " + String.valueOf(butce-totExpense) + " TL");
-
-
-        progressBar.setMax(butce);
-        progressBar.setProgress(totExpense);
-        progressText.setText(butce + " TL");
+        update();
 
         adapter = new ExpensesAdapter(this.getContext(), expenseList);
         recyclerView.setAdapter(adapter);
 
         addExpense.setOnClickListener(this);
+        progressText.setOnClickListener(this);
 
         return root;
     }
@@ -103,14 +110,67 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemSele
             if(!price.getText().toString().matches("") && !expenseName.getText().toString().matches("")) {
                 String name = String.valueOf(expenseName.getText());
                 int p = Integer.parseInt(String.valueOf(price.getText()));
-                expenseList.add(new Expense(name, type, p));
-                totExpense += p;
-                progressBar.setProgress(totExpense);
-                adapter = new ExpensesAdapter(this.getContext(), expenseList);
-                adapter.notifyDataSetChanged();
-                recyclerView.setAdapter(adapter);
-                kalanButce.setText("Kalan Bütçe : " + String.valueOf(butce - totExpense) + " TL");
+                db.addExpense(name, type, String.valueOf(p));
             }
+        }else if(v.getId()==progressText.getId()){
+            addBudgetDialog();
         }
+    }
+
+    public void newExpense(ArrayList e, int p) {
+        expenseList = e;
+        totExpense = p;
+        adapter = new ExpensesAdapter(this.getContext(), expenseList);
+        adapter.notifyDataSetChanged();
+        recyclerView.setAdapter(adapter);
+        update();
+    }
+
+    private void addBudgetDialog() {
+
+        @SuppressLint("InflateParams") final View DialogView = LayoutInflater.from(this.getContext()).inflate(R.layout.dialog_add_budget, null);
+        final Dialog dialog = new Dialog(this.getContext(), R.style.DialogAddBudget);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(DialogView);
+        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+        layoutParams.copyFrom(Objects.requireNonNull(dialog.getWindow()).getAttributes());
+        layoutParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
+        layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        dialog.getWindow().setAttributes(layoutParams);
+        dialog.show();
+
+        dialog.findViewById(R.id.add_budget_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditText budgetEdit = dialog.findViewById(R.id.add_budget_edit_txt);
+                if(!budgetEdit.getText().toString().matches("")){
+                    dialog.cancel();
+                    budget=Integer.parseInt(String.valueOf(budgetEdit.getText()));
+                    update();
+                    db.setBudget(budget);
+                }else{
+                    Log.d(TAG, "Budget eklema dialogunda edit text hatalı");
+                }
+            }
+        });
+
+    }
+
+    public void checkBudget(String i){
+        if(i==null) {
+            addBudgetDialog();
+        }else{
+            budget = Integer.parseInt(i);
+            System.out.println("Aylık Bütçe : " + budget);
+            update();
+        }
+    }
+
+    public void update(){
+        progressText.setText(String.valueOf(budget) + " TL");
+        progressBar.setMax(budget);
+        kalanbudget.setText("Kalan Bütçe : " + String.valueOf(budget - totExpense) + " TL");
+        progressBar.setProgress(totExpense);
+
     }
 }
