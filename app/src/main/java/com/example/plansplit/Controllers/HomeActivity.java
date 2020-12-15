@@ -59,8 +59,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         return personId;
     }
 
-    //denememee
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,20 +105,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             }
         });
         navigationView=findViewById(R.id.nav_draw_view);
-
-        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
-        if (acct != null) {
-            personId=acct.getId();
-            System.out.println("acct not null");
-        }else{
-            System.out.println("acct null");
-        }
-
-        System.out.println(acct.getId());
-        System.out.println(acct.getGivenName());
-        System.out.println(acct.getDisplayName());
-      
-        //----------------------------------------------------------------------
 
         //firebase'e ilk girişte mail isim soyisim kayıt yapılıyor.
         GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);

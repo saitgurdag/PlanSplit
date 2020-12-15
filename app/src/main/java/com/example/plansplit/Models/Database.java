@@ -838,14 +838,14 @@ public class Database {
         user_reference.child(user_key).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (!snapshot.exists()){
+                if (!snapshot.exists()) {
                     callBack.onError(KEY_NOT_FOUND, user_key + " ile ilişkili kullanıcı bulunamadı");
                     return;
                 }
                 @SuppressWarnings("unchecked")
                 ArrayList<String> friends = (ArrayList<String>)
                         snapshot.child("friends").getValue();
-                if (friends == null){
+                if (friends == null) {
                     friends = new ArrayList<>();
                 }
                 boolean is_friend_exists = friends.remove(friend_list_key);
@@ -891,4 +891,71 @@ public class Database {
             }
         });
     }
+
+    public void getBudget(){
+        user_reference.child(userId).child("budget").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    String b;
+                    b = snapshot.getValue().toString();
+                    ((PersonalFragment) fragment).checkBudget(b);
+                }else {
+                    ((PersonalFragment) fragment).checkBudget(null);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    public void setBudget(int budget){
+        user_reference.child(userId).child("budget").setValue(budget);
+    }
+
+    public void addExpense(String name, String type, String price){
+
+        DatabaseReference dbRef = user_reference.child(userId).child("expenses");
+        String key = dbRef.push().getKey();
+        DatabaseReference dbr = dbRef.child(key);
+        dbr.child("name").setValue(name);
+        dbr.child("type").setValue(type);
+        dbr.child("price").setValue(price);
+        getExpenses();
+
+    }
+
+    public ArrayList getExpenses() {
+        final ArrayList<Expense> expenses = new ArrayList<>();
+        DatabaseReference dbRef = user_reference.child(userId).child("expenses");
+        dbRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                totExpense=0;
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    String name = (String) ds.child("name").getValue();
+                    String type = (String) ds.child("type").getValue();
+                    String price = (String) ds.child("price").getValue();
+                    if(price!=null) {
+                        int p = Integer.parseInt(price);
+                        totExpense+=p;
+                        expenses.add(new Expense(name, type, p));
+                    }
+
+                }
+                ((PersonalFragment)fragment).newExpense(expenses, totExpense);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                Log.w(TAG, "Failed to read value.", error.toException());
+            }
+        });
+
+        return expenses;
+    }
+  
 }
