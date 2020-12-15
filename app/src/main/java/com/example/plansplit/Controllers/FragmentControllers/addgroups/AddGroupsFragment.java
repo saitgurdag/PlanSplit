@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatRadioButton;
@@ -118,21 +119,21 @@ public class AddGroupsFragment extends Fragment {
 
 
 
-//                if (AddGroupsAdapter.checked_personList.size() > 0) {
-//                    final String group_name = editTextTextPersonName.getText().toString().trim();
-//                    Groups group = new Groups(group_name,group_type);
-//                    group.addFriend(person_id);
-//                    for (Friend friend : AddGroupsAdapter.checked_personList) {
-//                        String friendKey = friend.getKey();
-//                        group.addFriend(friendKey);
-//                    }
-//                    group_ref.push().setValue(group);
-//
-//                    getFragmentManager().popBackStack();
-//
-//                } else {
-//                    Toast.makeText(getContext(), "Lütfen Arkadaş Seçiniz", Toast.LENGTH_SHORT).show();
-//                }
+                if (AddGroupsAdapter.checked_personList.size() > 0) {
+                    final String group_name = editTextTextPersonName.getText().toString().trim();
+                    Groups group = new Groups(group_name,group_type);
+                    group.addFriend(person_id);
+                    for (Friend friend : AddGroupsAdapter.checked_personList) {
+                        String friendKey = friend.getKey();
+                        group.addFriend(friendKey);
+                    }
+                    group_ref.push().setValue(group);
+
+                    getFragmentManager().popBackStack();
+
+                } else {
+                    Toast.makeText(getContext(), "Lütfen Arkadaş Seçiniz", Toast.LENGTH_SHORT).show();
+                }
 
             }
         });
