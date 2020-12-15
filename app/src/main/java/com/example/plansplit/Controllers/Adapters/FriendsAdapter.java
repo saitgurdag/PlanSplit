@@ -8,12 +8,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.plansplit.Controllers.FragmentControllers.friends.FriendsFragment;
 import com.example.plansplit.Controllers.MyGroupActivity;
 import com.example.plansplit.Models.Database;
 import com.example.plansplit.R;
@@ -24,28 +26,58 @@ import java.util.ArrayList;
 
 public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendsViewHolder>{
     private static final String TAG = "FriendsAdapter";
-    private ArrayList<Friend> friends;
+    private  ArrayList<Friend> friends=new ArrayList<>();
     private Context mCtx;
     private Database database = Database.getInstance();
     private String person_id;
     private RecyclerView m_RecyclerView;
+    private ArrayList<Friend> friendsbuffer=new ArrayList<>();
 
-    public FriendsAdapter(Context mCtx, String person_id, RecyclerView m_RecyclerView){
+    public FriendsAdapter(Context mCtx, String person_id, final RecyclerView m_RecyclerView){
         this.mCtx = mCtx;
         this.person_id = person_id;
         this.m_RecyclerView = m_RecyclerView;
         loadFriends();
+        FriendsFragment.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                friends=new ArrayList<>();
+                friends.addAll(friendsbuffer);
+                ArrayList<Friend> friendstodelete=new ArrayList<>();
+                if(!s.isEmpty()){
+                    for(Friend friend:friendsbuffer){
+                        if(!friend.getName().toLowerCase().contains(s.toLowerCase())){
+                            friendstodelete.add(friend);
+                        }
+                    }
+                    friends.removeAll(friendstodelete);
+                }
+                notifyDataSetChanged();
+                m_RecyclerView.setAdapter(FriendsAdapter.this);
+
+                return true;
+            }
+        });
+
     }
 
     public void loadFriends(){
-        this.friends = new ArrayList<>();
+        this.friendsbuffer = new ArrayList<>();
         database.getFriends(person_id, friendsCallBack);
     }
 
     private final Database.FriendCallBack friendsCallBack = new Database.FriendCallBack() {
         @Override
-        public void onFriendRetrieveSuccess(Friend friend) {
-            friends.add(friend);
+        public void onFriendRetrieveSuccess(final Friend friend) {
+
+            friendsbuffer.add(friend);
+            friends.clear();
+            friends.addAll(friendsbuffer);
             notifyDataSetChanged();
             m_RecyclerView.setAdapter(FriendsAdapter.this);
         }
@@ -57,6 +89,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendsV
             m_RecyclerView.setAdapter(FriendsAdapter.this);
         }
     };
+
 
     @NonNull
     @Override
