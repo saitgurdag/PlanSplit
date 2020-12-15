@@ -776,35 +776,23 @@ public class Database {
         user_reference.child(user_key).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (!snapshot.exists()){
+                if (!snapshot.exists()) {
                     callBack.onError(KEY_NOT_FOUND, user_key + " ile ilişkili kullanıcı bulunamadı");
                     return;
                 }
                 @SuppressWarnings("unchecked")
                 ArrayList<String> friends = (ArrayList<String>)
                         snapshot.child("friends").getValue();
-                if (friends == null){
+                if (friends == null) {
                     friends = new ArrayList<>();
                 }
                 boolean is_friend_exists = friends.remove(friend_key);
-                if (!is_friend_exists){
+                if (!is_friend_exists) {
                     callBack.onError(VALUE_NOT_FOUND, "Böyle bir arkadaş bulunamadı");
                     return;
                 }
                 handler.removeFriend(user_key, friends);
                 callBack.onSuccess("İstek silindi");
-              
-    public void getBudget(){
-        user_reference.child(userId).child("budget").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()){
-                    String b;
-                    b = snapshot.getValue().toString();
-                    ((PersonalFragment) fragment).checkBudget(b);
-                }else {
-                    ((PersonalFragment) fragment).checkBudget(null);
-                }
             }
 
             @Override
@@ -840,6 +828,22 @@ public class Database {
             }
         });
     }
+
+    public void getBudget(){
+        user_reference.child(userId).child("budget").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    String b;
+                    b = snapshot.getValue().toString();
+                    ((PersonalFragment) fragment).checkBudget(b);
+                }else {
+                    ((PersonalFragment) fragment).checkBudget(null);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
 
             }
         });
