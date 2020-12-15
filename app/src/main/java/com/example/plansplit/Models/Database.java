@@ -2,14 +2,19 @@ package com.example.plansplit.Models;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.example.plansplit.Controllers.Adapters.AddGroupsAdapter;
+import com.example.plansplit.Controllers.Adapters.GroupAdapter;
 import com.example.plansplit.Controllers.FragmentControllers.personal.PersonalFragment;
 import com.example.plansplit.Models.Objects.Expense;
 import com.example.plansplit.Models.Objects.Friend;
 import com.example.plansplit.Models.Objects.FriendRequest;
+import com.example.plansplit.Models.Objects.Groups;
 import com.example.plansplit.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -1013,6 +1018,60 @@ public class Database {
             }
         });
         return expenses;
+    }
+
+    public void createNewGroup(String person_id, ArrayList<Friend> checked_PersonList, String group_name, String group_type, EditText editTextTextPersonName){
+        if (AddGroupsAdapter.checked_personList.size() > 0) {
+            group_name = editTextTextPersonName.getText().toString().trim();
+            Groups group = new Groups(group_name,group_type);
+            group.addFriend(person_id);
+            for (Friend friend : AddGroupsAdapter.checked_personList) {
+                String friendKey = friend.getKey();
+                group.addFriend(friendKey);
+            }
+            group_reference.push().setValue(group);
+
+
+        } else {
+            Toast.makeText(context, "Lütfen Arkadaş Seçiniz", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void getGroups(final String person_id, final ArrayList<Groups> groupsArrayList, final GroupAdapter groupAdapter){
+        group_reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                groupsArrayList.clear();
+
+                for (final DataSnapshot d : snapshot.getChildren()) {
+//                    System.out.println(person_id);
+//                    DataSnapshot personKeysnp = d.child("group_members").getChildren().iterator().next();
+//                    String personKey = (String) personKeysnp.getValue();
+//                    System.out.println(personKey);
+
+                    DataSnapshot denem = d.child("group_members");
+
+                    for(DataSnapshot d2 : denem.getChildren()){
+                        if(d2.getValue().equals(person_id)){
+                            Groups group = d.getValue(Groups.class);
+                            groupsArrayList.add(group);
+                        }
+                    }
+
+//                    if( d.child(person_id).exists()){
+//                        System.out.println(person_id);
+//                        Groups group = d.getValue(Groups.class);
+//                        groupsArrayList.add(group);
+//                    }
+                }
+                groupAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
   
 }
