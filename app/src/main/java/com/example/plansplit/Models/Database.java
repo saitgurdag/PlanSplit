@@ -1,10 +1,18 @@
 package com.example.plansplit.Models;
 
-import androidx.annotation.NonNull;
+import android.content.Context;
+import android.util.Log;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+
+import com.example.plansplit.Controllers.FragmentControllers.personal.PersonalFragment;
+import com.example.plansplit.Models.Objects.Expense;
 import com.example.plansplit.Models.Objects.Friend;
 import com.example.plansplit.Models.Objects.FriendRequest;
 import com.example.plansplit.R;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -30,7 +38,55 @@ public class Database {
     private static final DatabaseReference friend_reference = database.getReference("friends");
     private static final DatabaseReference group_reference  =database.getReference("groups");
 
-    private Database(){ }
+    private static final String TAG = "DATABASE";
+    final int[] butce = new int[1];
+    public boolean ctrlRun=false;
+    private Context context;
+    private Fragment fragment;
+    private int totExpense = 0;
+
+    public int getTotExpense() {
+        return totExpense;
+    }
+
+    public int getButce() {
+        return butce[0];
+    }
+
+    public Database(){ }
+
+    private String userId = null;
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public Database(Context context){
+        this.context=context;
+        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(context);
+        if (acct != null) {
+            setUserId(acct.getId());
+            System.out.println("acct not null");
+        }else{
+            System.out.println("acct null");
+        }
+    }
+
+    public Database(Context context, Fragment fragment){
+        this.fragment = fragment;
+        this.context=context;
+        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(context);
+        if (acct != null) {
+            setUserId(acct.getId());
+            System.out.println("acct not null");
+        }else{
+            System.out.println("acct null");
+        }
+    }
 
     private static class Holder{
         private static final Database INSTANCE = new Database();
