@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -19,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.plansplit.Controllers.Adapters.FriendsAdapter;
 import com.example.plansplit.Models.Database;
+import com.example.plansplit.Models.Objects.Friend;
 import com.example.plansplit.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -36,6 +38,7 @@ public class FriendsFragment extends Fragment {
     private FriendsAdapter m_Adapter;
     private RecyclerView.LayoutManager m_LayoutManager;
     private String person_id = "";
+    public static SearchView searchView;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -53,6 +56,11 @@ public class FriendsFragment extends Fragment {
         m_LayoutManager = new LinearLayoutManager(getActivity());
         m_RecyclerView.setLayoutManager(m_LayoutManager);
 
+        searchView=root.findViewById(R.id.searchViewFriends);
+
+
+
+
         add_friend_button.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
@@ -62,7 +70,8 @@ public class FriendsFragment extends Fragment {
                     public void onSuccess(String success) {
                         Log.i(TAG, success);
                         Toast.makeText(getContext(), success, Toast.LENGTH_SHORT).show();
-                        m_Adapter.loadFriends();
+                        //m_Adapter.loadFriends();
+                        m_Adapter = new FriendsAdapter(getContext(), person_id, m_RecyclerView);
                         add_friend_email_text.clearFocus();
                         add_friend_email_text.setText("");
                         InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
