@@ -13,8 +13,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-import kotlin.Suppress;
-
 public class Database {
 
     //error list for easy debugging
@@ -29,6 +27,8 @@ public class Database {
     //Firebase
     private static final FirebaseDatabase database = FirebaseDatabase.getInstance();
     private static final DatabaseReference user_reference = database.getReference("users");
+    private static final DatabaseReference friend_reference = database.getReference("friends");
+    private static final DatabaseReference group_reference  =database.getReference("groups");
 
     private Database(){ }
 
@@ -59,45 +59,37 @@ public class Database {
         void onError(String error_tag, String error);
     }
 
-    /**
-     * Standard interface for status report from Database operations
-     */
+    /** Standard interface for status report from Database operations */
     public interface DatabaseCallBack {
         void onSuccess(String success);
         void onError(String error_tag, String error);
     }
 
-    /**
-     * A private handler for adding new friend and removing request
-     */
+    /** A private handler for adding new friend, removing request and removing friends node on error */
     @SuppressWarnings("unused")
     private interface AddFriendHandler {
         void addAsFriend(String key, ArrayList<String> friends);
         void removeFromRequests(String key, ArrayList<String> friend_reqs);
+        void removeFriendsOnError(String friend_list_key);
     }
 
-    /**
-     * A private handler for adding new friend request
-     */
+    /** A private handler for adding new friend request */
     @SuppressWarnings("unused")
     private interface SendFriendRequestHandler {
         void addToRequests(String key, ArrayList<String> friend_reqs);
     }
 
-    /**
-     * A private handler for declining the friend request
-     */
+    /** A private handler for declining the friend request */
     @SuppressWarnings("unused")
     private interface DeclineFriendRequestHandler {
         void declineFriendRequest(String key, ArrayList<String> friend_reqs);
     }
 
-    /**
-     * A private handler for removing friend from friend list
-     */
+    /** A private handler for removing friend from friend list and deleting friend snapshot */
     @SuppressWarnings("unused")
     private interface RemoveFriendHandler {
-        void removeFriend(String key, ArrayList<String> friends);
+        void removeFriend(String key);
+        void removeFromFriendList(String key, ArrayList<String> friends);
     }
 
     /**
@@ -115,7 +107,7 @@ public class Database {
     }
 
     /**
-     * It searchs for all friends of the given keys' user
+     * It searches for all friends of the given keys' user
      * then calls getFriend method to construct the Friend and calls CallBack,
      * which should be specialized
      * <p>
@@ -141,14 +133,36 @@ public class Database {
                     return;
                 }
                 @SuppressWarnings("unchecked")
-                ArrayList<String> friends = (ArrayList<String>)
+                ArrayList<String> friend_list_keys = (ArrayList<String>)
                         snapshot.child("friends").getValue();
-                if(friends == null){
+                if(friend_list_keys == null){
                     callBack.onError(FRIEND_LIST_EMPTY, "Arkadaş listesi boş");
                     return;
                 }
-                for(final String friend_key: friends){
-                    getFriend(friend_key, callBack);
+                for(final String friend_list_key: friend_list_keys){
+                    //assuming snapshot with friend_list_key exists, if not throws Exception
+                    friend_reference.child(friend_list_key).child("friends").addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (!snapshot.exists()){
+                                callBack.onError(VALUE_NOT_FOUND, "friends snapshot'ında arkadaş keyleri yok");
+                                return;
+                            }
+                            @SuppressWarnings("unchecked")
+                            ArrayList<String> friends = (ArrayList<String>) snapshot.getValue();
+                            for (String key: friends){
+                                if (!user_key.equals(key)){
+                                    getFriend(key, callBack);
+                                    return;
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
                 }
             }
 
@@ -196,51 +210,6 @@ public class Database {
                 int amount = 0;
                 Friend friend = new Friend(photo, name, amount, friend_key);
                 callBack.onFriendRetrieveSuccess(friend);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                callBack.onError(DATABASE_ERROR, error.getMessage());
-            }
-        });
-    }
-
-    /**
-     * It checks given keys friends list and searches for specific keys presence
-     * <p>
-     * ERRORS: <p>
-     * {@value DATABASE_ERROR} <p>
-     * {@value KEY_NOT_FOUND} <p>
-     * {@value USER_AND_TARGET_KEY_SAME} <p>
-     * {@value VALUE_NOT_FOUND} <p>
-     * @param user_key key whose friends list would be searched
-     * @param friend_key searched key
-     * @param callBack the callBack to be called whenever an error occurs or task successfully end
-     * @see Friend
-     */
-    public void isFriendExists(final String user_key, final String friend_key, final DatabaseCallBack callBack){
-        if (user_key == null){
-            callBack.onError(KEY_NOT_FOUND, "kullanıcı keyi null");
-            return;
-        }
-        if (friend_key == null){
-            callBack.onError(KEY_NOT_FOUND, "aranan key null");
-            return;
-        }
-        if (user_key.equals(friend_key)){
-            callBack.onError(USER_AND_TARGET_KEY_SAME, "Arkadaş keyi ile kullanıcı keyi aynı");
-            return;
-        }
-        //assuming there is a user with "user_key", if there is not, an Exception will be thrown
-        user_reference.child(user_key).child("friends").orderByValue().equalTo(friend_key).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (!snapshot.exists()){
-                    callBack.onError(VALUE_NOT_FOUND, "böyle bir arkadaş yok");
-                    return;
-                }
-                String email = (String) snapshot.child(friend_key).child("email").getValue();
-                callBack.onSuccess(email + " arkadaş listesinde bulunuyor");
             }
 
             @Override
@@ -341,8 +310,10 @@ public class Database {
     /**
      * It searches for given email, if any user is registered with this email,
      * if so, looks if the user and emails owner already friends, already sent request
-     * or they are same user. If no error shows up, calls searchInFriendRequest, which searches
-     * the users own friend requests list to determine if already a request from the other user sent.
+     * or they are same user. If nor error shows up, calls  searchInFriends, which searches
+     * the users friends in friends snapshot, if found calls success, if error shows up,
+     * calls searchInFriendRequestList, which searches the users own friend requests list
+     * to determine if already a request from the other user sent.
      * If so, rather than sending request, they will be directly added as Friend via addAsFriend method.
      * If not sendFriendRequestInner method will be called to send the requests
      * <p>
@@ -356,13 +327,32 @@ public class Database {
      * @param user_key key of this user
      * @param email email of the searched account, whom friend request will be send
      * @param callBack the callBack to be called whenever an error occurs or task successfully end
-     * @see #searchInFriendRequests(String, String, DatabaseCallBack)
+     * @see #searchInFriends(String, String, DatabaseCallBack)
+     * @see #searchInFriendRequestsList(String, String, DatabaseCallBack)
+     * @see #addAsFriend(String, String, DatabaseCallBack)
+     * @see #sendFriendRequestInner(String, String, DatabaseCallBack)
      */
-    public void sendFriendRequest(final String user_key, final String email, final DatabaseCallBack callBack){
+    public void sendFriendRequest(final String user_key,
+                                  final String email,
+                                  final DatabaseCallBack callBack){
         if (user_key == null){
             callBack.onError(KEY_NOT_FOUND, "kullanıcı keyi null");
             return;
         }
+        //to be able to use searchInFriends in other methods DatabaseCallBack must be overridden here
+        //in a such way, that it seems wrong. Could not find better solution other than rewrite
+        //searchInFriends for each method we need, which is unnecessary
+        final DatabaseCallBack innerCallBack = new DatabaseCallBack() {
+            @Override
+            public void onSuccess(String success) {
+                callBack.onError(ALREADY_FRIENDS, "zaten arkadaşlar");
+            }
+
+            @Override
+            public void onError(String error_tag, String friend_key) {
+                searchInFriendRequestsList(user_key, friend_key, callBack);
+            }
+        };
         user_reference.orderByChild("email").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -372,20 +362,14 @@ public class Database {
                 }
                 //make snapshot usable, which points directly the user with "email"
                 snapshot = snapshot.getChildren().iterator().next();
-                if (user_key.equals(snapshot.getKey())){
-                    callBack.onError(USER_AND_TARGET_KEY_SAME, email + " kendine istek yollamaya çalışıyor");
+                String friend_key = snapshot.getKey();
+                if (friend_key == null){
+                    callBack.onError(KEY_NOT_FOUND, "aranan key null");
                     return;
                 }
-                @SuppressWarnings("unchecked")
-                ArrayList<String> friends = (ArrayList<String>)
-                        snapshot.child("friends").getValue();
-                if (friends != null){
-                    for (String key: friends){
-                        if (user_key.equals(key)){
-                            callBack.onError(ALREADY_FRIENDS, "zaten arkadaşlar");
-                            return;
-                        }
-                    }
+                if (user_key.equals(friend_key)){
+                    callBack.onError(USER_AND_TARGET_KEY_SAME, email + " kendine istek yollamaya çalışıyor");
+                    return;
                 }
                 @SuppressWarnings("unchecked")
                 ArrayList<String> friend_reqs = (ArrayList<String>)
@@ -398,7 +382,88 @@ public class Database {
                         }
                     }
                 }
-                searchInFriendRequests(user_key, snapshot.getKey(), callBack);
+                @SuppressWarnings("unchecked")
+                ArrayList<String> friends = (ArrayList<String>)
+                        snapshot.child("friends").getValue();
+                if (friends == null){
+                    searchInFriendRequestsList(user_key, friend_key, callBack);
+                    return;
+                }
+                searchInFriends(user_key, friend_key, innerCallBack);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                callBack.onError(DATABASE_ERROR, error.getMessage());
+            }
+        });
+    }
+
+    /**
+     * Searches all of the user's friends snapshot to find friend_key, if found it means they
+     * are already friends and calls success, if not calls error with friend key for sendFriendRequest
+     * <p>
+     * ERRORS: <p>
+     * {@value DATABASE_ERROR} <p>
+     * {@value KEY_NOT_FOUND} <p>
+     * {@value VALUE_NOT_FOUND} <p>
+     * @param user_key key of this user
+     * @param friend_key key of the other user, who will be searched in friends
+     * @param callBack the callBack to be called whenever an error occurs or task successfully end
+     */
+    public void searchInFriends(final String user_key,
+                                final String friend_key,
+                                final DatabaseCallBack callBack){
+        if(user_key == null){
+            callBack.onError(KEY_NOT_FOUND, "kullanıcı keyi null");
+            return;
+        }
+        if(friend_key == null){
+            callBack.onError(KEY_NOT_FOUND, "aranan key null");
+            return;
+        }
+        if (user_key.equals(friend_key)){
+            callBack.onError(USER_AND_TARGET_KEY_SAME, "aranan key null");
+            return;
+        }
+        //assuming there is a user with "user_key", if not throws Exception
+        user_reference.child(user_key).child("friends").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (!snapshot.exists()){
+                    callBack.onError(VALUE_NOT_FOUND, "kullanıcın arkadaşı yok");
+                    return;
+                }
+                @SuppressWarnings("unchecked")
+                ArrayList<String> friend_list_keys = (ArrayList<String>) snapshot.getValue();
+                assert friend_list_keys != null;
+                for (String key: friend_list_keys){
+                    //assuming there is a user with "key", if not throws Exception
+                    friend_reference.child(key).child("friends").addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (!snapshot.exists()){
+                                callBack.onError(VALUE_NOT_FOUND, "friend node'unun arkadaşları boş");
+                                return;
+                            }
+                            @SuppressWarnings("unchecked")
+                            ArrayList<String> friends = (ArrayList<String>) snapshot.getValue();
+                            assert friends != null;
+                            for (String key: friends){
+                                if (friend_key.equals(key)){
+                                    String friend_list_key = snapshot.getRef().getParent().getKey();
+                                    assert friend_list_key != null;
+                                    callBack.onSuccess(friend_list_key);
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            callBack.onError(DATABASE_ERROR, error.getMessage());
+                        }
+                    });
+                }
             }
 
             @Override
@@ -419,7 +484,9 @@ public class Database {
      * @param friend_key key of the other user, whom friend reqeust will be send
      * @param callBack the callBack to be called whenever an error occurs or task successfully end
      */
-    private void sendFriendRequestInner(@NonNull final String user_key, @NonNull final String friend_key, final DatabaseCallBack callBack){
+    private void sendFriendRequestInner(@NonNull final String user_key,
+                                        @NonNull final String friend_key,
+                                        @NonNull final DatabaseCallBack callBack){
         final SendFriendRequestHandler handler = new SendFriendRequestHandler() {
             @Override
             public void addToRequests(String key, ArrayList<String> friend_reqs) {
@@ -453,7 +520,8 @@ public class Database {
 
     /**
      * It searches given key in users friend requests, if it shows up calls addASFriend,
-     * if not calls SendFriendRequestInner method.
+     * if not calls SendFriendRequestInner method. It is a private method as it does not make controls
+     * and should not be used directly, but should be called after control method
      * <p>
      * ERRORS: <p>
      * {@value DATABASE_ERROR} <p>
@@ -464,15 +532,9 @@ public class Database {
      * @see #sendFriendRequestInner(String, String, DatabaseCallBack)
      * @see #addAsFriend(String, String, DatabaseCallBack)
      */
-    private void searchInFriendRequests(final String user_key, final String searched_key, final DatabaseCallBack callBack){
-        if(user_key == null){
-            callBack.onError(KEY_NOT_FOUND, "kullanıcı keyi null");
-            return;
-        }
-        if(searched_key == null){
-            callBack.onError(KEY_NOT_FOUND, "aranan key null");
-            return;
-        }
+    private void searchInFriendRequestsList(@NonNull final String user_key,
+                                            @NonNull final String searched_key,
+                                            @NonNull final DatabaseCallBack callBack){
         user_reference.child(user_key).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -502,7 +564,7 @@ public class Database {
     }
 
     /**
-     * Adds both keys to one another's friends list
+     * Creates new node in friends snapshot, put nodes key inside both users friend list
      * <p>
      * ERRORS: <p>
      * {@value DATABASE_ERROR} <p>
@@ -536,13 +598,25 @@ public class Database {
             public void removeFromRequests(String key, ArrayList<String> friend_reqs) {
                 user_reference.child(key).child("friend_reqs").setValue(friend_reqs);
             }
+
+            @Override
+            public void removeFriendsOnError(String friend_list_key){
+                friend_reference.child(friend_list_key).setValue(null);
+            }
         };
         final boolean finalSame_key = same_key;
+        final String friend_list_key = friend_reference.push().getKey();
+        assert friend_list_key != null;
+        ArrayList<String> friends = new ArrayList<>();
+        friends.add(user_key);
+        friends.add(friend_key);
+        friend_reference.child(friend_list_key).child("friends").setValue(friends);
         user_reference.child(user_key).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(!snapshot.exists()){
                     callBack.onError(KEY_NOT_FOUND, user_key + " ile ilişkili kullanıcı bulunamadı");
+                    handler.removeFriendsOnError(friend_list_key);
                     return;
                 }
                 @SuppressWarnings("unchecked")
@@ -551,7 +625,7 @@ public class Database {
                 if(friends == null){
                     friends = new ArrayList<>();
                 }
-                friends.add(friend_key);
+                friends.add(friend_list_key);
                 @SuppressWarnings("unchecked")
                 ArrayList<String> friend_reqs = (ArrayList<String>)
                         snapshot.child("friend_reqs").getValue();
@@ -561,11 +635,13 @@ public class Database {
                 friend_reqs.remove(friend_key);
                 if (finalSame_key){
                     handler.removeFromRequests(user_key, friend_reqs);
+                    handler.removeFriendsOnError(friend_list_key);
                     callBack.onError(USER_AND_TARGET_KEY_SAME, "Arkadaş eklenecek key ile kullanıcı keyi aynı");
                     return;
                 }
                 if (friends.contains(friend_key)){
                     handler.removeFromRequests(user_key, friend_reqs);
+                    handler.removeFriendsOnError(friend_list_key);
                     callBack.onError(ALREADY_FRIENDS, "zaten arkadaşlar");
                     return;
                 }
@@ -584,6 +660,7 @@ public class Database {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(!snapshot.exists()){
                     callBack.onError(KEY_NOT_FOUND, friend_key + " ile ilişkili kullanıcı bulunamadı");
+                    handler.removeFriendsOnError(friend_list_key);
                     return;
                 }
                 @SuppressWarnings("unchecked")
@@ -592,7 +669,7 @@ public class Database {
                 if(friends == null){
                     friends = new ArrayList<>();
                 }
-                friends.add(user_key);
+                friends.add(friend_list_key);
                 @SuppressWarnings("unchecked")
                 ArrayList<String> friend_reqs = (ArrayList<String>)
                         snapshot.child("friend_reqs").getValue();
@@ -602,11 +679,13 @@ public class Database {
                 friend_reqs.remove(user_key);
                 if (finalSame_key){
                     handler.removeFromRequests(friend_key, friend_reqs);
+                    handler.removeFriendsOnError(friend_list_key);
                     //no error will be send as it would be send in user_key's snapshot
                     return;
                 }
                 if (friends.contains(user_key)){
                     handler.removeFromRequests(friend_key, friend_reqs);
+                    handler.removeFriendsOnError(friend_list_key);
                     //no error will be send as it would be send in user_key's snapshot
                     return;
                 }
@@ -634,7 +713,9 @@ public class Database {
      * @param request_key key of friend request
      * @param callBack the callBack to be called whenever an error occurs or task successfully end
      */
-    public void declineFriendRequest(final String user_key, final String request_key, final DatabaseCallBack callBack){
+    public void declineFriendRequest(final String user_key,
+                                     final String request_key,
+                                     final DatabaseCallBack callBack){
         if (user_key == null){
             callBack.onError(KEY_NOT_FOUND, "kullanıcı keyi null");
             return;
@@ -689,17 +770,19 @@ public class Database {
     }
 
     /**
-     * Removes each others keys from their friends list
+     *  Removes friend from friends snapshot and removes snapshots key from both users.
      * <p>
      * ERRORS: <p>
-     * {@value DATABASE_ERROR} <p>
-     * {@value KEY_NOT_FOUND} <p>
-     * {@value VALUE_NOT_FOUND} <p>
+     * see removeFriendInner and searchInFriends for error list<p>
      * @param user_key key of this user
      * @param friend_key key of friend
      * @param callBack the callBack to be called whenever an error occurs or task successfully end
+     * @see #removeFriendInner(String, String, String, RemoveFriendHandler, DatabaseCallBack)
+     * @see #searchInFriends(String, String, DatabaseCallBack)
      */
-    public void removeFriend(final String user_key, final String friend_key, final DatabaseCallBack callBack){
+    public void removeFriend(final String user_key,
+                             final String friend_key,
+                             final DatabaseCallBack callBack){
         if (user_key == null){
             callBack.onError(KEY_NOT_FOUND, "kullanıcı keyi null");
             return;
@@ -710,10 +793,48 @@ public class Database {
         }
         final RemoveFriendHandler handler = new RemoveFriendHandler() {
             @Override
-            public void removeFriend(String key, ArrayList<String> friends) {
+            public void removeFriend(String key) {
+                friend_reference.child(key).setValue(null);
+            }
+
+            @Override
+            public void removeFromFriendList(String key, ArrayList<String> friends) {
                 user_reference.child(key).child("friends").setValue(friends);
             }
         };
+        final DatabaseCallBack innerCallBack = new DatabaseCallBack() {
+            @Override
+            public void onSuccess(String friend_list_key) {
+                removeFriendInner(user_key, friend_key, friend_list_key, handler, callBack);
+            }
+
+            @Override
+            public void onError(String error_tag, String error) {
+                callBack.onError(error_tag, "böyle bir arkadaş bulunamadı");
+            }
+        };
+        searchInFriends(user_key, friend_key, innerCallBack);
+    }
+
+    /**
+     * Removes friend from friends snapshot and removes snapshots key from both users.
+     * It is a private method, controls must be done before calling this method
+     * <p>
+     * ERRORS: <p>
+     * {@value DATABASE_ERROR} <p>
+     * {@value KEY_NOT_FOUND} <p>
+     * {@value VALUE_NOT_FOUND} <p>
+     * @param user_key key of this user
+     * @param friend_key key of friend
+     * @param friend_list_key key of friends snapshot
+     * @param handler handler for removing friend and keys from friend list
+     * @param callBack the callBack to be called whenever an error occurs or task successfully end
+     */
+    private void removeFriendInner(@NonNull final String user_key,
+                                   @NonNull final String friend_key,
+                                   @NonNull final String friend_list_key,
+                                   @NonNull final RemoveFriendHandler handler,
+                                   @NonNull final DatabaseCallBack callBack){
         user_reference.child(user_key).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -727,13 +848,14 @@ public class Database {
                 if (friends == null){
                     friends = new ArrayList<>();
                 }
-                boolean is_friend_exists = friends.remove(friend_key);
+                boolean is_friend_exists = friends.remove(friend_list_key);
                 if (!is_friend_exists){
                     callBack.onError(VALUE_NOT_FOUND, "Böyle bir arkadaş bulunamadı");
                     return;
                 }
-                handler.removeFriend(user_key, friends);
-                callBack.onSuccess("İstek silindi");
+                handler.removeFromFriendList(user_key, friends);
+                handler.removeFriend(friend_list_key);
+                callBack.onSuccess("Arkadaş silindi");
             }
 
             @Override
@@ -754,12 +876,12 @@ public class Database {
                 if (friends == null){
                     friends = new ArrayList<>();
                 }
-                boolean is_friend_exists = friends.remove(user_key);
+                boolean is_friend_exists = friends.remove(friend_list_key);
                 if (!is_friend_exists){
                     callBack.onError(VALUE_NOT_FOUND, "Böyle bir arkadaş bulunamadı");
                     return;
                 }
-                handler.removeFriend(friend_key, friends);
+                handler.removeFromFriendList(friend_key, friends);
                 //no success will be send as it would be send in user_key's snapshot
             }
 

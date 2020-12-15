@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -112,7 +111,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendsV
                 public void onClick(View v) {
                     final int position = getAdapterPosition();
                     if (position != RecyclerView.NO_POSITION) {
-                        database.isFriendExists(person_id, friends.get(position).getKey(), new Database.DatabaseCallBack() {
+                        database.searchInFriends(person_id, friends.get(position).getKey(), new Database.DatabaseCallBack() {
                             @Override
                             public void onSuccess(String success) {
                                 Log.i(TAG, success);

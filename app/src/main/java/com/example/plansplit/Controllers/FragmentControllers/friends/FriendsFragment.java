@@ -51,7 +51,6 @@ public class FriendsFragment extends Fragment {
         m_RecyclerView.setHasFixedSize(true);
         m_LayoutManager = new LinearLayoutManager(getActivity());
         m_RecyclerView.setLayoutManager(m_LayoutManager);
-        m_Adapter = new FriendsAdapter(getContext(), person_id, m_RecyclerView);
 
         add_friend_button.setOnClickListener(new View.OnClickListener(){
             @Override
