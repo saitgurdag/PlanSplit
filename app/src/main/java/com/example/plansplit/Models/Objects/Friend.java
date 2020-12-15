@@ -11,6 +11,16 @@ public class Friend{
     private int image_background;
     private int color;
     private String key;
+    private String mail;
+    private int cardView_addgroupsPicture;
+
+    public int getCardView_addgroupsPicture() {
+        return cardView_addgroupsPicture;
+    }
+
+    public String getMail() {
+        return mail;
+    }
 
     public Friend(int person_image, String name, int amount, String key){
         this.person_image = person_image;

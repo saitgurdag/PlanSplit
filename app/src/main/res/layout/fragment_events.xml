@@ -5,70 +5,69 @@
     android:layout_height="match_parent"
     tools:context=".Controllers.FragmentControllers.mygroup.EventsFragment">
 
-   <RelativeLayout
-       android:id="@+id/w"
-       android:layout_width="match_parent"
-       android:layout_height="match_parent">
+    <RelativeLayout
+        android:id="@+id/w"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-       <RelativeLayout
-           android:id="@+id/q"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content">
+        <RelativeLayout
+            android:id="@+id/q"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
-           <include
-               android:id="@+id/item_user_layout"
-               layout="@layout/item_group_events_user"
-               />
+            <include
+                android:id="@+id/item_user_layout"
+                layout="@layout/item_group_events_user" />
 
-           <ImageButton
+        </RelativeLayout>
 
-               android:id="@+id/friend_filter"
-               android:background="@android:color/transparent"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:layout_alignTop="@+id/item_user_layout"
-               android:layout_alignBottom="@+id/item_user_layout"
-               android:layout_alignParentEnd="true"
-               android:layout_marginTop="20dp"
-               android:layout_marginEnd="14dp"
-               android:layout_marginBottom="20dp"
-               android:foregroundGravity="center_vertical"
-               android:src="@drawable/filter"/>
+        <RelativeLayout
+            android:id="@+id/events_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/q"
+            android:layout_marginTop="5dp"
+            android:elevation="5dp"
+            android:background="@drawable/order_status_background">
 
-       </RelativeLayout>
+            <TextView
+                android:id="@+id/textDateGroupEvents"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:paddingHorizontal="25dp"
+                android:fontFamily="@font/avenir"
+                android:textSize="20sp"
+                android:gravity="center|left"
+                android:text="Kasım 2020" />
 
-       <RelativeLayout
-           android:id="@+id/events_date"
-           android:layout_below="@+id/q"
-           android:layout_width="match_parent"
-           android:layout_height="wrap_content"
-           android:layout_marginTop="5dp">
+            <ImageButton
 
-           <TextView
-               android:id="@+id/textDateGroupEvents"
-               android:layout_width="match_parent"
-               android:layout_height="30dp"
-               android:text="tarih"
-               android:layout_marginLeft="30dp">
+                android:id="@+id/friend_filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:background="@android:color/transparent"
+                android:foregroundGravity="center_vertical"
+                android:paddingRight="25dp"
+                android:src="@drawable/ic_filtreleme" />
 
-           </TextView>
+        </RelativeLayout>
 
-       </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/relativeLayoutRecyclerViewGroupEvents"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/events_date"
+            android:layout_marginTop="5dp">
 
-       <RelativeLayout
-           android:id="@+id/relativeLayoutRecyclerViewGroupEvents"
-           android:layout_marginTop="5dp"
-           android:layout_width="match_parent"
-           android:layout_height="wrap_content"
-           android:layout_below="@+id/events_date"
-           >
-           <androidx.recyclerview.widget.RecyclerView
-               android:id="@+id/RecyclerViewGroupEvents"
-               android:layout_width="match_parent"
-               android:layout_height="match_parent"
-               />
-       </RelativeLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/RecyclerViewGroupEvents"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </RelativeLayout>
 
-   </RelativeLayout>
+    </RelativeLayout>
 
 </FrameLayout>

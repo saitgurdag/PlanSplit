@@ -80,6 +80,7 @@
             android:fontFamily="@font/avenir"
             android:textSize="28sp"
             android:textColor="@color/black"
+            android:clickable="true"
             app:layout_constraintBottom_toBottomOf="@+id/relativeLayout2"
             app:layout_constraintEnd_toEndOf="@+id/relativeLayout2"
             app:layout_constraintStart_toStartOf="@+id/relativeLayout2"
@@ -241,7 +242,7 @@
             <Button
                 android:id="@+id/add_expense"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="34dp"
                 android:layout_marginHorizontal="40dp"
                 android:layout_marginVertical="10dp"
                 android:background="@drawable/custom_button2"
