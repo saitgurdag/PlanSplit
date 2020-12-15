@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -19,11 +18,6 @@ import com.example.plansplit.Controllers.MyGroupActivity;
 import com.example.plansplit.Models.Database;
 import com.example.plansplit.R;
 import com.example.plansplit.Models.Objects.Friend;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -40,16 +34,15 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendsV
         this.mCtx = mCtx;
         this.person_id = person_id;
         this.m_RecyclerView = m_RecyclerView;
+        loadFriends();
+    }
+
+    public void loadFriends(){
         this.friends = new ArrayList<>();
         database.getFriends(person_id, friendsCallBack);
     }
 
-    public void Refresh(){
-        friends = new ArrayList<>();
-        database.getFriends(person_id, friendsCallBack);
-    }
-
-    private Database.FireBaseFriendCallBack friendsCallBack = new Database.FireBaseFriendCallBack() {
+    private final Database.FriendCallBack friendsCallBack = new Database.FriendCallBack() {
         @Override
         public void onFriendRetrieveSuccess(Friend friend) {
             friends.add(friend);
@@ -58,14 +51,10 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendsV
         }
 
         @Override
-        public void onEmptyListError() {
+        public void onError(String error_tag, String error) {
+            Log.e(TAG, error_tag + ": " + error);
             notifyDataSetChanged();
             m_RecyclerView.setAdapter(FriendsAdapter.this);
-        }
-
-        @Override
-        public void onError(String error) {
-            Log.e(TAG, error);
         }
     };
 
@@ -117,27 +106,32 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendsV
             friend_layout = itemView.findViewById(R.id.friend_background_layout);
             friend_image_balance = itemView.findViewById(R.id.friend_image_balance);
 
-            itemView.findViewById(R.id.friend_card).setOnLongClickListener(new View.OnLongClickListener(){
-                @Override
-                public boolean onLongClick(View v){
-                    int position = getAdapterPosition();
-                    if (position != RecyclerView.NO_POSITION) {
-                        //todo arkadaş detaylar ve arkadaş sil dialog seçeneği
-                    }
-                    return true;
-                }
-            });
-
             itemView.findViewById(R.id.friend_card).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int p = getAdapterPosition();
-                    System.out.println("pozisyonn : " + getAdapterPosition());
-                    Intent intent = new Intent(mCtx, MyGroupActivity.class);
-                    Gson gson = new Gson();
-                    String json = gson.toJson(friends.get(p));
-                    intent.putExtra("friend", json);
-                    mCtx.startActivity(intent);
+                    final int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        database.searchInFriends(person_id, friends.get(position).getKey(), new Database.DatabaseCallBack() {
+                            @Override
+                            public void onSuccess(String success) {
+                                Log.i(TAG, success);
+                                Intent intent = new Intent(mCtx, MyGroupActivity.class);
+                                Gson gson = new Gson();
+                                String json = gson.toJson(friends.get(position));
+                                intent.putExtra("friend", json);
+                                intent.putExtra("person_id", person_id);
+                                mCtx.startActivity(intent);
+                            }
+
+                            @Override
+                            public void onError(String error_tag, String error) {
+                                Log.e(TAG, error_tag + ": " + error);
+                                loadFriends();
+                            }
+                        });
+                    }else{
+                        Log.e(TAG, "RecyclerView: NO_POSITION");
+                    }
                 }
             });
         }

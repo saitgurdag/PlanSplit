@@ -50,7 +50,7 @@ public class AddGroupsAdapter extends RecyclerView.Adapter<AddGroupsAdapter.AddG
         checked_personList = new ArrayList<>();
     }
 
-    private Database.FireBaseFriendCallBack friendsCallBack = new Database.FireBaseFriendCallBack() {
+    private Database.FriendCallBack friendsCallBack = new Database.FriendCallBack() {
         @Override
         public void onFriendRetrieveSuccess(Friend friend) {
             addgroups_personList.add(friend);
@@ -59,15 +59,11 @@ public class AddGroupsAdapter extends RecyclerView.Adapter<AddGroupsAdapter.AddG
         }
 
         @Override
-        public void onEmptyListError() {
-            notifyDataSetChanged();
-            m_RecyclerView.setAdapter(AddGroupsAdapter.this);
+        public void onError(String error_tag, String error) {
+
         }
 
-        @Override
-        public void onError(String error) {
-            Log.e(TAG, error);
-        }
+
     };
 
     @NonNull
@@ -129,9 +125,7 @@ public class AddGroupsAdapter extends RecyclerView.Adapter<AddGroupsAdapter.AddG
                     }
                 }
             });
-
         }
-
         public void setItemClickListener(ItemClickListener ic){
             this.itemClickListener=ic;
         }

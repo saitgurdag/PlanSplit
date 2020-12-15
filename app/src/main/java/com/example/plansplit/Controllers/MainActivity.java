@@ -2,7 +2,6 @@ package com.example.plansplit.Controllers;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
@@ -25,8 +24,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -62,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken("503042129134-h3kphilhs7ofn5i2njqvgnnrnmr3l9ba.apps.googleusercontent.com")
+                .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
 
@@ -73,12 +70,9 @@ public class MainActivity extends AppCompatActivity {
 
         //Berkay Animasyon devamı
         frombottomLoginWallet = AnimationUtils.loadAnimation(this,R.anim.login_frombottom);
-        loginWalletAnimation =(ImageView)findViewById(R.id.imageViewLoginWallet);
+        loginWalletAnimation = findViewById(R.id.imageViewLoginWallet);
         loginWalletAnimation.setAnimation(frombottomLoginWallet);
-
-
         //berkay animasyon bitiş
-
     }
 
     private void signIn() {
@@ -89,7 +83,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             // The Task returned from this call is always completed, no need to attach
@@ -102,8 +95,6 @@ public class MainActivity extends AppCompatActivity {
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-
-            // Signed in successfully, show authenticated UI.
             firebaseAuthWithGoogle(account.getIdToken());
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
@@ -136,9 +127,6 @@ public class MainActivity extends AppCompatActivity {
     private void updateUI(FirebaseUser user) {
         if(user!=null){
             Intent intent = new Intent(MainActivity.this, HomeActivity.class);
-//            Gson gson = new Gson();
-//            String mAuth_json = gson.toJson(mAuth, FirebaseAuth.class);
-//            intent.putExtra("FirebaseAuth", mAuth_json);
             startActivity(intent);
         }
     }
@@ -146,11 +134,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
-        // Check for existing Google Sign In account, if the user is already signed in
-        // the GoogleSignInAccount will be non-null.
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        //GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
         updateUI(currentUser);
     }
 

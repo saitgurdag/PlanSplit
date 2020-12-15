@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -12,14 +14,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-
 import android.view.View;
 import android.widget.AdapterView;
+
+import com.example.plansplit.Controllers.FragmentControllers.friends.FriendsFragment;
 import com.example.plansplit.Controllers.FragmentControllers.groups.GroupExpenseFragment;
+import com.example.plansplit.Controllers.FragmentControllers.personal.PersonalFragment;
+import com.example.plansplit.Models.Database;
 import com.example.plansplit.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -32,34 +40,34 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.gson.Gson;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemSelectedListener {
 
     GoogleSignInClient mGoogleSignInClient;
     private static final String TAG = "HomeActivity";
-    private String personId=null;
+    private String personId;
     private DrawerLayout drawerLayout;
     NavigationView navigationView;
+    Bundle bundle;
+    String navigation_key;
+
     FirebaseAuth mAuth;
+    private static final Database database = Database.getInstance();
+    Database db = new Database();
 
     public String getPersonId() {
         return personId;
     }
-
-    //denememee
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         BottomNavigationView navView = findViewById(R.id.nav_view);
-        Gson gson = new Gson();
-//        mAuth = gson.fromJson(getIntent().getStringExtra("FirebaseAuth"), FirebaseAuth.class);
         mAuth = FirebaseAuth.getInstance();
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken("503042129134-h3kphilhs7ofn5i2njqvgnnrnmr3l9ba.apps.googleusercontent.com")
+                .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
 
@@ -83,10 +91,14 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
+
+
+
+
         navView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener(){
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item){
-                Bundle bundle = new Bundle();
+               bundle = new Bundle();
                 bundle.putString("person_id", personId);
                 navController.navigate(item.getItemId(), bundle);
                 return true;
@@ -94,28 +106,50 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         });
         navigationView=findViewById(R.id.nav_draw_view);
 
+        //firebase'e ilk girişte mail isim soyisim kayıt yapılıyor.
         GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
         if (acct != null) {
-            personId=acct.getId();
-            System.out.println("acct not null");
-        }else{
-            System.out.println("acct null");
+            personId = acct.getId();
+            String name = acct.getDisplayName();
+            if (name == null){
+                name = "No name";
+            }
+            String email = acct.getEmail();
+
+            //todo:kod çökmesin diye bir süre daha soyisim çekicez
+            // ama uygulama içi kullanım en kısa zamanda sıfırlanmalı
+            String surname = acct.getFamilyName();
+            if (surname == null){
+                surname = "No surname";
+            }
+
+            database.registerUser(personId, name, email, surname);
+            Log.d(TAG, "user registered with this email: " + email + "\n" + "and this key: " + personId);
+        }
+      
+        Bundle extras = getIntent().getExtras();
+        if(extras != null && extras.keySet().contains("navigation")) {
+            navigation_key = extras.getString("navigation");
+            bundle = new Bundle();
+            bundle.putString("person_id", personId);
+            switch (navigation_key) {
+                case "personal":
+                    navController.navigate(R.id.navigation_personal, bundle);
+                    break;
+                case "friends":
+                    navController.navigate(R.id.navigation_friends, bundle);
+                    break;
+                case "groups":
+                    navController.navigate(R.id.navigation_groups, bundle);
+                    break;
+                case "notifications":
+                    navController.navigate(R.id.navigation_notifications, bundle);
+                    break;
+
+            }
         }
 
-        System.out.println(acct.getId());
-        System.out.println(personId);
-        System.out.println(acct.getGivenName());
-        System.out.println(acct.getDisplayName());
-        //----------------------------------------------------------------------
-        //firebase'e ilk girişte mail isim soyisim kayıt yapılıyor.
-
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-
-        DatabaseReference dbRef = database.getReference("users").child(personId);
-        dbRef.child("name").setValue(acct.getGivenName());
-        dbRef.child("surname").setValue(acct.getFamilyName());
-        dbRef.child("email").setValue(acct.getEmail());
-
+      
         //----------------------------------------------------------------------
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -125,7 +159,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 //it's possible to do more actions on several items, if there is a large amount of items I prefer switch(){case} instead of if()
                 if (id==R.id.navigation_logout){
                     if (id == R.id.navigation_logout) {
-                        Log.d(TAG, "burda222");
+                      
+                        Log.d(TAG, "SignOut yapıldı");
                         signOut();
 
                         Intent intent = new Intent(HomeActivity.this, MainActivity.class);

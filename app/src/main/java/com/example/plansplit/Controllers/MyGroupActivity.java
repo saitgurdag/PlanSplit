@@ -1,6 +1,8 @@
 package com.example.plansplit.Controllers;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,6 +13,7 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -18,11 +21,15 @@ import androidx.navigation.Navigation;
 import com.example.plansplit.Models.Database;
 import com.example.plansplit.Models.Objects.Friend;
 import com.example.plansplit.R;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
 
 public class MyGroupActivity extends AppCompatActivity {
     //NavigationView navigationView;
-    Database db = Database.getInstance();
+    private static final String TAG = "MyGroupActivity";
+    Database database = Database.getInstance();
+    private String person_id = "";
+    private Friend friend;
     boolean ctrlType=false;             //eğer friend'den geliyorsa true, gruptan geliyorsa false
 
     public void showPopup(View v) {
@@ -44,6 +51,13 @@ public class MyGroupActivity extends AppCompatActivity {
         popup.show();
     }
 
+    public void loadActivity(String key) {
+        Intent intent=new Intent(this,HomeActivity.class);
+        intent.putExtra("navigation",key);
+        startActivity(intent);
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,12 +71,46 @@ public class MyGroupActivity extends AppCompatActivity {
         //BottomNavigationView navView = findViewById(R.id.nav_view_mygroup);
         LinearLayout l = findViewById(R.id.remove_friend_linear);
         ImageView groupPhotoIv = findViewById(R.id.group_pictureIv);
-        ImageButton listBttn = (ImageButton) findViewById(R.id.task_listButton);
-        ImageButton eventsBttn = (ImageButton) findViewById(R.id.eventsButton);
-        ImageButton groupOpBttn = (ImageButton) findViewById(R.id.groupOpButton);
-        ImageButton backBttn = (ImageButton) findViewById(R.id.mygroup_back_button);
+        ImageButton listBttn = findViewById(R.id.task_listButton);
+        ImageButton eventsBttn = findViewById(R.id.eventsButton);
+        ImageButton groupOpBttn = findViewById(R.id.groupOpButton);
+        ImageButton backBttn = findViewById(R.id.mygroup_back_button);
         ImageButton removeFriendBttn = findViewById(R.id.removeFriendButton);
         ImageButton menu = findViewById(R.id.mygroup_menuline_button);
+
+
+        BottomNavigationView navView = findViewById(R.id.nav_view2);
+        //navView.getMenu().getItem(2).setChecked(true);
+        navView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener(){
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item){
+
+                String fragmentKey = null;
+
+                switch (item.getItemId()) {
+                    case R.id.navigation_personal:
+                        fragmentKey = "personal";
+
+                        break;
+                    case R.id.navigation_friends:
+                        fragmentKey = "friends";
+                        break;
+                    case R.id.navigation_groups:
+                        fragmentKey = "groups";
+                        break;
+                    case R.id.navigation_notifications:
+                        fragmentKey = "notifications";
+                        break;
+                }
+                loadActivity(fragmentKey);
+                return true;
+            }
+
+
+
+        });
+
+
 
         final NavController navController = Navigation.findNavController(this, R.id.fragment_place_mygroup);
 
@@ -70,6 +118,7 @@ public class MyGroupActivity extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         if(extras != null && extras.keySet().contains("group_title")){
+            navView.getMenu().getItem(2).setChecked(true);
             group_title = extras.getString("group_title");
             int resid = extras.getInt("group_image");
             groupPhotoIv.setImageResource(resid);
@@ -81,9 +130,13 @@ public class MyGroupActivity extends AppCompatActivity {
 
             ctrlType=false;
         }else if(extras != null && extras.keySet().contains("friend")){
+            navView.getMenu().getItem(1).setChecked(true);
             Gson gson = new Gson();
             String json = extras.getString("friend");
-            Friend friend = gson.fromJson(json, Friend.class);
+            friend = gson.fromJson(json, Friend.class);
+            if(extras.keySet().contains("person_id")){
+                person_id = extras.getString("person_id");
+            }
             groupPhotoIv.setImageResource(friend.getPerson_image());
             group_title = friend.getName();
             System.out.println("friend" + friend.getName());
@@ -138,7 +191,19 @@ public class MyGroupActivity extends AppCompatActivity {
             removeFriendBttn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    db.removeFriend();
+                    database.removeFriend(person_id, friend.getKey(), new Database.DatabaseCallBack() {
+                        @Override
+                        public void onSuccess(String success) {
+                            Log.i(TAG, success);
+                            Toast.makeText(getBaseContext(), "Arkadaş silindi", Toast.LENGTH_SHORT).show();
+                            onBackPressed();
+                        }
+
+                        @Override
+                        public void onError(String error_tag, String error) {
+                            Log.e(TAG, error_tag + ": " + error);
+                        }
+                    });
                 }
             });
         }
