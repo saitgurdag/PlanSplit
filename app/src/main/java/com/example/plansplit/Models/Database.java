@@ -500,8 +500,12 @@ public class Database {
                 @SuppressWarnings("unchecked")
                 ArrayList<String> friend_list_keys = (ArrayList<String>) snapshot.getValue();
                 assert friend_list_keys != null;
+                final int key_size = friend_list_keys.size();
+                int number = 0;
                 for (String key: friend_list_keys){
+                    number++;
                     //assuming there is a user with "key", if not throws Exception
+                    final int finalNumber = number;
                     friend_reference.child(key).child("friends").addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -518,6 +522,9 @@ public class Database {
                                     assert friend_list_key != null;
                                     callBack.onSuccess(friend_list_key);
                                 }
+                            }
+                            if (finalNumber == key_size){
+                                callBack.onError(VALUE_NOT_FOUND, friend_key);
                             }
                         }
 
