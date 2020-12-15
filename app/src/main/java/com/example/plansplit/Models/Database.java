@@ -487,7 +487,9 @@ public class Database {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (!snapshot.exists()){
-                    callBack.onError(VALUE_NOT_FOUND, "kullanıcın arkadaşı yok");
+                    //fixme: although it is not an error message in order to use  this method
+                    // in sendFriendRequest, it must send friend_key as error
+                    callBack.onError(VALUE_NOT_FOUND, friend_key);
                     return;
                 }
                 @SuppressWarnings("unchecked")
@@ -1010,7 +1012,6 @@ public class Database {
                 Log.w(TAG, "Failed to read value.", error.toException());
             }
         });
-
         return expenses;
     }
   
