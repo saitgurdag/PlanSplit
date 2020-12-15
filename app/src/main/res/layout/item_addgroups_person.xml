@@ -4,9 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="5dp"
-    android:layout_marginTop="3dp"
-    android:layout_marginBottom="3dp"
     android:gravity="center">
 
 
@@ -48,7 +45,7 @@
 
                     <TextView
                         android:id="@+id/textViewName"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_toRightOf="@+id/cardView_addgroupsPicture"
                         android:fontFamily="@font/avenir"
@@ -58,7 +55,7 @@
 
                     <TextView
                         android:id="@+id/textViewMail"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_toRightOf="@+id/cardView_addgroupsPicture"
                         android:fontFamily="@font/avenir"
@@ -77,7 +74,8 @@
                     <CheckBox
                         android:id="@+id/checkBox_selected_friend"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:gravity="center"/>
                 </RelativeLayout>
 
 

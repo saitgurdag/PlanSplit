@@ -59,48 +59,66 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:gravity="center"
-            android:orientation="horizontal"
-            tools:layout_editor_absoluteX="1dp">
+            android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/buttonHouse"
-                android:layout_width="60dp"
-                android:layout_height="match_parent"
-                android:layout_margin="3dp"
-                android:fontFamily="@font/avenir"
-                android:text="Ev"
-                android:textSize="8sp"
-                tools:layout_editor_absoluteX="16dp"
-                tools:layout_editor_absoluteY="215dp" />
+            <RadioGroup
+                android:id="@+id/rgroupButton"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:orientation="horizontal"
+                android:paddingHorizontal="50dp"
+                android:gravity="center">
+                <androidx.appcompat.widget.AppCompatRadioButton
+                    android:id="@+id/rbuttonHouse"
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:gravity="center"
+                    android:text="@string/home"
+                    android:fontFamily="@font/avenir"
+                    android:textColor="@color/white"
+                    android:checked="true"
+                    android:button="@android:color/transparent"
+                    android:layout_weight="1"
+                    android:background="@drawable/radio_button_selector"
+                    android:elevation="5dp"/>
+                <androidx.appcompat.widget.AppCompatRadioButton
+                    android:id="@+id/rbuttonWork"
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:gravity="center"
+                    android:fontFamily="@font/avenir"
+                    android:text="@string/work"
+                    android:textColor="@color/black"
+                    android:button="@android:color/transparent"
+                    android:layout_weight="1"
+                    android:background="@drawable/radio_button_selector"
+                    android:elevation="5dp"/>
+                <androidx.appcompat.widget.AppCompatRadioButton
+                    android:id="@+id/rbuttonTrip"
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:gravity="center"
+                    android:text="@string/trip"
+                    android:fontFamily="@font/avenir"
+                    android:textColor="@color/black"
+                    android:button="@android:color/transparent"
+                    android:layout_weight="1"
+                    android:background="@drawable/radio_button_selector"
+                    android:elevation="5dp" />
+                <androidx.appcompat.widget.AppCompatRadioButton
+                    android:id="@+id/rbuttonOther"
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:fontFamily="@font/avenir"
+                    android:gravity="center"
+                    android:text="@string/other"
+                    android:textColor="@color/black"
+                    android:button="@android:color/transparent"
+                    android:layout_weight="1"
+                    android:background="@drawable/radio_button_selector"
+                    android:elevation="5dp" />
 
-            <Button
-                android:id="@+id/buttonWork"
-                android:layout_width="60dp"
-                android:layout_height="match_parent"
-                android:layout_margin="3dp"
-                android:fontFamily="@font/avenir"
-                android:text="İş"
-                android:textSize="8sp"
-                tools:layout_editor_absoluteX="115dp"
-                tools:layout_editor_absoluteY="215dp" />
-
-            <Button
-                android:id="@+id/buttonTrip"
-                android:layout_width="60dp"
-                android:layout_height="match_parent"
-                android:layout_margin="3dp"
-                android:fontFamily="@font/avenir"
-                android:text="Seyehat"
-                android:textSize="8sp" />
-
-            <Button
-                android:id="@+id/buttonOther"
-                android:layout_width="60dp"
-                android:layout_height="37dp"
-                android:layout_margin="3dp"
-                android:fontFamily="@font/avenir"
-                android:text="Diğer"
-                android:textSize="8sp" />
+            </RadioGroup>
         </LinearLayout>
 
         <RelativeLayout
@@ -112,6 +130,7 @@
 
             <TextView
                 android:id="@+id/textViewGroupMembers"
+                android:gravity="center|left"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
@@ -127,8 +146,7 @@
             android:layout_width="match_parent"
             android:layout_height="250dp"
             android:layout_gravity="center"
-            android:layout_marginTop="5dp"
-            android:padding="10dp"
+            android:padding="8dp"
             android:paddingHorizontal="2dp"
             tools:listitem="@layout/item_addgroups_person"></androidx.recyclerview.widget.RecyclerView>
 
