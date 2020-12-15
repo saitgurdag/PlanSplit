@@ -12,8 +12,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
@@ -53,8 +51,6 @@ public class ListFragment extends Fragment {
 
         Person p1 = new Person("Einstein");
         Person p2 = new Person("Curie");
-
-        Groups g1 = new Groups(1,"Ev","Ev",R.drawable.ic_home_black_radius,R.drawable.debt_remind,10);
 
         toDoList.add(new ToDoList("Su","Bekliyor", R.drawable.ic_shopping_cart));
         toDoList.add(new ToDoList("Zeytin Yağı", "Bekliyor", R.drawable.ic_shopping_cart));

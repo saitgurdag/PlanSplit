@@ -1,62 +1,60 @@
 package com.example.plansplit.Models.Objects;
 
+
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Groups {
-    private int group_id;
+public class Groups implements Serializable {
     private String group_name;
     private String group_type;
-    private int group_photo;
-    private int group_notification_symbol;
-    private int group_balance_sheet;
 
-    private ArrayList<Person> persons_inGroup = new ArrayList<Person>();
-    private ArrayList<ToDoList> toDoList_inGroup = new ArrayList<ToDoList>();
+    ArrayList<String> group_members = new ArrayList<String>();
+    ArrayList<Expense> group_expenses = new ArrayList<Expense>();
+    ArrayList<ToDoList> group_todo_list = new ArrayList<ToDoList>();
+    ArrayList<GroupNotification> group_notifications = new ArrayList<GroupNotification>();
 
-    public Groups(int group_id, String group_name, String group_type, int group_photo, int group_notification_symbol, int group_balance_sheet) {
-        this.group_id = group_id;
+    public Groups() {
+    }
+
+    public Groups(String group_name, String group_type) {
         this.group_name = group_name;
         this.group_type = group_type;
-        this.group_photo = group_photo;
-        this.group_notification_symbol = group_notification_symbol;
-        this.group_balance_sheet = group_balance_sheet;
     }
 
-    public void addToDo(ToDoList toDo) {
-        toDoList_inGroup.add(toDo);
+    public void addFriend(String friendKey){
+        group_members.add(friendKey);
     }
 
-
-    public ArrayList<Person> getPersons_inGroup() {
-        return persons_inGroup;
+    public ArrayList<String> getGroup_members() {
+        return group_members;
     }
 
-    public void setPersons_inGroup(ArrayList<Person> persons_inGroup) {
-        this.persons_inGroup = persons_inGroup;
+    public void setGroup_members(ArrayList<String> group_members) {
+        this.group_members = group_members;
     }
 
-    public int getGroup_notification_symbol() {
-        return group_notification_symbol;
+    public ArrayList<Expense> getGroup_expenses() {
+        return group_expenses;
     }
 
-    public void setGroup_notification_symbol(int group_notification_symbol) {
-        this.group_notification_symbol = group_notification_symbol;
+    public void setGroup_expenses(ArrayList<Expense> group_expenses) {
+        this.group_expenses = group_expenses;
     }
 
-    public String getGroup_balance_sheet() {
-        return String.valueOf(group_balance_sheet) + "  TL";
+    public ArrayList<ToDoList> getGroup_todo_list() {
+        return group_todo_list;
     }
 
-    public void setGroup_balance_sheet(int group_balance_sheet) {
-        this.group_balance_sheet = group_balance_sheet;
+    public void setGroup_todo_list(ArrayList<ToDoList> group_todo_list) {
+        this.group_todo_list = group_todo_list;
     }
 
-    public int getGroup_id() {
-        return group_id;
+    public ArrayList<GroupNotification> getGroup_notifications() {
+        return group_notifications;
     }
 
-    public void setGroup_id(int group_id) {
-        this.group_id = group_id;
+    public void setGroup_notifications(ArrayList<GroupNotification> group_notifications) {
+        this.group_notifications = group_notifications;
     }
 
     public String getGroup_name() {
@@ -75,11 +73,4 @@ public class Groups {
         this.group_type = group_type;
     }
 
-    public int getGroup_photo() {
-        return group_photo;
-    }
-
-    public void setGroup_photo(int group_photo) {
-        this.group_photo = group_photo;
-    }
 }
