@@ -132,14 +132,14 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendsV
 
         public FriendsViewHolder(@NonNull View itemView){
             super(itemView);
-            friend_image = itemView.findViewById(R.id.friend_image);
-            friend_name = itemView.findViewById(R.id.friend_name);
-            friend_amount = itemView.findViewById(R.id.friend_amount);
+            friend_image = itemView.findViewById(R.id.groupOperations_image);
+            friend_name = itemView.findViewById(R.id.groupOperations_text);
+            friend_amount = itemView.findViewById(R.id.groupOperations_amount);
             friend_amount_text = itemView.findViewById(R.id.friend_amount_text);
             friend_layout = itemView.findViewById(R.id.friend_background_layout);
-            friend_image_balance = itemView.findViewById(R.id.friend_image_balance);
+            friend_image_balance = itemView.findViewById(R.id.groupOperations_PersonBackGround);
 
-            itemView.findViewById(R.id.friend_card).setOnClickListener(new View.OnClickListener() {
+            itemView.findViewById(R.id.groupOperations_card).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     final int position = getAdapterPosition();

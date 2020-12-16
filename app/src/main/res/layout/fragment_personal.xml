@@ -27,7 +27,7 @@
                 android:padding="10dp">
 
                 <ImageView
-                    android:id="@+id/friend_image_balance"
+                    android:id="@+id/groupOperations_PersonBackGround"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_gravity="center"
@@ -35,7 +35,7 @@
                     android:padding="5dp" />
 
                 <ImageView
-                    android:id="@+id/friend_image"
+                    android:id="@+id/groupOperations_image"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_gravity="center"

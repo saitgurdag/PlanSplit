@@ -8,6 +8,37 @@ public class Person {
     private int checkBox_shareMethodPersonCheckBox;
     private int cardView_addgroupsPicture;
 
+    /////////// BERKAY EKLEME KISMI ////////////
+
+    // bu ekleme yeri grup işlemleri ekranı içinyapıldı
+    //Resim olarak hazır attribute cardView_shareMethodPersonPicture kullandım kişi resmi ile eşit çünki bu , groupDepth ekledim =  kişinin gruba olan borcu
+
+    private String groupDepth;
+    private int backGroundPerson ;
+
+    public Person(int backGroundPerson,int cardView_shareMethodPersonPicture, String groupDepth) {           // Group Operations için kullandığım Contructor
+        this.backGroundPerson=backGroundPerson;
+        this.cardView_shareMethodPersonPicture = cardView_shareMethodPersonPicture;
+        this.groupDepth = groupDepth;
+    }
+
+    public String getGroupDepth() {
+        return groupDepth;
+    }
+
+    public void setGroupDepth(String groupDepth) {
+        this.groupDepth = groupDepth;
+    }
+    public int getBackGroundPerson() {
+        return backGroundPerson;
+    }
+
+    public void setBackGroundPerson(int backGroundPerson) {
+        this.backGroundPerson = backGroundPerson;
+    }
+
+    ///////////// BERKAY EKLEME KISMI BİTİŞİ /////////////
+
     public String getName() {
         return name;
     }
