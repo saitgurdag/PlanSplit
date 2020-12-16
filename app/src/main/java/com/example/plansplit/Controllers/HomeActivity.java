@@ -1,11 +1,14 @@
 package com.example.plansplit.Controllers;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -40,6 +43,8 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemSelectedListener {
 
@@ -123,6 +128,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 surname = "No surname";
             }
 
+            Uri personPhoto = acct.getPhotoUrl();
+            setHeader(personPhoto,name,email);
+
+
+
             database.registerUser(personId, name, email, surname);
             Log.d(TAG, "user registered with this email: " + email + "\n" + "and this key: " + personId);
         }
@@ -156,6 +166,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 int id=menuItem.getItemId();
+
+
                 //it's possible to do more actions on several items, if there is a large amount of items I prefer switch(){case} instead of if()
                 if (id==R.id.navigation_logout){
                     if (id == R.id.navigation_logout) {
@@ -173,6 +185,16 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
+    }
+
+    private void setHeader(Uri personphoto,String name,String email) {
+        View header = navigationView.getHeaderView(0);
+        ImageView imageView=header.findViewById(R.id.imageViewHeaderProfilPhoto);
+        TextView headerpersonname=header.findViewById(R.id.textHeaderPersonName);
+        TextView headerpersonmail=header.findViewById(R.id.textHeaderMail);
+        Picasso.with(this).load(personphoto).into(imageView);
+        headerpersonname.setText(name);
+        headerpersonmail.setText(email);
     }
 
     private void signOut() {
