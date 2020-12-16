@@ -14,7 +14,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/groupOperations_card"
         android:layout_width="match_parent"
-        android:layout_height="78dp"
+        android:layout_height="60dp"
         android:clickable="true"
         android:focusable="true"
         android:orientation="vertical"
@@ -24,30 +24,39 @@
             android:id="@+id/friend_background_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/itemview_bg_border_red">
+            >
 
             <FrameLayout
                 android:id="@+id/friend_frame"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:padding="10dp">
+                android:padding="5dp">
 
-                <ImageView
-                    android:id="@+id/groupOperations_PersonBackGround"
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/CardviewGroupOps"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:layout_gravity="center"
-                    android:background="@drawable/circle_background_red"
-                    android:padding="5dp" />
-
-                <ImageView
-                    android:id="@+id/groupOperations_image"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_gravity="center"
+                    android:background="@color/green"
                     android:padding="5dp"
-                    app:srcCompat="@drawable/denemeresim" />
+                    app:cardCornerRadius="50dp">
+                    <ImageView
+                        android:id="@+id/groupOperations_PersonBackGround"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center"
+                        android:background="@drawable/circle_background_green"
+                        android:padding="5dp" />
+                    <ImageView
+                        android:id="@+id/groupOperations_image"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+                        android:layout_gravity="center"
+                        android:padding="5dp"
+                        app:srcCompat="@drawable/denemeresim" />
+
+</androidx.cardview.widget.CardView>
+
             </FrameLayout>
 
             <LinearLayout
@@ -62,16 +71,16 @@
                     android:layout_weight="1.6"
                     android:layout_gravity="center"
                     android:gravity="center">
+
                     <TextView
                         android:id="@+id/groupOperations_text"
-                        android:fontFamily="@font/avenir"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textStyle="bold"
-                        android:textSize="20sp"
                         android:layout_gravity="center_vertical"
+                        android:fontFamily="@font/avenir"
+                        android:text=" Harcama Toplamı"
                         android:textColor="@color/black"
-                        android:text="TextView" />
+                        android:textSize="20sp" />
                 </RelativeLayout>
 
                 <LinearLayout
@@ -89,21 +98,10 @@
                         android:layout_weight="1"
                         android:textAlignment="center"
                         android:gravity="center"
-                        android:textColor="@color/red"
                         android:textSize="20sp"
-                        android:text="TextView" />
+                        android:text="TextView TL" />
 
-                    <TextView
-                        android:id="@+id/friend_amount_text"
-                        android:fontFamily="@font/avenir"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:textAlignment="center"
-                        android:gravity="center"
-                        android:textColor="@color/red"
-                        android:textSize="15sp"
-                        android:text="TextView" />
+
                 </LinearLayout>
             </LinearLayout>
         </RelativeLayout>

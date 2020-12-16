@@ -5,11 +5,37 @@
     android:layout_height="match_parent"
     tools:context=".Controllers.FragmentControllers.mygroup.GroupOperationsFragment">
 
-    <TextView
+
+<RelativeLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    >
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerGroupOperations"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="group operations"
-        android:gravity="center"
-        android:background="@color/white"/>
+        android:layout_height="130dp"
+        android:layout_marginTop="8dp"
+        android:paddingHorizontal="5dp"
+        tools:listitem="@layout/item_groupoperations_person">
+
+    </androidx.recyclerview.widget.RecyclerView>
+    <LinearLayout
+        android:id="@+id/linearlayoutGroupOperations"
+        android:orientation="horizontal"
+        android:layout_below="@+id/recyclerGroupOperations"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+<com.github.mikephil.charting.charts.PieChart
+    android:id="@+id/pieChart"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+</com.github.mikephil.charting.charts.PieChart>
+
+    </LinearLayout>
+</RelativeLayout>
+
 
 </FrameLayout>
