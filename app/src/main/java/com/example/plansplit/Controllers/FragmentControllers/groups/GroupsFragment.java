@@ -96,6 +96,7 @@ public class GroupsFragment extends Fragment {
         });
 
         return root;
+
     }
 
     private void setOnClickListener() {
