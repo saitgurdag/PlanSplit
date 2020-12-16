@@ -42,7 +42,7 @@
     </RelativeLayout>
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/textHeaderPersonName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="5dp"
@@ -60,7 +60,7 @@
     <include
         android:id="@+id/item_user_layout"
         layout="@layout/item_user"
-        app:layout_constraintBottom_toTopOf="@+id/textView"
+        app:layout_constraintBottom_toTopOf="@+id/textHeaderPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -86,8 +86,8 @@
         android:layout_height="30dp"
         app:layout_constraintBottom_toTopOf="@+id/recyclerRelative"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView"
-        app:layout_constraintTop_toTopOf="@+id/textView"
+        app:layout_constraintStart_toEndOf="@+id/textHeaderPersonName"
+        app:layout_constraintTop_toTopOf="@+id/textHeaderPersonName"
         app:srcCompat="@drawable/ic_filtreleme" />
 
     <TextView

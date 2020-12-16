@@ -12,6 +12,14 @@
         <item name="colorControlActivated">@color/green</item>
         <item name="colorControlHighlight">@color/green</item>
     </style>
+    <style name="SearchView" parent="Widget.AppCompat.SearchView">
+        <!-- Customize your theme here. -->
+        <item name="searchIcon">@color/green</item>
+        <item name="android:editTextColor">@color/line_grey</item>
+        <item name="android:textColorHint">@color/green</item>
+        <item name="android:backgroundTint">@color/line_grey</item>
+
+    </style>
 
     <style name="LoginTheme" parent="Theme.AppCompat.Light.NoActionBar"/>
   

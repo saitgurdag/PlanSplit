@@ -8,18 +8,16 @@ public class ToDoList {
     private int symbol;
     private String who_added;
     private String resp_person_name;
-    private String resp_group_name;
 
     ArrayList<Person> responsible_person = new ArrayList<Person>();
     ArrayList<Groups> the_group = new ArrayList<Groups>();
 
-    public ToDoList(String description, String status, int symbol, String who_added, String resp_person_name, String resp_group_name) {
+    public ToDoList(String description, String status, int symbol, String who_added, String resp_person_name) {
         this.description = description;
         this.status = status;
         this.symbol = symbol;
         this.who_added = who_added;
         this.resp_person_name = resp_person_name;
-        this.resp_group_name = resp_group_name;
     }
 
     public ToDoList(String description, String status, int symbol) {
@@ -42,14 +40,6 @@ public class ToDoList {
 
     public void setResp_person_name(String resp_person_name) {
         this.resp_person_name = resp_person_name;
-    }
-
-    public String getResp_group_name() {
-        return resp_group_name;
-    }
-
-    public void setResp_group_name(String resp_group_name) {
-        this.resp_group_name = resp_group_name;
     }
 
     public ArrayList<Groups> getThe_group() {
