@@ -37,8 +37,9 @@ public class GroupOperationsAdapter extends RecyclerView.Adapter<GroupOperations
     public void onBindViewHolder(@NonNull GroupOperationsViewHolder holder, int position) {
         Person persons = groupOperationsPersonList.get(position);
 
-
+        //getResources().getColor(R.color.rojo)
         holder.background.setBackgroundColor(GroupOperationsFragment.colourArrayInteger.get(position));
+        //holder.background.setBackgroundColor();
         holder.personImage.setImageResource(persons.getCardView_shareMethodPersonPicture());
         holder.personGroupDepth.setText(persons.getGroupDepth());
 
