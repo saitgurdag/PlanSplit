@@ -15,6 +15,11 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="title_app">Plan &amp; Split</string>
     <string name="group_title">Grup İsmi</string>
+    <string name="write_group_name">Grup ismi yazınız</string>
+    <string name="group_operations">Grup İşlemleri</string>
+    <string name="group_settings">Grup Ayarları</string>
+    <string name="create_group">GRUBU OLUŞTUR</string>
+    <string name="please_give_group_name">Lütfen grup ismi giriniz</string>
     <string-array name="shareMethodSpinnerItems">
         <item>Eşit paylaşım</item>
         <item>Düzensiz paylaşım</item>
@@ -27,6 +32,8 @@
     <string name="total">Toplam</string>
     <string name="expense_desc">Harcama Açıklaması</string>
     <string name="expense_count">Harcama Miktarı</string>
+    <string name="expenses">Harcamalar</string>
+    <string name="add_expense">Harcama Ekle</string>
     <string name="payer">Ödeyen</string>
     <string name="partition_method">Paylaşma Yöntemi</string>
     <string name="save">Kaydet</string>
@@ -43,8 +50,6 @@
     <string name="group_events_object_payOrpayed_pay">TL ödedin</string>
     <string name="list">Liste</string>
     <string name="events">Olaylar</string>
-    <string name="group_operations">Grup İşlemleri</string>
-    <string name="group_settings">Grup Ayarları</string>
     <string name="as_table_export">Tablo Olarak Çıkar</string>
     <string name="quick_add">Hızlı Ekle</string>
     <string name="enter_mail_address">mail adresini giriniz</string>
@@ -56,7 +61,7 @@
     <string name="add_requierement">İhtiyaç ekleyiniz</string>
     <string name="back">Geri Dön</string>
     <string name="resp_question">Bu ihtiyacı karşılamak istiyor musunuz?</string>
-    <string name="cancel_resp">Bu ihtiyacı karşılamayı iptal istiyor musunuz?</string>
+    <string name="cancel_resp">Bu ihtiyacı karşılamayı iptal etmek istiyor musunuz?</string>
     <string name="yes">Evet</string>
     <string name="enter_note">enter note</string>
     <string name="group_expense_note_dialog_title">Not Ekle</string>
@@ -68,11 +73,8 @@
     <string name="date_picker_menu_weekly_repeat">Haftalık</string>
     <string name="date_picker_menu_monthly_repeat">Aylık</string>
     <string name="date_picker_menu_yearly_repeat">Yıllık</string>
-    <string name="expenses">Harcamalar</string>
-    <string name="add_expense">Harcama Ekle</string>
     <string name="remove_friend">Sil</string>
     <string name="pay">Ödeme yap</string>
-    <string name="create_group">GRUBU OLUŞTUR</string>
     <string name="home">Ev</string>
     <string name="trip">Seyahat</string>
     <string name="work">İş</string>
@@ -85,4 +87,6 @@
     <string name="title_all">hepsi</string>
     <string name="add_budget_text">Lütfen Aylık Bütçenizi Giriniz.</string>
     <string name="isim_giriniz">İsim giriniz</string>
+    <string name="select_friends">Lütfen arkadaş seçiniz</string>
+
 </resources>

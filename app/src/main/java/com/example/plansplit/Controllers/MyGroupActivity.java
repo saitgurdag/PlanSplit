@@ -25,12 +25,19 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
 
 public class MyGroupActivity extends AppCompatActivity {
-    //NavigationView navigationView;
     private static final String TAG = "MyGroupActivity";
     Database database = Database.getInstance();
     private String person_id = "";
     private Friend friend;
     boolean ctrlType=false;             //eğer friend'den geliyorsa true, gruptan geliyorsa false
+    private String group_type_option_home = "ev";
+    private String group_type_option_work = "iş";
+    private String group_type_option_trip = "seyahat";
+    private String group_type_option_other = "diğer";
+    int homePicture = R.drawable.ic_home_black_radius;
+    int workPicture = R.drawable.ic_suitcase_radius;
+    int tripPicture = R.drawable.ic_trip_radius;
+    int otherPicture = R.drawable.ic_other;
 
     public void showPopup(View v) {
         PopupMenu popup = new PopupMenu(MyGroupActivity.this, v);
@@ -68,7 +75,6 @@ public class MyGroupActivity extends AppCompatActivity {
         final TextView events_titleTv = findViewById(R.id.events_buttonTv);
         final TextView group_op_titletV = findViewById(R.id.group_op_buttonTv);
         final TextView remove_txt = findViewById(R.id.remove_friend);
-        //BottomNavigationView navView = findViewById(R.id.nav_view_mygroup);
         LinearLayout l = findViewById(R.id.remove_friend_linear);
         ImageView groupPhotoIv = findViewById(R.id.group_pictureIv);
         ImageButton listBttn = findViewById(R.id.task_listButton);
@@ -80,7 +86,6 @@ public class MyGroupActivity extends AppCompatActivity {
 
 
         BottomNavigationView navView = findViewById(R.id.nav_view2);
-        //navView.getMenu().getItem(2).setChecked(true);
         navView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener(){
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item){
@@ -120,8 +125,16 @@ public class MyGroupActivity extends AppCompatActivity {
         if(extras != null && extras.keySet().contains("group_title")){
             navView.getMenu().getItem(2).setChecked(true);
             group_title = extras.getString("group_title");
-            int resid = extras.getInt("group_image");
-            groupPhotoIv.setImageResource(resid);
+            String resid = extras.getString("group_image");
+            if(resid.equals(group_type_option_home)){
+                groupPhotoIv.setImageResource(homePicture);
+            }else if(resid.equals(group_type_option_work)){
+                groupPhotoIv.setImageResource(workPicture);
+            } else if(resid.equals(group_type_option_trip)){
+                groupPhotoIv.setImageResource(tripPicture);
+            } else if(resid.equals(group_type_option_other)){
+                groupPhotoIv.setImageResource(otherPicture);
+            }
             System.out.println("grouppp");
             groupOpBttn.setVisibility(View.VISIBLE);
             removeFriendBttn.setVisibility(View.INVISIBLE);
@@ -217,17 +230,6 @@ public class MyGroupActivity extends AppCompatActivity {
             }
         });
 
-/*
-        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_personal, R.id.navigation_friends, R.id.navigation_groups, R.id.navigation_notifications)
-
-                .build();
-        NavController navController = Navigation.findNavController(MyGroup.this, R.id.nav_host_fragment);
-        NavigationUI.setupActionBarWithNavController(MyGroup.this, navController, appBarConfiguration);
-        NavigationUI.setupWithNavController(navView, navController);
-
-        navigationView=findViewById(R.id.nav_draw_view);
-*/
     }
 
 

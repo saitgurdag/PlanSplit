@@ -1,66 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:layout_height="match_parent">
 
     <RelativeLayout
         android:id="@+id/recyclerRelative"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingHorizontal="5dp"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp"
         android:layout_marginTop="140dp"
         android:layout_marginBottom="70dp"
         android:gravity="bottom|end"
-        >
+        android:paddingHorizontal="5dp"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp">
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerGroups"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:listitem="@layout/item_groups_red"
+            android:layout_marginBottom="0dp"
             android:elevation="5dp"
-            android:layout_marginBottom="0dp"/>
+            tools:listitem="@layout/item_groups_red" />
+
         <RelativeLayout
             android:id="@+id/recycler_viewRL2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="bottom|end"
             android:layout_marginEnd="10dp"
-            android:translationZ="90dp"
-            >
+            android:gravity="bottom|end"
+            android:translationZ="90dp">
+
             <ImageView
                 android:id="@+id/add_expense"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-                app:srcCompat="@drawable/ic_plus_button"
                 android:layout_margin="10dp"
-                />
+                app:srcCompat="@drawable/ic_plus_button" />
         </RelativeLayout>
     </RelativeLayout>
 
-    <TextView
-        android:id="@+id/textHeaderPersonName"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:id="@+id/relativeLayout3"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:fontFamily="@font/avenir"
-        android:gravity="center"
-        android:text="Gruplar"
-        android:textColor="@color/darkGreen"
-        android:textSize="25sp"
-        android:textStyle="bold"
+        android:paddingTop="10dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintBottom_toTopOf="@+id/recyclerRelative"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/relativeLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/item_user_layout">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/textHeaderPersonName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:fontFamily="@font/avenir"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="@string/title_groups"
+                android:textColor="@color/darkGreen"
+                android:textSize="25sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/relativeLayout" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingEnd="25dp">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentRight="true"
+                android:layout_gravity="center"
+                app:srcCompat="@drawable/ic_filtreleme" />
+
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+
 
     <include
         android:id="@+id/item_user_layout"
         layout="@layout/item_user"
-        app:layout_constraintBottom_toTopOf="@+id/textHeaderPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/relativeLayout3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -70,39 +109,18 @@
         android:layout_width="310dp"
         android:layout_height="34dp"
         android:background="@drawable/custom_button2"
+        android:elevation="2dp"
+        android:fontFamily="@font/avenir"
         android:gravity="center"
         android:text="Yeni Grup Ekle"
         android:textColor="@color/grey"
+        android:textSize="15sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerRelative"
-        android:elevation="2dp"/>
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        app:layout_constraintBottom_toTopOf="@+id/recyclerRelative"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textHeaderPersonName"
-        app:layout_constraintTop_toTopOf="@+id/textHeaderPersonName"
-        app:srcCompat="@drawable/ic_filtreleme" />
-
-    <TextView
-        android:id="@+id/text_group"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/recyclerRelative" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

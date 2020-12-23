@@ -57,8 +57,7 @@
                 <TextView
                     android:id="@+id/user_debt_groupEvents_text"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
+                    android:layout_height="match_parent"
                     android:fontFamily="@font/avenir"
                     android:gravity="center"
                     android:text="Toplam 15TL Borçlusun"
@@ -75,6 +74,7 @@
                 android:gravity="center"
                 android:orientation="vertical"
                 android:paddingRight="20dp"
+                android:paddingTop="5dp"
                 >
 
                 <ImageButton
@@ -83,12 +83,14 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/background_pay"
                     android:src="@drawable/turkish_lira_symbol"
+                    android:padding="5dp"
                     android:elevation="5dp"/>
                 <TextView
                     android:id="@+id/pay_Tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/pay"
+                    android:textSize="15sp"
                     android:layout_gravity="center"
                     android:gravity="center"/>
 

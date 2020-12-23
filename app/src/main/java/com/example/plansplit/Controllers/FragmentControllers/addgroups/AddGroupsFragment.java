@@ -2,29 +2,30 @@ package com.example.plansplit.Controllers.FragmentControllers.addgroups;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatRadioButton;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.plansplit.Controllers.Adapters.AddGroupsAdapter;
+import com.example.plansplit.Controllers.FragmentControllers.groups.GroupsFragment;
 import com.example.plansplit.Controllers.HomeActivity;
+import com.example.plansplit.Models.Database;
 import com.example.plansplit.Models.Objects.Friend;
-import com.example.plansplit.Models.Objects.Groups;
 import com.example.plansplit.R;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class AddGroupsFragment extends Fragment {
@@ -33,23 +34,20 @@ public class AddGroupsFragment extends Fragment {
     private List<Friend> addgroups_personList;
     RecyclerView recyclerView;
     AddGroupsAdapter adapter;
-    private FirebaseDatabase database;
-    private DatabaseReference group_ref;
+    private static final Database database = Database.getInstance();
     private String person_id;
     Button buttonMakeGroup;
-    EditText editTextTextPersonName;
+    EditText groupName_EditText;
     RadioGroup rgroupButton;
     AppCompatRadioButton rbuttonHouse, rbuttonWork, rbuttonTrip, rbuttonOther;
     private String group_type = "ev";
-    private ArrayList<Groups> groupsArrayList;
+    ImageView groupPicture;
+    int homePicture, workPicture, tripPicture, otherPicture;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
         final View root = inflater.inflate(R.layout.fragment_addgroups, container, false);
-
-        database = FirebaseDatabase.getInstance();
-        group_ref = database.getReference("groups");
 
         final HomeActivity home = (HomeActivity) getContext();
 
@@ -67,7 +65,13 @@ public class AddGroupsFragment extends Fragment {
         rbuttonTrip = root.findViewById(R.id.rbuttonTrip);
         rbuttonOther = root.findViewById(R.id.rbuttonOther);
 
-        editTextTextPersonName = root.findViewById(R.id.editTextTextPersonName);
+        homePicture = R.drawable.ic_home_black_radius;
+        workPicture = R.drawable.ic_suitcase_radius;
+        tripPicture = R.drawable.ic_trip_radius;
+        otherPicture = R.drawable.ic_other;
+
+        groupPicture = root.findViewById(R.id.GroupPicture_ImageView);
+        groupName_EditText = root.findViewById(R.id.GroupName_EditText);
         buttonMakeGroup = root.findViewById(R.id.buttonMakeGroup);
 
         rgroupButton = (RadioGroup) root.findViewById(R.id.rgroupButton);
@@ -82,6 +86,7 @@ public class AddGroupsFragment extends Fragment {
                         rbuttonTrip.setTextColor(Color.BLACK);
                         rbuttonOther.setTextColor(Color.BLACK);
                         group_type = "ev";
+                        groupPicture.setImageResource(homePicture);
                         System.out.println("Ev butonu tıklandı");
                         break;
                     case R.id.rbuttonWork:
@@ -90,6 +95,7 @@ public class AddGroupsFragment extends Fragment {
                         rbuttonTrip.setTextColor(Color.BLACK);
                         rbuttonOther.setTextColor(Color.BLACK);
                         group_type = "iş";
+                        groupPicture.setImageResource(workPicture);
                         System.out.println("iş butonu tıklandı");
                         break;
                     case R.id.rbuttonTrip:
@@ -98,6 +104,7 @@ public class AddGroupsFragment extends Fragment {
                         rbuttonTrip.setTextColor(Color.WHITE);
                         rbuttonOther.setTextColor(Color.BLACK);
                         group_type = "seyahat";
+                        groupPicture.setImageResource(tripPicture);
                         System.out.println("seyahat butonu tıklandı");
                         break;
                     case R.id.rbuttonOther:
@@ -106,6 +113,7 @@ public class AddGroupsFragment extends Fragment {
                         rbuttonTrip.setTextColor(Color.BLACK);
                         rbuttonOther.setTextColor(Color.WHITE);
                         group_type = "diğer";
+                        groupPicture.setImageResource(otherPicture);
                         System.out.println("Diğer butonu tıklandı");
                         break;
                 }
@@ -116,30 +124,29 @@ public class AddGroupsFragment extends Fragment {
         buttonMakeGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
-
-                if (AddGroupsAdapter.checked_personList.size() > 0) {
-                    final String group_name = editTextTextPersonName.getText().toString().trim();
-                    Groups group = new Groups(group_name,group_type);
-                    group.addFriend(person_id);
-                    for (Friend friend : AddGroupsAdapter.checked_personList) {
-                        String friendKey = friend.getKey();
-                        group.addFriend(friendKey);
-                    }
-                    group_ref.push().setValue(group);
-
-                    getFragmentManager().popBackStack();
-
-                } else {
-                    Toast.makeText(getContext(), "Lütfen Arkadaş Seçiniz", Toast.LENGTH_SHORT).show();
-                }
-
+                createNewGroup();
             }
         });
 
         return root;
     }
 
+    public void createNewGroup() {
+        database.createNewGroup(person_id, AddGroupsAdapter.checked_personList, group_type, groupName_EditText, new Database.DatabaseCallBack() {
+            @Override
+            public void onSuccess(String success) {
+                Log.d(TAG, success);
+                GroupsFragment GroupsFragment = new GroupsFragment();
+                FragmentManager fragmentManager = getFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.nav_host_fragment, GroupsFragment).addToBackStack(null).commit();
+            }
+
+            @Override
+            public void onError(String error_tag, String error) {
+                Log.e(TAG, error_tag + ": " + error);
+                Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
 }
