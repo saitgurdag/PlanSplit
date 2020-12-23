@@ -19,37 +19,39 @@ import com.example.plansplit.Controllers.Adapters.ShareMethodAdapter;
 import com.example.plansplit.Controllers.FragmentControllers.friends.FriendExpenseFragment;
 import com.example.plansplit.R;
 import com.example.plansplit.Models.Objects.Person;
-import com.example.plansplit.Controllers.FragmentControllers.groups.GroupExpenseFragment;
+
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-
-public class ShareMethodFragment extends AppCompatDialogFragment implements AdapterView.OnItemSelectedListener {
-    private static final String TAG = "ShareMethodFragment";
-    private Dialog dialog;
+public class ShareMethodFriendsFragment extends AppCompatDialogFragment implements AdapterView.OnItemSelectedListener {
+    private static final String TAG = "ShareMethodFriendsFragment";
+    private Dialog dialogFriend;
     Button sharemethodExitBtn;
-    Spinner spinner;
+    Spinner spinnerFriend;
     Button sharemethodOKBtn;
     RecyclerView recyclerView;
     ShareMethodAdapter adapter;
-    List<Person> ShareGroupsPersonList;
+    List<Person> ShareFriendsPersonList;
 
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         {
 
-            dialog = new Dialog(getContext(), R.style.Theme_AppCompat_DayNight_Dialog_MinWidth);
-            dialog.setCancelable(false);
-            dialog.setContentView(R.layout.fragment_dialog_share_method);
-            sharemethodExitBtn = dialog.findViewById(R.id.shareMethodExitButton);
-            sharemethodOKBtn = dialog.findViewById(R.id.buttonShareMethodOk);
-            spinner = dialog.findViewById(R.id.shareMethodSpinner);
-            ArrayAdapter<CharSequence> adapter2=ArrayAdapter.createFromResource(this.getContext(),
+            dialogFriend = new Dialog(getContext(), R.style.Theme_AppCompat_DayNight_Dialog_MinWidth);
+            dialogFriend.setCancelable(false);
+            dialogFriend.setContentView(R.layout.fragment_dialog_share_method);
+            sharemethodExitBtn = dialogFriend.findViewById(R.id.shareMethodExitButton);
+            sharemethodOKBtn = dialogFriend.findViewById(R.id.buttonShareMethodOk);
+            spinnerFriend = dialogFriend.findViewById(R.id.shareMethodSpinner);
+
+
+            ArrayAdapter<CharSequence> adapter3=ArrayAdapter.createFromResource(this.getContext(),
                     R.array.shareMethodSpinnerItems, android.R.layout.simple_spinner_item);
-            adapter2.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-            spinner.setAdapter(adapter2);
-            spinner.setOnItemSelectedListener((AdapterView.OnItemSelectedListener) this.getContext());
+            adapter3.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+
+            spinnerFriend.setAdapter(adapter3);
+            spinnerFriend.setOnItemSelectedListener((AdapterView.OnItemSelectedListener)this.getContext());   //Burda bi OLAY VAR
 
 
             /*AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.Theme_AppCompat_DayNight_Dialog_MinWidth);
@@ -59,42 +61,43 @@ public class ShareMethodFragment extends AppCompatDialogFragment implements Adap
 
             //builder.setView(view);
 
-            recyclerView = (RecyclerView) dialog.findViewById(R.id.recycler_share_method);
+            recyclerView = (RecyclerView) dialogFriend.findViewById(R.id.recycler_share_method);
             recyclerView.setHasFixedSize(true);
             RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this.getContext(), 1);
             recyclerView.setLayoutManager(mLayoutManager);
-            ShareGroupsPersonList = new ArrayList<>();
+            ShareFriendsPersonList = new ArrayList<>();
 
-            ShareGroupsPersonList.add(new Person("ali", R.drawable.denemeresim, 0));
-            ShareGroupsPersonList.add(new Person("veli", R.drawable.denemeresim, 0));
-            ShareGroupsPersonList.add(new Person("osman", R.drawable.denemeresim, 0));
+            ShareFriendsPersonList.add(new Person("veli", R.drawable.denemeresim, 0));
+            ShareFriendsPersonList.add(new Person("hüseyin", R.drawable.denemeresim, 0));
+            ShareFriendsPersonList.add(new Person("ali", R.drawable.denemeresim, 0));
+            ShareFriendsPersonList.add(new Person("sami", R.drawable.denemeresim, 0));
 
 
-            adapter = new ShareMethodAdapter(this.getContext(), ShareGroupsPersonList);
+            adapter = new ShareMethodAdapter(this.getContext(), ShareFriendsPersonList);
             recyclerView.setAdapter(adapter);
             sharemethodExitBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    dialog.dismiss();
+                    dialogFriend.dismiss();
                 }
             });
             sharemethodOKBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    dialog.dismiss();
-                    GroupExpenseFragment.shareBtn.setText(GroupExpenseFragment.sharemethod);
+                    dialogFriend.dismiss();
+                    FriendExpenseFragment.shareBtn.setText(FriendExpenseFragment.sharemethod);
 
                 }
             });
 
-            return dialog;
+            return dialogFriend;
         }
     }
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-            String text=adapterView.getItemAtPosition(i).toString();
-            Toast.makeText(adapterView.getContext(),text,Toast.LENGTH_SHORT).show();
+        String text=adapterView.getItemAtPosition(i).toString();
+        Toast.makeText(adapterView.getContext(),text,Toast.LENGTH_SHORT).show();
 
     }
 

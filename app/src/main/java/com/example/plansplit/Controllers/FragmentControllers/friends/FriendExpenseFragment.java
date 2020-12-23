@@ -26,9 +26,10 @@ import android.widget.PopupMenu;
 import com.example.plansplit.Controllers.Adapters.CustomDialogAdapter;
 
 import com.example.plansplit.Controllers.Adapters.CustomDialogAdapterFriendExpense;
+import com.example.plansplit.Controllers.FragmentControllers.ShareMethod.ShareMethodFragment;
 import com.example.plansplit.Models.Objects.Person;
 import com.example.plansplit.R;
-import com.example.plansplit.Controllers.FragmentControllers.ShareMethod.ShareMethodFragment;
+import com.example.plansplit.Controllers.FragmentControllers.ShareMethod.ShareMethodFriendsFragment;
 
 import java.util.ArrayList;
 
@@ -61,9 +62,10 @@ public class FriendExpenseFragment extends Fragment {
 
         myImageNameListFriend = new ArrayList<>();
 
-        myImageNameListFriend.add(new Person("ali", R.drawable.denemeresim, 0));
         myImageNameListFriend.add(new Person("veli", R.drawable.denemeresim, 0));
-
+        myImageNameListFriend.add(new Person("veli", R.drawable.denemeresim, 0));
+        myImageNameListFriend.add(new Person("ali", R.drawable.denemeresim, 0));
+        myImageNameListFriend.add(new Person("sami", R.drawable.denemeresim, 0));
 
         dialogBtn = root.findViewById(R.id.payer_button);
         calenderBtn = root.findViewById(R.id.calendarButton);
@@ -110,8 +112,8 @@ public class FriendExpenseFragment extends Fragment {
     }
 
     public void openShareMethodDialog() {//// aynı oldu
-        ShareMethodFragment shareDialog = new ShareMethodFragment();
-        shareDialog.show(getParentFragmentManager(), "friend share method dialog");
+        ShareMethodFriendsFragment shareDialogFriend = new ShareMethodFriendsFragment();
+        shareDialogFriend.show(getParentFragmentManager(), "friend share method dialog");
 
 
     }
@@ -212,7 +214,6 @@ public class FriendExpenseFragment extends Fragment {
                         switch (menuItem.getItemId()) {
                             case R.id.date_picker_menu_for_once:
                                 repetition = getResources().getString(R.string.date_picker_menu_for_once);
-
                                 break;
                             case R.id.date_picker_menu_weekly_repeat:
                                 repetition = getResources().getString(R.string.date_picker_menu_weekly_repeat);

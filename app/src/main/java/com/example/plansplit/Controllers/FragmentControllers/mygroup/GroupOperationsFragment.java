@@ -110,7 +110,7 @@ public class GroupOperationsFragment extends Fragment {
 
         PieDataSet pieDataSet = new PieDataSet(depthOfPerson,"");
 
-        pieChart.setHoleRadius(75);
+        pieChart.setHoleRadius(65);
         pieDataSet.setValueTextColor(Color.BLACK);
 
 
@@ -124,13 +124,14 @@ public class GroupOperationsFragment extends Fragment {
 
 
 
-        pieDataSet.setValueTextSize(12f);
+        pieDataSet.setValueTextSize(13f);
 
         PieData pieData = new PieData(pieDataSet);
         pieChart.setData(pieData);
         pieChart.getDescription().setEnabled(false);
         pieChart.getLegend().setEnabled(false);          //Daire dilimi dışındaki şeyleri seildik description boxları
-        pieChart.setCenterText("TOPLAM : "+totalDepth+" TL");
+        pieChart.setCenterText(totalDepth+" TL");
+        pieChart.setCenterTextSize(20f);
         pieChart.animate();
         //PİE CHART BİTİŞ
 
