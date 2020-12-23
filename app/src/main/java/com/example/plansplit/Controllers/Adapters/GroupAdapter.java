@@ -17,9 +17,15 @@ import java.util.ArrayList;
 
 public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private ArrayList<Groups> groups;
+    private ArrayList<Groups> groups = new ArrayList<>();
     Context mContx;
     RecyclerViewClickListener mListener;
+    private String group_type_option_home = "ev";
+    private String group_type_option_work = "iş";
+    private String group_type_option_trip = "seyahat";
+    private String group_type_option_other = "diğer";
+    int homePicture, workPicture, tripPicture, otherPicture;
+
 
     public GroupAdapter(Context mContx, ArrayList<Groups> groups, RecyclerViewClickListener mListener) {
         this.mContx = mContx;
@@ -41,6 +47,22 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         MyViewHolder viewHolder0 = (MyViewHolder) holder;
         viewHolder0.mTitle.setText(groups.get(position).getGroup_name());
 
+        homePicture = R.drawable.ic_home_black_radius;
+        workPicture = R.drawable.ic_suitcase_radius;
+        tripPicture = R.drawable.ic_trip_radius;
+        otherPicture = R.drawable.ic_other;
+
+        String group_type = groups.get(position).getGroup_type();
+        if(group_type.equals(group_type_option_home)){
+            viewHolder0.mGroupIcon.setImageResource(homePicture);
+        } else if(group_type.equals(group_type_option_work)){
+            viewHolder0.mGroupIcon.setImageResource(workPicture);
+        } else if(group_type.equals(group_type_option_trip)){
+            viewHolder0.mGroupIcon.setImageResource(tripPicture);
+        } else if(group_type.equals(group_type_option_other)){
+            viewHolder0.mGroupIcon.setImageResource(otherPicture);
+        }
+
     }
 
     @Override
@@ -51,14 +73,14 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        ImageView mImageView, mImageView_extra;
+        ImageView mGroupIcon, mImageView_extra;
         TextView mTitle, mCost;
 
         public MyViewHolder(@NonNull View itemView) {
 
             super(itemView);
 
-            this.mImageView = itemView.findViewById(R.id.imageIv);
+            this.mGroupIcon = itemView.findViewById(R.id.imageIv);
             this.mImageView_extra = itemView.findViewById(R.id.imageIv_extra);
             this.mTitle = itemView.findViewById(R.id.group_titleTv);
             this.mCost = itemView.findViewById(R.id.costTv);

@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName"
+        android:id="@+id/GroupName_EditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="48dp"
@@ -171,10 +171,10 @@
         android:layout_marginEnd="24dp"
         android:background="@drawable/camera_button"
         android:padding="4dp"
-        app:layout_constraintBottom_toBottomOf="@+id/editTextTextPersonName"
+        app:layout_constraintBottom_toBottomOf="@+id/GroupName_EditText"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/editTextTextPersonName"
-        app:layout_constraintTop_toTopOf="@+id/editTextTextPersonName"
+        app:layout_constraintStart_toEndOf="@+id/GroupName_EditText"
+        app:layout_constraintTop_toTopOf="@+id/GroupName_EditText"
         app:srcCompat="@drawable/ic_camera" />
 
     <Button

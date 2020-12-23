@@ -3,7 +3,6 @@ package com.example.plansplit.Models;
 import android.content.Context;
 import android.util.Log;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -24,7 +23,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
+import java.util.List;
 
 public class Database {
 
@@ -36,16 +38,20 @@ public class Database {
     private static final String USER_AND_TARGET_KEY_SAME = "USER_AND_TARGET_KEY_SAME";
     private static final String ALREADY_FRIENDS = "ALREADY_FRIENDS";
     private static final String ALREADY_SENT_FRIEND_REQUEST = "ALREADY_SENT_FRIEND_REQUEST";
+    private static final String NO_SELECTED_FRIEND = "NO_SELECTED_FRIEND";
+    private static final String NO_GIVEN_GROUP_NAME = "NO_GIVEN_GROUP_NAME";
+
 
     //Firebase
     private static final FirebaseDatabase database = FirebaseDatabase.getInstance();
     private static final DatabaseReference user_reference = database.getReference("users");
     private static final DatabaseReference friend_reference = database.getReference("friends");
-    private static final DatabaseReference group_reference  =database.getReference("groups");
+    private static final DatabaseReference group_reference = database.getReference("groups");
 
     private static final String TAG = "DATABASE";
+    private static final String addGroupsFragment = "AddGroupsFragment";
     final int[] butce = new int[1];
-    public boolean ctrlRun=false;
+    public boolean ctrlRun = false;
     private Context context;
     private Fragment fragment;
     private int totExpense = 0;
@@ -58,7 +64,8 @@ public class Database {
         return butce[0];
     }
 
-    public Database(){ }
+    public Database() {
+    }
 
     private String userId = null;
 
@@ -70,35 +77,36 @@ public class Database {
         return userId;
     }
 
-    public Database(Context context){
-        this.context=context;
+    public Database(Context context) {
+        this.context = context;
         GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(context);
         if (acct != null) {
             setUserId(acct.getId());
             System.out.println("acct not null");
-        }else{
+        } else {
             System.out.println("acct null");
         }
     }
 
-    public Database(Context context, Fragment fragment){
+    public Database(Context context, Fragment fragment) {
         this.fragment = fragment;
-        this.context=context;
+        this.context = context;
         GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(context);
         if (acct != null) {
             setUserId(acct.getId());
             System.out.println("acct not null");
-        }else{
+        } else {
             System.out.println("acct null");
         }
     }
 
-    private static class Holder{
+    private static class Holder {
         private static final Database INSTANCE = new Database();
     }
 
+
     //Singleton
-    public static Database getInstance(){
+    public static Database getInstance() {
         return Holder.INSTANCE;
     }
 
@@ -108,6 +116,7 @@ public class Database {
      */
     public interface FriendCallBack {
         void onFriendRetrieveSuccess(Friend friend);
+
         void onError(String error_tag, String error);
     }
 
@@ -117,51 +126,67 @@ public class Database {
      */
     public interface FriendRequestCallBack {
         void onFriendRequestRetrieveSuccess(FriendRequest friend_request);
+
         void onError(String error_tag, String error);
     }
 
-    /** Standard interface for status report from Database operations */
+    /**
+     * Standard interface for status report from Database operations
+     */
     public interface DatabaseCallBack {
         void onSuccess(String success);
+
         void onError(String error_tag, String error);
     }
 
-    /** A private handler for adding new friend, removing request and removing friends node on error */
+    /**
+     * A private handler for adding new friend, removing request and removing friends node on error
+     */
     @SuppressWarnings("unused")
     private interface AddFriendHandler {
         void addAsFriend(String key, ArrayList<String> friends);
+
         void removeFromRequests(String key, ArrayList<String> friend_reqs);
+
         void removeFriendsOnError(String friend_list_key);
     }
 
-    /** A private handler for adding new friend request */
+    /**
+     * A private handler for adding new friend request
+     */
     @SuppressWarnings("unused")
     private interface SendFriendRequestHandler {
         void addToRequests(String key, ArrayList<String> friend_reqs);
     }
 
-    /** A private handler for declining the friend request */
+    /**
+     * A private handler for declining the friend request
+     */
     @SuppressWarnings("unused")
     private interface DeclineFriendRequestHandler {
         void declineFriendRequest(String key, ArrayList<String> friend_reqs);
     }
 
-    /** A private handler for removing friend from friend list and deleting friend snapshot */
+    /**
+     * A private handler for removing friend from friend list and deleting friend snapshot
+     */
     @SuppressWarnings("unused")
     private interface RemoveFriendHandler {
         void removeFriend(String key);
+
         void removeFromFriendList(String key, ArrayList<String> friends);
     }
 
     /**
      * Creates a child with "key" under user reference. No controls are made, so before use it
      * parameters should be checked
-     * @param key Google ID
-     * @param name display name of google account
-     * @param email current email of google account
+     *
+     * @param key     Google ID
+     * @param name    display name of google account
+     * @param email   current email of google account
      * @param surname surname of google account
      */
-    public void registerUser(String key, String name, String email, String surname){
+    public void registerUser(String key, String name, String email, String surname) {
         user_reference.child(key).child("name").setValue(name);
         user_reference.child(key).child("email").setValue(email);
         user_reference.child(key).child("surname").setValue(surname);
@@ -176,19 +201,20 @@ public class Database {
      * {@value DATABASE_ERROR} <p>
      * {@value KEY_NOT_FOUND} <p>
      * {@value FRIEND_LIST_EMPTY} <p>
+     *
      * @param user_key unique key whose friends would be searched for
      * @param callBack the callBack to be called whenever an error occurs or task successfully end
      * @see #getFriend(String, FriendCallBack)
      */
-    public void getFriends(final String user_key, final FriendCallBack callBack){
-        if (user_key == null){
+    public void getFriends(final String user_key, final FriendCallBack callBack) {
+        if (user_key == null) {
             callBack.onError(KEY_NOT_FOUND, "kullanıcı keyi null");
             return;
         }
         user_reference.child(user_key).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(!snapshot.exists()) {
+                if (!snapshot.exists()) {
                     callBack.onError(KEY_NOT_FOUND,
                             user_key + " ile ilişkili kullanıcı bulunamadı");
                     return;
@@ -196,23 +222,23 @@ public class Database {
                 @SuppressWarnings("unchecked")
                 ArrayList<String> friend_list_keys = (ArrayList<String>)
                         snapshot.child("friends").getValue();
-                if(friend_list_keys == null){
+                if (friend_list_keys == null) {
                     callBack.onError(FRIEND_LIST_EMPTY, "Arkadaş listesi boş");
                     return;
                 }
-                for(final String friend_list_key: friend_list_keys){
+                for (final String friend_list_key : friend_list_keys) {
                     //assuming snapshot with friend_list_key exists, if not throws Exception
                     friend_reference.child(friend_list_key).child("friends").addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            if (!snapshot.exists()){
+                            if (!snapshot.exists()) {
                                 callBack.onError(VALUE_NOT_FOUND, "friends snapshot'ında arkadaş keyleri yok");
                                 return;
                             }
                             @SuppressWarnings("unchecked")
                             ArrayList<String> friends = (ArrayList<String>) snapshot.getValue();
-                            for (String key: friends){
-                                if (!user_key.equals(key)){
+                            for (String key : friends) {
+                                if (!user_key.equals(key)) {
                                     getFriend(key, callBack);
                                     return;
                                 }
@@ -240,19 +266,20 @@ public class Database {
      * ERRORS: <p>
      * {@value DATABASE_ERROR} <p>
      * {@value KEY_NOT_FOUND} <p>
+     *
      * @param friend_key key which would be searched and then constructed as a Friend
-     * @param callBack the callBack to be called whenever an error occurs or task successfully end
+     * @param callBack   the callBack to be called whenever an error occurs or task successfully end
      * @see Friend
      */
-    public void getFriend(final String friend_key, final FriendCallBack callBack){
-        if (friend_key == null){
+    public void getFriend(final String friend_key, final FriendCallBack callBack) {
+        if (friend_key == null) {
             callBack.onError(KEY_NOT_FOUND, "aranan key null");
             return;
         }
         user_reference.child(friend_key).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(!snapshot.exists()){
+                if (!snapshot.exists()) {
                     callBack.onError(KEY_NOT_FOUND, friend_key + " ile ilişkili kullanıcı bulunamadı");
                     return;
                 }
@@ -263,7 +290,7 @@ public class Database {
                 */
                 int photo = R.drawable.denemeresim;
                 String name = snapshot.child("name").getValue().toString();
-                if(name.equals("No name")){
+                if (name.equals("No name")) {
                     //if there was one name when user login "No name" would be used, in such case
                     //using email as name would be better to show user to recognize the person
                     name = snapshot.child("email").getValue().toString();
@@ -289,19 +316,20 @@ public class Database {
      * {@value DATABASE_ERROR} <p>
      * {@value KEY_NOT_FOUND} <p>
      * {@value FRIEND_LIST_EMPTY} <p>
+     *
      * @param user_key unique key whose friend requests would be searched for
      * @param callBack the callBack to be called whenever an error occurs or task successfully end
-     * @see #getFriendRequest(String, FriendRequestCallBack) 
+     * @see #getFriendRequest(String, FriendRequestCallBack)
      */
-    public void getFriendRequests(final String user_key, final FriendRequestCallBack callBack){
-        if (user_key == null){
+    public void getFriendRequests(final String user_key, final FriendRequestCallBack callBack) {
+        if (user_key == null) {
             callBack.onError(KEY_NOT_FOUND, "kullanıcı keyi null");
             return;
         }
         user_reference.child(user_key).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(!snapshot.exists()) {
+                if (!snapshot.exists()) {
                     callBack.onError(KEY_NOT_FOUND,
                             user_key + " ile ilişkili kullanıcı bulunamadı");
                     return;
@@ -309,11 +337,11 @@ public class Database {
                 @SuppressWarnings("unchecked")
                 ArrayList<String> friend_reqs = (ArrayList<String>)
                         snapshot.child("friend_reqs").getValue();
-                if(friend_reqs == null){
+                if (friend_reqs == null) {
                     callBack.onError(FRIEND_LIST_EMPTY, "Arkadaş istekleri listesi boş");
                     return;
                 }
-                for(final String request_key: friend_reqs){
+                for (final String request_key : friend_reqs) {
                     getFriendRequest(request_key, callBack);
                 }
             }
@@ -331,19 +359,20 @@ public class Database {
      * ERRORS: <p>
      * {@value DATABASE_ERROR} <p>
      * {@value KEY_NOT_FOUND} <p>
+     *
      * @param request_key key which would be searched and then constructed as a Friend
-     * @param callBack the callBack to be called whenever an error occurs or task successfully end
+     * @param callBack    the callBack to be called whenever an error occurs or task successfully end
      * @see FriendRequest
      */
-    public void getFriendRequest(final String request_key, final FriendRequestCallBack callBack){
-        if (request_key == null){
+    public void getFriendRequest(final String request_key, final FriendRequestCallBack callBack) {
+        if (request_key == null) {
             callBack.onError(KEY_NOT_FOUND, "aranan key null");
             return;
         }
         user_reference.child(request_key).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(!snapshot.exists()){
+                if (!snapshot.exists()) {
                     callBack.onError(KEY_NOT_FOUND, request_key + " ile ilişkili kullanıcı bulunamadı");
                     return;
                 }
@@ -352,7 +381,7 @@ public class Database {
                 */
                 int photo = R.drawable.denemeresim;
                 String name = snapshot.child("name").getValue().toString();
-                if(name == null){
+                if (name == null) {
                     //if somehow null is present w/o Exception, use email as name, as it can not be null
                     name = snapshot.child("email").getValue().toString();
                 }
@@ -385,8 +414,9 @@ public class Database {
      * {@value USER_AND_TARGET_KEY_SAME} <p>
      * {@value ALREADY_FRIENDS} <p>
      * {@value ALREADY_SENT_FRIEND_REQUEST} <p>
+     *
      * @param user_key key of this user
-     * @param email email of the searched account, whom friend request will be send
+     * @param email    email of the searched account, whom friend request will be send
      * @param callBack the callBack to be called whenever an error occurs or task successfully end
      * @see #searchInFriends(String, String, DatabaseCallBack)
      * @see #searchInFriendRequestsList(String, String, DatabaseCallBack)
@@ -395,8 +425,8 @@ public class Database {
      */
     public void sendFriendRequest(final String user_key,
                                   final String email,
-                                  final DatabaseCallBack callBack){
-        if (user_key == null){
+                                  final DatabaseCallBack callBack) {
+        if (user_key == null) {
             callBack.onError(KEY_NOT_FOUND, "kullanıcı keyi null");
             return;
         }
@@ -417,27 +447,27 @@ public class Database {
         user_reference.orderByChild("email").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(!snapshot.exists()){
+                if (!snapshot.exists()) {
                     callBack.onError(VALUE_NOT_FOUND, email + " ile ilişkili kullanıcı bulunamadı");
                     return;
                 }
                 //make snapshot usable, which points directly the user with "email"
                 snapshot = snapshot.getChildren().iterator().next();
                 String friend_key = snapshot.getKey();
-                if (friend_key == null){
+                if (friend_key == null) {
                     callBack.onError(KEY_NOT_FOUND, "aranan key null");
                     return;
                 }
-                if (user_key.equals(friend_key)){
+                if (user_key.equals(friend_key)) {
                     callBack.onError(USER_AND_TARGET_KEY_SAME, email + " kendine istek yollamaya çalışıyor");
                     return;
                 }
                 @SuppressWarnings("unchecked")
                 ArrayList<String> friend_reqs = (ArrayList<String>)
                         snapshot.child("friend_reqs").getValue();
-                if (friend_reqs != null){
-                    for(String key: friend_reqs){
-                        if (user_key.equals(key)){
+                if (friend_reqs != null) {
+                    for (String key : friend_reqs) {
+                        if (user_key.equals(key)) {
                             callBack.onError(ALREADY_SENT_FRIEND_REQUEST, "bu emaile daha önce istek yollanmış");
                             return;
                         }
@@ -446,7 +476,7 @@ public class Database {
                 @SuppressWarnings("unchecked")
                 ArrayList<String> friends = (ArrayList<String>)
                         snapshot.child("friends").getValue();
-                if (friends == null){
+                if (friends == null) {
                     searchInFriendRequestsList(user_key, friend_key, callBack);
                     return;
                 }
@@ -468,22 +498,23 @@ public class Database {
      * {@value DATABASE_ERROR} <p>
      * {@value KEY_NOT_FOUND} <p>
      * {@value VALUE_NOT_FOUND} <p>
-     * @param user_key key of this user
+     *
+     * @param user_key   key of this user
      * @param friend_key key of the other user, who will be searched in friends
-     * @param callBack the callBack to be called whenever an error occurs or task successfully end
+     * @param callBack   the callBack to be called whenever an error occurs or task successfully end
      */
     public void searchInFriends(final String user_key,
                                 final String friend_key,
-                                final DatabaseCallBack callBack){
-        if(user_key == null){
+                                final DatabaseCallBack callBack) {
+        if (user_key == null) {
             callBack.onError(KEY_NOT_FOUND, "kullanıcı keyi null");
             return;
         }
-        if(friend_key == null){
+        if (friend_key == null) {
             callBack.onError(KEY_NOT_FOUND, "aranan key null");
             return;
         }
-        if (user_key.equals(friend_key)){
+        if (user_key.equals(friend_key)) {
             callBack.onError(USER_AND_TARGET_KEY_SAME, "aranan key null");
             return;
         }
@@ -491,7 +522,7 @@ public class Database {
         user_reference.child(user_key).child("friends").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (!snapshot.exists()){
+                if (!snapshot.exists()) {
                     //fixme: although it is not an error message in order to use  this method
                     // in sendFriendRequest, it must send friend_key as error
                     callBack.onError(VALUE_NOT_FOUND, friend_key);
@@ -502,28 +533,28 @@ public class Database {
                 assert friend_list_keys != null;
                 final int key_size = friend_list_keys.size();
                 int number = 0;
-                for (String key: friend_list_keys){
+                for (String key : friend_list_keys) {
                     number++;
                     //assuming there is a user with "key", if not throws Exception
                     final int finalNumber = number;
                     friend_reference.child(key).child("friends").addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            if (!snapshot.exists()){
+                            if (!snapshot.exists()) {
                                 callBack.onError(VALUE_NOT_FOUND, "friend node'unun arkadaşları boş");
                                 return;
                             }
                             @SuppressWarnings("unchecked")
                             ArrayList<String> friends = (ArrayList<String>) snapshot.getValue();
                             assert friends != null;
-                            for (String key: friends){
-                                if (friend_key.equals(key)){
+                            for (String key : friends) {
+                                if (friend_key.equals(key)) {
                                     String friend_list_key = snapshot.getRef().getParent().getKey();
                                     assert friend_list_key != null;
                                     callBack.onSuccess(friend_list_key);
                                 }
                             }
-                            if (finalNumber == key_size){
+                            if (finalNumber == key_size) {
                                 callBack.onError(VALUE_NOT_FOUND, friend_key);
                             }
                         }
@@ -550,13 +581,14 @@ public class Database {
      * ERRORS: <p>
      * {@value DATABASE_ERROR} <p>
      * {@value KEY_NOT_FOUND} <p>
-     * @param user_key key of this user
+     *
+     * @param user_key   key of this user
      * @param friend_key key of the other user, whom friend reqeust will be send
-     * @param callBack the callBack to be called whenever an error occurs or task successfully end
+     * @param callBack   the callBack to be called whenever an error occurs or task successfully end
      */
     private void sendFriendRequestInner(@NonNull final String user_key,
                                         @NonNull final String friend_key,
-                                        @NonNull final DatabaseCallBack callBack){
+                                        @NonNull final DatabaseCallBack callBack) {
         final SendFriendRequestHandler handler = new SendFriendRequestHandler() {
             @Override
             public void addToRequests(String key, ArrayList<String> friend_reqs) {
@@ -567,14 +599,14 @@ public class Database {
         user_reference.child(friend_key).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(!snapshot.exists()){
+                if (!snapshot.exists()) {
                     callBack.onError(KEY_NOT_FOUND, friend_key + " ile ilişkili kullanıcı bulunamadı");
                     return;
                 }
                 @SuppressWarnings("unchecked")
                 ArrayList<String> friend_reqs = (ArrayList<String>)
                         snapshot.child("friend_reqs").getValue();
-                if(friend_reqs == null){
+                if (friend_reqs == null) {
                     friend_reqs = new ArrayList<>();
                 }
                 friend_reqs.add(user_key);
@@ -596,28 +628,29 @@ public class Database {
      * ERRORS: <p>
      * {@value DATABASE_ERROR} <p>
      * {@value KEY_NOT_FOUND} <p>
-     * @param user_key key of this user, whose friend requests list will be searched
+     *
+     * @param user_key     key of this user, whose friend requests list will be searched
      * @param searched_key key of the other user, which is searched in this users requests list
-     * @param callBack the callBack to be called whenever an error occurs or task successfully end
+     * @param callBack     the callBack to be called whenever an error occurs or task successfully end
      * @see #sendFriendRequestInner(String, String, DatabaseCallBack)
      * @see #addAsFriend(String, String, DatabaseCallBack)
      */
     private void searchInFriendRequestsList(@NonNull final String user_key,
                                             @NonNull final String searched_key,
-                                            @NonNull final DatabaseCallBack callBack){
+                                            @NonNull final DatabaseCallBack callBack) {
         user_reference.child(user_key).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (!snapshot.exists()){
+                if (!snapshot.exists()) {
                     callBack.onError(KEY_NOT_FOUND, user_key + " ile ilişkili kullanıcı bulunamadı");
                     return;
                 }
                 @SuppressWarnings("unchecked")
                 ArrayList<String> friend_reqs = (ArrayList<String>)
                         snapshot.child("friend_reqs").getValue();
-                if(friend_reqs != null){
-                    for (String key: friend_reqs) {
-                        if(searched_key.equals(key)){
+                if (friend_reqs != null) {
+                    for (String key : friend_reqs) {
+                        if (searched_key.equals(key)) {
                             addAsFriend(user_key, searched_key, callBack);
                             return;
                         }
@@ -641,21 +674,22 @@ public class Database {
      * {@value KEY_NOT_FOUND} <p>
      * {@value USER_AND_TARGET_KEY_SAME} <p>
      * {@value ALREADY_FRIENDS} <p>
-     * @param user_key key of this user
+     *
+     * @param user_key   key of this user
      * @param friend_key key of friend request
-     * @param callBack the callBack to be called whenever an error occurs or task successfully end
+     * @param callBack   the callBack to be called whenever an error occurs or task successfully end
      */
-    public void addAsFriend(final String user_key, final String friend_key, final DatabaseCallBack callBack){
-        if(user_key == null){
+    public void addAsFriend(final String user_key, final String friend_key, final DatabaseCallBack callBack) {
+        if (user_key == null) {
             callBack.onError(KEY_NOT_FOUND, "kullanıcı keyi null");
             return;
         }
-        if(friend_key == null){
+        if (friend_key == null) {
             callBack.onError(KEY_NOT_FOUND, "aranan key null");
             return;
         }
         boolean same_key = false;
-        if (user_key.equals(friend_key)){
+        if (user_key.equals(friend_key)) {
             same_key = true;
         }
         final AddFriendHandler handler = new AddFriendHandler() {
@@ -670,7 +704,7 @@ public class Database {
             }
 
             @Override
-            public void removeFriendsOnError(String friend_list_key){
+            public void removeFriendsOnError(String friend_list_key) {
                 friend_reference.child(friend_list_key).setValue(null);
             }
         };
@@ -684,7 +718,7 @@ public class Database {
         user_reference.child(user_key).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(!snapshot.exists()){
+                if (!snapshot.exists()) {
                     callBack.onError(KEY_NOT_FOUND, user_key + " ile ilişkili kullanıcı bulunamadı");
                     handler.removeFriendsOnError(friend_list_key);
                     return;
@@ -692,24 +726,24 @@ public class Database {
                 @SuppressWarnings("unchecked")
                 ArrayList<String> friends = (ArrayList<String>)
                         snapshot.child("friends").getValue();
-                if(friends == null){
+                if (friends == null) {
                     friends = new ArrayList<>();
                 }
                 friends.add(friend_list_key);
                 @SuppressWarnings("unchecked")
                 ArrayList<String> friend_reqs = (ArrayList<String>)
                         snapshot.child("friend_reqs").getValue();
-                if(friend_reqs == null){
+                if (friend_reqs == null) {
                     friend_reqs = new ArrayList<>();
                 }
                 friend_reqs.remove(friend_key);
-                if (finalSame_key){
+                if (finalSame_key) {
                     handler.removeFromRequests(user_key, friend_reqs);
                     handler.removeFriendsOnError(friend_list_key);
                     callBack.onError(USER_AND_TARGET_KEY_SAME, "Arkadaş eklenecek key ile kullanıcı keyi aynı");
                     return;
                 }
-                if (friends.contains(friend_key)){
+                if (friends.contains(friend_key)) {
                     handler.removeFromRequests(user_key, friend_reqs);
                     handler.removeFriendsOnError(friend_list_key);
                     callBack.onError(ALREADY_FRIENDS, "zaten arkadaşlar");
@@ -728,7 +762,7 @@ public class Database {
         user_reference.child(friend_key).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(!snapshot.exists()){
+                if (!snapshot.exists()) {
                     callBack.onError(KEY_NOT_FOUND, friend_key + " ile ilişkili kullanıcı bulunamadı");
                     handler.removeFriendsOnError(friend_list_key);
                     return;
@@ -736,24 +770,24 @@ public class Database {
                 @SuppressWarnings("unchecked")
                 ArrayList<String> friends = (ArrayList<String>)
                         snapshot.child("friends").getValue();
-                if(friends == null){
+                if (friends == null) {
                     friends = new ArrayList<>();
                 }
                 friends.add(friend_list_key);
                 @SuppressWarnings("unchecked")
                 ArrayList<String> friend_reqs = (ArrayList<String>)
                         snapshot.child("friend_reqs").getValue();
-                if(friend_reqs == null){
+                if (friend_reqs == null) {
                     friend_reqs = new ArrayList<>();
                 }
                 friend_reqs.remove(user_key);
-                if (finalSame_key){
+                if (finalSame_key) {
                     handler.removeFromRequests(friend_key, friend_reqs);
                     handler.removeFriendsOnError(friend_list_key);
                     //no error will be send as it would be send in user_key's snapshot
                     return;
                 }
-                if (friends.contains(user_key)){
+                if (friends.contains(user_key)) {
                     handler.removeFromRequests(friend_key, friend_reqs);
                     handler.removeFriendsOnError(friend_list_key);
                     //no error will be send as it would be send in user_key's snapshot
@@ -779,23 +813,24 @@ public class Database {
      * {@value KEY_NOT_FOUND} <p>
      * {@value USER_AND_TARGET_KEY_SAME} <p>
      * {@value VALUE_NOT_FOUND} <p>
-     * @param user_key key of this user
+     *
+     * @param user_key    key of this user
      * @param request_key key of friend request
-     * @param callBack the callBack to be called whenever an error occurs or task successfully end
+     * @param callBack    the callBack to be called whenever an error occurs or task successfully end
      */
     public void declineFriendRequest(final String user_key,
                                      final String request_key,
-                                     final DatabaseCallBack callBack){
-        if (user_key == null){
+                                     final DatabaseCallBack callBack) {
+        if (user_key == null) {
             callBack.onError(KEY_NOT_FOUND, "kullanıcı keyi null");
             return;
         }
-        if (request_key == null){
+        if (request_key == null) {
             callBack.onError(KEY_NOT_FOUND, "aranan key null");
             return;
         }
         boolean same_key = false;
-        if (user_key.equals(request_key)){
+        if (user_key.equals(request_key)) {
             same_key = true;
         }
         final DeclineFriendRequestHandler handler = new DeclineFriendRequestHandler() {
@@ -808,23 +843,23 @@ public class Database {
         user_reference.child(user_key).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (!snapshot.exists()){
+                if (!snapshot.exists()) {
                     callBack.onError(KEY_NOT_FOUND, user_key + " ile ilişkili kullanıcı bulunamadı");
                     return;
                 }
                 @SuppressWarnings("unchecked")
                 ArrayList<String> friend_reqs = (ArrayList<String>)
                         snapshot.child("friend_reqs").getValue();
-                if (friend_reqs == null){
+                if (friend_reqs == null) {
                     friend_reqs = new ArrayList<>();
                 }
                 boolean is_request_exists = friend_reqs.remove(request_key);
-                if (!is_request_exists){
+                if (!is_request_exists) {
                     callBack.onError(VALUE_NOT_FOUND, "Böyle bir istek bulunamadı");
                     return;
                 }
                 handler.declineFriendRequest(user_key, friend_reqs);
-                if (finalSame_key){
+                if (finalSame_key) {
                     callBack.onError(USER_AND_TARGET_KEY_SAME, "Silinecek isteğin keyi ile kullanıcı keyi aynı");
                     //even though decline method successfully called, still an error will be sent,
                     //as it should not be happening in the first place
@@ -840,24 +875,25 @@ public class Database {
     }
 
     /**
-     *  Removes friend from friends snapshot and removes snapshots key from both users.
+     * Removes friend from friends snapshot and removes snapshots key from both users.
      * <p>
      * ERRORS: <p>
      * see removeFriendInner and searchInFriends for error list<p>
-     * @param user_key key of this user
+     *
+     * @param user_key   key of this user
      * @param friend_key key of friend
-     * @param callBack the callBack to be called whenever an error occurs or task successfully end
+     * @param callBack   the callBack to be called whenever an error occurs or task successfully end
      * @see #removeFriendInner(String, String, String, RemoveFriendHandler, DatabaseCallBack)
      * @see #searchInFriends(String, String, DatabaseCallBack)
      */
     public void removeFriend(final String user_key,
                              final String friend_key,
-                             final DatabaseCallBack callBack){
-        if (user_key == null){
+                             final DatabaseCallBack callBack) {
+        if (user_key == null) {
             callBack.onError(KEY_NOT_FOUND, "kullanıcı keyi null");
             return;
         }
-        if (friend_key == null){
+        if (friend_key == null) {
             callBack.onError(KEY_NOT_FOUND, "silinecek key null");
             return;
         }
@@ -894,17 +930,18 @@ public class Database {
      * {@value DATABASE_ERROR} <p>
      * {@value KEY_NOT_FOUND} <p>
      * {@value VALUE_NOT_FOUND} <p>
-     * @param user_key key of this user
-     * @param friend_key key of friend
+     *
+     * @param user_key        key of this user
+     * @param friend_key      key of friend
      * @param friend_list_key key of friends snapshot
-     * @param handler handler for removing friend and keys from friend list
-     * @param callBack the callBack to be called whenever an error occurs or task successfully end
+     * @param handler         handler for removing friend and keys from friend list
+     * @param callBack        the callBack to be called whenever an error occurs or task successfully end
      */
     private void removeFriendInner(@NonNull final String user_key,
                                    @NonNull final String friend_key,
                                    @NonNull final String friend_list_key,
                                    @NonNull final RemoveFriendHandler handler,
-                                   @NonNull final DatabaseCallBack callBack){
+                                   @NonNull final DatabaseCallBack callBack) {
         user_reference.child(user_key).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -919,7 +956,7 @@ public class Database {
                     friends = new ArrayList<>();
                 }
                 boolean is_friend_exists = friends.remove(friend_list_key);
-                if (!is_friend_exists){
+                if (!is_friend_exists) {
                     callBack.onError(VALUE_NOT_FOUND, "Böyle bir arkadaş bulunamadı");
                     return;
                 }
@@ -936,18 +973,18 @@ public class Database {
         user_reference.child(friend_key).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (!snapshot.exists()){
+                if (!snapshot.exists()) {
                     callBack.onError(KEY_NOT_FOUND, friend_key + " ile ilişkili kullanıcı bulunamadı");
                     return;
                 }
                 @SuppressWarnings("unchecked")
                 ArrayList<String> friends = (ArrayList<String>)
                         snapshot.child("friends").getValue();
-                if (friends == null){
+                if (friends == null) {
                     friends = new ArrayList<>();
                 }
                 boolean is_friend_exists = friends.remove(friend_list_key);
-                if (!is_friend_exists){
+                if (!is_friend_exists) {
                     callBack.onError(VALUE_NOT_FOUND, "Böyle bir arkadaş bulunamadı");
                     return;
                 }
@@ -962,15 +999,15 @@ public class Database {
         });
     }
 
-    public void getBudget(){
+    public void getBudget() {
         user_reference.child(userId).child("budget").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()){
+                if (snapshot.exists()) {
                     String b;
                     b = snapshot.getValue().toString();
                     ((PersonalFragment) fragment).checkBudget(b);
-                }else {
+                } else {
                     ((PersonalFragment) fragment).checkBudget(null);
                 }
             }
@@ -982,11 +1019,11 @@ public class Database {
         });
     }
 
-    public void setBudget(int budget){
+    public void setBudget(int budget) {
         user_reference.child(userId).child("budget").setValue(budget);
     }
 
-    public void addExpense(String name, String type, String price){
+    public void addExpense(String name, String type, String price) {
 
         DatabaseReference dbRef = user_reference.child(userId).child("expenses");
         String key = dbRef.push().getKey();
@@ -1004,19 +1041,19 @@ public class Database {
         dbRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                totExpense=0;
+                totExpense = 0;
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     String name = (String) ds.child("name").getValue();
                     String type = (String) ds.child("type").getValue();
                     String price = (String) ds.child("price").getValue();
-                    if(price!=null) {
+                    if (price != null) {
                         int p = Integer.parseInt(price);
-                        totExpense+=p;
+                        totExpense += p;
                         expenses.add(new Expense(name, type, p));
                     }
 
                 }
-                ((PersonalFragment)fragment).newExpense(expenses, totExpense);
+                ((PersonalFragment) fragment).newExpense(expenses, totExpense);
             }
 
             @Override
@@ -1027,58 +1064,55 @@ public class Database {
         return expenses;
     }
 
-    public void createNewGroup(String person_id, ArrayList<Friend> checked_PersonList, String group_name, String group_type, EditText editTextTextPersonName){
-        if (AddGroupsAdapter.checked_personList.size() > 0) {
-            group_name = editTextTextPersonName.getText().toString().trim();
-            Groups group = new Groups(group_name,group_type);
-            group.addFriend(person_id);
-            for (Friend friend : AddGroupsAdapter.checked_personList) {
-                String friendKey = friend.getKey();
-                group.addFriend(friendKey);
+    public void createNewGroup(String person_id, List<Friend> checked_personList, String group_type,
+                               @NotNull EditText groupName_EditText, final DatabaseCallBack callBack) {
+        if (!groupName_EditText.getText().toString().isEmpty()) {
+            if (AddGroupsAdapter.checked_personList.size() > 0) {
+                final String group_name = groupName_EditText.getText().toString().trim();
+                Groups group = new Groups(group_name, group_type);
+                group.addFriend(person_id);
+                for (Friend friend : AddGroupsAdapter.checked_personList) {
+                    String friendKey = friend.getKey();
+                    group.addFriend(friendKey);
+                }
+                group_reference.push().setValue(group);
+                callBack.onSuccess("Grup başarılıyla oluşturuldu");
+            } else {
+                callBack.onError(NO_SELECTED_FRIEND, "Lütfen arkadaş seçiniz");
             }
-            group_reference.push().setValue(group);
-
-
         } else {
-            Toast.makeText(context, "Lütfen Arkadaş Seçiniz", Toast.LENGTH_SHORT).show();
+            callBack.onError(NO_GIVEN_GROUP_NAME, "Lütfen grup ismi giriniz");
         }
     }
 
-    public void getGroups(final String person_id, final ArrayList<Groups> groupsArrayList, final GroupAdapter groupAdapter){
+    public void getGroups(final String person_id, final ArrayList<Groups> groupsArrayList, final GroupAdapter groupAdapter) {
         group_reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 groupsArrayList.clear();
 
                 for (final DataSnapshot d : snapshot.getChildren()) {
-//                    System.out.println(person_id);
-//                    DataSnapshot personKeysnp = d.child("group_members").getChildren().iterator().next();
-//                    String personKey = (String) personKeysnp.getValue();
-//                    System.out.println(personKey);
+                    /*System.out.println(person_id);
+                    DataSnapshot personKeysnp = d.child("group_members").getChildren().iterator().next();
+                    String personKey = (String) personKeysnp.getValue();
+                    System.out.println(personKey);*/ //gruplarda bulunan kişiler
 
-                    DataSnapshot denem = d.child("group_members");
-
-                    for(DataSnapshot d2 : denem.getChildren()){
-                        if(d2.getValue().equals(person_id)){
+                    DataSnapshot gmembers_snapshot = d.child("group_members");
+                    for (DataSnapshot d2 : gmembers_snapshot.getChildren()) {
+                        if (d2.getValue().equals(person_id)) {
                             Groups group = d.getValue(Groups.class);
                             groupsArrayList.add(group);
                         }
                     }
-
-//                    if( d.child(person_id).exists()){
-//                        System.out.println(person_id);
-//                        Groups group = d.getValue(Groups.class);
-//                        groupsArrayList.add(group);
-//                    }
                 }
                 groupAdapter.notifyDataSetChanged();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                Log.w(TAG, "Failed to read value.", error.toException());
             }
         });
     }
-  
+
 }

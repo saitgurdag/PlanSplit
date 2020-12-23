@@ -21,26 +21,18 @@ import com.example.plansplit.Controllers.Adapters.GroupAdapter;
 import com.example.plansplit.Controllers.FragmentControllers.addgroups.AddGroupsFragment;
 import com.example.plansplit.Controllers.HomeActivity;
 import com.example.plansplit.Controllers.MyGroupActivity;
+import com.example.plansplit.Models.Database;
 import com.example.plansplit.Models.Objects.Groups;
 import com.example.plansplit.R;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
 public class GroupsFragment extends Fragment {
     private static final String TAG = "GroupsFragment";
-    //private static final Database database = Database.getInstance();
-    //private static final Database database;
-    //private static final DatabaseReference group_reference  =database.getReference("groups");
-    private ArrayList<Groups> groupsArrayList;
+    private static final Database database = Database.getInstance();
+    public static ArrayList<Groups> groupsArrayList;
     private RecyclerView recyclerView;
     private GroupAdapter groupAdapter;
-    private FirebaseDatabase database;
-    private DatabaseReference group_ref;
     private GroupAdapter.RecyclerViewClickListener mListener;
     private ImageView add_expense;
     private Button add_new_group;
@@ -51,8 +43,6 @@ public class GroupsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_groups, container, false);
 
-        database = FirebaseDatabase.getInstance();
-        group_ref = database.getReference("groups");
         final HomeActivity home = (HomeActivity) getContext();
         person_id = home.getPersonId();
 
@@ -63,11 +53,10 @@ public class GroupsFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
         groupsArrayList = new ArrayList<>();
 
-        allGroups();
-
-
         groupAdapter = new GroupAdapter(this.getContext(), groupsArrayList, mListener);
         recyclerView.setAdapter(groupAdapter);
+
+        getGroups();
 
         Log.d(TAG, "BURADA");
 
@@ -77,9 +66,10 @@ public class GroupsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 GroupExpenseFragment expenseFragment = new GroupExpenseFragment();
-                FragmentManager fragmentManager = getFragmentManager();
+                FragmentManager fragmentManager = getParentFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.nav_host_fragment, expenseFragment);
+                fragmentTransaction.addToBackStack(TAG);
                 fragmentTransaction.commit();
             }
         });
@@ -88,9 +78,10 @@ public class GroupsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 AddGroupsFragment addGroupsFragment = new AddGroupsFragment();
-                FragmentManager fragmentManager = getFragmentManager();
+                FragmentManager fragmentManager = getParentFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.nav_host_fragment, addGroupsFragment);
+                fragmentTransaction.addToBackStack(TAG);
                 fragmentTransaction.commit();
             }
         });
@@ -111,37 +102,8 @@ public class GroupsFragment extends Fragment {
         };
     }
 
-    public void allGroups() {
-        group_ref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                groupsArrayList.clear();
-
-                for (final DataSnapshot d : snapshot.getChildren()) {
-                    System.out.println(person_id);
-                    DataSnapshot personKeysnp = d.child("group_members").getChildren().iterator().next();
-                    String personKey = (String) personKeysnp.getValue();
-                    System.out.println(personKey);
-
-                    DataSnapshot denem = d.child("group_members");
-
-                    for(DataSnapshot d2 : denem.getChildren()){
-                        if(d2.getValue().equals(person_id)){
-                            Groups group = d.getValue(Groups.class);
-                            groupsArrayList.add(group);
-                        }
-                    }
-
-                }
-                groupAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
+    public void getGroups() {
+        database.getGroups(person_id, groupsArrayList, groupAdapter);
     }
 
 }
