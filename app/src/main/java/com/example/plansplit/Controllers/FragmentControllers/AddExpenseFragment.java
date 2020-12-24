@@ -1,4 +1,8 @@
-package com.example.plansplit.Controllers.FragmentControllers.groups;
+package com.example.plansplit.Controllers.FragmentControllers;
+
+//public class FriendExpenseFragment {
+//}
+
 
 import android.app.Dialog;
 import android.os.Bundle;
@@ -10,7 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -19,22 +22,20 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.PopupMenu;
 import android.widget.Spinner;
 import android.widget.Toast;
-
-import com.example.plansplit.Controllers.Adapters.CustomDialogAdapter;
+import com.example.plansplit.Controllers.FragmentControllers.friends.FriendExpenseNoteDialog;
 import com.example.plansplit.Models.Objects.Person;
 import com.example.plansplit.R;
-import com.example.plansplit.Controllers.FragmentControllers.ShareMethod.ShareMethodFragment;
+import com.example.plansplit.Controllers.Adapters.CustomDialogAdapter;
+import com.example.plansplit.Controllers.FragmentControllers.ShareMethod.ShareMethodFriendsFragment;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-public class GroupExpenseFragment extends Fragment {
+public class AddExpenseFragment extends Fragment {
 
     private int startYear, startMonth, startDay;
     public static Dialog dialog;
@@ -47,10 +48,9 @@ public class GroupExpenseFragment extends Fragment {
     public static String sharemethod;
     public static Button shareBtn;
     private Button dpokBtn;
-    private  String payer_name;
+    private String payer_name;
     private String note;
     private String date;
-    private ArrayList myImageNameList;
     private Button expensetypeBtn;
     private Button dpexpenseexitBtn;
     private Button dpexpenseokBtn;
@@ -63,9 +63,10 @@ public class GroupExpenseFragment extends Fragment {
     private ImageView expensePicture;
     private int expensePictureResourceID;
     private int foodPicture,wearPicture,hygienePicture,stationeryPicture, otherPicture;
+    private ArrayList myImageNameListFriend;
 
-    public static GroupExpenseFragment newInstance() {
-        return new GroupExpenseFragment();
+    public static AddExpenseFragment newInstance() {
+        return new AddExpenseFragment();
     }
 
     @Override
@@ -73,19 +74,21 @@ public class GroupExpenseFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         final View root = inflater.inflate(R.layout.fragment_expense, container, false);
 
-       /* myImageNameList = new ArrayList<>();
+        myImageNameListFriend = new ArrayList<>();
 
-        myImageNameList.add(new Person("ali", R.drawable.denemeresim,0));
-        myImageNameList.add(new Person("veli", R.drawable.denemeresim, 0));
-        myImageNameList.add(new Person("osman", R.drawable.denemeresim, 0));*/
+        myImageNameListFriend.add(new Person("veli", R.drawable.denemeresim, 0));
+        myImageNameListFriend.add(new Person("veli", R.drawable.denemeresim, 0));
+        myImageNameListFriend.add(new Person("ali", R.drawable.denemeresim, 0));
+        myImageNameListFriend.add(new Person("sami", R.drawable.denemeresim, 0));
 
         edittextexpensename=root.findViewById(R.id.editTextExpenseName);
         edittextexpenseamounth=root.findViewById(R.id.editTextExpenseAmounth);
         saveexpenseBtn=root.findViewById(R.id.saveExpenseButton);
+
         dialogBtn = root.findViewById(R.id.payer_button);
         calenderBtn = root.findViewById(R.id.calendarButton);
         noteBtn = root.findViewById(R.id.noteButton);
-        shareBtn=root.findViewById(R.id.method_button);
+        shareBtn = root.findViewById(R.id.method_button);
         expensetypeBtn=root.findViewById(R.id.expense_type_button);
         noteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,6 +98,29 @@ public class GroupExpenseFragment extends Fragment {
         });
         date=new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date());
         calenderBtn.setText(date);
+
+        /*dialogBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openPayerDialog(FriendExpenseFragment.this);
+            }
+        });*/
+        /*shareBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openShareMethodDialog();
+
+            }
+        });*/
+
+
+        calenderBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDatePicker();
+
+            }
+        });
 
         expensetypeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,7 +144,7 @@ public class GroupExpenseFragment extends Fragment {
                         expensetypeBtn.setText(expenseType);
                     }
                 });
-               Spinner expensespinner=dialog.findViewById(R.id.spinnerExpense);
+                Spinner expensespinner=dialog.findViewById(R.id.spinnerExpense);
                 expensePicture=dialog.findViewById(R.id.ImageExpense);
                 foodPicture = R.drawable.ic_baseline_fastfood_24;
                 wearPicture = R.drawable.ic_baseline_wear_24;
@@ -159,38 +185,13 @@ public class GroupExpenseFragment extends Fragment {
                         expenseType=selectedtext;
                     }
 
+
                     @Override
                     public void onNothingSelected(AdapterView<?> adapterView) {
 
                     }
                 });
 
-
-            }
-        });
-
-
-
-        /*dialogBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openPayerDialog(GroupExpenseFragment.this);
-            }
-        });*/
-       /* shareBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openShareMethodDialog();
-
-            }
-        });*/
-
-
-
-        calenderBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showDatePicker();
 
             }
         });
@@ -219,15 +220,14 @@ public class GroupExpenseFragment extends Fragment {
     }
 
     public void openNoteDialog() {
-        GroupExpenseNoteDialog groupExpenseNoteDialog = new GroupExpenseNoteDialog();
-        groupExpenseNoteDialog.show(getParentFragmentManager(), "group note dialog");
+        FriendExpenseNoteDialog friendExpenseNoteDialog = new FriendExpenseNoteDialog();
+        friendExpenseNoteDialog.show(getParentFragmentManager(), "friend note dialog");
 
     }
 
-    public void openShareMethodDialog() {
-       ShareMethodFragment shareDialog = new ShareMethodFragment();
-        shareDialog.show(getParentFragmentManager(), "group share method dialog");
-
+    public void openShareMethodDialog() {//// aynı oldu
+        ShareMethodFriendsFragment shareDialogFriend = new ShareMethodFriendsFragment();
+        shareDialogFriend.show(getParentFragmentManager(), "friend share method dialog");
 
 
     }
@@ -237,12 +237,11 @@ public class GroupExpenseFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
     }
 
-    public void openPayerDialog(GroupExpenseFragment activity) {
+    public void openPayerDialog(AddExpenseFragment activity) {
 
         dialog = new Dialog(getContext(), R.style.Theme_AppCompat_DayNight_Dialog_MinWidth);
         dialog.setCancelable(false);
         dialog.setContentView(R.layout.dialog_recycler_select_payer);
-
 
 
         Button btndialog = (Button) dialog.findViewById(R.id.buttonExitPayerSelection);
@@ -253,31 +252,28 @@ public class GroupExpenseFragment extends Fragment {
                 dialog.dismiss();
             }
         });
+    /*
+            RecyclerView recyclerView = dialog.findViewById(R.id.recyclerPayer);
+            CustomDialogAdapter adapterRe = new CustomDialogAdapter(getContext(), myImageNameList);
+            recyclerView.setAdapter(adapterRe);
+            recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
 
-        RecyclerView recyclerView = dialog.findViewById(R.id.recyclerPayer);
-        CustomDialogAdapter adapterRe = new CustomDialogAdapter(getContext(), myImageNameList);
-        recyclerView.setAdapter(adapterRe);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+            recyclerView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-        recyclerView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                }
+            });
 
-            }
-        });
+     */
 
         dialog.show();
 
     }
 
-    public String getNote() {
-        return note;
-    }
-
     public void setNote(String note) {
         this.note = note;
     }
-
 
 
     public String getPayer_name() {
@@ -291,16 +287,13 @@ public class GroupExpenseFragment extends Fragment {
     public void showDatePicker() {
 
 
-
-
-
         dialog = new Dialog(getContext(), R.style.Theme_AppCompat_DayNight_Dialog_MinWidth);
         dialog.setCancelable(false);
         dialog.setContentView(R.layout.dialog_datepicker_layout);
         final DatePicker dp = (DatePicker) dialog.findViewById(R.id.dp_group_expense);
-        dpmenuBtn=dialog.findViewById(R.id.dpMenuButton);
-        dpokBtn=dialog.findViewById(R.id.dpOKButton);
-        dpexitBtn=dialog.findViewById(R.id.dpExitButton);
+        dpmenuBtn = dialog.findViewById(R.id.dpMenuButton);
+        dpokBtn = dialog.findViewById(R.id.dpOKButton);
+        dpexitBtn = dialog.findViewById(R.id.dpExitButton);
         dpokBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -312,7 +305,6 @@ public class GroupExpenseFragment extends Fragment {
                 dialog.dismiss();
             }
         });
-
 
 
         dpexitBtn.setOnClickListener(new View.OnClickListener() {
@@ -331,19 +323,18 @@ public class GroupExpenseFragment extends Fragment {
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem menuItem) {
-                        switch(menuItem.getItemId()){
+                        switch (menuItem.getItemId()) {
                             case R.id.date_picker_menu_for_once:
-                                repetition=getResources().getString(R.string.date_picker_menu_for_once);
-
+                                repetition = getResources().getString(R.string.date_picker_menu_for_once);
                                 break;
                             case R.id.date_picker_menu_weekly_repeat:
-                                repetition=getResources().getString(R.string.date_picker_menu_weekly_repeat);
+                                repetition = getResources().getString(R.string.date_picker_menu_weekly_repeat);
                                 break;
                             case R.id.date_picker_menu_monthly_repeat:
-                                repetition=getResources().getString(R.string.date_picker_menu_monthly_repeat);
+                                repetition = getResources().getString(R.string.date_picker_menu_monthly_repeat);
                                 break;
                             case R.id.date_picker_menu_yearly_repeat:
-                                repetition=getResources().getString(R.string.date_picker_menu_yearly_repeat);
+                                repetition = getResources().getString(R.string.date_picker_menu_yearly_repeat);
                                 break;
                         }
                         dpmenuBtn.setText(repetition);
@@ -353,18 +344,9 @@ public class GroupExpenseFragment extends Fragment {
                 popup.show();*/
             }
         });
+
+
+
         dialog.show();
-       // builder.create().show();
     }
 }
-
-
-
-
-
-
-
-   /* @Override
-    public void applyTexts(String note) {
-         noteBtn.setText(note);
-    }*/

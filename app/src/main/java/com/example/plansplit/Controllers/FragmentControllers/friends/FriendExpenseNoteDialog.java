@@ -13,12 +13,13 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
+import com.example.plansplit.Controllers.FragmentControllers.AddExpenseFragment;
 import com.example.plansplit.R;
 
 public class FriendExpenseNoteDialog extends AppCompatDialogFragment {
 
     private EditText edittextnote;
-    private  FriendExpenseFragment friendExpenseFragment;
+    private AddExpenseFragment addExpenseFragment;
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
@@ -26,7 +27,7 @@ public class FriendExpenseNoteDialog extends AppCompatDialogFragment {
         LayoutInflater layoutInflater=getActivity().getLayoutInflater();
         final View view=layoutInflater.inflate(R.layout.group_expense_note_dialog,null);
         edittextnote=view.findViewById(R.id.editTextNote);
-        friendExpenseFragment=new FriendExpenseFragment();
+        addExpenseFragment =new AddExpenseFragment();
 
         builder.setView(view)
                 .setTitle(getResources().getString(R.string.group_expense_note_dialog_title))
@@ -40,7 +41,7 @@ public class FriendExpenseNoteDialog extends AppCompatDialogFragment {
                 .setPositiveButton(getResources().getString(R.string.group_expense_note_dialog_positive), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        friendExpenseFragment.setNote(edittextnote.getText().toString());
+                        addExpenseFragment.setNote(edittextnote.getText().toString());
                     }
                 });
 
