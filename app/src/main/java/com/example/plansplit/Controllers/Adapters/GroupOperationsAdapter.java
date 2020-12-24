@@ -11,13 +11,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.plansplit.Controllers.FragmentControllers.mygroup.GroupOperationsFragment;
 import com.example.plansplit.Models.Objects.Person;
-import com.example.plansplit.Models.Objects.Transfers;
 import com.example.plansplit.R;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import kotlin.reflect.KParameter;
 
 public class GroupOperationsAdapter extends RecyclerView.Adapter<GroupOperationsAdapter.GroupOperationsViewHolder> {
 
@@ -51,8 +47,8 @@ public class GroupOperationsAdapter extends RecyclerView.Adapter<GroupOperations
         public TextView  personGroupDepth;
         public GroupOperationsViewHolder(@NonNull View itemView){
             super(itemView);
-            background = itemView.findViewById(R.id.groupOperations_PersonBackGround);
-            personImage=itemView.findViewById(R.id.groupOperations_image);
+            background = itemView.findViewById(R.id.personalOperations_PersonBackGround);
+            personImage=itemView.findViewById(R.id.personalOperations_imagePerson);
             personGroupDepth=itemView.findViewById(R.id.groupOperations_amount);
         }
     }

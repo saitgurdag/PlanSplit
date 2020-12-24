@@ -22,8 +22,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.plansplit.Controllers.Adapters.FriendsAdapter;
 import com.example.plansplit.Controllers.FragmentControllers.AddExpenseFragment;
+import com.example.plansplit.Controllers.HomeActivity;
 import com.example.plansplit.Models.Database;
 import com.example.plansplit.R;
+import com.squareup.picasso.Picasso;
 
 public class FriendsFragment extends Fragment {
     private static final String TAG = "FriendsFragment";
@@ -34,6 +36,7 @@ public class FriendsFragment extends Fragment {
     private String person_id = "";
     public static SearchView searchView;
     private ImageView add_expence_friend;   //BERKAY
+    private ImageView personImage;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -41,8 +44,11 @@ public class FriendsFragment extends Fragment {
         Log.d(TAG, "BURADA");
         Button add_friend_button = root.findViewById(R.id.friend_add_button);
         final EditText add_friend_email_text = root.findViewById(R.id.friends_add_email);
+        final HomeActivity home = (HomeActivity) getContext();
 
         person_id = getArguments().get("person_id").toString();
+        personImage=root.findViewById(R.id.notification_image2);
+        Picasso.with(getContext()).load(home.getPersonPhoto()).into(personImage);
 
 
         m_RecyclerView = root.findViewById(R.id.recycler_friends);

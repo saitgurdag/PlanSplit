@@ -8,15 +8,6 @@
         android:id="@+id/navigation_settings"
         android:icon="@drawable/ic_baseline_settings_24"
         android:title="@string/title_settings" />
-    <item
-        android:id="@+id/navigation_contact"
-        android:icon="@drawable/ic_baseline_mail_24"
-        android:title="@string/title_contact" />
-
-    <item
-        android:id="@+id/navigation_rate"
-        android:icon="@drawable/ic_baseline_thumb_up_24"
-        android:title="@string/title_rate" />
 
     <item
         android:id="@+id/navigation_logout"

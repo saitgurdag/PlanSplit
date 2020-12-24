@@ -1,9 +1,11 @@
 package com.example.plansplit.Models.Objects;
 
+import android.net.Uri;
+
 import com.example.plansplit.R;
 
 public class Friend{
-    private int person_image;
+    private String person_image;
     private String name;
     private String amount;
     private int amount_text;
@@ -22,8 +24,12 @@ public class Friend{
         return mail;
     }
 
-    public Friend(int person_image, String name, int amount, String key){
-        this.person_image = person_image;
+    public Friend(String person_image, String name, int amount, String key){
+        if(!person_image.isEmpty()){
+
+            this.person_image = person_image;
+        }
+
         this.name = name;
         this.key = key;
 
@@ -45,8 +51,8 @@ public class Friend{
         }
     }
 
-    public int getPerson_image(){
-        return person_image;
+    public Uri getPerson_image(){
+        return Uri.parse(person_image);
     }
 
     public String getName(){
