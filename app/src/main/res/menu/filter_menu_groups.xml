@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/filter_house"
+        android:title="@string/title_house" />
+
+    <item
+        android:id="@+id/filter_travel"
+        android:title="@string/title_travel" />
+    <item
+        android:id="@+id/filter_business"
+        android:title="@string/title_business" />
+
+    <item
+        android:id="@+id/filter_others"
+        android:title="@string/title_others" />
+    <item
+        android:id="@+id/filter_all"
+        android:title="@string/title_all" />
+</menu>
