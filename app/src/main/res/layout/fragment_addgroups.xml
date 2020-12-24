@@ -59,7 +59,7 @@
                         android:textSize="20sp" />
 
                     <EditText
-                        android:id="@+id/GroupName_EditText"
+                        android:id="@+id/editTextExpenseName"
                         android:layout_width="270dp"
                         android:layout_height="match_parent"
                         android:layout_below="@+id/textHeaderMail"
@@ -86,7 +86,7 @@
             android:orientation="horizontal">
 
             <RadioGroup
-                android:id="@+id/rgroupButton"
+                android:id="@+id/rgroupButton2"
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
                 android:gravity="center"
@@ -94,7 +94,7 @@
                 android:paddingHorizontal="50dp">
 
                 <androidx.appcompat.widget.AppCompatRadioButton
-                    android:id="@+id/rbuttonHouse"
+                    android:id="@+id/rbuttonFood"
                     android:layout_width="0dp"
                     android:layout_height="30dp"
                     android:layout_weight="1"
@@ -108,7 +108,7 @@
                     android:textColor="@color/white" />
 
                 <androidx.appcompat.widget.AppCompatRadioButton
-                    android:id="@+id/rbuttonWork"
+                    android:id="@+id/rbuttonWear"
                     android:layout_width="0dp"
                     android:layout_height="30dp"
                     android:layout_weight="1"
@@ -121,7 +121,7 @@
                     android:textColor="@color/black" />
 
                 <androidx.appcompat.widget.AppCompatRadioButton
-                    android:id="@+id/rbuttonTrip"
+                    android:id="@+id/rbuttonStationery"
                     android:layout_width="0dp"
                     android:layout_height="30dp"
                     android:layout_weight="1"

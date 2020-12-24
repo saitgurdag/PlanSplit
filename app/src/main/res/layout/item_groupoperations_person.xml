@@ -33,6 +33,8 @@
                 android:layout_centerVertical="true"
                 android:padding="5dp">
 
+
+
                 <ImageView
                     android:id="@+id/groupOperations_PersonBackGround"
                     android:layout_width="50dp"

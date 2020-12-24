@@ -1,7 +1,5 @@
 package com.example.plansplit.Controllers.FragmentControllers.groups;
 
-import androidx.lifecycle.ViewModelProvider;
-
 import android.app.Dialog;
 import android.os.Bundle;
 
@@ -15,16 +13,26 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.plansplit.Controllers.Adapters.CustomDialogAdapter;
 import com.example.plansplit.Models.Objects.Person;
 import com.example.plansplit.R;
 import com.example.plansplit.Controllers.FragmentControllers.ShareMethod.ShareMethodFragment;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 public class GroupExpenseFragment extends Fragment {
 
@@ -43,6 +51,18 @@ public class GroupExpenseFragment extends Fragment {
     private String note;
     private String date;
     private ArrayList myImageNameList;
+    private Button expensetypeBtn;
+    private Button dpexpenseexitBtn;
+    private Button dpexpenseokBtn;
+    private EditText edittextexpensename;
+    private EditText edittextexpenseamounth;
+    private Button saveexpenseBtn;
+    private String expensename;
+    private String expenseamounth;
+    private String expenseType;
+    private ImageView expensePicture;
+    private int expensePictureResourceID;
+    private int foodPicture,wearPicture,hygienePicture,stationeryPicture, otherPicture;
 
     public static GroupExpenseFragment newInstance() {
         return new GroupExpenseFragment();
@@ -53,36 +73,117 @@ public class GroupExpenseFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         final View root = inflater.inflate(R.layout.fragment_expense, container, false);
 
-        myImageNameList = new ArrayList<>();
+       /* myImageNameList = new ArrayList<>();
 
         myImageNameList.add(new Person("ali", R.drawable.denemeresim,0));
         myImageNameList.add(new Person("veli", R.drawable.denemeresim, 0));
-        myImageNameList.add(new Person("osman", R.drawable.denemeresim, 0));
+        myImageNameList.add(new Person("osman", R.drawable.denemeresim, 0));*/
 
+        edittextexpensename=root.findViewById(R.id.editTextExpenseName);
+        edittextexpenseamounth=root.findViewById(R.id.editTextExpenseAmounth);
+        saveexpenseBtn=root.findViewById(R.id.saveExpenseButton);
         dialogBtn = root.findViewById(R.id.payer_button);
         calenderBtn = root.findViewById(R.id.calendarButton);
         noteBtn = root.findViewById(R.id.noteButton);
         shareBtn=root.findViewById(R.id.method_button);
+        expensetypeBtn=root.findViewById(R.id.expense_type_button);
         noteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 openNoteDialog();
             }
         });
+        date=new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date());
+        calenderBtn.setText(date);
 
-        dialogBtn.setOnClickListener(new View.OnClickListener() {
+        expensetypeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog = new Dialog(getContext(), R.style.Theme_AppCompat_DayNight_Dialog_MinWidth);
+                dialog.setCancelable(false);
+                dialog.setContentView(R.layout.dialog_select_expense_type);
+                dialog.show();
+                dpexpenseokBtn=dialog.findViewById(R.id.dpExpenseOKButton);
+                dpexpenseexitBtn=dialog.findViewById(R.id.dpExpenseExitButton);
+                dpexpenseexitBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
+                dpexpenseokBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                        expensetypeBtn.setText(expenseType);
+                    }
+                });
+               Spinner expensespinner=dialog.findViewById(R.id.spinnerExpense);
+                expensePicture=dialog.findViewById(R.id.ImageExpense);
+                foodPicture = R.drawable.ic_baseline_fastfood_24;
+                wearPicture = R.drawable.ic_baseline_wear_24;
+                hygienePicture = R.drawable.ic_baseline_hygiene_24;
+                stationeryPicture = R.drawable.ic_baseline_school_24;
+                otherPicture = R.drawable.ic_other;
+                ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
+                        R.array.expenseSpinnerItems, android.R.layout.simple_spinner_item);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                expensespinner.setAdapter(adapter);
+                expensespinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                        String selectedtext=adapterView.getItemAtPosition(i).toString();
+                        switch (i){
+                            case 0:
+                                expensePictureResourceID=foodPicture;
+
+                                break;
+                            case 1:
+                                expensePictureResourceID=wearPicture;
+
+                                break;
+                            case 2:
+                                expensePictureResourceID=stationeryPicture;
+
+                                break;
+                            case 3:
+                                expensePictureResourceID=hygienePicture;
+
+                                break;
+                            case 4:
+                                expensePictureResourceID=otherPicture;
+
+                                break;
+                        }
+                        expensePicture.setImageResource(expensePictureResourceID);
+                        expenseType=selectedtext;
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapterView) {
+
+                    }
+                });
+
+
+            }
+        });
+
+
+
+        /*dialogBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openPayerDialog(GroupExpenseFragment.this);
             }
-        });
-        shareBtn.setOnClickListener(new View.OnClickListener() {
+        });*/
+       /* shareBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 openShareMethodDialog();
 
             }
-        });
+        });*/
 
 
 
@@ -90,6 +191,25 @@ public class GroupExpenseFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 showDatePicker();
+
+            }
+        });
+
+        saveexpenseBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                expensename=edittextexpensename.getText().toString();
+                expenseamounth=edittextexpenseamounth.getText().toString();
+                if(!android.text.TextUtils.isDigitsOnly(expenseamounth)){
+                    Toast.makeText(getContext(), "Hatalı girdi", Toast.LENGTH_LONG).show();
+                }
+                else{
+                    System.out.println(expenseamounth); //harcama miktarı
+                }
+                System.out.println(expensename);  //harcama ismi
+                System.out.println(expenseType);  //harcama tipi
+                System.out.println(date);   //harcama tarihi
+                System.out.println(expensePictureResourceID);  //harcama resmi idsi
 
             }
         });
@@ -205,7 +325,7 @@ public class GroupExpenseFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                PopupMenu popup = new PopupMenu(getContext(), dpmenuBtn);
+               /* PopupMenu popup = new PopupMenu(getContext(), dpmenuBtn);
                 //popup.getMenuInflater().inflate(R.menu.date_picker_menu,popup.getMenu());
                 popup.inflate(R.menu.date_picker_menu);
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -230,7 +350,7 @@ public class GroupExpenseFragment extends Fragment {
                         return false;
                     }
                 });
-                popup.show();
+                popup.show();*/
             }
         });
         dialog.show();

@@ -27,6 +27,14 @@
         <item>Paya göre paylaşım</item>
         <item>Fazlalığa göre paylaşım</item>
     </string-array>
+    <string-array name="expenseSpinnerItems">
+        <item>yiyecek</item>
+        <item>giyecek</item>
+        <item>kırtasiye</item>
+        <item>temizlik</item>
+        <item>diğer</item>
+    </string-array>
+    <string name="equal_sharing">Eşit Paylaşım</string>
     <string name="personal_debt">Borç</string>
     <string name="personal_due">Alacak</string>
     <string name="total">Toplam</string>
@@ -35,6 +43,8 @@
     <string name="expenses">Harcamalar</string>
     <string name="add_expense">Harcama Ekle</string>
     <string name="payer">Ödeyen</string>
+    <string name="payer_selector">Ödeyen(Siz)</string>
+    <string name="expense_type_selector">Harcama Tipi </string>
     <string name="partition_method">Paylaşma Yöntemi</string>
     <string name="save">Kaydet</string>
     <string name="persons_groups">Kişiler veya Gruplar:</string>
@@ -88,5 +98,8 @@
     <string name="add_budget_text">Lütfen Aylık Bütçenizi Giriniz.</string>
     <string name="isim_giriniz">İsim giriniz</string>
     <string name="select_friends">Lütfen arkadaş seçiniz</string>
+    <string name="title_house">ev</string>
+    <string name="title_travel">seyehat</string>
+    <string name="title_business">iş</string>
 
 </resources>

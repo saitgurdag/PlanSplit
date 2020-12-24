@@ -4,10 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,11 +19,13 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.plansplit.Controllers.Adapters.ExpensesAdapter;
 import com.example.plansplit.Controllers.Adapters.GroupAdapter;
 import com.example.plansplit.Controllers.FragmentControllers.addgroups.AddGroupsFragment;
 import com.example.plansplit.Controllers.HomeActivity;
 import com.example.plansplit.Controllers.MyGroupActivity;
 import com.example.plansplit.Models.Database;
+import com.example.plansplit.Models.Objects.Expense;
 import com.example.plansplit.Models.Objects.Groups;
 import com.example.plansplit.R;
 
@@ -31,30 +35,75 @@ public class GroupsFragment extends Fragment {
     private static final String TAG = "GroupsFragment";
     private static final Database database = Database.getInstance();
     public static ArrayList<Groups> groupsArrayList;
+    private static ImageView groupsfilterBtn;
     private RecyclerView recyclerView;
     private GroupAdapter groupAdapter;
     private GroupAdapter.RecyclerViewClickListener mListener;
     private ImageView add_expense;
     private Button add_new_group;
     private String person_id;
+    private String selectedFilter;
+
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_groups, container, false);
 
+
+
         final HomeActivity home = (HomeActivity) getContext();
         person_id = home.getPersonId();
-
+        groupsfilterBtn=root.findViewById(R.id.imageViewFilterGroup);
 
         recyclerView = root.findViewById(R.id.recyclerGroups);
         recyclerView.setHasFixedSize(true);
         setOnClickListener();
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
+
         groupsArrayList = new ArrayList<>();
 
         groupAdapter = new GroupAdapter(this.getContext(), groupsArrayList, mListener);
         recyclerView.setAdapter(groupAdapter);
+
+        groupsfilterBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                PopupMenu popup = new PopupMenu(getContext(), groupsfilterBtn);
+                //popup.getMenuInflater().inflate(R.menu.date_picker_menu,popup.getMenu());
+                popup.inflate(R.menu.filter_menu_groups);
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem) {
+                        switch(menuItem.getItemId()){
+                            case R.id.filter_house:
+                                selectedFilter=getResources().getString(R.string.title_house);
+
+                                break;
+                            case R.id.filter_travel:
+                                selectedFilter=getResources().getString(R.string.title_travel);
+                                break;
+                            case R.id.filter_business:
+                                selectedFilter=getResources().getString(R.string.title_business);
+                                break;
+                            case R.id.filter_others:
+                                selectedFilter=getResources().getString(R.string.title_others);
+                                break;
+                            case R.id.filter_all:
+                                selectedFilter=getResources().getString(R.string.title_all);
+                                break;
+
+                        }
+                        filterList(selectedFilter);
+                        return false;
+                    }
+                });
+                popup.show();
+
+            }
+        });
+
 
         getGroups();
 
@@ -86,6 +135,8 @@ public class GroupsFragment extends Fragment {
             }
         });
 
+
+
         return root;
 
     }
@@ -105,5 +156,24 @@ public class GroupsFragment extends Fragment {
     public void getGroups() {
         database.getGroups(person_id, groupsArrayList, groupAdapter);
     }
+
+    public void filterList(String filtertype) {
+        if (!filtertype.equals(getResources().getString(R.string.title_all))) {
+            ArrayList filteredgrouparray = new ArrayList();
+            for (Groups groups : groupsArrayList) {
+                if (groups.getGroup_type().contains(filtertype)) {
+                    filteredgrouparray.add(groups);
+                }
+            }
+            groupAdapter = new GroupAdapter(getContext(), filteredgrouparray, mListener);
+            recyclerView.setAdapter(groupAdapter);
+        } else {
+            groupAdapter = new GroupAdapter(getContext(), groupsArrayList, mListener);
+            recyclerView.setAdapter(groupAdapter);
+        }
+    }
+
+
+
 
 }

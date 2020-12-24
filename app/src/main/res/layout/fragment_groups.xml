@@ -83,7 +83,7 @@
             android:paddingEnd="25dp">
 
             <ImageView
-                android:id="@+id/imageView"
+                android:id="@+id/imageViewFilterGroup"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_alignParentRight="true"
