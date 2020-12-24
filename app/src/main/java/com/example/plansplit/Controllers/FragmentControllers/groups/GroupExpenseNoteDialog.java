@@ -13,12 +13,13 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
+import com.example.plansplit.Controllers.FragmentControllers.AddExpenseFragment;
 import com.example.plansplit.R;
 
 public class GroupExpenseNoteDialog extends AppCompatDialogFragment {
 
     private EditText edittextnote;
-    private  GroupExpenseFragment groupExpenseFragment;
+    private AddExpenseFragment addExpenseFragment;
 
     @NonNull
     @Override
@@ -27,7 +28,7 @@ public class GroupExpenseNoteDialog extends AppCompatDialogFragment {
         LayoutInflater layoutInflater=getActivity().getLayoutInflater();
         final View view=layoutInflater.inflate(R.layout.group_expense_note_dialog,null);
         edittextnote=view.findViewById(R.id.editTextNote);
-        groupExpenseFragment=new GroupExpenseFragment();
+        addExpenseFragment=new AddExpenseFragment();
 
             builder.setView(view)
                     .setTitle(getResources().getString(R.string.group_expense_note_dialog_title))
@@ -41,7 +42,7 @@ public class GroupExpenseNoteDialog extends AppCompatDialogFragment {
                     .setPositiveButton(getResources().getString(R.string.group_expense_note_dialog_positive), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            groupExpenseFragment.setNote(edittextnote.getText().toString());
+                            addExpenseFragment.setNote(edittextnote.getText().toString());
                         }
                     });
 

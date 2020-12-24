@@ -24,12 +24,8 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-import android.view.View;
-import android.widget.AdapterView;
 
-import com.example.plansplit.Controllers.FragmentControllers.friends.FriendsFragment;
-import com.example.plansplit.Controllers.FragmentControllers.groups.GroupExpenseFragment;
-import com.example.plansplit.Controllers.FragmentControllers.personal.PersonalFragment;
+import com.example.plansplit.Controllers.FragmentControllers.AddExpenseFragment;
 import com.example.plansplit.Models.Database;
 import com.example.plansplit.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -226,7 +222,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         String text=adapterView.getItemAtPosition(i).toString();
-        GroupExpenseFragment.sharemethod=text;
+        AddExpenseFragment.sharemethod=text;
         //Toast.makeText(adapterView.getContext(),text,Toast.LENGTH_SHORT).show();
     }
 

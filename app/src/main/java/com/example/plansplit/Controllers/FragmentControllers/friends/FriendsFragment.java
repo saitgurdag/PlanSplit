@@ -1,7 +1,6 @@
 package com.example.plansplit.Controllers.FragmentControllers.friends;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,13 +9,11 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -24,19 +21,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.plansplit.Controllers.Adapters.FriendsAdapter;
-import com.example.plansplit.Controllers.FragmentControllers.groups.GroupExpenseFragment;
-import com.example.plansplit.Controllers.MainActivity;
+import com.example.plansplit.Controllers.FragmentControllers.AddExpenseFragment;
 import com.example.plansplit.Models.Database;
-import com.example.plansplit.Models.Objects.Friend;
 import com.example.plansplit.R;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
-import java.util.Objects;
 
 public class FriendsFragment extends Fragment {
     private static final String TAG = "FriendsFragment";
@@ -71,10 +58,10 @@ public class FriendsFragment extends Fragment {
         add_expence_friend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FriendExpenseFragment friendExpenseFragment = new FriendExpenseFragment();
+                AddExpenseFragment addExpenseFragment = new AddExpenseFragment();
                 FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.nav_host_fragment, friendExpenseFragment);
+                fragmentTransaction.replace(R.id.nav_host_fragment, addExpenseFragment);
                 fragmentTransaction.commit();
             }
         });

@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.plansplit.Controllers.Adapters.ExpensesAdapter;
 import com.example.plansplit.Controllers.Adapters.GroupAdapter;
+import com.example.plansplit.Controllers.FragmentControllers.AddExpenseFragment;
 import com.example.plansplit.Controllers.FragmentControllers.addgroups.AddGroupsFragment;
 import com.example.plansplit.Controllers.HomeActivity;
 import com.example.plansplit.Controllers.MyGroupActivity;
@@ -114,7 +115,7 @@ public class GroupsFragment extends Fragment {
         add_expense.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GroupExpenseFragment expenseFragment = new GroupExpenseFragment();
+                AddExpenseFragment expenseFragment = new AddExpenseFragment();
                 FragmentManager fragmentManager = getParentFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.nav_host_fragment, expenseFragment);
