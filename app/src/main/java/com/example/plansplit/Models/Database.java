@@ -56,15 +56,35 @@ public class Database {
     private Fragment fragment;
     private int totExpense = 0;
 
+    public Database(Object... o){
+        if(o.length==1){
+            this.context =(Context) o[0];
+            GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(context);
+            if (acct != null) {
+                setUserId(acct.getId());
+                System.out.println("acct not null");
+            } else {
+                System.out.println("acct null");
+            }
+        }else if(o.length==2){
+            this.context = (Context) o[0];
+            this.fragment = (Fragment) o[1];
+            GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(context);
+            if (acct != null) {
+                setUserId(acct.getId());
+                System.out.println("acct not null");
+            } else {
+                System.out.println("acct null");
+            }
+        }
+    }
+
     public int getTotExpense() {
         return totExpense;
     }
 
     public int getButce() {
         return butce[0];
-    }
-
-    public Database() {
     }
 
     private String userId = null;
@@ -77,28 +97,7 @@ public class Database {
         return userId;
     }
 
-    public Database(Context context) {
-        this.context = context;
-        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(context);
-        if (acct != null) {
-            setUserId(acct.getId());
-            System.out.println("acct not null");
-        } else {
-            System.out.println("acct null");
-        }
-    }
 
-    public Database(Context context, Fragment fragment) {
-        this.fragment = fragment;
-        this.context = context;
-        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(context);
-        if (acct != null) {
-            setUserId(acct.getId());
-            System.out.println("acct not null");
-        } else {
-            System.out.println("acct null");
-        }
-    }
 
     private static class Holder {
         private static final Database INSTANCE = new Database();
