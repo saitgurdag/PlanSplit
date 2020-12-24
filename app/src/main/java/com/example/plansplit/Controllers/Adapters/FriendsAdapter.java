@@ -21,6 +21,7 @@ import com.example.plansplit.Models.Database;
 import com.example.plansplit.R;
 import com.example.plansplit.Models.Objects.Friend;
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -102,8 +103,14 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendsV
     @Override
     public void onBindViewHolder(@NonNull FriendsViewHolder holder, int position){
         Friend friend = friends.get(position);
+        if(friend.getPerson_image().toString().isEmpty()){
+            holder.friend_image.setImageResource(R.drawable.denemeresim);
+        }
+        if(!friend.getPerson_image().toString().isEmpty()){
+            Picasso.with(mCtx).load(friend.getPerson_image()).into(holder.friend_image);
+        }
+        //holder.friend_image.setImageResource(friend.getPerson_image());
 
-        holder.friend_image.setImageResource(friend.getPerson_image());
         holder.friend_name.setText(friend.getName());
         holder.friend_amount.setText(friend.getAmount());
         holder.friend_amount.setTextColor(ContextCompat.
@@ -132,12 +139,12 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendsV
 
         public FriendsViewHolder(@NonNull View itemView){
             super(itemView);
-            friend_image = itemView.findViewById(R.id.groupOperations_image);
+            friend_image = itemView.findViewById(R.id.personalOperations_imagePerson);
             friend_name = itemView.findViewById(R.id.groupOperations_text);
             friend_amount = itemView.findViewById(R.id.groupOperations_amount);
             friend_amount_text = itemView.findViewById(R.id.friend_amount_text);
             friend_layout = itemView.findViewById(R.id.friend_background_layout);
-            friend_image_balance = itemView.findViewById(R.id.groupOperations_PersonBackGround);
+            friend_image_balance = itemView.findViewById(R.id.personalOperations_PersonBackGround);
 
             itemView.findViewById(R.id.groupOperations_card).setOnClickListener(new View.OnClickListener() {
                 @Override

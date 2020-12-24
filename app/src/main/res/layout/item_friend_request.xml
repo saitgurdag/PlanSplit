@@ -31,13 +31,19 @@
                 android:layout_centerVertical="true"
                 android:padding="10dp">
 
-                <ImageView
-                    android:id="@+id/friend_requests_image"
+                <androidx.cardview.widget.CardView
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:layout_gravity="center"
-                    android:padding="5dp"
-                    app:srcCompat="@drawable/denemeresim" />
+                    app:cardCornerRadius="25dp" >
+
+                    <ImageView
+                        android:id="@+id/friend_requests_image"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        app:srcCompat="@drawable/denemeresim" />
+                </androidx.cardview.widget.CardView>
+
             </FrameLayout>
 
             <LinearLayout

@@ -23,6 +23,7 @@ import com.example.plansplit.Models.Objects.Friend;
 import com.example.plansplit.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 
 public class MyGroupActivity extends AppCompatActivity {
     private static final String TAG = "MyGroupActivity";
@@ -69,6 +70,8 @@ public class MyGroupActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mygroup);
+
+
 
         TextView groupnameTv = findViewById(R.id.group_title_mygroupTv);
         final TextView list_titleTv = findViewById(R.id.list_buttonTv);
@@ -150,7 +153,8 @@ public class MyGroupActivity extends AppCompatActivity {
             if(extras.keySet().contains("person_id")){
                 person_id = extras.getString("person_id");
             }
-            groupPhotoIv.setImageResource(friend.getPerson_image());
+           // groupPhotoIv.setImageResource(friend.getPerson_image());
+            Picasso.with(getApplicationContext()).load(friend.getPerson_image()).into(groupPhotoIv);
             group_title = friend.getName();
             System.out.println("friend" + friend.getName());
             groupOpBttn.setVisibility(View.INVISIBLE);

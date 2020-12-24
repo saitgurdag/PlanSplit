@@ -29,6 +29,7 @@ import com.example.plansplit.Models.Database;
 import com.example.plansplit.Models.Objects.Expense;
 import com.example.plansplit.Models.Objects.Groups;
 import com.example.plansplit.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -44,6 +45,7 @@ public class GroupsFragment extends Fragment {
     private Button add_new_group;
     private String person_id;
     private String selectedFilter;
+    private ImageView personImage;
 
 
     @Nullable
@@ -61,6 +63,8 @@ public class GroupsFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         setOnClickListener();
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        personImage=root.findViewById(R.id.notification_image2);
+        Picasso.with(getContext()).load(home.getPersonPhoto()).into(personImage);
 
         groupsArrayList = new ArrayList<>();
 
