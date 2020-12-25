@@ -15,9 +15,12 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.example.plansplit.Controllers.FragmentControllers.addgroups.AddGroupsFragment;
 import com.example.plansplit.Models.Database;
 import com.example.plansplit.Models.Objects.Friend;
 import com.example.plansplit.R;
@@ -29,7 +32,7 @@ public class MyGroupActivity extends AppCompatActivity {
     Database database = Database.getInstance();
     private String person_id = "";
     private Friend friend;
-    boolean ctrlType=false;             //eğer friend'den geliyorsa true, gruptan geliyorsa false
+    boolean ctrlType = false;             //eğer friend'den geliyorsa true, gruptan geliyorsa false
     private String group_type_option_home = "ev";
     private String group_type_option_work = "iş";
     private String group_type_option_trip = "seyahat";
@@ -46,11 +49,19 @@ public class MyGroupActivity extends AppCompatActivity {
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                if(menuItem.getItemId() == R.id.mygroup_group_options)
+                if (menuItem.getItemId() == R.id.mygroup_group_options){
+                    AddGroupsFragment addGroupsFragment = new AddGroupsFragment();
+                    FragmentManager fragmentManager = getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.fragment_place_mygroup, addGroupsFragment); // Başka aktivitedeki fragment'a erişemiyorum
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
                     Toast.makeText(MyGroupActivity.this, "Grup Ayarları Seçildi", Toast.LENGTH_SHORT).show();
-                if(menuItem.getItemId() == R.id.mygroup_table_export)
+                }
+
+                if (menuItem.getItemId() == R.id.mygroup_table_export)
                     Toast.makeText(MyGroupActivity.this, "Tablo Olarak Çıkar Seçildi", Toast.LENGTH_SHORT).show();
-                if(menuItem.getItemId() == R.id.mygroup_quick_add)
+                if (menuItem.getItemId() == R.id.mygroup_quick_add)
                     Toast.makeText(MyGroupActivity.this, "Hızlı Ekle Seçildi", Toast.LENGTH_SHORT).show();
                 return true;
             }
@@ -59,8 +70,8 @@ public class MyGroupActivity extends AppCompatActivity {
     }
 
     public void loadActivity(String key) {
-        Intent intent=new Intent(this,HomeActivity.class);
-        intent.putExtra("navigation",key);
+        Intent intent = new Intent(this, HomeActivity.class);
+        intent.putExtra("navigation", key);
         startActivity(intent);
 
     }
@@ -86,9 +97,9 @@ public class MyGroupActivity extends AppCompatActivity {
 
 
         BottomNavigationView navView = findViewById(R.id.nav_view2);
-        navView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener(){
+        navView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item){
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
                 String fragmentKey = null;
 
@@ -112,9 +123,7 @@ public class MyGroupActivity extends AppCompatActivity {
             }
 
 
-
         });
-
 
 
         final NavController navController = Navigation.findNavController(this, R.id.fragment_place_mygroup);
@@ -122,17 +131,17 @@ public class MyGroupActivity extends AppCompatActivity {
         String group_title = "Group title";
 
         Bundle extras = getIntent().getExtras();
-        if(extras != null && extras.keySet().contains("group_title")){
+        if (extras != null && extras.keySet().contains("group_title")) {
             navView.getMenu().getItem(2).setChecked(true);
             group_title = extras.getString("group_title");
             String resid = extras.getString("group_image");
-            if(resid.equals(group_type_option_home)){
+            if (resid.equals(group_type_option_home)) {
                 groupPhotoIv.setImageResource(homePicture);
-            }else if(resid.equals(group_type_option_work)){
+            } else if (resid.equals(group_type_option_work)) {
                 groupPhotoIv.setImageResource(workPicture);
-            } else if(resid.equals(group_type_option_trip)){
+            } else if (resid.equals(group_type_option_trip)) {
                 groupPhotoIv.setImageResource(tripPicture);
-            } else if(resid.equals(group_type_option_other)){
+            } else if (resid.equals(group_type_option_other)) {
                 groupPhotoIv.setImageResource(otherPicture);
             }
             System.out.println("grouppp");
@@ -141,13 +150,13 @@ public class MyGroupActivity extends AppCompatActivity {
             l.setVisibility(View.INVISIBLE);
             menu.setVisibility(View.VISIBLE);
 
-            ctrlType=false;
-        }else if(extras != null && extras.keySet().contains("friend")){
+            ctrlType = false;
+        } else if (extras != null && extras.keySet().contains("friend")) {
             navView.getMenu().getItem(1).setChecked(true);
             Gson gson = new Gson();
             String json = extras.getString("friend");
             friend = gson.fromJson(json, Friend.class);
-            if(extras.keySet().contains("person_id")){
+            if (extras.keySet().contains("person_id")) {
                 person_id = extras.getString("person_id");
             }
             groupPhotoIv.setImageResource(friend.getPerson_image());
@@ -158,7 +167,7 @@ public class MyGroupActivity extends AppCompatActivity {
             l.setVisibility(View.VISIBLE);
             menu.setVisibility(View.INVISIBLE);
 
-            ctrlType=true;
+            ctrlType = true;
         }
 
         list_titleTv.setVisibility(View.GONE);
@@ -174,7 +183,7 @@ public class MyGroupActivity extends AppCompatActivity {
                 navController.navigate(R.id.navi_todo_list);
                 list_titleTv.setVisibility(View.VISIBLE);
                 events_titleTv.setVisibility(View.GONE);
-                if(!ctrlType)
+                if (!ctrlType)
                     group_op_titletV.setVisibility(View.GONE);
             }
         });
@@ -185,12 +194,12 @@ public class MyGroupActivity extends AppCompatActivity {
                 navController.navigate(R.id.navi_events);
                 events_titleTv.setVisibility(View.VISIBLE);
                 list_titleTv.setVisibility(View.GONE);
-                if(!ctrlType)
+                if (!ctrlType)
                     group_op_titletV.setVisibility(View.GONE);
             }
         });
 
-        if(!ctrlType) {
+        if (!ctrlType) {
             groupOpBttn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -200,7 +209,7 @@ public class MyGroupActivity extends AppCompatActivity {
                     list_titleTv.setVisibility(View.GONE);
                 }
             });
-        }else{
+        } else {
             removeFriendBttn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -220,7 +229,6 @@ public class MyGroupActivity extends AppCompatActivity {
                 }
             });
         }
-
 
 
         backBttn.setOnClickListener(new View.OnClickListener() {

@@ -11,17 +11,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.plansplit.Controllers.FragmentControllers.mygroup.GroupOperationsFragment;
 import com.example.plansplit.Models.Objects.Person;
-import com.example.plansplit.Models.Objects.Transfers;
 import com.example.plansplit.R;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import kotlin.reflect.KParameter;
 
 public class GroupOperationsAdapter extends RecyclerView.Adapter<GroupOperationsAdapter.GroupOperationsViewHolder> {
 
     private ArrayList<Person> groupOperationsPersonList;
+
     public GroupOperationsAdapter(ArrayList<Person> operationsPersonList){
         groupOperationsPersonList = operationsPersonList;
     }
@@ -36,10 +33,7 @@ public class GroupOperationsAdapter extends RecyclerView.Adapter<GroupOperations
     @Override
     public void onBindViewHolder(@NonNull GroupOperationsViewHolder holder, int position) {
         Person persons = groupOperationsPersonList.get(position);
-
-        //getResources().getColor(R.color.rojo)
-        holder.background.setBackgroundColor(GroupOperationsFragment.colourArrayInteger.get(position));
-        //holder.background.setBackgroundColor();
+        holder.background.setColorFilter(GroupOperationsFragment.colourArrayInteger.get(position));
         holder.personImage.setImageResource(persons.getCardView_shareMethodPersonPicture());
         holder.personGroupDepth.setText(persons.getGroupDepth());
 

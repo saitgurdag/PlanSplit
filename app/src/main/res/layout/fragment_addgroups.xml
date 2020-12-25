@@ -65,10 +65,10 @@
                         android:layout_below="@+id/textHeaderMail"
                         android:layout_marginLeft="15dp"
                         android:layout_toRightOf="@+id/GroupPicture_ImageView"
-                        android:maxLength="20"
                         android:fontFamily="@font/avenir"
                         android:hint="@string/write_group_name"
-                        android:inputType="textPersonName" />
+                        android:inputType="textPersonName"
+                        android:maxLength="20" />
 
                 </LinearLayout>
 
@@ -152,20 +152,104 @@
         <RelativeLayout
             android:id="@+id/linearLayoutButtons"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="65dp"
             android:layout_below="@+id/linearLayoutSelectionButtons"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/order_status_background">
 
-            <TextView
-                android:id="@+id/textViewGroupMembers"
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="8dp"
-                android:fontFamily="@font/avenir"
-                android:gravity="center|left"
-                android:text="Grup Üyeleri"
-                android:textSize="25sp" />
+                android:orientation="horizontal"
+                android:paddingStart="8dp"
+                android:gravity="center_vertical">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentTop="true">
+
+                    <TextView
+                        android:id="@+id/textViewGroupMembers"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_marginLeft="8dp"
+                        android:fontFamily="@font/avenir"
+                        android:text="Grup Üyeleri"
+                        android:textSize="25sp" />
+
+                </RelativeLayout>
+
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingEnd="10dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentBottom="true"
+                    android:gravity="center">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/add_new_person"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:visibility="invisible"
+                        app:cardCornerRadius="5dp"
+                        app:cardElevation="3dp"
+                        app:cardUseCompatPadding="true">
+
+                        <RelativeLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:padding="5dp"
+                                android:paddingHorizontal="5dp">
+
+                                <ImageView
+                                    android:id="@+id/cardView_addgroupsPicture"
+                                    android:layout_width="30dp"
+                                    android:layout_height="30dp"
+                                    android:background="@drawable/ic_rectangle"
+                                    android:padding="5dp"
+                                    android:src="@drawable/addgroups_addfriendicon"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <TextView
+                                    android:id="@+id/textViewName"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:layout_toRightOf="@+id/cardView_addgroupsPicture"
+                                    android:fontFamily="@font/avenir"
+                                    android:gravity="center"
+                                    android:paddingLeft="10dp"
+                                    android:text="@string/add_friends_to_group"
+                                    android:textColor="@color/black"
+                                    android:textSize="15sp" />
+
+
+                            </LinearLayout>
+
+                        </RelativeLayout>
+                    </androidx.cardview.widget.CardView>
+
+                </RelativeLayout>
+
+
+            </RelativeLayout>
+
 
         </RelativeLayout>
 
@@ -174,9 +258,9 @@
             android:layout_width="match_parent"
             android:layout_height="250dp"
             android:layout_gravity="center"
-            android:padding="8dp"
-            android:paddingHorizontal="2dp"
+            android:paddingHorizontal="8dp"
             tools:listitem="@layout/item_addgroups_person" />
+
 
         <RelativeLayout
             android:id="@+id/relativeLayout"
@@ -199,6 +283,23 @@
                 android:textColor="@color/grey"
                 android:textSize="15sp"
                 android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/buttonRemoveGroup"
+                android:layout_width="310dp"
+                android:layout_height="34dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/button_smooth_corner"
+                android:elevation="2dp"
+                android:fontFamily="@font/avenir"
+                android:shadowColor="#EFEDED"
+                android:text="@string/remove_group"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:visibility="invisible" />
         </RelativeLayout>
 
     </LinearLayout>
