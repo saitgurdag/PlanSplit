@@ -1,13 +1,15 @@
 package com.example.plansplit.Models.Objects;
 
+import android.net.Uri;
+
 public class FriendRequest{
     private String key;
     private String name;
     private String email;
-    private int foto;
+    private Uri image;
 
-    public FriendRequest(int foto, String name, String email, String key){
-        this.foto = foto;
+    public FriendRequest(String image, String name, String email, String key){
+        this.image = Uri.parse(image);;
         this.name = name;
         this.email = email;
         this.key = key;
@@ -21,8 +23,8 @@ public class FriendRequest{
         return email;
     }
 
-    public int getFoto(){
-        return foto;
+    public Uri getFoto(){
+        return image;
     }
 
     public String getKey(){

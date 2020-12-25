@@ -11,15 +11,13 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDialogFragment;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.plansplit.Controllers.Adapters.ShareMethodAdapter;
-import com.example.plansplit.Controllers.FragmentControllers.friends.FriendExpenseFragment;
+import com.example.plansplit.Controllers.FragmentControllers.AddExpenseFragment;
 import com.example.plansplit.R;
 import com.example.plansplit.Models.Objects.Person;
-import com.example.plansplit.Controllers.FragmentControllers.groups.GroupExpenseFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,7 +80,7 @@ public class ShareMethodFragment extends AppCompatDialogFragment implements Adap
                 @Override
                 public void onClick(View view) {
                     dialog.dismiss();
-                    GroupExpenseFragment.shareBtn.setText(GroupExpenseFragment.sharemethod);
+                    AddExpenseFragment.shareBtn.setText(AddExpenseFragment.sharemethod);
 
                 }
             });

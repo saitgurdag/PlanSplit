@@ -27,20 +27,29 @@
                 android:padding="10dp">
 
                 <ImageView
-                    android:id="@+id/groupOperations_PersonBackGround"
+                    android:id="@+id/personalOperations_PersonBackGround"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_gravity="center"
                     android:background="@drawable/circle_background_red"
                     android:padding="5dp" />
 
-                <ImageView
-                    android:id="@+id/groupOperations_image"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_gravity="center"
-                    android:padding="5dp"
-                    app:srcCompat="@drawable/denemeresim" />
+                <androidx.cardview.widget.CardView
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_marginStart="7.5dp"
+                    android:layout_marginTop="7.5dp"
+                    android:backgroundTintMode="src_over"
+                    app:cardCornerRadius="17.5dp">
+
+                    <ImageView
+                        android:id="@+id/personalOperations_imagePerson"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center|fill"
+                        app:srcCompat="@drawable/denemeresim" />
+                </androidx.cardview.widget.CardView>
+
             </FrameLayout>
 
             <LinearLayout

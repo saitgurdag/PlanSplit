@@ -60,9 +60,9 @@ public class AddGroupsFragment extends Fragment {
         adapter = new AddGroupsAdapter(getContext(), person_id, recyclerView, addgroups_personList);
         recyclerView.setAdapter(adapter);
 
-        rbuttonHouse = root.findViewById(R.id.rbuttonHouse);
-        rbuttonWork = root.findViewById(R.id.rbuttonWork);
-        rbuttonTrip = root.findViewById(R.id.rbuttonTrip);
+        rbuttonHouse = root.findViewById(R.id.rbuttonFood);
+        rbuttonWork = root.findViewById(R.id.rbuttonWear);
+        rbuttonTrip = root.findViewById(R.id.rbuttonStationery);
         rbuttonOther = root.findViewById(R.id.rbuttonOther);
 
         homePicture = R.drawable.ic_home_black_radius;
@@ -71,16 +71,18 @@ public class AddGroupsFragment extends Fragment {
         otherPicture = R.drawable.ic_other;
 
         groupPicture = root.findViewById(R.id.GroupPicture_ImageView);
-        groupName_EditText = root.findViewById(R.id.GroupName_EditText);
+        groupName_EditText = root.findViewById(R.id.editTextExpenseName);
         buttonMakeGroup = root.findViewById(R.id.buttonMakeGroup);
 
-        rgroupButton = (RadioGroup) root.findViewById(R.id.rgroupButton);
+
+
+        rgroupButton = (RadioGroup) root.findViewById(R.id.rgroupButton2);
         rgroupButton.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
 
                 switch (checkedId) {
-                    case R.id.rbuttonHouse:
+                    case R.id.rbuttonFood:
                         rbuttonHouse.setTextColor(Color.WHITE);
                         rbuttonWork.setTextColor(Color.BLACK);
                         rbuttonTrip.setTextColor(Color.BLACK);
@@ -89,7 +91,7 @@ public class AddGroupsFragment extends Fragment {
                         groupPicture.setImageResource(homePicture);
                         System.out.println("Ev butonu tıklandı");
                         break;
-                    case R.id.rbuttonWork:
+                    case R.id.rbuttonWear:
                         rbuttonHouse.setTextColor(Color.BLACK);
                         rbuttonWork.setTextColor(Color.WHITE);
                         rbuttonTrip.setTextColor(Color.BLACK);
@@ -98,7 +100,7 @@ public class AddGroupsFragment extends Fragment {
                         groupPicture.setImageResource(workPicture);
                         System.out.println("iş butonu tıklandı");
                         break;
-                    case R.id.rbuttonTrip:
+                    case R.id.rbuttonStationery:
                         rbuttonHouse.setTextColor(Color.BLACK);
                         rbuttonWork.setTextColor(Color.BLACK);
                         rbuttonTrip.setTextColor(Color.WHITE);
@@ -127,6 +129,8 @@ public class AddGroupsFragment extends Fragment {
                 createNewGroup();
             }
         });
+
+
 
         return root;
     }

@@ -28,9 +28,11 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.plansplit.Controllers.Adapters.ExpensesAdapter;
+import com.example.plansplit.Controllers.HomeActivity;
 import com.example.plansplit.Models.Database;
 import com.example.plansplit.Models.Objects.Expense;
 import com.example.plansplit.R;
+import com.squareup.picasso.Picasso;
 
 import java.sql.SQLOutput;
 import java.util.ArrayList;
@@ -53,10 +55,12 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemSele
     TextView progressText, kalanbudget;
     Button addExpense;
     ImageView filter;
+    ImageView personPhoto;
     EditText expenseName, price;
     String type;
     String selectedFilter;
     Spinner spin;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -68,6 +72,10 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemSele
         totExpense = 0;
         expenseList = db.getExpenses();
         totExpense = db.getTotExpense();
+        final HomeActivity home = (HomeActivity) getContext();
+
+        personPhoto=root.findViewById(R.id.personalOperations_imagePerson);
+        Picasso.with(getContext()).load(home.getPersonPhoto()).into(personPhoto);
 
         country = new String[]{"Yiyecek", "Giyecek", "Kırtasiye", "Temizlik" , "Diğer"};
         spin = (Spinner) root.findViewById(R.id.spinner);
@@ -101,6 +109,7 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemSele
         filter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                System.out.println(home.getPersonPhoto());
 
                 PopupMenu popup = new PopupMenu(getContext(), filter);
                 //popup.getMenuInflater().inflate(R.menu.date_picker_menu,popup.getMenu());

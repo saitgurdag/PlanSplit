@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.plansplit.Models.Database;
 import com.example.plansplit.Models.Objects.Friend;
 import com.example.plansplit.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,7 +79,8 @@ public class AddGroupsAdapter extends RecyclerView.Adapter<AddGroupsAdapter.AddG
         final Friend addgroups_person = addgroups_personList.get(position);
         holder.Name.setText(addgroups_person.getName());
         holder.Mail.setText(addgroups_person.getMail());
-        holder.cardView_addgroups.setForeground(mCtx.getResources().getDrawable(R.drawable.denemeresim));
+        Picasso.with(mCtx).load(addgroups_person.getPerson_image()).into( holder.addFriendImage);
+        //holder.cardView_addgroups.setForeground(mCtx.getResources().getDrawable(R.drawable.denemeresim));
 
         holder.setItemClickListener(new ItemClickListener() {
             @Override
@@ -100,7 +103,7 @@ public class AddGroupsAdapter extends RecyclerView.Adapter<AddGroupsAdapter.AddG
     public class AddGroupViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView Name;
         public TextView Mail;
-        public CardView cardView_addgroups;
+        public ImageView addFriendImage;
         public CheckBox checkBox_selected_friends;
         ItemClickListener itemClickListener;
 
@@ -108,7 +111,7 @@ public class AddGroupsAdapter extends RecyclerView.Adapter<AddGroupsAdapter.AddG
             super(itemView);
             this.Name = (TextView) itemView.findViewById(R.id.textViewName);
             this.Mail = (TextView) itemView.findViewById(R.id.textViewMail);
-            this.cardView_addgroups = (CardView) itemView.findViewById(R.id.cardView_addgroupsPicture);
+            this.addFriendImage = (ImageView) itemView.findViewById(R.id.imageViewAddFriendToGroup);
             this.checkBox_selected_friends = (CheckBox) itemView.findViewById(R.id.checkBox_selected_friend);
             checkBox_selected_friends.setOnClickListener(this);
 

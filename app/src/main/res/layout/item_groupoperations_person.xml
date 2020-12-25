@@ -26,8 +26,10 @@
                 android:layout_centerVertical="true"
                 android:padding="5dp">
 
+
+
                 <ImageView
-                    android:id="@+id/groupOperations_PersonBackGround"
+                    android:id="@+id/personalOperations_PersonBackGround"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_gravity="center"

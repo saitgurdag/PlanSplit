@@ -57,15 +57,35 @@ public class Database {
     private Fragment fragment;
     private int totExpense = 0;
 
+    public Database(Object... o){
+        if(o.length==1){
+            this.context =(Context) o[0];
+            GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(context);
+            if (acct != null) {
+                setUserId(acct.getId());
+                System.out.println("acct not null");
+            } else {
+                System.out.println("acct null");
+            }
+        }else if(o.length==2){
+            this.context = (Context) o[0];
+            this.fragment = (Fragment) o[1];
+            GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(context);
+            if (acct != null) {
+                setUserId(acct.getId());
+                System.out.println("acct not null");
+            } else {
+                System.out.println("acct null");
+            }
+        }
+    }
+
     public int getTotExpense() {
         return totExpense;
     }
 
     public int getButce() {
         return butce[0];
-    }
-
-    public Database() {
     }
 
     private String userId = null;
@@ -78,28 +98,7 @@ public class Database {
         return userId;
     }
 
-    public Database(Context context) {
-        this.context = context;
-        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(context);
-        if (acct != null) {
-            setUserId(acct.getId());
-            System.out.println("acct not null");
-        } else {
-            System.out.println("acct null");
-        }
-    }
 
-    public Database(Context context, Fragment fragment) {
-        this.fragment = fragment;
-        this.context = context;
-        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(context);
-        if (acct != null) {
-            setUserId(acct.getId());
-            System.out.println("acct not null");
-        } else {
-            System.out.println("acct null");
-        }
-    }
 
     private static class Holder {
         private static final Database INSTANCE = new Database();
@@ -187,10 +186,11 @@ public class Database {
      * @param email   current email of google account
      * @param surname surname of google account
      */
-    public void registerUser(String key, String name, String email, String surname) {
+    public void registerUser(String key, String name, String email, String surname,String image) {
         user_reference.child(key).child("name").setValue(name);
         user_reference.child(key).child("email").setValue(email);
         user_reference.child(key).child("surname").setValue(surname);
+        user_reference.child(key).child("image").setValue(image);
     }
 
     /**
@@ -280,6 +280,7 @@ public class Database {
         user_reference.child(friend_key).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String photo;
                 if (!snapshot.exists()) {
                     callBack.onError(KEY_NOT_FOUND, friend_key + " ile ilişkili kullanıcı bulunamadı");
                     return;
@@ -289,7 +290,13 @@ public class Database {
                             borçların database'de tutulma yöntemi geçici,
                             acilen değişmeli
                 */
-                int photo = R.drawable.denemeresim;
+                if(!snapshot.child("image").exists()){
+                     photo ="photo yok";
+                }
+                else{
+                    photo = snapshot.child("image").getValue().toString();
+                }
+
                 String name = snapshot.child("name").getValue().toString();
                 if (name.equals("No name")) {
                     //if there was one name when user login "No name" would be used, in such case
@@ -380,14 +387,15 @@ public class Database {
                 /*fixme: kayıt sırasında resim almadığımızdan
                             rastgele resim koydum.
                 */
-                int photo = R.drawable.denemeresim;
+                //int photo = R.drawable.denemeresim;
+                String image = snapshot.child("image").getValue().toString();
                 String name = snapshot.child("name").getValue().toString();
                 if (name == null) {
                     //if somehow null is present w/o Exception, use email as name, as it can not be null
                     name = snapshot.child("email").getValue().toString();
                 }
                 String email = snapshot.child("email").getValue().toString();
-                FriendRequest friend_request = new FriendRequest(photo, name, email, request_key);
+                FriendRequest friend_request = new FriendRequest(image, name, email, request_key);
                 callBack.onFriendRequestRetrieveSuccess(friend_request);
             }
 
