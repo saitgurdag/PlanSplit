@@ -102,5 +102,6 @@
     <string name="add_friends_to_group">Arkadaş Ekle</string>
     <string name="title_house">ev</string>
     <string name="title_travel">seyehat</string>
+    <string name="title_business">iş</string>
 
 </resources>

@@ -40,6 +40,7 @@ public class Database {
     private static final String ALREADY_SENT_FRIEND_REQUEST = "ALREADY_SENT_FRIEND_REQUEST";
     private static final String NO_SELECTED_FRIEND = "NO_SELECTED_FRIEND";
     private static final String NO_GIVEN_GROUP_NAME = "NO_GIVEN_GROUP_NAME";
+    private static final String ALREADY_IN_GROUP = "ALREADY_IN_GROUP";
 
 
     //Firebase
@@ -1085,19 +1086,21 @@ public class Database {
                 }
                 final String group_key = group_reference.push().getKey();
                 assert group_key != null;
+                group.setKey(group_key);
                 group_reference.child(group_key).setValue(group);
+                //System.out.println(group.getKey()); check group_key;
 
                 final DatabaseReference cur_user_ref = user_reference.child(person_id);
                 cur_user_ref.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         ArrayList<String> current_users_groups = (ArrayList<String>) snapshot.child("groups").getValue();
-                        if(current_users_groups == null){
+                        if (current_users_groups == null) {
                             current_users_groups = new ArrayList<>();
                         }
-                        if(current_users_groups.contains(group_key)){
-                            callBack.onError(ALREADY_FRIENDS,"Zaten bu grupta varsın");
-                        }else{
+                        if (current_users_groups.contains(group_key)) {
+                            callBack.onError(ALREADY_FRIENDS, "Zaten bu grupta varsın");
+                        } else {
                             current_users_groups.add(group_key);
                         }
                         cur_user_ref.child("groups").setValue(current_users_groups);
@@ -1111,24 +1114,24 @@ public class Database {
                 });
 
 
-                for (Friend friend: AddGroupsAdapter.checked_personList){
+                for (Friend friend : AddGroupsAdapter.checked_personList) {
                     String friendKey = friend.getKey();
                     final DatabaseReference user_ref = user_reference.child(friendKey);
                     user_ref.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            if(!snapshot.exists()){
+                            if (!snapshot.exists()) {
                                 callBack.onError(KEY_NOT_FOUND, "kullanıcı bulunamadı");
                             }
 
                             ArrayList<String> users_groups = (ArrayList<String>) snapshot.child("groups").getValue();
-                            if(users_groups == null){
+                            if (users_groups == null) {
                                 users_groups = new ArrayList<>();
                             }
 
-                            if(users_groups.contains(group_key)){
-                                callBack.onError(ALREADY_FRIENDS,"Zaten bu grupta varsın");
-                            }else{
+                            if (users_groups.contains(group_key)) {
+                                callBack.onError(ALREADY_IN_GROUP, "Zaten bu grupta varsın");
+                            } else {
                                 users_groups.add(group_key);
                             }
                             user_ref.child("groups").setValue(users_groups);
