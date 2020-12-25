@@ -24,12 +24,8 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-import android.view.View;
-import android.widget.AdapterView;
 
-import com.example.plansplit.Controllers.FragmentControllers.friends.FriendsFragment;
-import com.example.plansplit.Controllers.FragmentControllers.groups.GroupExpenseFragment;
-import com.example.plansplit.Controllers.FragmentControllers.personal.PersonalFragment;
+import com.example.plansplit.Controllers.FragmentControllers.AddExpenseFragment;
 import com.example.plansplit.Models.Database;
 import com.example.plansplit.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -55,10 +51,13 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     NavigationView navigationView;
     Bundle bundle;
     String navigation_key;
+    public static Uri personPhoto;
 
     FirebaseAuth mAuth;
     private static final Database database = Database.getInstance();
     Database db = new Database();
+
+
 
     public String getPersonId() {
         return personId;
@@ -128,12 +127,14 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 surname = "No surname";
             }
 
-            Uri personPhoto = acct.getPhotoUrl();
+            personPhoto = acct.getPhotoUrl();
             setHeader(personPhoto,name,email);
+            String image=personPhoto.toString();
 
 
 
-            database.registerUser(personId, name, email, surname);
+
+            database.registerUser(personId, name, email, surname,image);
             Log.d(TAG, "user registered with this email: " + email + "\n" + "and this key: " + personId);
         }
       
@@ -168,6 +169,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 int id=menuItem.getItemId();
 
 
+
                 //it's possible to do more actions on several items, if there is a large amount of items I prefer switch(){case} instead of if()
                 if (id==R.id.navigation_logout){
                     if (id == R.id.navigation_logout) {
@@ -180,6 +182,12 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                         finish();
 
                     }
+                }
+                if (id==R.id.navigation_home){
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                    bundle = new Bundle();
+                    bundle.putString("person_id", personId);
+                    navController.navigate(R.id.navigation_personal, bundle);
                 }
                 return true;
             }
@@ -226,12 +234,16 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         String text=adapterView.getItemAtPosition(i).toString();
-        GroupExpenseFragment.sharemethod=text;
+        AddExpenseFragment.sharemethod=text;
         //Toast.makeText(adapterView.getContext(),text,Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
 
+    }
+
+    public static Uri getPersonPhoto() {
+        return personPhoto;
     }
 }

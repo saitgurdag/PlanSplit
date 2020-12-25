@@ -62,18 +62,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textHeaderPersonName" />
 
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="126dp"
-        android:layout_height="31dp"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/ic_header_rectangle"
-        android:text="@string/header_profile_button"
-        android:textAlignment="gravity"
-        android:textAllCaps="false"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.515"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textHeaderMail" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

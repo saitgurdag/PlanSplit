@@ -10,16 +10,16 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.plansplit.Controllers.FragmentControllers.AddExpenseFragment;
 import com.example.plansplit.Models.Objects.Person;
 import com.example.plansplit.R;
-import com.example.plansplit.Controllers.FragmentControllers.groups.GroupExpenseFragment;
 
 import java.util.ArrayList;
 
 public class CustomDialogAdapter extends RecyclerView.Adapter<CustomDialogAdapter.MyViewHolder> {
 
         private LayoutInflater inflater;
-        private GroupExpenseFragment groupExpenseFragment;
+        private AddExpenseFragment addExpenseFragment;
 
         private ArrayList myImageNameList;
 
@@ -67,10 +67,10 @@ public class CustomDialogAdapter extends RecyclerView.Adapter<CustomDialogAdapte
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                       groupExpenseFragment=new GroupExpenseFragment();
-                        groupExpenseFragment.setPayer_name((String) name.getText());
-                        GroupExpenseFragment.dialogBtn.setText(name.getText());
-                        GroupExpenseFragment.dialog.dismiss();
+                        addExpenseFragment =new AddExpenseFragment();
+                        addExpenseFragment.setPayer_name((String) name.getText());
+                        AddExpenseFragment.dialogBtn.setText(name.getText());
+                        AddExpenseFragment.dialog.dismiss();
                     }
                 });
 

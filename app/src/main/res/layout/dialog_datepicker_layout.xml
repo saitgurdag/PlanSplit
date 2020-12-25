@@ -54,6 +54,7 @@
         android:text="@string/date_picker_menu_for_once"
         android:textAllCaps="false"
         android:textStyle="normal"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -63,14 +64,13 @@
         android:id="@+id/dpOKButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:background="?android:attr/selectableItemBackground"
         android:text="@android:string/ok"
         android:textAlignment="textEnd"
         android:textColor="@color/dialog_positive_button_color"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dpMenuButton" />
+        app:layout_constraintTop_toBottomOf="@+id/dp_group_expense" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

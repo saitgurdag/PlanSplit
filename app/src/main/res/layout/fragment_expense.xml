@@ -1,10 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="@string/expense_type_selector"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/textHeaderMail"
+        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+    <Button
+        android:id="@+id/expense_type_button"
+        android:layout_width="146dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/expense_button"
+        android:fontFamily="@font/avenir"
+        android:text="@string/expense_type_selector"
+        android:textAllCaps="false"
+        android:textSize="15dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintStart_toEndOf="@+id/textHeaderMail"
+        app:layout_constraintTop_toBottomOf="@+id/method_button" />
 
     <View
         android:id="@+id/view2"
@@ -17,7 +43,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/GroupName_EditText"
+        android:id="@+id/editTextExpenseName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="48dp"
@@ -32,7 +58,7 @@
         app:layout_constraintTop_toTopOf="@+id/exp_symbolIv" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName2"
+        android:id="@+id/editTextExpenseAmounth"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="48dp"
@@ -96,7 +122,7 @@
         android:layout_height="30dp"
         android:background="@drawable/expense_button"
         android:fontFamily="@font/avenir"
-        android:text="@string/payer"
+        android:text="@string/payer_selector"
         android:textAllCaps="false"
         android:textSize="15dp"
         android:textStyle="bold"
@@ -111,7 +137,7 @@
         android:layout_height="30dp"
         android:background="@drawable/expense_button"
         android:fontFamily="@font/avenir"
-        android:text="@string/partition_method"
+        android:text="@string/equal_sharing"
         android:textAllCaps="false"
         android:textSize="15dp"
         android:textStyle="bold"
@@ -123,7 +149,7 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <Button
-        android:id="@+id/save_button"
+        android:id="@+id/saveExpenseButton"
         android:layout_width="224dp"
         android:layout_height="34dp"
         android:layout_marginBottom="24dp"
@@ -151,12 +177,12 @@
 
     <EditText
         android:id="@+id/editTextTextPersonName4"
-        android:layout_height="wrap_content"
         android:layout_width="268dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:ems="10"
-        android:inputType="textPersonName"
         android:hint="@string/persons_groups_inexpense"
+        android:inputType="textPersonName"
         android:textColor="@color/black"
         android:textSize="11dp"
         app:layout_constraintBottom_toBottomOf="@+id/view2"
@@ -171,41 +197,43 @@
         android:layout_marginEnd="24dp"
         android:background="@drawable/camera_button"
         android:padding="4dp"
-        app:layout_constraintBottom_toBottomOf="@+id/GroupName_EditText"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/editTextExpenseName"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/GroupName_EditText"
-        app:layout_constraintTop_toTopOf="@+id/GroupName_EditText"
+        app:layout_constraintStart_toEndOf="@+id/editTextExpenseName"
+        app:layout_constraintTop_toTopOf="@+id/editTextExpenseName"
         app:srcCompat="@drawable/ic_camera" />
 
     <Button
         android:id="@+id/noteButton"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/calendar_button"
         android:drawableLeft="@drawable/ic_noun_note"
         android:fontFamily="@font/avenir"
         android:text="@string/note"
         android:textSize="15dp"
-        app:layout_constraintBottom_toBottomOf="@+id/calendarButton"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.749"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/calendarButton"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/calendarButton" />
 
     <Button
         android:id="@+id/calendarButton"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="24dp"
         android:background="@drawable/calendar_button"
         android:drawableLeft="@drawable/ic_calendar"
         android:drawablePadding="10dp"
         android:fontFamily="@font/avenir"
         android:text="@string/calendar"
         android:textSize="15dp"
-        app:layout_constraintEnd_toStartOf="@+id/noteButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/method_button" />
+        app:layout_constraintTop_toBottomOf="@+id/expense_type_button" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -45,8 +45,8 @@ public class GroupOperationsAdapter extends RecyclerView.Adapter<GroupOperations
         public TextView  personGroupDepth;
         public GroupOperationsViewHolder(@NonNull View itemView){
             super(itemView);
-            background = itemView.findViewById(R.id.groupOperations_PersonBackGround);
-            personImage=itemView.findViewById(R.id.groupOperations_image);
+            background = itemView.findViewById(R.id.personalOperations_PersonBackGround);
+            personImage=itemView.findViewById(R.id.personalOperations_imagePerson);
             personGroupDepth=itemView.findViewById(R.id.groupOperations_amount);
         }
     }

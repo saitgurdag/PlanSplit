@@ -20,6 +20,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -86,7 +87,7 @@ public class FriendRequestsAdapter extends RecyclerView.Adapter<FriendRequestsAd
 
         holder.name.setText(request.getName());
         holder.email.setText(request.getEmail());
-        holder.foto.setImageResource(request.getFoto());
+        Picasso.with(mCtx).load(request.getFoto()).into(holder.foto);
     }
 
     @Override
