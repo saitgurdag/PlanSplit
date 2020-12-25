@@ -19,6 +19,7 @@
     <string name="group_operations">Grup İşlemleri</string>
     <string name="group_settings">Grup Ayarları</string>
     <string name="create_group">GRUBU OLUŞTUR</string>
+    <string name="remove_group">GRUBU SİL</string>
     <string name="please_give_group_name">Lütfen grup ismi giriniz</string>
     <string-array name="shareMethodSpinnerItems">
         <item>Eşit paylaşım</item>
@@ -98,8 +99,8 @@
     <string name="add_budget_text">Lütfen Aylık Bütçenizi Giriniz.</string>
     <string name="isim_giriniz">İsim giriniz</string>
     <string name="select_friends">Lütfen arkadaş seçiniz</string>
+    <string name="add_friends_to_group">Arkadaş Ekle</string>
     <string name="title_house">ev</string>
     <string name="title_travel">seyehat</string>
-    <string name="title_business">iş</string>
 
 </resources>

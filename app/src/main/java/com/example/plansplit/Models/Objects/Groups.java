@@ -7,6 +7,7 @@ import java.util.ArrayList;
 public class Groups implements Serializable {
     private String group_name;
     private String group_type;
+    private String key;
 
     ArrayList<String> group_members = new ArrayList<String>();
     ArrayList<Expense> group_expenses = new ArrayList<Expense>();
@@ -73,4 +74,11 @@ public class Groups implements Serializable {
         this.group_type = group_type;
     }
 
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
 }
