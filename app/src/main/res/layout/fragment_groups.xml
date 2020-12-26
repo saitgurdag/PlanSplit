@@ -24,21 +24,6 @@
             android:elevation="5dp"
             tools:listitem="@layout/item_groups_red" />
 
-        <RelativeLayout
-            android:id="@+id/recycler_viewRL2"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginEnd="10dp"
-            android:gravity="bottom|end"
-            android:translationZ="90dp">
-
-            <ImageView
-                android:id="@+id/add_expense"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_margin="10dp"
-                app:srcCompat="@drawable/ic_plus_button" />
-        </RelativeLayout>
     </RelativeLayout>
 
     <RelativeLayout

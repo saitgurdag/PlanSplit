@@ -27,6 +27,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.plansplit.Controllers.FragmentControllers.AddExpenseFragment;
 import com.example.plansplit.Models.Database;
+import com.example.plansplit.Models.Objects.Groups;
 import com.example.plansplit.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -39,6 +40,8 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Transaction;
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -98,7 +101,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
 
 
-
         navView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener(){
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item){
@@ -137,9 +139,18 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             database.registerUser(personId, name, email, surname,image);
             Log.d(TAG, "user registered with this email: " + email + "\n" + "and this key: " + personId);
         }
-      
+
         Bundle extras = getIntent().getExtras();
-        if(extras != null && extras.keySet().contains("navigation")) {
+        if(extras != null && (extras.keySet().contains("friend") || extras.keySet().contains("group"))) {
+            bundle = new Bundle();
+            bundle.putString("person_id", personId);
+            if (extras.keySet().contains("friend")) {
+                bundle.putString("friend", extras.getString("friend"));
+            } else if (extras.keySet().contains("group")){
+                bundle.putString("group", extras.getString("group"));
+            }
+            navController.navigate(R.id.navigation_add_expense, bundle);
+        }else if(extras != null && extras.keySet().contains("navigation")) {
             navigation_key = extras.getString("navigation");
             bundle = new Bundle();
             bundle.putString("person_id", personId);

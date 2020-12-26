@@ -41,7 +41,6 @@ public class Database {
     private static final String NO_SELECTED_FRIEND = "NO_SELECTED_FRIEND";
     private static final String NO_GIVEN_GROUP_NAME = "NO_GIVEN_GROUP_NAME";
 
-
     //Firebase
     private static final FirebaseDatabase database = FirebaseDatabase.getInstance();
     private static final DatabaseReference user_reference = database.getReference("users");
@@ -204,7 +203,7 @@ public class Database {
      *
      * @param user_key unique key whose friends would be searched for
      * @param callBack the callBack to be called whenever an error occurs or task successfully end
-     * @see #getFriend(String, FriendCallBack)
+     * @see #getFriend(String, FriendCallBack, String)
      */
     public void getFriends(final String user_key, final FriendCallBack callBack) {
         if (user_key == null) {
@@ -239,7 +238,7 @@ public class Database {
                             ArrayList<String> friends = (ArrayList<String>) snapshot.getValue();
                             for (String key : friends) {
                                 if (!user_key.equals(key)) {
-                                    getFriend(key, callBack);
+                                    getFriend(key, callBack, friend_list_key);
                                     return;
                                 }
                             }
@@ -271,7 +270,7 @@ public class Database {
      * @param callBack   the callBack to be called whenever an error occurs or task successfully end
      * @see Friend
      */
-    public void getFriend(final String friend_key, final FriendCallBack callBack) {
+    public void getFriend(final String friend_key, final FriendCallBack callBack , final String friendshipsKey) {      //friendshipsKey arkadaşlığın bağlı olduğu friends klasındaki keyi tututyor.
         if (friend_key == null) {
             callBack.onError(KEY_NOT_FOUND, "aranan key null");
             return;
@@ -304,6 +303,7 @@ public class Database {
                 }
                 int amount = 0;
                 Friend friend = new Friend(photo, name, amount, friend_key);
+                friend.setFriendshipsKey(friendshipsKey);
                 callBack.onFriendRetrieveSuccess(friend);
             }
 
@@ -1043,6 +1043,32 @@ public class Database {
 
     }
 
+    public void addExpenseToFriends(String name, String type, String price, String friendshipKey , String personId, String date) {
+
+        DatabaseReference dbRef = friend_reference.child(friendshipKey).child("expenses");
+        String key = dbRef.push().getKey();
+        DatabaseReference dbr = dbRef.child(key);
+        dbr.child("name").setValue(name);
+        dbr.child("type").setValue(type);
+        dbr.child("price").setValue(price);
+        dbr.child("addedBy").setValue(personId);
+        dbr.child("date").setValue(date);
+
+    }
+
+    public void addExpenseToGroups(String name, String type, String price, String groupsKey , String personId, String date) {
+
+        DatabaseReference dbRef = group_reference.child(groupsKey).child("expenses");
+        String key = dbRef.push().getKey();
+        DatabaseReference dbr = dbRef.child(key);
+        dbr.child("name").setValue(name);
+        dbr.child("type").setValue(type);
+        dbr.child("price").setValue(price);
+        dbr.child("addedBy").setValue(personId);
+        dbr.child("date").setValue(date);
+
+    }
+
     public ArrayList getExpenses() {
         final ArrayList<Expense> expenses = new ArrayList<>();
         DatabaseReference dbRef = user_reference.child(userId).child("expenses");
@@ -1109,6 +1135,7 @@ public class Database {
                     for (DataSnapshot d2 : gmembers_snapshot.getChildren()) {
                         if (d2.getValue().equals(person_id)) {
                             Groups group = d.getValue(Groups.class);
+                            group.setGroupKey(d.getKey());
                             groupsArrayList.add(group);
                         }
                     }

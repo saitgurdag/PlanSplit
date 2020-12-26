@@ -14,6 +14,7 @@ public class Friend{
     private int color;
     private String key;
     private String mail;
+    private String friendshipsKey;
     private int cardView_addgroupsPicture;
 
     public int getCardView_addgroupsPicture() {
@@ -22,6 +23,14 @@ public class Friend{
 
     public String getMail() {
         return mail;
+    }
+
+    public String getFriendshipsKey() {
+        return friendshipsKey;
+    }
+
+    public void setFriendshipsKey(String friendshipsKey) {
+        this.friendshipsKey = friendshipsKey;
     }
 
     public Friend(String person_image, String name, int amount, String key){
