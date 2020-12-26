@@ -65,13 +65,15 @@
     <string name="enter_mail_address">mail adresini giriniz</string>
     <string name="requirement_list">İhtiyaç Listesi</string>
     <string name="requierement_desc">İhtiyaç Tanımı</string>
-    <string name="added_by">Curie ekledi</string>
+    <string name="added">ekledi</string>
     <string name="purchased_by">Einstein alacak</string>
     <string name="waiting">Bekliyor</string>
     <string name="add_requierement">İhtiyaç ekleyiniz</string>
     <string name="back">Geri Dön</string>
+    <string name="already_reserved">önceden rezerve yaptı</string>
+    <string name="cancel">Karşılamayı iptal et</string>
     <string name="resp_question">Bu ihtiyacı karşılamak istiyor musunuz?</string>
-    <string name="cancel_resp">Bu ihtiyacı karşılamayı iptal etmek istiyor musunuz?</string>
+    <string name="cancel_resp">Bu ihtiyacı ödemek istiyor musunuz?</string>
     <string name="yes">Evet</string>
     <string name="enter_note">enter note</string>
     <string name="group_expense_note_dialog_title">Not Ekle</string>
@@ -101,5 +103,8 @@
     <string name="title_house">ev</string>
     <string name="title_travel">seyehat</string>
     <string name="title_business">iş</string>
+    <string name="reserved">alacak</string>
+    <string name="will_buy">alacak</string>
+    <string name="ask_need">Lütfen bir ihtiyaç giriniz</string>
 
 </resources>

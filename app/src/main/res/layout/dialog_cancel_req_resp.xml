@@ -14,6 +14,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <Button
+            android:id="@+id/imageViewCancelButton"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="right"
+            android:background="@drawable/close_menu_24px" />
+
         <LinearLayout
             android:id="@+id/cancel_question_CV"
             android:layout_width="match_parent"
@@ -92,7 +99,7 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:fontFamily="@font/avenir"
-                                        android:text="@string/added_by"
+                                        android:text="@string/added"
                                         android:textColor="@color/shadow_text"
                                         android:textSize="14sp" />
 
@@ -115,29 +122,29 @@
                                 android:gravity="center">
 
                                 <LinearLayout
-                                    android:layout_width="122dp"
+                                    android:layout_width="150dp"
                                     android:layout_height="55dp"
                                     android:background="@drawable/order_status_background"
                                     android:orientation="horizontal">
 
                                     <TextView
                                         android:id="@+id/cancel_order_status_personTv"
-                                        android:layout_width="52dp"
-                                        android:layout_height="wrap_content"
+                                        android:layout_width="69dp"
+                                        android:layout_height="45dp"
                                         android:layout_gravity="center"
                                         android:layout_marginStart="10dp"
                                         android:fontFamily="@font/avenir"
                                         android:gravity="center"
                                         android:text="@string/purchased_by"
                                         android:textColor="@color/light_black"
-                                        android:textSize="14sp" />
+                                        android:textSize="12sp" />
 
                                     <ImageView
                                         android:id="@+id/cancel_order_status_icon"
                                         android:layout_width="24dp"
                                         android:layout_height="24dp"
-                                        android:layout_gravity="center"
-                                        android:layout_marginStart="17dp"
+                                        android:layout_gravity="center|right"
+                                        android:layout_marginStart="6dp"
                                         android:background="@drawable/alacak" />
 
 
@@ -184,7 +191,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="30dp"
                 android:background="@android:color/transparent"
-                android:text="@string/back"
+                android:text="@string/cancel"
                 android:textColor="@color/button_gray" />
 
             <Button

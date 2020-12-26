@@ -14,6 +14,7 @@ import com.example.plansplit.Models.Objects.Expense;
 import com.example.plansplit.Models.Objects.Friend;
 import com.example.plansplit.Models.Objects.FriendRequest;
 import com.example.plansplit.Models.Objects.Groups;
+import com.example.plansplit.Models.Objects.ToDoList;
 import com.example.plansplit.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -26,7 +27,10 @@ import com.google.firebase.database.ValueEventListener;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+
+import static android.provider.Contacts.SettingsColumns.KEY;
 
 public class Database {
 
@@ -55,6 +59,7 @@ public class Database {
     private Context context;
     private Fragment fragment;
     private int totExpense = 0;
+    private String person_name;
 
     public Database(Object... o){
         if(o.length==1){
@@ -62,6 +67,7 @@ public class Database {
             GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(context);
             if (acct != null) {
                 setUserId(acct.getId());
+                this.person_name=acct.getDisplayName();
                 System.out.println("acct not null");
             } else {
                 System.out.println("acct null");
@@ -72,6 +78,7 @@ public class Database {
             GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(context);
             if (acct != null) {
                 setUserId(acct.getId());
+                this.person_name=acct.getDisplayName();
                 System.out.println("acct not null");
             } else {
                 System.out.println("acct null");
@@ -116,6 +123,11 @@ public class Database {
     public interface FriendCallBack {
         void onFriendRetrieveSuccess(Friend friend);
 
+        void onError(String error_tag, String error);
+    }
+
+    public interface ToDoListCallBack {
+        void onToDoListRetrieveSuccess(ToDoList todo);
         void onError(String error_tag, String error);
     }
 
@@ -176,6 +188,11 @@ public class Database {
         void removeFromFriendList(String key, ArrayList<String> friends);
     }
 
+    private interface ToDoListHandler{
+        void handler(String key);
+
+    }
+
     /**
      * Creates a child with "key" under user reference. No controls are made, so before use it
      * parameters should be checked
@@ -190,6 +207,299 @@ public class Database {
         user_reference.child(key).child("email").setValue(email);
         user_reference.child(key).child("surname").setValue(surname);
         user_reference.child(key).child("image").setValue(image);
+    }
+
+    public void updateDoListFriend(final String friend_key, final String toDo_key, final String operation,final DatabaseCallBack callBack){
+        final ToDoListHandler handler = new ToDoListHandler() {
+            @Override
+            public void handler(String key){
+                if(operation.equals("save")){
+                    friend_reference.child(key).child("todos").child(toDo_key).child("resp_person_name").setValue(person_name);
+                    friend_reference.child(key).child("todos").child(toDo_key).child("resp_person").setValue(userId);
+                    friend_reference.child(key).child("todos").child(toDo_key).child("status").setValue("reserved");
+                }
+                if(operation.equals("cancel")){
+                    friend_reference.child(key).child("todos").child(toDo_key).child("resp_person_name").setValue("none");
+                    friend_reference.child(key).child("todos").child(toDo_key).child("resp_person").setValue("none");
+                    friend_reference.child(key).child("todos").child(toDo_key).child("status").setValue("waiting");
+                }
+
+            }
+        };
+        user_reference.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull final DataSnapshot snapshot_user) {
+                if (!snapshot_user.exists()) {
+                    callBack.onError(KEY_NOT_FOUND,
+                            userId + " ile ilişkili kullanıcı bulunamadı");
+                    return;
+                }
+                @SuppressWarnings("unchecked")
+                ArrayList<String> friend_list_keys = (ArrayList<String>)
+                        snapshot_user.child("friends").getValue();            //kullanıcı arkadaş listeleri Mli olanlar
+                if (friend_list_keys == null) {
+                    callBack.onError(FRIEND_LIST_EMPTY, "Arkadaş listesi boş");
+                    return;
+                }
+                for (final String friend_list_key : friend_list_keys) {
+                    friend_reference.child(friend_list_key).child("friends").addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (!snapshot.exists()) {
+                                callBack.onError(VALUE_NOT_FOUND, "friends snapshot'ında arkadaş keyleri yok");
+                                return;
+                            }
+                            @SuppressWarnings("unchecked")
+                            ArrayList<String> friends = (ArrayList<String>) snapshot.getValue();
+                            for (String key : friends) {
+                                if(friend_key.equals(key)){
+                                    handler.handler(friend_list_key);
+                                    callBack.onSuccess("success");
+                                    return;
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            callBack.onError(DATABASE_ERROR,error.getMessage());
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                callBack.onError(DATABASE_ERROR, error.getMessage());
+            }
+        });
+    }
+
+    public void deletetoDoListFriend(final String friend_key, final String toDo_key, final DatabaseCallBack callBack){
+        final ToDoListHandler handler = new ToDoListHandler() {
+            @Override
+            public void handler(String key){
+                friend_reference.child(key).child("todos").child(toDo_key).setValue(null);
+            }
+        };
+        user_reference.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull final DataSnapshot snapshot_user) {
+                if (!snapshot_user.exists()) {
+                    callBack.onError(KEY_NOT_FOUND,
+                            userId + " ile ilişkili kullanıcı bulunamadı");
+                    return;
+                }
+                @SuppressWarnings("unchecked")
+                ArrayList<String> friend_list_keys = (ArrayList<String>)
+                        snapshot_user.child("friends").getValue();            //kullanıcı arkadaş listeleri Mli olanlar
+                if (friend_list_keys == null) {
+                    callBack.onError(FRIEND_LIST_EMPTY, "Arkadaş listesi boş");
+                    return;
+                }
+                for (final String friend_list_key : friend_list_keys) {
+                    friend_reference.child(friend_list_key).child("friends").addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (!snapshot.exists()) {
+                                callBack.onError(VALUE_NOT_FOUND, "friends snapshot'ında arkadaş keyleri yok");
+                                return;
+                            }
+                            @SuppressWarnings("unchecked")
+                            ArrayList<String> friends = (ArrayList<String>) snapshot.getValue();
+                            for (String key : friends) {
+                                if(friend_key.equals(key)){
+                                    handler.handler(friend_list_key);
+                                    callBack.onSuccess("success");
+                                    return;
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                              callBack.onError(DATABASE_ERROR,error.getMessage());
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                callBack.onError(DATABASE_ERROR, error.getMessage());
+            }
+        });
+    }
+    public void gettoDoListFriend(final String friend_key, final ToDoListCallBack callBack){
+        user_reference.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull final DataSnapshot snapshot_user) {
+
+                if (!snapshot_user.exists()) {
+                    callBack.onError(KEY_NOT_FOUND,
+                            userId + " ile ilişkili kullanıcı bulunamadı");
+                    return;
+                }
+                @SuppressWarnings("unchecked")
+                ArrayList<String> friend_list_keys = (ArrayList<String>)
+                        snapshot_user.child("friends").getValue();            //kullanıcı arkadaş listeleri Mli olanlar
+                if (friend_list_keys == null) {
+                    callBack.onError(FRIEND_LIST_EMPTY, "Arkadaş listesi boş");
+                    return;
+                }
+                for (final String friend_list_key : friend_list_keys) {
+                    //assuming snapshot with friend_list_key exists, if not throws Exception
+                    friend_reference.child(friend_list_key).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull final DataSnapshot snapshot_friend) {
+
+                            if (!snapshot_friend.exists()) {
+                                callBack.onError(VALUE_NOT_FOUND, "friends snapshot'ında todo yok");
+                                return;
+                            }
+                        @SuppressWarnings("unchecked")
+                            ArrayList<String> friends = (ArrayList<String>) snapshot_friend.child("friends").getValue();
+
+                            for (String key : friends) {
+                                if (friend_key.equals(key)) {
+                                    //ArrayList<ToDoList> todolists = new ArrayList<>();
+                                    @SuppressWarnings("unchecked")
+                                    HashMap<String, String> todos = (HashMap<String, String>) snapshot_friend.child("todos").getValue();
+                                    if(todos == null){
+                                        callBack.onError(VALUE_NOT_FOUND, "todos boş");
+                                        return;
+                                    }
+                                    for (final String key2 : todos.keySet()) {
+                                        final DataSnapshot snapshotTodo = snapshot_friend.child("todos").child(key2);
+                                        final DataSnapshot snapshot_friendget = snapshot_friend.child("friends").child(friend_key);
+                                        //description, status, who_added, resp_person_name, key
+
+                                        final String description = snapshotTodo.child("description").getValue().toString();
+                                        final String status = snapshotTodo.child("status").getValue().toString();
+                                        final String resp_person_name = snapshotTodo.child("resp_person_name").getValue().toString();
+                                        final String who_added = snapshotTodo.child("who_added").getValue().toString();
+                                        final String resp_person = snapshotTodo.child("resp_person").getValue().toString();
+                                        //if(snapshotTodo.child("who_added").getValue().toString().equals(userId)){
+                                        //    who_added=snapshot_user.child("name").getValue().toString();
+                                        //    todolists.add(new ToDoList(description, who_added, key2));
+                                        //}
+
+                                        user_reference.child(who_added).addListenerForSingleValueEvent(new ValueEventListener() {
+                                             @Override
+                                             public void onDataChange(@NonNull DataSnapshot snapshot_users_friend){
+                                                if(!snapshot_users_friend.exists()){
+                                                    callBack.onError(KEY_NOT_FOUND,"key bulunamadı");
+                                                   return ;
+                                                }
+                                                String who_added_name = snapshot_users_friend.child("name").getValue().toString();
+
+                                                //ArrayList<ToDoList> todolists = new ArrayList<>();
+                                                ToDoList todo;
+                                                if(status.equals("waiting")){
+                                                    todo = new ToDoList(description, who_added_name, resp_person_name, key2);
+                                                }else{
+                                                    todo = new ToDoList(description, who_added_name, resp_person_name, resp_person,key2,status);
+                                                }
+                                                callBack.onToDoListRetrieveSuccess(todo);
+                                                //todolists.add(todo);
+                                                //callBack.onToDoListRetrieveSuccess(todolists);
+
+                                               /* snapshot_users_friend.child("name").getValue().toString();
+                                                ArrayList<ToDoList> todolists2 = new ArrayList<>();
+                                                 todolists2.add(new ToDoList(description, who_added, resp_person_name,key2));
+                                                     todolists2.addAll(todolists);
+                                                todolists2.get(todolists2.size()).setWho_Added(snapshot_users_friend.child("name").getValue().toString());
+                                                */
+                                             }
+
+                                             @Override
+                                             public void onCancelled(@NonNull DatabaseError error) {
+                                                callBack.onError(DATABASE_ERROR, error.getMessage());
+                                             }
+                                        });
+                                    }
+                                    break;
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            callBack.onError(DATABASE_ERROR,error.getMessage());
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                callBack.onError(DATABASE_ERROR, error.getMessage());
+            }
+        });
+
+    }
+
+    public void addtoDoListFriend(final String friend_key,final ToDoList todo, final DatabaseCallBack callBack){
+        final ToDoListHandler handler=new ToDoListHandler() {
+            @Override
+            public void handler(String key) {
+                DatabaseReference databaseReference=friend_reference.child(key).child("todos").push();
+                databaseReference.child("description").setValue(todo.getDescription());
+                databaseReference.child("resp_person_name").setValue(todo.getResp_person_name());
+                databaseReference.child("resp_person").setValue(todo.getResp_person());
+                databaseReference.child("status").setValue(todo.getStatus());
+                databaseReference.child("who_added").setValue(todo.getWho_added());
+            }
+        };
+
+        user_reference.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (!snapshot.exists()) {
+                    callBack.onError(KEY_NOT_FOUND,
+                            userId + " ile ilişkili kullanıcı bulunamadı");
+                    return;
+                }
+                @SuppressWarnings("unchecked")
+                ArrayList<String> friend_list_keys = (ArrayList<String>)
+                        snapshot.child("friends").getValue();            //kullanıcı arkadaş listeleri Mli olanlar
+                if (friend_list_keys == null) {
+                    callBack.onError(FRIEND_LIST_EMPTY, "Arkadaş listesi boş");
+                    return;
+                }
+                for (final String friend_list_key : friend_list_keys) {
+                    //assuming snapshot with friend_list_key exists, if not throws Exception
+                    friend_reference.child(friend_list_key).child("friends").addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (!snapshot.exists()) {
+                                callBack.onError(VALUE_NOT_FOUND, "friends snapshot'ında arkadaş keyleri yok");
+                                return;
+                            }
+                            @SuppressWarnings("unchecked")
+                            ArrayList<String> friends = (ArrayList<String>) snapshot.getValue();
+                            for (String key : friends) {
+                              if(friend_key.equals(key)){
+                                 handler.handler(friend_list_key);
+                                 callBack.onSuccess("todo eklendi");
+                                 return;
+                              }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                              callBack.onError(DATABASE_ERROR,error.getMessage());
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                callBack.onError(DATABASE_ERROR, error.getMessage());
+            }
+        });
     }
 
     /**
@@ -221,7 +531,7 @@ public class Database {
                 }
                 @SuppressWarnings("unchecked")
                 ArrayList<String> friend_list_keys = (ArrayList<String>)
-                        snapshot.child("friends").getValue();
+                        snapshot.child("friends").getValue();            //kullanıcı arkadaş listeleri Mli olanlar
                 if (friend_list_keys == null) {
                     callBack.onError(FRIEND_LIST_EMPTY, "Arkadaş listesi boş");
                     return;

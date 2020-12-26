@@ -93,7 +93,7 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:fontFamily="@font/avenir"
-                                        android:text="@string/added_by"
+                                        android:text="@string/added"
                                         android:textColor="@color/shadow_text"
                                         android:textSize="14sp" />
 

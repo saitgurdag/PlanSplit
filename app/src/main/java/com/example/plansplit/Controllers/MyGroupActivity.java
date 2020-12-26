@@ -39,6 +39,8 @@ public class MyGroupActivity extends AppCompatActivity {
     int workPicture = R.drawable.ic_suitcase_radius;
     int tripPicture = R.drawable.ic_trip_radius;
     int otherPicture = R.drawable.ic_other;
+    String todolistfriend="berkjay";
+    Bundle extras;
 
     public void showPopup(View v) {
         PopupMenu popup = new PopupMenu(MyGroupActivity.this, v);
@@ -124,7 +126,7 @@ public class MyGroupActivity extends AppCompatActivity {
 
         String group_title = "Group title";
 
-        Bundle extras = getIntent().getExtras();
+         extras = getIntent().getExtras();
         if(extras != null && extras.keySet().contains("group_title")){
             navView.getMenu().getItem(2).setChecked(true);
             group_title = extras.getString("group_title");
@@ -150,6 +152,8 @@ public class MyGroupActivity extends AppCompatActivity {
             Gson gson = new Gson();
             String json = extras.getString("friend");
             friend = gson.fromJson(json, Friend.class);
+             todolistfriend=friend.getKey();
+             System.out.println(todolistfriend);
             if(extras.keySet().contains("person_id")){
                 person_id = extras.getString("person_id");
             }
@@ -175,9 +179,24 @@ public class MyGroupActivity extends AppCompatActivity {
         listBttn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                navController.navigate(R.id.navi_todo_list);
-                list_titleTv.setVisibility(View.VISIBLE);
-                events_titleTv.setVisibility(View.GONE);
+                if(extras != null && extras.keySet().contains("group_title")){
+                    Bundle bundlelistgroup = new Bundle();
+                    bundlelistgroup.putString("group_title", extras.getString("group_title"));
+                    navController.navigate(R.id.navi_todo_list, bundlelistgroup);
+                    list_titleTv.setVisibility(View.VISIBLE);
+                    events_titleTv.setVisibility(View.GONE);
+
+                }
+                else {
+
+                    Bundle bundlelistfriends = new Bundle();
+                    bundlelistfriends.putString("friend_key", todolistfriend);
+                    bundlelistfriends.putString("person_key", person_id);
+                    navController.navigate(R.id.navi_todo_list, bundlelistfriends);
+                    list_titleTv.setVisibility(View.VISIBLE);
+                    events_titleTv.setVisibility(View.GONE);
+                }
+
                 if(!ctrlType)
                     group_op_titletV.setVisibility(View.GONE);
             }
