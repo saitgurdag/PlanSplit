@@ -1,7 +1,5 @@
 package com.example.plansplit.Controllers;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,8 +17,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-
-import com.example.plansplit.Controllers.FragmentControllers.AddExpenseFragment;
 import com.example.plansplit.Models.Database;
 import com.example.plansplit.Models.Objects.Friend;
 import com.example.plansplit.Models.Objects.Groups;
@@ -32,7 +28,7 @@ import com.squareup.picasso.Picasso;
 public class MyGroupActivity extends AppCompatActivity {
     private static final String TAG = "MyGroupActivity";
     Database database = Database.getInstance();
-    private String person_id = "";
+    public String person_id = "";
     private Friend friend;
     private Groups group;
     boolean ctrlType=false;             //eğer friend'den geliyorsa true, gruptan geliyorsa false
@@ -45,6 +41,14 @@ public class MyGroupActivity extends AppCompatActivity {
     int tripPicture = R.drawable.ic_trip_radius;
     int otherPicture = R.drawable.ic_other;
     private ImageView add_expense_btn;
+
+    public String getType(){
+        if(ctrlType){
+            return "friend";
+        }else{
+            return "group";
+        }
+    }
 
     public void showPopup(View v) {
         PopupMenu popup = new PopupMenu(MyGroupActivity.this, v);
@@ -72,13 +76,18 @@ public class MyGroupActivity extends AppCompatActivity {
 
     }
 
+    public Friend getFriend() {
+        return friend;
+    }
+
+    public Groups getGroup() {
+        return group;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mygroup);
-
-
-
         TextView groupnameTv = findViewById(R.id.group_title_mygroupTv);
         final TextView list_titleTv = findViewById(R.id.list_buttonTv);
         final TextView events_titleTv = findViewById(R.id.events_buttonTv);
@@ -104,7 +113,6 @@ public class MyGroupActivity extends AppCompatActivity {
                 switch (item.getItemId()) {
                     case R.id.navigation_personal:
                         fragmentKey = "personal";
-
                         break;
                     case R.id.navigation_friends:
                         fragmentKey = "friends";

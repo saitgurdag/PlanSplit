@@ -12,8 +12,11 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.plansplit.Controllers.Adapters.ExpensesAdapter;
 import com.example.plansplit.Controllers.Adapters.GroupEventsAdapter;
 import com.example.plansplit.Controllers.HomeActivity;
+import com.example.plansplit.Controllers.MyGroupActivity;
+import com.example.plansplit.Models.Database;
 import com.example.plansplit.Models.Objects.Transfers;
 import com.example.plansplit.R;
 import com.squareup.picasso.Picasso;
@@ -26,8 +29,12 @@ public class EventsFragment extends Fragment {
     //Berkay ekleme kısmı//
     RecyclerView recyclerView;
     GroupEventsAdapter adapter;
-    List<Transfers> GroupEventsObjectList;
+    Database db;
     ImageView userImage;
+    boolean ctrlType;   // friend => true       group=> false
+    String personId;
+    MyGroupActivity myGroupActivity;
+    ArrayList<Transfers>GroupEventsObjectList = new ArrayList<>();
 
     //Berkay ekleme kısmı bitiş//
 
@@ -38,37 +45,41 @@ public class EventsFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        //Berkay Ekleme kısmı //
-
         View root = inflater.inflate(R.layout.fragment_events, container, false);
+        GroupEventsObjectList = new ArrayList<>();
+        db = new Database(this.getContext(), this);
+        myGroupActivity=(MyGroupActivity) getContext();
         userImage=root.findViewById(R.id.user_image_groupEvents);
         Picasso.with(getContext()).load(HomeActivity.getPersonPhoto()).into(userImage);
-
-
         recyclerView=(RecyclerView) root.findViewById(R.id.RecyclerViewGroupEvents);
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this.getContext(),1);
         recyclerView.setLayoutManager(mLayoutManager);
 
-        ArrayList<Transfers>GroupEventsObjectList = new ArrayList<>();
-
-        GroupEventsObjectList.add(new Transfers(0,R.drawable.denemeresim,"Kartuş","Curie","150","50"));
-        GroupEventsObjectList.add(new Transfers(0,R.drawable.denemeresim,"Öğle Yemeği","Sen","15","10"));
-        GroupEventsObjectList.add(new Transfers(1,R.drawable.denemeresim,"N,Bohr","A, Einstein"+"'a","20"));
-        GroupEventsObjectList.add(new Transfers(0,R.drawable.denemeresim,"Kitap","Sen","30","10"));
-        GroupEventsObjectList.add(new Transfers(0,R.drawable.denemeresim,"Pergel","Arda","30","10"));
-        GroupEventsObjectList.add(new Transfers(1,R.drawable.denemeresim,"Sen","Ali"+"'ye","5"));
+        if(myGroupActivity.getType().equals("group")){
+            db.getExpensesFromGroup(myGroupActivity.getGroup().getGroupKey());
+        }else if(myGroupActivity.getType().equals("friend")){
+            db.getExpensesFromFriend(myGroupActivity.getFriend().getFriendshipsKey());
+        }
 
         recyclerView = root.findViewById(R.id.RecyclerViewGroupEvents);
         recyclerView.setHasFixedSize(true);
         adapter =new GroupEventsAdapter(GroupEventsObjectList);
+        adapter.notifyDataSetChanged();
 
         recyclerView.setAdapter(adapter);
         return root;
-        //Berkay Ekleme kısmı bitiş//
     }
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+    }
+
+    public void setArray(ArrayList a){
+        GroupEventsObjectList = a;
+        adapter = new GroupEventsAdapter(GroupEventsObjectList);
+        adapter.notifyDataSetChanged();
+        recyclerView.setAdapter(adapter);
+
     }
 }

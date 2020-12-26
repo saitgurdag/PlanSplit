@@ -56,7 +56,7 @@ public class AddExpenseFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         final View root = inflater.inflate(R.layout.fragment_expense, container, false);
         ctrlDate=false;
-        db = new Database();
+        db = new Database(this.getContext());
         edittextexpensename=root.findViewById(R.id.editTextExpenseName);
         edittextexpenseamounth=root.findViewById(R.id.editTextExpenseAmounth);
         saveexpenseBtn=root.findViewById(R.id.saveExpenseButton);
@@ -184,11 +184,11 @@ public class AddExpenseFragment extends Fragment {
                     Intent intent = new Intent(getContext(), MyGroupActivity.class);
                     intent.putExtra("person_id", personId);
                     if(ctrlFG) {
-                        db.addExpenseToFriends(expensename, expenseType, expenseamounth, friend.getFriendshipsKey(), personId, date);
+                        db.addExpenseToFriends(expensename, expenseType, expenseamounth, friend.getFriendshipsKey(), date);
                         json = gson.toJson(friend);
                         intent.putExtra("friend", json);
                     }else {
-                        db.addExpenseToGroups(expensename, expenseType, expenseamounth, group.getGroupKey(), personId, date);
+                        db.addExpenseToGroups(expensename, expenseType, expenseamounth, group.getGroupKey(), date);
                         json = gson.toJson(group);
                         intent.putExtra("group", json);
                     }

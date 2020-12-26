@@ -1,6 +1,8 @@
 package com.example.plansplit.Controllers;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -55,6 +57,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     Bundle bundle;
     String navigation_key;
     public static Uri personPhoto;
+    SharedPreferences mPrefs;
 
     FirebaseAuth mAuth;
     private static final Database database = Database.getInstance();
@@ -72,6 +75,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
         BottomNavigationView navView = findViewById(R.id.nav_view);
         mAuth = FirebaseAuth.getInstance();
+        mPrefs = getSharedPreferences("userName", Context.MODE_PRIVATE);
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -120,6 +124,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             if (name == null){
                 name = "No name";
             }
+            SharedPreferences.Editor prefsEditor = mPrefs.edit();
+            prefsEditor.putString("userName", name);
+            prefsEditor.apply();
             String email = acct.getEmail();
 
             //todo:kod çökmesin diye bir süre daha soyisim çekicez
