@@ -1,6 +1,5 @@
 package com.example.plansplit.Controllers.Adapters;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +25,6 @@ public class AddGroupsAdapter extends RecyclerView.Adapter<AddGroupsAdapter.AddG
     public static List<Friend> checked_personList = new ArrayList<>();
     Context mCtx;
     AddGroupsAdapter.OnItemClickListener nListener;
-    private static final String TAG = "FriendsAdapter";
     private Database database = Database.getInstance();
     private String person_id;
     private RecyclerView m_RecyclerView;

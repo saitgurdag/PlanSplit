@@ -1,41 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:context=".Controllers.FragmentControllers.mygroup.GroupOperationsFragment">
 
 
-<RelativeLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    >
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerGroupOperations"
-        android:layout_width="match_parent"
-        android:layout_height="130dp"
-        android:layout_marginTop="8dp"
-        android:paddingHorizontal="5dp"
-        tools:listitem="@layout/item_groupoperations_person">
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
-    </androidx.recyclerview.widget.RecyclerView>
-    <LinearLayout
-        android:id="@+id/linearlayoutGroupOperations"
-        android:orientation="horizontal"
-        android:layout_below="@+id/recyclerGroupOperations"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        <LinearLayout
+            android:id="@+id/topLL"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="15dp"
+                android:fontFamily="@font/avenir"
+                android:textSize="20sp"
+                android:textColor="@color/grey"
+                android:text="Grup Harcama Toplamları"
+                android:textStyle="bold"/>
 
-<com.github.mikephil.charting.charts.PieChart
-    android:id="@+id/pieChart"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerGroupOperations"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:paddingHorizontal="10dp"
+                tools:listitem="@layout/item_groupoperations_person"/>
 
-</com.github.mikephil.charting.charts.PieChart>
-
-    </LinearLayout>
-</RelativeLayout>
+        </LinearLayout>
 
 
-</FrameLayout>
+
+        <LinearLayout
+            android:paddingTop="10dp"
+            android:id="@+id/linearlayoutGroupOperations"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/topLL"
+            android:orientation="horizontal">
+
+            <com.github.mikephil.charting.charts.PieChart
+                android:id="@+id/pieChart"
+                android:layout_width="match_parent"
+                android:layout_height="300dp">
+
+            </com.github.mikephil.charting.charts.PieChart>
+
+        </LinearLayout>
+    </RelativeLayout>
+
+
+</ScrollView>

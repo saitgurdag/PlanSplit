@@ -144,7 +144,7 @@ public class GroupsFragment extends Fragment {
     }
 
     public void getGroups() {
-        database.getGroups(person_id, groupsArrayList, groupAdapter);
+        database.getAllGroups(person_id, groupsArrayList, groupAdapter);
     }
 
     public void filterList(String filtertype) {
