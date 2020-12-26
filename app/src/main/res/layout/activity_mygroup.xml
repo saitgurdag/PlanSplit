@@ -250,6 +250,7 @@
             android:background="@color/white"
             android:gravity="center">
 
+
             <fragment
                 android:id="@+id/fragment_place_mygroup"
                 android:name="androidx.navigation.fragment.NavHostFragment"
@@ -264,6 +265,22 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <RelativeLayout
+                android:id="@+id/recycler_viewRL2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="bottom|end"
+                android:paddingEnd="18dp"
+                android:translationZ="90dp">
+
+                <ImageView
+                    android:id="@+id/add_expense"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="10dp"
+                    app:srcCompat="@drawable/add_expense_btn" />
+            </RelativeLayout>
 
         </RelativeLayout>
         <com.google.android.material.bottomnavigation.BottomNavigationView

@@ -19,10 +19,10 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-
 import com.example.plansplit.Controllers.FragmentControllers.addgroups.AddGroupsFragment;
 import com.example.plansplit.Models.Database;
 import com.example.plansplit.Models.Objects.Friend;
+import com.example.plansplit.Models.Objects.Groups;
 import com.example.plansplit.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
@@ -31,9 +31,10 @@ import com.squareup.picasso.Picasso;
 public class MyGroupActivity extends AppCompatActivity {
     private static final String TAG = "MyGroupActivity";
     Database database = Database.getInstance();
-    private String person_id = "";
+    public String person_id = "";
     private Friend friend;
-    boolean ctrlType = false;             //eğer friend'den geliyorsa true, gruptan geliyorsa false
+    private Groups group;
+    boolean ctrlType=false;             //eğer friend'den geliyorsa true, gruptan geliyorsa false
     private String group_type_option_home = "ev";
     private String group_type_option_work = "iş";
     private String group_type_option_trip = "seyahat";
@@ -42,6 +43,15 @@ public class MyGroupActivity extends AppCompatActivity {
     int workPicture = R.drawable.ic_suitcase_radius;
     int tripPicture = R.drawable.ic_trip_radius;
     int otherPicture = R.drawable.ic_other;
+    private ImageView add_expense_btn;
+
+    public String getType(){
+        if(ctrlType){
+            return "friend";
+        }else{
+            return "group";
+        }
+    }
 
     public void showPopup(View v) {
         PopupMenu popup = new PopupMenu(MyGroupActivity.this, v);
@@ -77,13 +87,18 @@ public class MyGroupActivity extends AppCompatActivity {
 
     }
 
+    public Friend getFriend() {
+        return friend;
+    }
+
+    public Groups getGroup() {
+        return group;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mygroup);
-
-
-
         TextView groupnameTv = findViewById(R.id.group_title_mygroupTv);
         final TextView list_titleTv = findViewById(R.id.list_buttonTv);
         final TextView events_titleTv = findViewById(R.id.events_buttonTv);
@@ -97,7 +112,7 @@ public class MyGroupActivity extends AppCompatActivity {
         ImageButton backBttn = findViewById(R.id.mygroup_back_button);
         ImageButton removeFriendBttn = findViewById(R.id.removeFriendButton);
         ImageButton menu = findViewById(R.id.mygroup_menuline_button);
-
+        add_expense_btn = findViewById(R.id.add_expense);
 
         BottomNavigationView navView = findViewById(R.id.nav_view2);
         navView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -109,7 +124,6 @@ public class MyGroupActivity extends AppCompatActivity {
                 switch (item.getItemId()) {
                     case R.id.navigation_personal:
                         fragmentKey = "personal";
-
                         break;
                     case R.id.navigation_friends:
                         fragmentKey = "friends";
@@ -134,11 +148,14 @@ public class MyGroupActivity extends AppCompatActivity {
         String group_title = "Group title";
 
         Bundle extras = getIntent().getExtras();
-        if (extras != null && extras.keySet().contains("group_title")) {
+        if(extras != null && extras.keySet().contains("group")){
             navView.getMenu().getItem(2).setChecked(true);
-            group_title = extras.getString("group_title");
-            String resid = extras.getString("group_image");
-            if (resid.equals(group_type_option_home)) {
+            Gson gson = new Gson();
+            String json = extras.getString("group");
+            group = gson.fromJson(json, Groups.class);
+            group_title = group.getGroup_name();
+            String resid = group.getGroup_type();
+            if(resid.equals(group_type_option_home)){
                 groupPhotoIv.setImageResource(homePicture);
             } else if (resid.equals(group_type_option_work)) {
                 groupPhotoIv.setImageResource(workPicture);
@@ -147,14 +164,12 @@ public class MyGroupActivity extends AppCompatActivity {
             } else if (resid.equals(group_type_option_other)) {
                 groupPhotoIv.setImageResource(otherPicture);
             }
-            System.out.println("grouppp");
             groupOpBttn.setVisibility(View.VISIBLE);
             removeFriendBttn.setVisibility(View.INVISIBLE);
             l.setVisibility(View.INVISIBLE);
             menu.setVisibility(View.VISIBLE);
-
-            ctrlType = false;
-        } else if (extras != null && extras.keySet().contains("friend")) {
+            ctrlType=false;
+        }else if(extras != null && extras.keySet().contains("friend")){
             navView.getMenu().getItem(1).setChecked(true);
             Gson gson = new Gson();
             String json = extras.getString("friend");
@@ -170,8 +185,7 @@ public class MyGroupActivity extends AppCompatActivity {
             removeFriendBttn.setVisibility(View.VISIBLE);
             l.setVisibility(View.VISIBLE);
             menu.setVisibility(View.INVISIBLE);
-
-            ctrlType = true;
+            ctrlType=true;
         }
 
         list_titleTv.setVisibility(View.GONE);
@@ -179,7 +193,6 @@ public class MyGroupActivity extends AppCompatActivity {
         groupnameTv.setText(group_title);
         group_op_titletV.setVisibility(View.GONE);
         remove_txt.setVisibility(View.GONE);
-
 
         listBttn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -233,13 +246,30 @@ public class MyGroupActivity extends AppCompatActivity {
                 }
             });
         }
-
-
+      
         backBttn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onBackPressed();
             }
+        });
+
+        add_expense_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MyGroupActivity.this, HomeActivity.class);
+                Gson gson = new Gson();
+                if(ctrlType==false){
+                    String json = gson.toJson(group);
+                    intent.putExtra("group", json);
+                }else {
+                    String json = gson.toJson(friend);
+                    intent.putExtra("friend", json);
+                }
+                startActivity(intent);
+
+            }
+
         });
 
     }

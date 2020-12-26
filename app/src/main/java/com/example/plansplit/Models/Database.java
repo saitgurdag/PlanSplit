@@ -1,6 +1,7 @@
 package com.example.plansplit.Models;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.EditText;
 
@@ -9,11 +10,13 @@ import androidx.fragment.app.Fragment;
 
 import com.example.plansplit.Controllers.Adapters.AddGroupsAdapter;
 import com.example.plansplit.Controllers.Adapters.GroupAdapter;
+import com.example.plansplit.Controllers.FragmentControllers.mygroup.EventsFragment;
 import com.example.plansplit.Controllers.FragmentControllers.personal.PersonalFragment;
 import com.example.plansplit.Models.Objects.Expense;
 import com.example.plansplit.Models.Objects.Friend;
 import com.example.plansplit.Models.Objects.FriendRequest;
 import com.example.plansplit.Models.Objects.Groups;
+import com.example.plansplit.Models.Objects.Transfers;
 import com.example.plansplit.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -42,7 +45,6 @@ public class Database {
     private static final String NO_GIVEN_GROUP_NAME = "NO_GIVEN_GROUP_NAME";
     private static final String ALREADY_IN_GROUP = "ALREADY_IN_GROUP";
 
-
     //Firebase
     private static final FirebaseDatabase database = FirebaseDatabase.getInstance();
     private static final DatabaseReference user_reference = database.getReference("users");
@@ -54,8 +56,9 @@ public class Database {
     final int[] butce = new int[1];
     public boolean ctrlRun = false;
     private Context context;
-    private Fragment fragment;
+    private Fragment fragment=null;
     private int totExpense = 0;
+    SharedPreferences mPrefs;
 
     public Database(Object... o){
         if(o.length==1){
@@ -205,7 +208,7 @@ public class Database {
      *
      * @param user_key unique key whose friends would be searched for
      * @param callBack the callBack to be called whenever an error occurs or task successfully end
-     * @see #getFriend(String, FriendCallBack)
+     * @see #getFriend(String, FriendCallBack, String)
      */
     public void getFriends(final String user_key, final FriendCallBack callBack) {
         if (user_key == null) {
@@ -240,7 +243,7 @@ public class Database {
                             ArrayList<String> friends = (ArrayList<String>) snapshot.getValue();
                             for (String key : friends) {
                                 if (!user_key.equals(key)) {
-                                    getFriend(key, callBack);
+                                    getFriend(key, callBack, friend_list_key);
                                     return;
                                 }
                             }
@@ -272,7 +275,7 @@ public class Database {
      * @param callBack   the callBack to be called whenever an error occurs or task successfully end
      * @see Friend
      */
-    public void getFriend(final String friend_key, final FriendCallBack callBack) {
+    public void getFriend(final String friend_key, final FriendCallBack callBack , final String friendshipsKey) {      //friendshipsKey arkadaşlığın bağlı olduğu friends klasındaki keyi tututyor.
         if (friend_key == null) {
             callBack.onError(KEY_NOT_FOUND, "aranan key null");
             return;
@@ -305,6 +308,7 @@ public class Database {
                 }
                 int amount = 0;
                 Friend friend = new Friend(photo, name, amount, friend_key);
+                friend.setFriendshipsKey(friendshipsKey);
                 callBack.onFriendRetrieveSuccess(friend);
             }
 
@@ -1044,6 +1048,117 @@ public class Database {
 
     }
 
+    public void addExpenseToFriends(String name, String type, String price, String friendshipKey , String date) {
+
+        mPrefs = context.getSharedPreferences("userName", Context.MODE_PRIVATE);
+        String userName = mPrefs.getString("userName","");
+        DatabaseReference dbRef = friend_reference.child(friendshipKey).child("expenses");
+        String key = dbRef.push().getKey();
+        DatabaseReference dbr = dbRef.child(key);
+        dbr.child("name").setValue(name);
+        dbr.child("type").setValue(type);
+        dbr.child("price").setValue(price);
+        dbr.child("addedBy").setValue(userName);
+        dbr.child("date").setValue(date);
+        getExpensesFromFriend(friendshipKey);
+
+    }
+
+    public void addExpenseToGroups(String name, String type, String price, String groupsKey, String date) {
+
+        mPrefs = context.getSharedPreferences("userName", Context.MODE_PRIVATE);
+        String userName = mPrefs.getString("userName","");
+        DatabaseReference dbRef = group_reference.child(groupsKey).child("expenses");
+        String key = dbRef.push().getKey();
+        DatabaseReference dbr = dbRef.child(key);
+        dbr.child("name").setValue(name);
+        dbr.child("type").setValue(type);
+        dbr.child("price").setValue(price);
+        dbr.child("addedBy").setValue(userName);
+        dbr.child("date").setValue(date);
+
+    }
+
+    public void getExpensesFromFriend(String friendshipKey){
+        final ArrayList<Transfers> expenses = new ArrayList<>();
+        DatabaseReference dbRef = friend_reference.child(friendshipKey).child("expenses");
+        dbRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    String name = (String) ds.child("name").getValue();
+                    String addedBy = (String) ds.child("addedBy").getValue();
+                    String type = (String) ds.child("type").getValue();
+                    String price = (String) ds.child("price").getValue();
+                    String date = (String) ds.child("date").getValue();
+                    int image = R.drawable.ic_other;;
+                    if(type!=null && name!=null && price!=null && addedBy!=null) {
+                        if (type.equals("yiyecek")) {
+                            image = R.drawable.ic_baseline_fastfood_24;
+                        } else if (type.equals("giyecek")) {
+                            image = R.drawable.ic_baseline_wear_24;
+                        } else if (type.equals("temizlik")) {
+                            image = R.drawable.ic_baseline_hygiene_24;
+                        } else if (type.equals("kırtasiye")) {
+                            image = R.drawable.ic_baseline_school_24;
+                        } else if (type.equals("diğer")) {
+                            image = R.drawable.ic_other;
+                        }
+                        expenses.add(new Transfers(0, image, name, addedBy, price, "50"));
+                    }
+                }
+                if(fragment!=null){
+                    ((EventsFragment) fragment).setArray(expenses);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                Log.w(TAG, "Failed to read value.", error.toException());
+            }
+        });
+    }
+
+    public void getExpensesFromGroup(String groupKey){
+        final ArrayList<Transfers> expenses = new ArrayList<>();
+        DatabaseReference dbRef = group_reference.child(groupKey).child("expenses");
+        dbRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    String name = (String) ds.child("name").getValue();
+                    String addedBy = (String) ds.child("addedBy").getValue();
+                    String type = (String) ds.child("type").getValue();
+                    String price = (String) ds.child("price").getValue();
+                    String date = (String) ds.child("date").getValue();
+                    int image = R.drawable.ic_other;;
+                    if(type!=null && name!=null && price!=null && addedBy!=null) {
+                        if (type.equals("yiyecek")) {
+                            image = R.drawable.ic_baseline_fastfood_24;
+                        } else if (type.equals("giyecek")) {
+                            image = R.drawable.ic_baseline_wear_24;
+                        } else if (type.equals("temizlik")) {
+                            image = R.drawable.ic_baseline_hygiene_24;
+                        } else if (type.equals("kırtasiye")) {
+                            image = R.drawable.ic_baseline_school_24;
+                        } else if (type.equals("diğer")) {
+                            image = R.drawable.ic_other;
+                        }
+                        expenses.add(new Transfers(0, image, name, addedBy, price, "50"));
+                    }
+                }
+                if(fragment!=null){
+                    ((EventsFragment) fragment).setArray(expenses);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                Log.w(TAG, "Failed to read value.", error.toException());
+            }
+        });
+    }
+
     public ArrayList getExpenses() {
         final ArrayList<Expense> expenses = new ArrayList<>();
         DatabaseReference dbRef = user_reference.child(userId).child("expenses");
@@ -1168,6 +1283,7 @@ public class Database {
                     for (DataSnapshot d2 : gmembers_snapshot.getChildren()) {
                         if (d2.getValue().equals(person_id)) {
                             Groups group = d.getValue(Groups.class);
+                            group.setGroupKey(d.getKey());
                             groupsArrayList.add(group);
                         }
                     }
