@@ -79,7 +79,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/avenir"
-                                android:text="@string/added_by"
+                                android:text="@string/added"
                                 android:textColor="@color/shadow_text"
                                 android:textSize="14sp" />
 
@@ -109,7 +109,7 @@
 
                             <TextView
                                 android:id="@+id/order_statusTv"
-                                android:layout_width="52dp"
+                                android:layout_width="60dp"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:layout_marginStart="10dp"
@@ -117,14 +117,14 @@
                                 android:gravity="center"
                                 android:text="@string/waiting"
                                 android:textColor="@color/light_black"
-                                android:textSize="14sp" />
+                                android:textSize="12sp" />
 
                             <ImageView
                                 android:id="@+id/order_status_icon"
                                 android:layout_width="24dp"
                                 android:layout_height="24dp"
                                 android:layout_gravity="center"
-                                android:layout_marginStart="17dp"
+                                android:layout_marginStart="15dp"
                                 android:background="@drawable/bekliyor" />
 
 
