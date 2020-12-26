@@ -35,13 +35,11 @@ public class FriendsFragment extends Fragment {
     private RecyclerView.LayoutManager m_LayoutManager;
     private String person_id = "";
     public static SearchView searchView;
-    private ImageView add_expence_friend;   //BERKAY
     private ImageView personImage;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         final View root = inflater.inflate(R.layout.fragment_friends, container, false);
-        Log.d(TAG, "BURADA");
         Button add_friend_button = root.findViewById(R.id.friend_add_button);
         final EditText add_friend_email_text = root.findViewById(R.id.friends_add_email);
         final HomeActivity home = (HomeActivity) getContext();
@@ -57,21 +55,6 @@ public class FriendsFragment extends Fragment {
         m_RecyclerView.setLayoutManager(m_LayoutManager);
 
         searchView=root.findViewById(R.id.searchViewFriends);
-
-        add_expence_friend = root.findViewById(R.id.add_expense_friend);  //BERKAY
-
-        //BERKAY BAŞLA
-        add_expence_friend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AddExpenseFragment addExpenseFragment = new AddExpenseFragment();
-                FragmentManager fragmentManager = getFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.nav_host_fragment, addExpenseFragment);
-                fragmentTransaction.commit();
-            }
-        });
-        //BERKAY BİTİŞ
 
         add_friend_button.setOnClickListener(new View.OnClickListener(){
             @Override

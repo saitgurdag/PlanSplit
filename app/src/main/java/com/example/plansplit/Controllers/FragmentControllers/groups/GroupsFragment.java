@@ -29,6 +29,7 @@ import com.example.plansplit.Models.Database;
 import com.example.plansplit.Models.Objects.Expense;
 import com.example.plansplit.Models.Objects.Groups;
 import com.example.plansplit.R;
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -41,7 +42,6 @@ public class GroupsFragment extends Fragment {
     private RecyclerView recyclerView;
     private GroupAdapter groupAdapter;
     private GroupAdapter.RecyclerViewClickListener mListener;
-    private ImageView add_expense;
     private Button add_new_group;
     private String person_id;
     private String selectedFilter;
@@ -109,25 +109,9 @@ public class GroupsFragment extends Fragment {
             }
         });
 
-
         getGroups();
 
-        Log.d(TAG, "BURADA");
-
-        add_expense = root.findViewById(R.id.add_expense);
         add_new_group = root.findViewById(R.id.add_new_group);
-        add_expense.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AddExpenseFragment expenseFragment = new AddExpenseFragment();
-                FragmentManager fragmentManager = getParentFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.nav_host_fragment, expenseFragment);
-                fragmentTransaction.addToBackStack(TAG);
-                fragmentTransaction.commit();
-            }
-        });
-
         add_new_group.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -151,15 +135,16 @@ public class GroupsFragment extends Fragment {
             @Override
             public void onClick(View v, int position) {
                 Intent intent = new Intent(getParentFragment().getContext(), MyGroupActivity.class);
-                intent.putExtra("group_title", groupsArrayList.get(position).getGroup_name());
-                intent.putExtra("group_image", groupsArrayList.get(position).getGroup_type());
+                Gson gson = new Gson();
+                String json = gson.toJson(groupsArrayList.get(position));
+                intent.putExtra("group", json);
                 startActivity(intent);
             }
         };
     }
 
     public void getGroups() {
-        database.getGroups(person_id, groupsArrayList, groupAdapter);
+        database.getAllGroups(person_id, groupsArrayList, groupAdapter);
     }
 
     public void filterList(String filtertype) {

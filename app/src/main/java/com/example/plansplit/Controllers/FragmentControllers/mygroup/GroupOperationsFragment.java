@@ -9,14 +9,11 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.plansplit.Controllers.Adapters.GroupEventsAdapter;
 import com.example.plansplit.Controllers.Adapters.GroupOperationsAdapter;
 import com.example.plansplit.Models.Objects.Person;
-import com.example.plansplit.Models.Objects.Transfers;
 import com.example.plansplit.R;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
@@ -25,7 +22,6 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class GroupOperationsFragment extends Fragment {
     //BERKAY EKLEME KISMI
@@ -54,7 +50,7 @@ public class GroupOperationsFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_group_operations,container,false);
         recyclerView = (RecyclerView) root.findViewById(R.id.recyclerGroupOperations);
         recyclerView.setHasFixedSize(true);
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this.getContext(),1);
+        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this.getContext(),3);
         recyclerView.setLayoutManager(mLayoutManager);
 
         groupOperationsPersonList = new ArrayList<>();

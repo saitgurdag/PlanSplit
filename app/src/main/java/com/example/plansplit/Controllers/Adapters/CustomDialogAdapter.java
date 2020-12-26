@@ -63,6 +63,7 @@ public class CustomDialogAdapter extends RecyclerView.Adapter<CustomDialogAdapte
 
                 name = (TextView) itemView.findViewById(R.id.payer_name_text);
                 image= (ImageView) itemView.findViewById(R.id.ImagePayer);
+                /*
 
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -73,6 +74,8 @@ public class CustomDialogAdapter extends RecyclerView.Adapter<CustomDialogAdapte
                         AddExpenseFragment.dialog.dismiss();
                     }
                 });
+
+                 */
 
 
             }
