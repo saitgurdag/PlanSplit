@@ -54,7 +54,7 @@ public class ListFragment extends Fragment {
 
         final View root = inflater.inflate(R.layout.fragment_list, container, false);
         database=new Database(getContext());
-        toDoList = new ArrayList<>();
+       // toDoList = new ArrayList<>();
 
         if(!getArguments().containsKey("group_title")){
             operation="friend";
@@ -65,7 +65,7 @@ public class ListFragment extends Fragment {
         if(getArguments().containsKey("group_title")){
              operation="group";
         }
-        updateUI(operation);
+        //updateUI(operation);
 
         /*recyclerView = root.findViewById(R.id.req_list_recyclerView);
         recyclerView.setHasFixedSize(true);
@@ -137,7 +137,7 @@ public class ListFragment extends Fragment {
             database.gettoDoListFriend(friendkey, new Database.ToDoListCallBack() {
                 @Override
                 public void onToDoListRetrieveSuccess(ToDoList todo) {
-                    System.out.println(todo.getDescription());
+                    System.out.println("ihtiyac"+todo.getDescription());
                     toDoListAdapter = new ToDoListAdapter(getContext(), friendkey, recyclerView);
                     recyclerView.setAdapter(toDoListAdapter);
                 }

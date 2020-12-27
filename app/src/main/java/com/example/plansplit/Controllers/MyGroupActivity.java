@@ -71,7 +71,6 @@ public class MyGroupActivity extends AppCompatActivity {
                     fragmentTransaction.commit();
                     Toast.makeText(MyGroupActivity.this, "Grup Ayarları Seçildi", Toast.LENGTH_SHORT).show();
                 }
-
                 if (menuItem.getItemId() == R.id.mygroup_table_export)
                     Toast.makeText(MyGroupActivity.this, "Tablo Olarak Çıkar Seçildi", Toast.LENGTH_SHORT).show();
                 if (menuItem.getItemId() == R.id.mygroup_quick_add)
