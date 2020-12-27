@@ -55,16 +55,6 @@ public class GroupOperationsFragment extends Fragment {
 
         groupOperationsPersonList = new ArrayList<>();
 
-
-        groupOperationsPersonList.add(new Person(background,R.drawable.denemeresim,"100"));
-        groupOperationsPersonList.add(new Person(background,R.drawable.denemeresim,"300"));
-        groupOperationsPersonList.add(new Person(background,R.drawable.denemeresim,"400"));
-        groupOperationsPersonList.add(new Person(background,R.drawable.denemeresim,"500"));
-        groupOperationsPersonList.add(new Person(background,R.drawable.denemeresim,"1000"));
-        groupOperationsPersonList.add(new Person(background,R.drawable.denemeresim,"700"));
-        groupOperationsPersonList.add(new Person(background,R.drawable.denemeresim,"1200"));
-
-
         recyclerView = root.findViewById(R.id.recyclerGroupOperations);
         recyclerView.setHasFixedSize(true);
         adapter =new GroupOperationsAdapter(groupOperationsPersonList);

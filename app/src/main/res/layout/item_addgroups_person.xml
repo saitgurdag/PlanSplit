@@ -41,7 +41,6 @@
                             android:id="@+id/cardView_addgroupsPicture"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:foreground="@drawable/denemeresim"
                             android:layout_gravity="center"
                             app:cardCornerRadius="20dp"
                             app:layout_constraintStart_toStartOf="parent"
