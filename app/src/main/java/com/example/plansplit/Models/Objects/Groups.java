@@ -17,8 +17,8 @@ public class Groups implements Serializable {
     ArrayList<GroupNotification> group_notifications = new ArrayList<GroupNotification>();
 
     public Groups() {
+        
     }
-
     public Groups(String group_name, String group_type) {
         this.group_name = group_name;
         this.group_type = group_type;

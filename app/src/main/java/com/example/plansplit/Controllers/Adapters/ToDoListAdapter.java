@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.plansplit.Models.Database;
@@ -29,22 +30,34 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ToDoLi
     //resp sen değilsen uyarı
 
     private Context mContext;
-    private ArrayList<ToDoList> toDoList;
+    public static ArrayList<ToDoList> toDoList;
     private Database database;
-    private String friend_key;
+    private String key;
     private RecyclerView m_RecyclerView;
+    private String operation;
+    ItemTouchHelper.SimpleCallback itemtouchhelpercallback;
 
-    public ToDoListAdapter(Context mContext, String friend_key,RecyclerView m_RecyclerView) {
+
+    public ToDoListAdapter(Context mContext, String key,RecyclerView m_RecyclerView, String operation) {
         database = new Database(mContext);
         this.mContext = mContext;
         this.m_RecyclerView=m_RecyclerView;
-        this.friend_key = friend_key;
-        loadTodos();
+        this.key = key;
+        this.operation=operation;
+        if(operation.equals("friend")){
+            loadTodosFriend();
+        }else{
+            loadTodosGroup();
+        }
     }
 
-    public void loadTodos(){
+    public void loadTodosFriend(){
             this.toDoList = new ArrayList<>();
-            database.gettoDoListFriend(friend_key, todolistCallBack);
+            database.gettoDoListFriend(key, todolistCallBack);
+    }
+    public void loadTodosGroup(){
+        this.toDoList = new ArrayList<>();
+        database.gettoDoListGroup(key, todolistCallBack);
     }
 
     private Database.ToDoListCallBack todolistCallBack = new Database.ToDoListCallBack() {
@@ -68,6 +81,7 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ToDoLi
         ImageView desc_symbol, status_symbol_icon;
         CardView toDo_Card;
 
+
         public ToDoListViewHolder(@NonNull View itemView) {
             super(itemView);
             this.req_desc = itemView.findViewById(R.id.req_descriptionTv);
@@ -82,7 +96,11 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ToDoLi
     final Database.DatabaseCallBack databaseCallBack=new Database.DatabaseCallBack() {
         @Override
         public void onSuccess(String success) {
-            loadTodos();
+            if(operation.equals("friend")){
+                loadTodosFriend();
+            }else{
+                loadTodosGroup();
+            }
         }
 
         @Override
@@ -109,7 +127,6 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ToDoLi
         final String reserved="reserved";
         holder.req_desc.setText(toDo.getDescription());
         holder.desc_symbol.setImageResource(R.drawable.ic_shopping_cart);
-//        holder.order_status.setText(toDo.getStatus());
         holder.recommender_person.setText(toDo.getWho_added()+" "+mContext.getResources().getString(R.string.added));
         if(toDo.getStatus().equals(waiting)){
             holder.status_symbol_icon.setImageResource(waitingImage);
@@ -120,10 +137,12 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ToDoLi
             holder.order_status.setText(toDo.getResp_person_name()+"\n"+mContext.getResources().getString(R.string.reserved));
         }
 
-
         holder.toDo_Card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+
+
                 if(toDo.getStatus().equals(waiting)){
 
                     AlertDialog.Builder mBuilder = new AlertDialog.Builder(view.getRootView().getContext());
@@ -148,7 +167,11 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ToDoLi
                         @Override
                         public void onClick(View view) {
                             Toast.makeText(view.getRootView().getContext(), "Başarıyla kaydedildi", Toast.LENGTH_SHORT).show();
-                            database.updateDoListFriend(friend_key,toDoList.get(holder.getAdapterPosition()).getKey(),"save",databaseCallBack);
+                            if(operation.equals("friend")){
+                                database.updateDoListFriend(key, toDoList.get(holder.getAdapterPosition()).getKey(), "save",databaseCallBack);
+                            }else{
+                                database.updateDoListGroup(key, toDoList.get(holder.getAdapterPosition()).getKey(),"save",databaseCallBack);
+                            }
                             dialog.dismiss();
                         }
                     });
@@ -156,6 +179,7 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ToDoLi
                     mBack.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+
                             dialog.dismiss();
                         }
                     });
@@ -193,7 +217,13 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ToDoLi
                         @Override
                         public void onClick(View view) {
                             Toast.makeText(view.getRootView().getContext(), "Harcama ekranına gönderildi", Toast.LENGTH_SHORT).show();
-                            //d database.deletetoDoListFriend(friend_key,toDoList.get(holder.getAdapterPosition()).getKey(),databaseCallBack);
+                          /*  if(operation.equals("friend")) {
+                                database.updateDoListFriend(key, toDoList.get(holder.getAdapterPosition()).getKey(), "delete", databaseCallBack);
+                            }
+                            else{
+                                database.updateDoListGroup(key, toDoList.get(holder.getAdapterPosition()).getKey(), "delete", databaseCallBack);
+                            }*/
+                            //TODO:Harcama ekranına yollanacak ve harcama eklendiği anda yukarıdaki fonksiyonlar çalışacak!!!
                             dialog.dismiss();
                         }
                     });
@@ -201,20 +231,27 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ToDoLi
                     mBack.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            database.updateDoListFriend(friend_key,toDoList.get(holder.getAdapterPosition()).getKey(),"cancel",databaseCallBack);
+                            if(operation.equals("friend")){
+                                database.updateDoListFriend(key, toDoList.get(holder.getAdapterPosition()).getKey(), "cancel",databaseCallBack);
+                            }else{
+                                database.updateDoListGroup(key, toDoList.get(holder.getAdapterPosition()).getKey(),"cancel",databaseCallBack);
+                            }
                             dialog.dismiss();
                         }
                     });
-                    dialog.show();
 
+                    dialog.show();
                 }
                 if(toDo.getStatus().equals(reserved)&&!(toDo.getResp_person().equals(database.getUserId()))){
                     Toast.makeText(mContext,  toDo.getResp_person_name()+" "+mContext.getResources().getString(R.string.already_reserved), Toast.LENGTH_SHORT).show();
                 }
-
-
             }
         });
+
+
+
+
+
     }
 
     @Override

@@ -41,6 +41,7 @@ public class Database {
     private static final String DATABASE_ERROR = "DATABASE_ERROR";
     private static final String KEY_NOT_FOUND = "KEY_NOT_FOUND";
     private static final String FRIEND_LIST_EMPTY = "FRIEND_LIST_EMPTY";
+    private static final String GROUP_LIST_EMPTY = "GROUP_LIST_EMPTY";
     private static final String VALUE_NOT_FOUND = "VALUE_NOT_FOUND";
     private static final String USER_AND_TARGET_KEY_SAME = "USER_AND_TARGET_KEY_SAME";
     private static final String ALREADY_FRIENDS = "ALREADY_FRIENDS";
@@ -213,6 +214,7 @@ public class Database {
         user_reference.child(key).child("image").setValue(image);
     }
 
+
     public void updateDoListFriend(final String friend_key, final String toDo_key, final String operation,final DatabaseCallBack callBack){
         final ToDoListHandler handler = new ToDoListHandler() {
             @Override
@@ -221,11 +223,12 @@ public class Database {
                     friend_reference.child(key).child("todos").child(toDo_key).child("resp_person_name").setValue(person_name);
                     friend_reference.child(key).child("todos").child(toDo_key).child("resp_person").setValue(userId);
                     friend_reference.child(key).child("todos").child(toDo_key).child("status").setValue("reserved");
-                }
-                if(operation.equals("cancel")){
+                }else if(operation.equals("cancel")){
                     friend_reference.child(key).child("todos").child(toDo_key).child("resp_person_name").setValue("none");
                     friend_reference.child(key).child("todos").child(toDo_key).child("resp_person").setValue("none");
                     friend_reference.child(key).child("todos").child(toDo_key).child("status").setValue("waiting");
+                }else if(operation.equals("delete")){
+                    friend_reference.child(key).child("todos").child(toDo_key).setValue(null);
                 }
 
             }
@@ -279,69 +282,28 @@ public class Database {
         });
     }
 
-    public void deletetoDoListFriend(final String friend_key, final String toDo_key, final DatabaseCallBack callBack){
-        final ToDoListHandler handler = new ToDoListHandler() {
-            @Override
-            public void handler(String key){
-                friend_reference.child(key).child("todos").child(toDo_key).setValue(null);
-            }
-        };
-        user_reference.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull final DataSnapshot snapshot_user) {
-                if (!snapshot_user.exists()) {
-                    callBack.onError(KEY_NOT_FOUND,
-                            userId + " ile ilişkili kullanıcı bulunamadı");
-                    return;
-                }
-                @SuppressWarnings("unchecked")
-                ArrayList<String> friend_list_keys = (ArrayList<String>)
-                        snapshot_user.child("friends").getValue();            //kullanıcı arkadaş listeleri Mli olanlar
-                if (friend_list_keys == null) {
-                    callBack.onError(FRIEND_LIST_EMPTY, "Arkadaş listesi boş");
-                    return;
-                }
-                for (final String friend_list_key : friend_list_keys) {
-                    friend_reference.child(friend_list_key).child("friends").addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            if (!snapshot.exists()) {
-                                callBack.onError(VALUE_NOT_FOUND, "friends snapshot'ında arkadaş keyleri yok");
-                                return;
-                            }
-                            @SuppressWarnings("unchecked")
-                            ArrayList<String> friends = (ArrayList<String>) snapshot.getValue();
-                            for (String key : friends) {
-                                if(friend_key.equals(key)){
-                                    handler.handler(friend_list_key);
-                                    callBack.onSuccess("success");
-                                    return;
-                                }
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-                              callBack.onError(DATABASE_ERROR,error.getMessage());
-                        }
-                    });
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                callBack.onError(DATABASE_ERROR, error.getMessage());
-            }
-        });
+    public void updateDoListGroup(@NonNull final String group_key, @NonNull final String toDo_key, final String operation, final DatabaseCallBack callBack){
+        if(operation.equals("save")){
+            group_reference.child(group_key).child("todos").child(toDo_key).child("resp_person_name").setValue(person_name);
+            group_reference.child(group_key).child("todos").child(toDo_key).child("resp_person").setValue(userId);
+            group_reference.child(group_key).child("todos").child(toDo_key).child("status").setValue("reserved");
+        }else if(operation.equals("cancel")){
+            group_reference.child(group_key).child("todos").child(toDo_key).child("resp_person_name").setValue("none");
+            group_reference.child(group_key).child("todos").child(toDo_key).child("resp_person").setValue("none");
+            group_reference.child(group_key).child("todos").child(toDo_key).child("status").setValue("waiting");
+        }else if(operation.equals("delete")){
+            group_reference.child(group_key).child("todos").child(toDo_key).setValue(null);
+        }
+        callBack.onSuccess("group todo list updatelendi: " + operation);
     }
+
     public void gettoDoListFriend(final String friend_key, final ToDoListCallBack callBack){
         user_reference.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull final DataSnapshot snapshot_user) {
 
                 if (!snapshot_user.exists()) {
-                    callBack.onError(KEY_NOT_FOUND,
-                            userId + " ile ilişkili kullanıcı bulunamadı");
+                    callBack.onError(KEY_NOT_FOUND, userId + " ile ilişkili kullanıcı bulunamadı");
                     return;
                 }
                 @SuppressWarnings("unchecked")
@@ -400,9 +362,9 @@ public class Database {
                                                 //ArrayList<ToDoList> todolists = new ArrayList<>();
                                                 ToDoList todo;
                                                 if(status.equals("waiting")){
-                                                    todo = new ToDoList(description, who_added_name, resp_person_name, key2);
+                                                    todo = new ToDoList(description, who_added_name, resp_person_name, key2, who_added);
                                                 }else{
-                                                    todo = new ToDoList(description, who_added_name, resp_person_name, resp_person,key2,status);
+                                                    todo = new ToDoList(description, who_added_name, resp_person_name, resp_person,key2, status, who_added);
                                                 }
                                                 callBack.onToDoListRetrieveSuccess(todo);
                                                 //todolists.add(todo);
@@ -504,6 +466,186 @@ public class Database {
                 callBack.onError(DATABASE_ERROR, error.getMessage());
             }
         });
+    }
+
+    public void addtoDoListGroup(final String group_key, final ToDoList todo, final DatabaseCallBack callBack){
+        final ToDoListHandler handler=new ToDoListHandler() {
+            @Override
+            public void handler(String group_key) {
+                DatabaseReference todo_ref = group_reference.child(group_key).child("todos").push();
+                todo_ref.child("description").setValue(todo.getDescription());
+                todo_ref.child("resp_person_name").setValue(todo.getResp_person_name());
+                todo_ref.child("resp_person").setValue(todo.getResp_person());
+                todo_ref.child("status").setValue(todo.getStatus());
+                todo_ref.child("who_added").setValue(todo.getWho_added());
+            }
+        };
+
+        group_reference.child(group_key).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull final DataSnapshot snapshot) {
+                if (!snapshot.exists()) {
+                    callBack.onError(VALUE_NOT_FOUND, "groups snapshot'ında todo yok");
+                    return;
+                }
+                handler.handler(group_key);
+                callBack.onSuccess("todo eklendi");
+            }
+
+            @Override
+             public void onCancelled(@NonNull DatabaseError error) {
+                callBack.onError(DATABASE_ERROR, error.getMessage());
+             }
+        });
+    }
+
+    public void gettoDoListGroup(final String group_key, final ToDoListCallBack callBack){
+        group_reference.child(group_key).child("todos").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull final DataSnapshot snapshot) {
+                if (!snapshot.exists()) {
+                    callBack.onError(VALUE_NOT_FOUND, "groups snapshot'ında todo yok");
+                    return;
+                }
+                @SuppressWarnings("unchecked")
+                HashMap<String, String> todos = (HashMap<String, String>) snapshot.getValue();
+                if(todos == null){
+                    callBack.onError(VALUE_NOT_FOUND, "todos boş");
+                    return;
+                }
+                for (final String key2 : todos.keySet()) {
+                    final DataSnapshot snapshotTodo = snapshot.child(key2);
+                    //description, status, who_added, resp_person_name, key
+
+                    final String description = snapshotTodo.child("description").getValue().toString();
+                    final String status = snapshotTodo.child("status").getValue().toString();
+                    final String resp_person_name = snapshotTodo.child("resp_person_name").getValue().toString();
+                    final String who_added = snapshotTodo.child("who_added").getValue().toString();
+                    final String resp_person = snapshotTodo.child("resp_person").getValue().toString();
+
+                    user_reference.child(who_added).addListenerForSingleValueEvent(new ValueEventListener() {
+                         @Override
+                         public void onDataChange(@NonNull DataSnapshot snapshot_users){
+                            if(!snapshot_users.exists()){
+                                callBack.onError(KEY_NOT_FOUND,"key bulunamadı");
+                               return ;
+                            }
+                            String who_added_name = snapshot_users.child("name").getValue().toString();
+
+                            ToDoList todo;
+                            if(status.equals("waiting")){
+                                todo = new ToDoList(description, who_added_name, resp_person_name, key2,who_added);
+                            }else{
+                                todo = new ToDoList(description, who_added_name, resp_person_name, resp_person, key2, status, who_added);
+                            }
+                            callBack.onToDoListRetrieveSuccess(todo);
+
+                         }
+
+                         @Override
+                         public void onCancelled(@NonNull DatabaseError error) {
+                            callBack.onError(DATABASE_ERROR, error.getMessage());
+                         }
+                    });
+                }
+            }
+
+            @Override
+             public void onCancelled(@NonNull DatabaseError error) {
+                callBack.onError(DATABASE_ERROR, error.getMessage());
+             }
+        });
+
+
+
+
+        /*
+        user_reference.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull final DataSnapshot snapshot_user) {
+
+                if (!snapshot_user.exists()) {
+                    callBack.onError(KEY_NOT_FOUND,
+                            userId + " ile ilişkili kullanıcı bulunamadı");
+                    return;
+                }
+                @SuppressWarnings("unchecked")
+                ArrayList<String> group_list_keys = (ArrayList<String>)
+                        snapshot_user.child("groups").getValue();            //kullanıcı arkadaş listeleri Mli olanlar
+                if (group_list_keys == null) {
+                    callBack.onError(GROUP_LIST_EMPTY, "Grup listesi boş");
+                    return;
+                }
+                for (final String group_list_key : group_list_keys) {
+                    //assuming snapshot with friend_list_key exists, if not throws Exception
+                    group_reference.child(group_list_key).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull final DataSnapshot snapshot_group) {
+
+                            if (!snapshot_group.exists()) {
+                                callBack.onError(VALUE_NOT_FOUND, "groups snapshot'ında todo yok");
+                                return;
+                            }
+                            @SuppressWarnings("unchecked")
+                            HashMap<String, String> todos = (HashMap<String, String>) snapshot_group.child("todos").getValue();
+                            if(todos == null){
+                                callBack.onError(VALUE_NOT_FOUND, "todos boş");
+                                return;
+                            }
+                            for (final String key2 : todos.keySet()) {
+                                final DataSnapshot snapshotTodo = snapshot_group.child("todos").child(key2);
+                                final DataSnapshot snapshot_groupmembers = snapshot_group.child("group_members");
+                                //description, status, who_added, resp_person_name, key
+
+                                final String description = snapshotTodo.child("description").getValue().toString();
+                                final String status = snapshotTodo.child("status").getValue().toString();
+                                final String resp_person_name = snapshotTodo.child("resp_person_name").getValue().toString();
+                                final String who_added = snapshotTodo.child("who_added").getValue().toString();
+                                final String resp_person = snapshotTodo.child("resp_person").getValue().toString();
+
+                                user_reference.child(who_added).addListenerForSingleValueEvent(new ValueEventListener() {
+                                     @Override
+                                     public void onDataChange(@NonNull DataSnapshot snapshot_users){
+                                        if(!snapshot_users.exists()){
+                                            callBack.onError(KEY_NOT_FOUND,"key bulunamadı");
+                                           return ;
+                                        }
+                                        String who_added_name = snapshot_users.child("name").getValue().toString();
+
+                                        ToDoList todo;
+                                        if(status.equals("waiting")){
+                                            todo = new ToDoList(description, who_added_name, resp_person_name, key2,who_added);
+                                        }else{
+                                            todo = new ToDoList(description, who_added_name, resp_person_name, resp_person, key2, status, who_added);
+                                        }
+                                        callBack.onToDoListRetrieveSuccess(todo);
+
+                                     }
+
+                                     @Override
+                                     public void onCancelled(@NonNull DatabaseError error) {
+                                        callBack.onError(DATABASE_ERROR, error.getMessage());
+                                     }
+                                });
+
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            callBack.onError(DATABASE_ERROR,error.getMessage());
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                callBack.onError(DATABASE_ERROR, error.getMessage());
+            }
+        });
+        */
+
     }
 
     /**
