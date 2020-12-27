@@ -26,7 +26,7 @@ import com.example.plansplit.Controllers.FragmentControllers.addgroups.AddGroups
 import com.example.plansplit.Controllers.HomeActivity;
 import com.example.plansplit.Controllers.MyGroupActivity;
 import com.example.plansplit.Models.Database;
-import com.example.plansplit.Models.Objects.Expense;
+import com.example.plansplit.Models.Objects.Friend;
 import com.example.plansplit.Models.Objects.Groups;
 import com.example.plansplit.R;
 import com.google.gson.Gson;

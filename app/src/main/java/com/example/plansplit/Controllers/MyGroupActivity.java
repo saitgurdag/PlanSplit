@@ -149,7 +149,7 @@ public class MyGroupActivity extends AppCompatActivity {
 
         String group_title = "Group title";
 
-        Bundle extras = getIntent().getExtras();
+        extras = getIntent().getExtras();
         if(extras != null && extras.keySet().contains("group")){
             navView.getMenu().getItem(2).setChecked(true);
             Gson gson = new Gson();
@@ -201,10 +201,14 @@ public class MyGroupActivity extends AppCompatActivity {
         listBttn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(extras != null && extras.keySet().contains("group_title")){
+                if(extras != null && extras.keySet().contains("group")){
                     Bundle bundlelistgroup = new Bundle();
-                    bundlelistgroup.putString("group_title", extras.getString("group_title"));
+                    Gson gson = new Gson();
+                    String json = extras.getString("group");
+                    group = gson.fromJson(json, Groups.class);
+                    bundlelistgroup.putString("group_title", group.getGroup_name());
                     navController.navigate(R.id.navi_todo_list, bundlelistgroup);
+                    add_expense_btn.setVisibility(View.GONE);
                     list_titleTv.setVisibility(View.VISIBLE);
                     events_titleTv.setVisibility(View.GONE);
 
@@ -215,6 +219,7 @@ public class MyGroupActivity extends AppCompatActivity {
                     bundlelistfriends.putString("friend_key", todolistfriend);
                     bundlelistfriends.putString("person_key", person_id);
                     navController.navigate(R.id.navi_todo_list, bundlelistfriends);
+                    add_expense_btn.setVisibility(View.GONE);
                     list_titleTv.setVisibility(View.VISIBLE);
                     events_titleTv.setVisibility(View.GONE);
                 }
@@ -230,6 +235,7 @@ public class MyGroupActivity extends AppCompatActivity {
                 navController.navigate(R.id.navi_events);
                 events_titleTv.setVisibility(View.VISIBLE);
                 list_titleTv.setVisibility(View.GONE);
+                add_expense_btn.setVisibility(View.VISIBLE);
                 if (!ctrlType)
                     group_op_titletV.setVisibility(View.GONE);
             }
@@ -242,6 +248,7 @@ public class MyGroupActivity extends AppCompatActivity {
                     navController.navigate(R.id.navi_operation);
                     group_op_titletV.setVisibility(View.VISIBLE);
                     events_titleTv.setVisibility(View.GONE);
+                    add_expense_btn.setVisibility(View.GONE);
                     list_titleTv.setVisibility(View.GONE);
                 }
             });

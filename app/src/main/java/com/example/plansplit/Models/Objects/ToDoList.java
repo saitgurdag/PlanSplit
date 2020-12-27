@@ -11,7 +11,6 @@ public class ToDoList {
     private String resp_person_name="none";
     private String resp_person="none";
     private String key;
-    final HomeActivity home = new HomeActivity();
 
     ArrayList<Person> responsible_person = new ArrayList<Person>();
     ArrayList<Groups> the_group = new ArrayList<Groups>();
