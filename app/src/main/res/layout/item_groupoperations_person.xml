@@ -72,7 +72,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:fontFamily="@font/avenir"
-                        android:text=" Harcama Toplamı"
+                        android:text="@string/expense_total"
                         android:textColor="@color/black"
                         android:textSize="20sp" />
                 </RelativeLayout>

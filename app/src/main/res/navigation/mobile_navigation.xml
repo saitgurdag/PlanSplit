@@ -29,5 +29,4 @@
         android:name="com.example.plansplit.Controllers.FragmentControllers.notifications.NotificationsFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_notifications" />
-
 </navigation>

@@ -2,9 +2,8 @@ package com.example.plansplit.Controllers.FragmentControllers.personal;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.res.Resources;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -34,9 +33,7 @@ import com.example.plansplit.Models.Objects.Expense;
 import com.example.plansplit.R;
 import com.squareup.picasso.Picasso;
 
-import java.sql.SQLOutput;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 import static android.R.layout.simple_spinner_item;
@@ -77,7 +74,14 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemSele
         personPhoto=root.findViewById(R.id.personalOperations_imagePerson);
         Picasso.with(getContext()).load(home.getPersonPhoto()).into(personPhoto);
 
-        country = new String[]{"Yiyecek", "Giyecek", "Kırtasiye", "Temizlik" , "Diğer"};
+
+        //country = new String[]{"Yiyecek", "Giyecek", "Kırtasiye", "Temizlik" , "Diğer"};
+        country = new String[]{getResources().getStringArray(R.array.expensePersonalItems)[0],
+                getResources().getStringArray(R.array.expensePersonalItems)[1],
+                getResources().getStringArray(R.array.expensePersonalItems)[2],
+                getResources().getStringArray(R.array.expensePersonalItems)[3],
+                getResources().getStringArray(R.array.expensePersonalItems)[4]};
+
         spin = (Spinner) root.findViewById(R.id.spinner);
         spin.setOnItemSelectedListener(this);
         ArrayAdapter aa = new ArrayAdapter(this.getContext(), simple_spinner_item, country);
@@ -249,7 +253,7 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemSele
     public void update(){
         progressText.setText(String.valueOf(budget) + " TL");
         progressBar.setMax(budget);
-        kalanbudget.setText("Kalan Bütçe : " + String.valueOf(budget - totExpense) + " TL");
+        kalanbudget.setText(getString(R.string.personalfragment_moneyleft) + String.valueOf(budget - totExpense) + " TL");
         progressBar.setProgress(totExpense);
 
     }

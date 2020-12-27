@@ -1,25 +1,30 @@
 <resources>
     <string name="app_name">PlanSplit</string>
-    <string name="title_friends">Arkadaşlar</string>
-    <string name="title_personal">Kişisel</string>
-    <string name="title_notifications">Bildirimler</string>
-    <string name="title_groups">Gruplar</string>
-    <string name="title_settings">Ayarlar</string>
-    <string name="title_contact">İletişim</string>
-    <string name="title_rate">Puan Ver</string>
-    <string name="title_home">Anasayfa</string>
-    <string name="header_user_name">Albert Einstein</string>
-    <string name="header_gmail"> albertenisten@gmail.com</string>
-    <string name="header_profile_button">Profil</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="title_app">Plan &amp; Split</string>
-    <string name="group_title">Grup İsmi</string>
-    <string name="write_group_name">Grup ismi yazınız</string>
-    <string name="group_operations">Grup İşlemleri</string>
-    <string name="group_settings">Grup Ayarları</string>
-    <string name="create_group">GRUBU OLUŞTUR</string>
-    <string name="please_give_group_name">Lütfen grup ismi giriniz</string>
+    <string name="select_language">Dil Seçiniz</string>
+    <string name="title_friends" translatable="false">Arkadaşlar</string>
+    <string name="title_personal" translatable="false">Kişisel</string>
+    <string name="title_notifications" translatable="false">Bildirimler</string>
+    <string name="title_groups" translatable="false">Gruplar</string>
+    <string name="title_settings" translatable="false">Ayarlar</string>
+    <string name="title_change_language" translatable="false">Dili Değiştir</string>
+    <string name="title_contact" translatable="false">İletişim</string>
+    <string name="title_rate" translatable="false">Puan Ver</string>
+    <string name="title_home" translatable="false">Anasayfa</string>
+    <string name="header_user_name" translatable="false">Albert Einstein</string>
+    <string name="header_gmail" translatable="false"> albertenisten@gmail.com</string>
+    <string name="header_profile_button" translatable="false">Profil</string>
+    <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
+    <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
+    <string name="title_app" translatable="false">Plan &amp; Split</string>
+    <string name="group_title" translatable="false">Grup İsmi</string>
+    <string name="write_group_name" translatable="false">Grup ismi yazınız</string>
+    <string name="group_operations" translatable="false">Grup İşlemleri</string>
+    <string name="group_settings" translatable="false">Grup Ayarları</string>
+    <string name="create_group" translatable="false">GRUBU OLUŞTUR</string>
+    <string name="group_members" translatable="false">Grup Üyeleri</string>
+    <string name="please_give_group_name" translatable="false">Lütfen grup ismi giriniz</string>
+    <string name="current_dept_status" translatable="false">Güncel Borç Bilgisi</string>
+    <string name="enter_amount" translatable="false">Miktarı Girin</string>
     <string-array name="shareMethodSpinnerItems">
         <item>Eşit paylaşım</item>
         <item>Düzensiz paylaşım</item>
@@ -34,72 +39,101 @@
         <item>temizlik</item>
         <item>diğer</item>
     </string-array>
-    <string name="equal_sharing">Eşit Paylaşım</string>
-    <string name="personal_debt">Borç</string>
-    <string name="personal_due">Alacak</string>
-    <string name="total">Toplam</string>
-    <string name="expense_desc">Harcama Açıklaması</string>
-    <string name="expense_count">Harcama Miktarı</string>
-    <string name="expenses">Harcamalar</string>
-    <string name="add_expense">Harcama Ekle</string>
-    <string name="payer">Ödeyen</string>
-    <string name="payer_selector">Ödeyen(Siz)</string>
-    <string name="expense_type_selector">Harcama Tipi </string>
-    <string name="partition_method">Paylaşma Yöntemi</string>
-    <string name="save">Kaydet</string>
-    <string name="persons_groups">Kişiler veya Gruplar:</string>
-    <string name="persons_groups_inexpense">Harcamaya dahil olan kişiler veya grupları seçiniz</string>
-    <string name="calendar">Takvim</string>
-    <string name="note">Not</string>
-    <string name="title_logout">Çıkış Yap</string>
-    <string name="friend_amount_user_owes">Borçlusun</string>
-    <string name="friend_amount_friend_owes">Borçlu</string>
-    <string name="group_events_object_depth_status_owes">Borçlusun</string>
-    <string name="group_events_object_depth_status_claimant">Alacaklısın</string>
-    <string name="group_events_object_payOrpayed_payed">TL ödedi</string>
-    <string name="group_events_object_payOrpayed_pay">TL ödedin</string>
-    <string name="list">Liste</string>
-    <string name="events">Olaylar</string>
-    <string name="as_table_export">Tablo Olarak Çıkar</string>
-    <string name="quick_add">Hızlı Ekle</string>
-    <string name="enter_mail_address">mail adresini giriniz</string>
-    <string name="requirement_list">İhtiyaç Listesi</string>
-    <string name="requierement_desc">İhtiyaç Tanımı</string>
-    <string name="added_by">Curie ekledi</string>
-    <string name="purchased_by">Einstein alacak</string>
-    <string name="waiting">Bekliyor</string>
-    <string name="add_requierement">İhtiyaç ekleyiniz</string>
-    <string name="back">Geri Dön</string>
-    <string name="resp_question">Bu ihtiyacı karşılamak istiyor musunuz?</string>
-    <string name="cancel_resp">Bu ihtiyacı karşılamayı iptal etmek istiyor musunuz?</string>
-    <string name="yes">Evet</string>
-    <string name="enter_note">enter note</string>
-    <string name="group_expense_note_dialog_title">Not Ekle</string>
-    <string name="group_expense_note_dialog_negative">Geri</string>
-    <string name="group_expense_note_dialog_positive">Kaydet</string>
-    <string name="select_payer">Ödeyen</string>
-    <string name="select_date">Tarih Seç</string>
-    <string name="date_picker_menu_for_once">Tek Seferlik</string>
-    <string name="date_picker_menu_weekly_repeat">Haftalık</string>
-    <string name="date_picker_menu_monthly_repeat">Aylık</string>
-    <string name="date_picker_menu_yearly_repeat">Yıllık</string>
-    <string name="remove_friend">Sil</string>
-    <string name="pay">Ödeme yap</string>
-    <string name="home">Ev</string>
-    <string name="trip">Seyahat</string>
-    <string name="work">İş</string>
-    <string name="other">Diğer</string>
-    <string name="title_wear">giyecek</string>
-    <string name="title_food">yiyecek</string>
-    <string name="title_others">diğer</string>
-    <string name="title_stationery">kırtasiye</string>
-    <string name="title_hygiene">temizlik</string>
-    <string name="title_all">hepsi</string>
-    <string name="add_budget_text">Lütfen Aylık Bütçenizi Giriniz.</string>
-    <string name="isim_giriniz">İsim giriniz</string>
-    <string name="select_friends">Lütfen arkadaş seçiniz</string>
-    <string name="title_house">ev</string>
-    <string name="title_travel">seyehat</string>
-    <string name="title_business">iş</string>
+    <string name="equal_sharing" translatable="false">Eşit Paylaşım</string>
+    <string name="personal_debt" translatable="false">Borç</string>
+    <string name="personal_due" translatable="false">Alacak</string>
+    <string name="total" translatable="false">Toplam</string>
+    <string name="expense_desc" translatable="false">Harcama Açıklaması</string>
+    <string name="expense_count" translatable="false">Harcama Miktarı</string>
+    <string name="expense_total" translatable="false">Harcama Toplamı :</string>
+    <string name="expenses" translatable="false">Harcamalar</string>
+    <string name="add_expense" translatable="false">Harcama Ekle</string>
+    <string name="payer" translatable="false">Ödeyen</string>
+    <string name="payer_selector" translatable="false">Ödeyen(Siz)</string>
+    <string name="expense_type_selector" translatable="false">Harcama Tipi </string>
+    <string name="partition_method" translatable="false">Paylaşma Yöntemi</string>
+    <string name="save" translatable="false">Kaydet</string>
+    <string name="persons_groups" translatable="false">Kişiler veya Gruplar:</string>
+    <string name="persons_groups_inexpense" translatable="false">Harcamaya dahil olan kişiler veya grupları seçiniz</string>
+    <string name="calendar" translatable="false">Takvim</string>
+    <string name="note" translatable="false">Not</string>
+    <string name="title_logout" translatable="false">Çıkış Yap</string>
+    <string name="friend_amount_user_owes" translatable="false">Borçlusun</string>
+    <string name="friend_amount_friend_owes" translatable="false">Borçlu</string>
+    <string name="group_events_object_depth_status_owes" translatable="false">Borçlusun</string>
+    <string name="group_events_object_depth_status_claimant" translatable="false">Alacaklısın</string>
+    <string name="group_events_object_payOrpayed_payed" translatable="false">TL ödedi</string>
+    <string name="group_events_object_payOrpayed_pay" translatable="false">TL ödedin</string>
+    <string name="list" translatable="false">Liste</string>
+    <string name="events" translatable="false">Olaylar</string>
+    <string name="as_table_export" translatable="false">Tablo Olarak Çıkar</string>
+    <string name="quick_add" translatable="false">Hızlı Ekle</string>
+    <string name="enter_mail_address" translatable="false">mail adresini giriniz</string>
+    <string name="requirement_list" translatable="false">İhtiyaç Listesi</string>
+    <string name="requierement_desc" translatable="false">İhtiyaç Tanımı</string>
+    <string name="added_by" translatable="false">Curie ekledi</string>
+    <string name="purchased_by" translatable="false">Einstein alacak</string>
+    <string name="waiting" translatable="false">Bekliyor</string>
+    <string name="add_requierement" translatable="false">İhtiyaç ekleyiniz</string>
+    <string name="back" translatable="false">Geri Dön</string>
+    <string name="resp_question" translatable="false">Bu ihtiyacı karşılamak istiyor musunuz?</string>
+    <string name="cancel_resp" translatable="false">Bu ihtiyacı karşılamayı iptal etmek istiyor musunuz?</string>
+    <string name="yes" translatable="false">Evet</string>
+    <string name="enter_note" translatable="false">enter note</string>
+    <string name="group_expense_note_dialog_title" translatable="false">Not Ekle</string>
+    <string name="group_expense_note_dialog_negative" translatable="false">Geri</string>
+    <string name="group_expense_note_dialog_positive" translatable="false">Kaydet</string>
+    <string name="select_payer" translatable="false">Ödeyen</string>
+    <string name="select_date" translatable="false">Tarih Seç</string>
+    <string name="date_picker_menu_for_once" translatable="false">Tek Seferlik</string>
+    <string name="date_picker_menu_weekly_repeat" translatable="false">Haftalık</string>
+    <string name="date_picker_menu_monthly_repeat" translatable="false">Aylık</string>
+    <string name="date_picker_menu_yearly_repeat" translatable="false">Yıllık</string>
+    <string name="remove_friend" translatable="false">Sil</string>
+    <string name="pay" translatable="false">Ödeme yap</string>
+    <string name="home" translatable="false">Ev</string>
+    <string name="trip" translatable="false">Seyahat</string>
+    <string name="work" translatable="false">İş</string>
+    <string name="other" translatable="false">Diğer</string>
+    <string name="title_wear" translatable="false">giyecek</string>
+    <string name="title_food" translatable="false">yiyecek</string>
+    <string name="title_others" translatable="false">diğer</string>
+    <string name="title_stationery" translatable="false">kırtasiye</string>
+    <string name="title_hygiene" translatable="false">temizlik</string>
+    <string name="title_all" translatable="false">hepsi</string>
+    <string name="add_budget_text" translatable="false">Lütfen Aylık Bütçenizi Giriniz.</string>
+    <string name="isim_giriniz" translatable="false">İsim giriniz</string>
+    <string name="select_friends" translatable="false">Lütfen arkadaş seçiniz</string>
+    <string name="title_house" translatable="false">ev</string>
+    <string name="title_travel" translatable="false">seyehat</string>
+    <string name="title_business" translatable="false">iş</string>
+    <string name="tl_sign" translatable="false">TL </string>
+
+    //Personal Fragment Yeni Stringsler başlangıç
+    <string name="add_expense_price" translatable="false">fiyat</string>
+    <string name="personalfragment_moneyleft" translatable="false">Kalan Bütce :</string>
+
+    <string-array name="expensePersonalItems">
+        <item>Yiyecek</item>
+        <item>Giyecek</item>
+        <item>Kırtasiye</item>
+        <item>Temizlik</item>
+        <item>Diğer</item>
+    </string-array>
+    //Personal Fragment Yeni Stringsler bitiş
+
+    //Evenst Fragment Başla
+    <string name="total_dept" translatable="false">Toplam borcunuz : </string>
+    <string name="total_claimant" translatable="false">Toplam alacağınız : </string>
+    //Events Fragment bitiş
+
+
+    //Frangment Friends baş
+    <string name="add_friend" translatable="false">Arkadaş Ekle</string>
+    //Frangment Friends bitis
+
+    //Groups Fragment başla
+    <string name="add_new_group" translatable="false">YENİ GRUP EKLE</string>
+    //Groups fragment bitiş
 
 </resources>

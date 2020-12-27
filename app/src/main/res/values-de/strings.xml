@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PlanSplit</string>
+    <string name="select_language">Wähle Sprache</string>
+    <string name="title_friends" translatable="false">Freunde</string>
+    <string name="title_personal" translatable="false">Personal</string>
+    <string name="title_notifications" translatable="false">Benachrichtigungen</string>
+    <string name="title_groups" translatable="false">Gruppen</string>
+    <string name="title_settings" translatable="false">Einstellungen</string>
+    <string name="title_change_language" translatable="false">Verändern Sprache</string>
+    <string name="title_contact" translatable="false">Kontakt</string>
+    <string name="title_rate" translatable="false">Bewerten</string>
+    <string name="title_home" translatable="false">Startseite</string>
+    <string name="header_user_name" translatable="false">Albert Einstein</string>
+    <string name="header_gmail" translatable="false"> albertenisten@gmail.com</string>
+    <string name="header_profile_button" translatable="false">Profil</string>
+    <string name="navigation_drawer_close" translatable="false">Navigationsschublade schließen</string>
+    <string name="navigation_drawer_open" translatable="false">Navigationsschublade öffnen</string>
+    <string name="title_app" translatable="false">Plan &amp; Split</string>
+    <string name="group_title" translatable="false">Gruppenname</string>
+    <string name="write_group_name" translatable="false">Geben Sie den Gruppennamen ein</string>
+    <string name="group_operations" translatable="false">Gruppenbetrieb</string>
+    <string name="group_settings" translatable="false">Gruppeneinstellungen</string>
+    <string name="create_group" translatable="false">GRUPPE ERSTELLEN</string>
+    <string name="group_members" translatable="false">Gruppenmitglieder</string>
+    <string name="please_give_group_name" translatable="false">Bitte geben Sie den Gruppennamen ein</string>
+    <string name="current_dept_status" translatable="false">Momentan Schuld Information</string>
+    <string name="enter_amount" translatable="false">Geben Sie Betrag</string>
+    <string-array name="shareMethodSpinnerItems">
+        <item>Gleiches Teilen</item>
+        <item>Ungleichmäßiges Teilen</item>
+        <item>Prozentuales Teilen</item>
+        <item>Teilen nach Schnitt</item>
+        <item>Teilen durch Überschuss</item>
+    </string-array>
+    <string-array name="expenseSpinnerItems">
+        <item>Nahrung</item>
+        <item>Kleidung</item>
+        <item>Schreibwaren</item>
+        <item>Reinigungsmittel</item>
+        <item>Andere</item>
+    </string-array>
+    <string name="equal_sharing" translatable="false">Gleiches Teilen</string>
+    <string name="personal_debt" translatable="false">Schulden</string>
+    <string name="personal_due" translatable="false">Gläubiger</string>
+    <string name="total" translatable="false">Summe</string>
+    <string name="expense_desc" translatable="false">Kostenbeschreibung</string>
+    <string name="expense_count" translatable="false">Kostenbetrag</string>
+    <string name="expense_total" translatable="false">Summe der Kosten :</string>
+    <string name="expenses" translatable="false">Kosten</string>
+    <string name="add_expense" translatable="false">Addiere Kosten</string>
+    <string name="payer" translatable="false">Zahler</string>
+    <string name="payer_selector" translatable="false">Zahler (Sie)</string>
+    <string name="expense_type_selector" translatable="false">Kosten Art </string>
+    <string name="partition_method" translatable="false">Verteilungsmethode</string>
+    <string name="save" translatable="false">Speichern</string>
+    <string name="persons_groups" translatable="false">Personen oder Gruppen :</string>
+    <string name="persons_groups_inexpense" translatable="false">Wählen Sie Personen oder Gruppen aus, die in den Kosten enthalten sind</string>
+    <string name="calendar" translatable="false">Kalender</string>
+    <string name="note" translatable="false">Notiz</string>
+    <string name="title_logout" translatable="false">Exit</string>
+    <string name="friend_amount_user_owes" translatable="false">Du schuldest</string>
+    <string name="friend_amount_friend_owes" translatable="false">Schulden</string>
+    <string name="group_events_object_depth_status_owes" translatable="false">Du schuldest</string>
+    <string name="group_events_object_depth_status_claimant" translatable="false">Alacaklısın</string>
+    <string name="group_events_object_payOrpayed_payed" translatable="false">TL bezahlt</string>
+    <string name="group_events_object_payOrpayed_pay" translatable="false">TL bezahlt</string>
+    <string name="list" translatable="false">Liste</string>
+    <string name="events" translatable="false">Ereignissen</string>
+    <string name="as_table_export" translatable="false">Als Tabelle exportieren</string>
+    <string name="quick_add" translatable="false">Schnelles Addieren</string>
+    <string name="enter_mail_address" translatable="false">Geben Sie die Mail Adresse ein</string>
+    <string name="requirement_list" translatable="false">Anforderungsliste</string>
+    <string name="requierement_desc" translatable="false">Anforderung Beschreibung</string>
+    <string name="added_by" translatable="false">Curie addiert</string>
+    <string name="purchased_by" translatable="false">Einstein bezahlen</string>
+    <string name="waiting" translatable="false">Warten</string>
+    <string name="add_requierement" translatable="false">Addieren Sie Anforderung</string>
+    <string name="back" translatable="false">Zurück</string>
+    <string name="resp_question" translatable="false">Möchten Sie diese Anforderung bereitstellen ?</string>
+    <string name="cancel_resp" translatable="false">Möchten Sie stornieren, um diese Anforderung bereitstellen ?</string>
+    <string name="yes" translatable="false">Ja</string>
+    <string name="enter_note" translatable="false">Geben Notiz ein</string>
+    <string name="group_expense_note_dialog_title" translatable="false">Geben Notiz ein</string>
+    <string name="group_expense_note_dialog_negative" translatable="false">Zurück</string>
+    <string name="group_expense_note_dialog_positive" translatable="false">Speichern</string>
+    <string name="select_payer" translatable="false">Bezahler</string>
+    <string name="select_date" translatable="false">Datum auswählen</string>
+    <string name="date_picker_menu_for_once" translatable="false">Einmal</string>
+    <string name="date_picker_menu_weekly_repeat" translatable="false">Wöchentliche Wiederholung</string>
+    <string name="date_picker_menu_monthly_repeat" translatable="false">Monatliche Wiederholung</string>
+    <string name="date_picker_menu_yearly_repeat" translatable="false">Jährliche Wiederholung</string>
+    <string name="remove_friend" translatable="false">Löschen</string>
+    <string name="pay" translatable="false">Zahlen</string>
+    <string name="home" translatable="false">Haus</string>
+    <string name="trip" translatable="false">Reisen</string>
+    <string name="work" translatable="false">Arbeit</string>
+    <string name="other" translatable="false">Andere</string>
+    <string name="title_wear" translatable="false">Kleidung</string>
+    <string name="title_food" translatable="false">Nahrung</string>
+    <string name="title_others" translatable="false">Andere</string>
+    <string name="title_stationery" translatable="false">Schreibwaren</string>
+    <string name="title_hygiene" translatable="false">Reinigungsmittel</string>
+    <string name="title_all" translatable="false">Alle</string>
+    <string name="add_budget_text" translatable="false">Bitte geben Sie Ihr Monatsbudget ein.</string>
+    <string name="isim_giriniz" translatable="false">Name eingeben</string>
+    <string name="select_friends" translatable="false">Bitte wählen Sie einen Freund</string>
+    <string name="title_house" translatable="false">Haus</string>
+    <string name="title_travel" translatable="false">Reisen</string>
+    <string name="title_business" translatable="false">Arbeit</string>
+    <string name="tl_sign" translatable="false">TL </string>
+
+    //Personal Fragment Yeni Stringsler başlangıç
+    <string name="add_expense_price" translatable="false">preis</string>
+    <string name="personalfragment_moneyleft" translatable="false">Budget Übrig :</string>
+
+    <string-array name="expensePersonalItems">
+        <item>Nahrung</item>
+        <item>Kleidung</item>
+        <item>Schreibwaren</item>
+        <item>Reinigungsmittel</item>
+        <item>Andere</item>
+    </string-array>
+    //Personal Fragment Yeni Stringsler bitiş
+
+    //Evenst Fragment Başla
+    <string name="total_dept" translatable="false">Total Schuld : </string>
+    <string name="total_claimant" translatable="false">Total benehmen : </string>
+    //Events Fragment bitiş
+
+    //Frangment Friends baş
+    <string name="add_friend" translatable="false">Addiere Freund</string>
+    //Frangment Friends bitis
+
+    //Groups Fragment başla
+    <string name="add_new_group" translatable="false">ADDIERE NEUE GRUPPE</string>
+    //Groups fragment bitiş
+
+</resources>
