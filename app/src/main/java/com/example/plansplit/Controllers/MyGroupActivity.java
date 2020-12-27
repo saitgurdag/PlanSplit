@@ -205,7 +205,7 @@ public class MyGroupActivity extends AppCompatActivity {
                     Gson gson = new Gson();
                     String json = extras.getString("group");
                     group = gson.fromJson(json, Groups.class);
-                    bundlelistgroup.putString("group_title", group.getGroup_name());
+                    bundlelistgroup.putString("group_title", group.getGroupKey());
                     navController.navigate(R.id.navi_todo_list, bundlelistgroup);
                     add_expense_btn.setVisibility(View.GONE);
                     list_titleTv.setVisibility(View.VISIBLE);

@@ -14,6 +14,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
@@ -39,14 +40,10 @@ public class ListFragment extends Fragment {
     private Button add_new_reqBt;
     private String personId;
     private String friendkey;
+    private String groupkey;
     private String operation;
     RecyclerView.LayoutManager layoutManager;
 
-
-
-    public static ListFragment newInstance() {
-        return new ListFragment();
-    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -54,7 +51,7 @@ public class ListFragment extends Fragment {
 
         final View root = inflater.inflate(R.layout.fragment_list, container, false);
         database=new Database(getContext());
-       // toDoList = new ArrayList<>();
+
 
         if(!getArguments().containsKey("group_title")){
             operation="friend";
@@ -64,20 +61,39 @@ public class ListFragment extends Fragment {
         }
         if(getArguments().containsKey("group_title")){
              operation="group";
+             groupkey=getArguments().getString("group_title");
+             personId=database.getUserId();
         }
-        //updateUI(operation);
-
-        /*recyclerView = root.findViewById(R.id.req_list_recyclerView);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL));*/
 
         recyclerView = root.findViewById(R.id.req_list_recyclerView);
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
+        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
 
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
 
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                System.out.println("status"+ToDoListAdapter.toDoList.get(viewHolder.getAdapterPosition()).getWho_added_id());
+
+                if (ToDoListAdapter.toDoList.get(viewHolder.getAdapterPosition()).getWho_added_id().equals(personId)) {
+                    if (operation.equals("friend")) {
+                        database.updateDoListFriend(friendkey, ToDoListAdapter.toDoList.get(viewHolder.getAdapterPosition()).getKey(), "delete", databaseCallBack);
+                    } else {
+                        database.updateDoListGroup(groupkey, ToDoListAdapter.toDoList.get(viewHolder.getAdapterPosition()).getKey(), "delete", databaseCallBack);
+                    }
+                }
+                toDoListAdapter.notifyDataSetChanged();
+            }
+
+        };
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
 
 
 
@@ -95,9 +111,6 @@ public class ListFragment extends Fragment {
                 mBuilder.setView(dialog_add_req_view);
                 final AlertDialog dialog = mBuilder.create();
 
-
-                    //Toast.makeText(getContext(), getArguments().getString("group_title"), Toast.LENGTH_SHORT).show();
-
                 mSave.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -109,9 +122,10 @@ public class ListFragment extends Fragment {
                             }
                             if(operation.equals("group")){
                                 Toast.makeText(getContext(), "Gruba ekleme yapılacak", Toast.LENGTH_SHORT).show();
+                                System.out.println("grup keyi"+groupkey);
+                                System.out.println("personid"+personId);
+                                database.addtoDoListGroup(groupkey, toDoList, databaseCallBack);
                             }
-
-
                             dialog.dismiss();
                         } else {
                             Toast.makeText(getContext(), getResources().getString(R.string.ask_need), Toast.LENGTH_SHORT).show();
@@ -134,24 +148,12 @@ public class ListFragment extends Fragment {
 
     private void updateUI(String operation) {
         if (operation.equals("friend")) {
-            database.gettoDoListFriend(friendkey, new Database.ToDoListCallBack() {
-                @Override
-                public void onToDoListRetrieveSuccess(ToDoList todo) {
-                    System.out.println("ihtiyac"+todo.getDescription());
-                    toDoListAdapter = new ToDoListAdapter(getContext(), friendkey, recyclerView);
-                    recyclerView.setAdapter(toDoListAdapter);
-                }
-
-                @Override
-                public void onError(String error_tag, String error) {
-                    Log.e(error_tag, error);
-                }
-            });
+            toDoListAdapter = new ToDoListAdapter(getContext(), friendkey, recyclerView, operation);
         }
         if (operation.equals("group")) {
-            System.out.println("operasyon var bnu gece");
+            toDoListAdapter = new ToDoListAdapter(getContext(), groupkey, recyclerView, operation);
         }
-        }
+    }
 
 
     private final Database.DatabaseCallBack databaseCallBack = new Database.DatabaseCallBack() {
@@ -159,7 +161,6 @@ public class ListFragment extends Fragment {
         public void onSuccess(String success) {
             Log.d(TAG, success);
             updateUI(operation);
-            Toast.makeText(getContext(),   " başarıyla kaydedildi", Toast.LENGTH_SHORT).show();
         }
 
         @Override
@@ -176,12 +177,7 @@ public class ListFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if( operation.equals("friend")) {
-
-            toDoListAdapter = new ToDoListAdapter(getContext(), friendkey, recyclerView);
-        }
-
-
+        updateUI(operation);
     }
 
 }

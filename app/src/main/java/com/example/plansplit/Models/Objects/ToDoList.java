@@ -8,15 +8,17 @@ public class ToDoList {
     private String description;
     private String status="waiting"; //waiting,reserved
     private String who_added;
+    private String who_added_id;
     private String resp_person_name="none";
     private String resp_person="none";
     private String key;
 
-    ArrayList<Person> responsible_person = new ArrayList<Person>();
-    ArrayList<Groups> the_group = new ArrayList<Groups>();
-
     public String getKey() {
         return key;
+    }
+
+    public String getWho_added_id() {
+        return who_added_id;
     }
 
     public String getResp_person() {
@@ -35,35 +37,31 @@ public class ToDoList {
         this.who_added = who_added;
 
     }
-    public ToDoList(String description, String who_added, String key) {
+    public ToDoList(String description, String who_added, String key,String who_added_id) {
         this.description = description;
         this.who_added = who_added;
         this.key=key;
+        this.who_added_id=who_added_id;
     }
     
-    public ToDoList(String description, String who_added, String resp_person_name,String key) {
+    public ToDoList(String description, String who_added, String resp_person_name,String key,String who_added_id) {
             this.description = description;
             this.who_added = who_added;
             this.resp_person_name = resp_person_name;
             this.key=key;
+            this.who_added_id=who_added_id;
     }
-    public ToDoList(String description, String who_added, String resp_person_name,String resp_person,String key,String status) {
+    public ToDoList(String description, String who_added, String resp_person_name,String resp_person,String key,String status,String who_added_id) {
         this.description = description;
         this.who_added = who_added;
         this.resp_person_name = resp_person_name;
         this.key=key;
         this.status=status;
         this.resp_person=resp_person;
+        this.who_added_id=who_added_id;
     }
 
-   /* public ToDoList(String description, String status, int symbol) {
-        this.description = description;
-        this.status = status;
-
-    }*/
-
     public String getWho_added() {
-          System.out.println(who_added);
         return who_added;
     }
 
@@ -77,19 +75,6 @@ public class ToDoList {
 
     public void setResp_person_name(String resp_person_name) {
         this.resp_person_name = resp_person_name;
-    }
-
-    public ArrayList<Groups> getThe_group() {
-        return the_group;
-    }
-
-    public void setThe_group(ArrayList<Groups> the_group) {
-        this.the_group = the_group;
-    }
-
-
-    public void setResponsible_person(ArrayList<Person> responsible_person) {
-        this.responsible_person = responsible_person;
     }
 
     public String getDescription() {
@@ -107,7 +92,4 @@ public class ToDoList {
     public void setStatus(String status) {
         this.status = status;
     }
-    
-
-
 }
