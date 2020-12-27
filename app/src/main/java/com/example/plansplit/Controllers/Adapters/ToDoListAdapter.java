@@ -148,7 +148,7 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ToDoLi
                         @Override
                         public void onClick(View view) {
                             Toast.makeText(view.getRootView().getContext(), "Başarıyla kaydedildi", Toast.LENGTH_SHORT).show();
-                            database.updateDoListFriend(database.getUserId(),toDoList.get(holder.getAdapterPosition()).getKey(),"save",databaseCallBack);
+                            database.updateDoListFriend(friend_key,toDoList.get(holder.getAdapterPosition()).getKey(),"save",databaseCallBack);
                             dialog.dismiss();
                         }
                     });
