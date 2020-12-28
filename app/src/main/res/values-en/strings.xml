@@ -117,11 +117,8 @@
     <string name="title_travel" translatable="false">travel</string>
     <string name="title_business" translatable="false">work</string>
     <string name="tl_sign" translatable="false">TL </string>
-
-    //Personal Fragment Yeni Stringsler başlangıç
     <string name="add_expense_price" translatable="false">price</string>
     <string name="personalfragment_moneyleft" translatable="false">Budget Left :</string>
-
     <string-array name="expensePersonalItems">
         <item>food</item>
         <item>wear</item>
@@ -129,20 +126,8 @@
         <item>cleaning</item>
         <item>others</item>
     </string-array>
-    //Personal Fragment Yeni Stringsler bitiş
-
-    //Evenst Fragment Başla
     <string name="total_dept" translatable="false">Total dept amount: </string>
     <string name="total_claimant" translatable="false">Total claim amount : </string>
-    //Events Fragment bitiş
-
-    //Frangment Friends baş
     <string name="add_friend" translatable="false">Add Friend</string>
-    //Frangment Friends bitis
-
-    //Groups Fragment başla
     <string name="add_new_group" translatable="false">ADD NEW GROUP</string>
-    //Groups fragment bitiş
-
-
 </resources>
