@@ -1,8 +1,11 @@
 package com.example.plansplit.Controllers;
 
-import android.content.Context;
+import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +18,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -46,6 +50,8 @@ import com.google.firebase.database.Transaction;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
+
+import java.util.Locale;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemSelectedListener {
 
@@ -178,6 +184,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             }
         }
 
+
+
       
         //----------------------------------------------------------------------
 
@@ -189,6 +197,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
 
                 //it's possible to do more actions on several items, if there is a large amount of items I prefer switch(){case} instead of if()
+                if(id == R.id.navigation_language){
+                    showChangeLanguageDialog();
+                    loadLocale();
+                }
+
                 if (id==R.id.navigation_logout){
                     if (id == R.id.navigation_logout) {
                       
@@ -212,6 +225,58 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         });
 
     }
+
+    //////BERKAY HEADER DAN DİL BAŞLA///////
+
+    private  void showChangeLanguageDialog(){
+        final String[] listItems = {"Deutsch","Englisch","Türkçe"};
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(HomeActivity.this);
+        mBuilder.setTitle("Choose Language Please");
+        mBuilder.setSingleChoiceItems(listItems, -1, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                if(i == 0){
+                    //Deutsch
+                    setLocale("de");
+                    recreate();
+                }
+                else if(i == 1){
+                    //Englisch
+                    setLocale("en");
+                    recreate();
+                }
+                else if(i == 2){
+                    //Türkce
+                    setLocale("tr-rTR");
+                    recreate();
+                }
+                dialogInterface.dismiss();
+            }
+
+        });
+        AlertDialog mDialog = mBuilder.create();
+        mDialog.show();
+    }
+
+    private void setLocale(String language) {
+        Locale locale = new Locale(language);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getBaseContext().getResources().updateConfiguration(config,getBaseContext().getResources().getDisplayMetrics());
+
+        SharedPreferences.Editor editor = getSharedPreferences("LanguageSettings",MODE_PRIVATE).edit();
+        editor.putString("My_Lang",language);
+        editor.apply();
+    }
+    //Load language in shared prefences
+    public void loadLocale(){
+        SharedPreferences prefs = getSharedPreferences("LanguageSettings", Activity.MODE_PRIVATE);
+        String language = prefs.getString("My_Lang","");
+        setLocale(language);
+    }
+//////BERKAY HEADER DAN DİL BİTİŞ///////
 
     private void setHeader(Uri personphoto,String name,String email) {
         View header = navigationView.getHeaderView(0);

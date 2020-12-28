@@ -250,7 +250,6 @@
 
             </RelativeLayout>
 
-
         </RelativeLayout>
 
         <androidx.recyclerview.widget.RecyclerView

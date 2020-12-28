@@ -15,7 +15,7 @@
 
             android:id="@+id/linearLayoutLogin"
             android:layout_width="match_parent"
-            android:layout_height="230dp"
+            android:layout_height="240dp"
             android:gravity="center"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -32,7 +32,7 @@
                     android:layout_width="88dp"
                     android:layout_height="87dp"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="5dp"
                     android:scaleType="fitXY"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -53,11 +53,26 @@
                 <com.google.android.gms.common.SignInButton
                     android:id="@+id/sign_in_button"
                     android:layout_width="match_parent"
-                    android:layout_height="37dp"
+                    android:layout_height="36dp"
                     android:layout_below="@+id/imageView3"
                     android:layout_marginTop="48dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
+
+                <Button
+                    android:id="@+id/select_language_button"
+                    android:layout_width="172dp"
+                    android:drawableLeft="@drawable/ic_language"
+                    android:layout_centerHorizontal="true"
+                    android:padding="5dp"
+                    android:background="@drawable/button_smooth_corner_language"
+                    android:layout_height="33dp"
+                    android:layout_below="@+id/sign_in_button"
+                    android:onClick="selectLanguageButtonClicked"
+                    android:text="@string/select_language"
+                    android:textSize="12dp">
+
+                </Button>
 
             </RelativeLayout>
         </LinearLayout>
