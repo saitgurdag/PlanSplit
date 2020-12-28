@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="ask_need">Please Enter a Requirament</string>
+    <string name="already_reserved">already reserved</string>
+    <string name="will_buy">will buy</string>
+    <string name="reserved">will buy</string>
+    <string name="remove_group">DELETE GROUP</string>
+    <string name="add_friends_to_group">Add Friend</string>
+    <string name="cancel">Cancel Requirament</string>
+    <string name="added">added</string>
     <string name="app_name">PlanSplit</string>
     <string name="select_language">Select Language</string>
     <string name="title_friends" translatable="false">Friends</string>

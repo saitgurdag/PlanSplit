@@ -1,4 +1,12 @@
 <resources>
+    <string name="ask_need">Lütfen bir ihtiyaç giriniz</string>
+    <string name="already_reserved">önceden rezerve yaptı</string>
+    <string name="will_buy">alacak</string>
+    <string name="reserved">alacak</string>
+    <string name="remove_group">GRUBU SİL</string>
+    <string name="add_friends_to_group">Arkadaş Ekle</string>
+    <string name="cancel">Karşılamayı iptal et</string>
+    <string name="added">ekledi</string>
     <string name="app_name">PlanSplit</string>
     <string name="select_language">Dil Seçiniz</string>
     <string name="title_friends" translatable="false">Arkadaşlar</string>
