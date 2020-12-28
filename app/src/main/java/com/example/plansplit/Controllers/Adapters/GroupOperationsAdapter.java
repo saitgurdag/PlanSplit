@@ -18,6 +18,7 @@ import java.util.ArrayList;
 public class GroupOperationsAdapter extends RecyclerView.Adapter<GroupOperationsAdapter.GroupOperationsViewHolder> {
 
     private ArrayList<Person> groupOperationsPersonList;
+
     public GroupOperationsAdapter(ArrayList<Person> operationsPersonList){
         groupOperationsPersonList = operationsPersonList;
     }
@@ -32,10 +33,7 @@ public class GroupOperationsAdapter extends RecyclerView.Adapter<GroupOperations
     @Override
     public void onBindViewHolder(@NonNull GroupOperationsViewHolder holder, int position) {
         Person persons = groupOperationsPersonList.get(position);
-
-        //getResources().getColor(R.color.rojo)
-        holder.background.setBackgroundColor(GroupOperationsFragment.colourArrayInteger.get(position));
-        //holder.background.setBackgroundColor();
+        holder.background.setColorFilter(GroupOperationsFragment.colourArrayInteger.get(position));
         holder.personImage.setImageResource(persons.getCardView_shareMethodPersonPicture());
         holder.personGroupDepth.setText(persons.getGroupDepth());
 

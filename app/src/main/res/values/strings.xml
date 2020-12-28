@@ -109,7 +109,6 @@
     <string name="title_business" translatable="false">iş</string>
     <string name="tl_sign" translatable="false">TL </string>
 
-    //Personal Fragment Yeni Stringsler başlangıç
     <string name="add_expense_price" translatable="false">fiyat</string>
     <string name="personalfragment_moneyleft" translatable="false">Kalan Bütce :</string>
 
@@ -120,20 +119,12 @@
         <item>Temizlik</item>
         <item>Diğer</item>
     </string-array>
-    //Personal Fragment Yeni Stringsler bitiş
-
-    //Evenst Fragment Başla
+   
     <string name="total_dept" translatable="false">Toplam borcunuz : </string>
     <string name="total_claimant" translatable="false">Toplam alacağınız : </string>
-    //Events Fragment bitiş
 
-
-    //Frangment Friends baş
     <string name="add_friend" translatable="false">Arkadaş Ekle</string>
-    //Frangment Friends bitis
 
-    //Groups Fragment başla
     <string name="add_new_group" translatable="false">YENİ GRUP EKLE</string>
-    //Groups fragment bitiş
 
 </resources>

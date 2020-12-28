@@ -68,6 +68,7 @@ public class CustomDialogAdapterFriendExpense extends RecyclerView.Adapter<Custo
 
             name = (TextView) itemView.findViewById(R.id.payer_name_text);
             image= (ImageView) itemView.findViewById(R.id.ImagePayer);
+            /*
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -78,6 +79,8 @@ public class CustomDialogAdapterFriendExpense extends RecyclerView.Adapter<Custo
                     AddExpenseFragment.dialog.dismiss();
                 }
             });
+
+             */
 
 
         }

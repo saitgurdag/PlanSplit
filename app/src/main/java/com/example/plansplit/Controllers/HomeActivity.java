@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -32,6 +33,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.plansplit.Controllers.FragmentControllers.AddExpenseFragment;
 import com.example.plansplit.Models.Database;
+import com.example.plansplit.Models.Objects.Groups;
 import com.example.plansplit.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -44,6 +46,8 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Transaction;
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -59,6 +63,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     Bundle bundle;
     String navigation_key;
     public static Uri personPhoto;
+    SharedPreferences mPrefs;
 
     FirebaseAuth mAuth;
     private static final Database database = Database.getInstance();
@@ -76,6 +81,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
         BottomNavigationView navView = findViewById(R.id.nav_view);
         mAuth = FirebaseAuth.getInstance();
+        mPrefs = getSharedPreferences("userName", Context.MODE_PRIVATE);
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -105,7 +111,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
 
 
-
         navView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener(){
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item){
@@ -125,6 +130,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             if (name == null){
                 name = "No name";
             }
+            SharedPreferences.Editor prefsEditor = mPrefs.edit();
+            prefsEditor.putString("userName", name);
+            prefsEditor.apply();
             String email = acct.getEmail();
 
             //todo:kod çökmesin diye bir süre daha soyisim çekicez
@@ -144,9 +152,18 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             database.registerUser(personId, name, email, surname,image);
             Log.d(TAG, "user registered with this email: " + email + "\n" + "and this key: " + personId);
         }
-      
+
         Bundle extras = getIntent().getExtras();
-        if(extras != null && extras.keySet().contains("navigation")) {
+        if(extras != null && (extras.keySet().contains("friend") || extras.keySet().contains("group"))) {
+            bundle = new Bundle();
+            bundle.putString("person_id", personId);
+            if (extras.keySet().contains("friend")) {
+                bundle.putString("friend", extras.getString("friend"));
+            } else if (extras.keySet().contains("group")){
+                bundle.putString("group", extras.getString("group"));
+            }
+            navController.navigate(R.id.navigation_add_expense, bundle);
+        }else if(extras != null && extras.keySet().contains("navigation")) {
             navigation_key = extras.getString("navigation");
             bundle = new Bundle();
             bundle.putString("person_id", personId);

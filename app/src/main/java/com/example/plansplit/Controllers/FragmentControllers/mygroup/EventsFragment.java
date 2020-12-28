@@ -18,11 +18,14 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.plansplit.Controllers.Adapters.ExpensesAdapter;
 import com.example.plansplit.Controllers.Adapters.GroupEventsAdapter;
 import com.example.plansplit.Controllers.FragmentControllers.AddExpenseFragment;
 import com.example.plansplit.Controllers.FragmentControllers.PayFragment;
 import com.example.plansplit.Controllers.FragmentControllers.notifications.NotificationsFragment;
 import com.example.plansplit.Controllers.HomeActivity;
+import com.example.plansplit.Controllers.MyGroupActivity;
+import com.example.plansplit.Models.Database;
 import com.example.plansplit.Models.Objects.Transfers;
 import com.example.plansplit.R;
 import com.squareup.picasso.Picasso;
@@ -31,15 +34,17 @@ import java.util.List;
 
 public class EventsFragment extends Fragment {
 
-    //Berkay ekleme kısmı//
     RecyclerView recyclerView;
     GroupEventsAdapter adapter;
-    List<Transfers> GroupEventsObjectList;
+    Database db;
     ImageView userImage;
     TextView userDeptText;
     int userTotalDept;
     ImageButton payButton;
-    //Berkay ekleme kısmı bitiş//
+    boolean ctrlType;   // friend => true       group=> false
+    String personId;
+    MyGroupActivity myGroupActivity;
+    ArrayList<Transfers>GroupEventsObjectList = new ArrayList<>();
 
     public static EventsFragment newInstance() {
         return new EventsFragment();
@@ -48,22 +53,20 @@ public class EventsFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull final LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        //Berkay Ekleme kısmı //
-
         View root = inflater.inflate(R.layout.fragment_events, container, false);
+        GroupEventsObjectList = new ArrayList<>();
+        db = new Database(this.getContext(), this);
+        myGroupActivity=(MyGroupActivity) getContext();
         userImage=root.findViewById(R.id.user_image_groupEvents);
         payButton=root.findViewById(R.id.pay_IButton);
         Picasso.with(getContext()).load(HomeActivity.getPersonPhoto()).into(userImage);
         userDeptText = root.findViewById(R.id.user_debt_groupEvents_text);
         userTotalDept = 15;
         userDeptText.setText(getString(R.string.total_dept)+String.valueOf(userTotalDept)+"TL");
-
         recyclerView=(RecyclerView) root.findViewById(R.id.RecyclerViewGroupEvents);
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this.getContext(),1);
         recyclerView.setLayoutManager(mLayoutManager);
-
-        //Berkay
 
         payButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,24 +74,17 @@ public class EventsFragment extends Fragment {
             openPayFragment();
             }
         });
-        //Berkay
+        if(myGroupActivity.getType().equals("group")){
+            db.getExpensesFromGroup(myGroupActivity.getGroup().getGroupKey());
+        }else if(myGroupActivity.getType().equals("friend")){
+            db.getExpensesFromFriend(myGroupActivity.getFriend().getFriendshipsKey());
+        }
 
-        ArrayList<Transfers>GroupEventsObjectList = new ArrayList<>();
-
-        GroupEventsObjectList.add(new Transfers(0,R.drawable.denemeresim,"Kartuş","Curie","150","50"));
-        GroupEventsObjectList.add(new Transfers(0,R.drawable.denemeresim,"Öğle Yemeği","Sen","15","10"));
-        GroupEventsObjectList.add(new Transfers(1,R.drawable.denemeresim,"N,Bohr","A, Einstein"+"'a","20"));
-        GroupEventsObjectList.add(new Transfers(0,R.drawable.denemeresim,"Kitap","Sen","30","10"));
-        GroupEventsObjectList.add(new Transfers(0,R.drawable.denemeresim,"Pergel","Arda","30","10"));
-        GroupEventsObjectList.add(new Transfers(1,R.drawable.denemeresim,"Sen","Ali"+"'ye","5"));
-
-        recyclerView = root.findViewById(R.id.RecyclerViewGroupEvents);
-        recyclerView.setHasFixedSize(true);
         adapter =new GroupEventsAdapter(GroupEventsObjectList);
+        adapter.notifyDataSetChanged();
 
         recyclerView.setAdapter(adapter);
         return root;
-        //Berkay Ekleme kısmı bitiş//
     }
         @Override
         public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -101,5 +97,13 @@ public class EventsFragment extends Fragment {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragment_place_mygroup,payFragment);
         fragmentTransaction.commit();
+    }
+
+    public void setArray(ArrayList a){
+        GroupEventsObjectList = a;
+        adapter = new GroupEventsAdapter(GroupEventsObjectList);
+        adapter.notifyDataSetChanged();
+        recyclerView.setAdapter(adapter);
+
     }
 }
