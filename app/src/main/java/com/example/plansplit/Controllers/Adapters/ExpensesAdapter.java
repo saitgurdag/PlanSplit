@@ -52,7 +52,6 @@ public class ExpensesAdapter extends RecyclerView.Adapter<ExpensesAdapter.Expens
 
         String type = "";
         if(Locale.getDefault().toString().equals("en")){   //Eger kullanıcı ingilizce kullanıyorsa
-            System.out.println("DİLİ ENG GÖRDÜ DONE");
             if (expense.getExpense_type().toLowerCase().equals("yiyecek")){
                 type = "food";
             }else if(expense.getExpense_type().toLowerCase().equals("giyecek")){
@@ -65,7 +64,6 @@ public class ExpensesAdapter extends RecyclerView.Adapter<ExpensesAdapter.Expens
                 type = "others";
             }
         }else if(Locale.getDefault().toString().equals("de")){  //Eger Kullanıcı almanca kullanıyosa
-            System.out.println("DİLİ ALM GÖRDÜ DONE");
             if (expense.getExpense_type().toLowerCase().equals("yiyecek")){
                 type = "nahrung";
             }else if(expense.getExpense_type().toLowerCase().equals("giyecek")){
