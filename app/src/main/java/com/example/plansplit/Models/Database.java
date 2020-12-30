@@ -32,6 +32,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import static android.provider.Contacts.SettingsColumns.KEY;
 
@@ -1627,7 +1628,6 @@ public class Database {
                         totExpense += p;
                         expenses.add(new Expense(name, type, p));
                     }
-
                 }
                 ((PersonalFragment) fragment).newExpense(expenses, totExpense);
             }

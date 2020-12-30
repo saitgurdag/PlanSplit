@@ -104,27 +104,27 @@
     <string name="trip" translatable="false">Reisen</string>
     <string name="work" translatable="false">Arbeit</string>
     <string name="other" translatable="false">Andere</string>
-    <string name="title_wear" translatable="false">Kleidung</string>
-    <string name="title_food" translatable="false">Nahrung</string>
-    <string name="title_others" translatable="false">Andere</string>
-    <string name="title_stationery" translatable="false">Schreibwaren</string>
-    <string name="title_hygiene" translatable="false">Reinigungsmittel</string>
-    <string name="title_all" translatable="false">Alle</string>
+    <string name="title_wear" translatable="false">kleidung</string>
+    <string name="title_food" translatable="false">nahrung</string>
+    <string name="title_others" translatable="false">andere</string>
+    <string name="title_stationery" translatable="false">schreibwaren</string>
+    <string name="title_hygiene" translatable="false">reinigungsmittel</string>
+    <string name="title_all" translatable="false">alle</string>
     <string name="add_budget_text" translatable="false">Bitte geben Sie Ihr Monatsbudget ein.</string>
     <string name="isim_giriniz" translatable="false">Name eingeben</string>
     <string name="select_friends" translatable="false">Bitte wählen Sie einen Freund</string>
-    <string name="title_house" translatable="false">Haus</string>
-    <string name="title_travel" translatable="false">Reisen</string>
-    <string name="title_business" translatable="false">Arbeit</string>
+    <string name="title_house" translatable="false">haus</string>
+    <string name="title_travel" translatable="false">reisen</string>
+    <string name="title_business" translatable="false">arbeit</string>
     <string name="tl_sign" translatable="false">TL </string>
     <string name="add_expense_price" translatable="false">preis</string>
     <string name="personalfragment_moneyleft" translatable="false">Budget Übrig :</string>
     <string-array name="expensePersonalItems">
-        <item>Nahrung</item>
-        <item>Kleidung</item>
-        <item>Schreibwaren</item>
-        <item>Reinigungsmittel</item>
-        <item>Andere</item>
+        <item>nahrung</item>
+        <item>kleidung</item>
+        <item>schreibwaren</item>
+        <item>reinigungsmittel</item>
+        <item>andere</item>
     </string-array>
     <string name="total_dept" translatable="false">Total Schuld : </string>
     <string name="total_claimant" translatable="false">Total benehmen : </string>
