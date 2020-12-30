@@ -8,13 +8,13 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.example.plansplit.Controllers.Adapters.AddGroupsAdapter;
-import com.example.plansplit.Controllers.Adapters.GroupAdapter;
+import com.example.plansplit.Controllers.Adapters.GroupOperationsAdapter;
 import com.example.plansplit.Controllers.FragmentControllers.personal.PersonalFragment;
 import com.example.plansplit.Models.Objects.Expense;
 import com.example.plansplit.Models.Objects.Friend;
 import com.example.plansplit.Models.Objects.FriendRequest;
 import com.example.plansplit.Models.Objects.Groups;
-import com.example.plansplit.R;
+import com.example.plansplit.Models.Objects.Person;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.firebase.database.DataSnapshot;
@@ -26,7 +26,6 @@ import com.google.firebase.database.ValueEventListener;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Database {
 
@@ -41,6 +40,8 @@ public class Database {
     private static final String NO_SELECTED_FRIEND = "NO_SELECTED_FRIEND";
     private static final String NO_GIVEN_GROUP_NAME = "NO_GIVEN_GROUP_NAME";
     private static final String ALREADY_IN_GROUP = "ALREADY_IN_GROUP";
+    private static final String ALREADY_REMOVED_FROM_GROUP = "ALREADY_REMOVED_FROM_GROUP";
+    private static final String ALREADY_DELETED_GROUP = "ALREADY_DELETED_GROUP";
 
 
     //Firebase
@@ -1073,20 +1074,21 @@ public class Database {
         return expenses;
     }
 
-    public void createNewGroup(String person_id, List<Friend> checked_personList, String group_type,
+    public void createNewGroup(String person_id, ArrayList<Friend> checked_personList, String group_type,
                                @NotNull EditText groupName_EditText, final DatabaseCallBack callBack) {
         if (!groupName_EditText.getText().toString().isEmpty()) {
-            if (AddGroupsAdapter.checked_personList.size() > 0) {
+            if (checked_personList.size() > 0) {
+                final String group_key = group_reference.push().getKey();
+                assert group_key != null;
                 final String group_name = groupName_EditText.getText().toString().trim();
-                Groups group = new Groups(group_name, group_type);
+                Groups group = new Groups(group_name, group_type, group_key);
                 group.addFriend(person_id);
-                for (Friend friend : AddGroupsAdapter.checked_personList) {
+                for (Friend friend : checked_personList) {
                     String friendKey = friend.getKey();
                     group.addFriend(friendKey);
                 }
-                final String group_key = group_reference.push().getKey();
-                assert group_key != null;
-                group.setKey(group_key);
+
+//                group.setKey(group_key);
                 group_reference.child(group_key).setValue(group);
                 //System.out.println(group.getKey()); check group_key;
 
@@ -1152,7 +1154,7 @@ public class Database {
         }
     }
 
-    public void getAllGroups(final String person_id, final ArrayList<Groups> groupsArrayList, final GroupAdapter groupAdapter) {
+    public void getAllGroups(final String person_id, final ArrayList<Groups> groupsArrayList, final DatabaseCallBack callBack) {
         group_reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -1172,7 +1174,7 @@ public class Database {
                         }
                     }
                 }
-                groupAdapter.notifyDataSetChanged();
+                callBack.onSuccess("Gruplar getirildi");
             }
 
             @Override
@@ -1181,5 +1183,244 @@ public class Database {
             }
         });
     }
+
+    public void getAllGroupMembers(Groups group, final ArrayList<Person> groupOperationsPersonList, final int background, final GroupOperationsAdapter adapter){
+        final ArrayList<String> group_members_id = group.getGroup_members();
+
+        user_reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot d_members: snapshot.getChildren()){
+                    if(group_members_id.contains(d_members.getKey())){
+                        String user_image = (String) d_members.child("image").getValue();
+                        Person person = new Person(background,user_image,"10");
+                        groupOperationsPersonList.add(person);
+                    }
+                }
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.w(TAG, "Failed to read value.", error.toException());
+            }
+        });
+    }
+
+    public void searchInGroups(String person_id, final String group_key, final DatabaseCallBack callBack){
+        if (person_id == null) {
+            callBack.onError(KEY_NOT_FOUND, "kullanıcı keyi null");
+            return;
+        }
+        if (group_key == null) {
+            callBack.onError(KEY_NOT_FOUND, "grup keyi key null");
+            return;
+        }
+
+        user_reference.child(person_id).child("groups").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (!snapshot.exists()) {
+                    callBack.onError(VALUE_NOT_FOUND, group_key);
+                    return;
+                }
+
+                for(DataSnapshot d_group_key: snapshot.getChildren()){
+                    if(d_group_key.getValue().equals(group_key)){
+                        String cur_group_key = d_group_key.getKey();
+                        System.out.println(cur_group_key);
+                        assert cur_group_key != null;
+                        callBack.onSuccess(cur_group_key);
+                    }
+
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                callBack.onError(DATABASE_ERROR, error.getMessage());
+            }
+        });
+
+    }
+
+    public void getGroupMembersObjects(final ArrayList<Friend> group_members_objects, final ArrayList<String> group_members_ID){
+        user_reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot d_members: snapshot.getChildren()){
+                    if(group_members_ID.contains(d_members.getKey())){
+                        if(group_members_ID.get(0).equals(d_members.getKey())){
+                            String user_image = (String) d_members.child("image").getValue();
+                            String user_name = (String) d_members.child("name").getValue();
+                            Friend cur_user = new Friend(user_image, user_name, group_members_ID.get(0));
+                            System.out.println(cur_user.getName());
+                            group_members_objects.add(cur_user);
+                        }
+                        Friend member = d_members.getValue(Friend.class);
+                        group_members_objects.add(member);
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    public void updateGroup(String group_key, String group_type, @NotNull EditText groupName_EditText, final DatabaseCallBack callBack){
+        if (!groupName_EditText.getText().toString().isEmpty()){
+            final String group_name = groupName_EditText.getText().toString().trim();
+            group_reference.child(group_key).child("group_name").setValue(group_name);
+            group_reference.child(group_key).child("group_type").setValue(group_type);
+            callBack.onSuccess("Değişikliler başarıyla kaydedildi");
+
+        }else {
+            callBack.onError(NO_GIVEN_GROUP_NAME, "Lütfen grup ismi giriniz");
+        }
+    }
+
+    public void addUserToGroup(Groups group, ArrayList<Friend> checked_personList, final DatabaseCallBack callBack){
+        if(checked_personList.size() > 0){
+            for (Friend friend : checked_personList){
+                String friendKey = friend.getKey();
+                final String groupKey = group.getKey();
+                if(!group.getGroup_members().contains(friendKey)){
+                    group.addFriend(friendKey);
+                }
+
+                group_reference.child(groupKey).setValue(group);
+
+                final DatabaseReference user_groups_ref = user_reference.child(friendKey).child("groups");
+                user_groups_ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if(!snapshot.exists()){
+                            ArrayList<String> current_users_groups = new ArrayList<String>();
+                            current_users_groups.add(groupKey);
+                            user_groups_ref.setValue(current_users_groups);
+                        }else{
+                            ArrayList<String> current_users_groups = (ArrayList<String>) snapshot.getValue();
+                            if (!current_users_groups.contains(groupKey)){
+                                current_users_groups.add(groupKey);
+                            }else{
+                                callBack.onError(ALREADY_IN_GROUP, "Zaten bu gruba kayıtlı");
+                            }
+                            user_groups_ref.setValue(current_users_groups);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        callBack.onError(DATABASE_ERROR, error.getMessage());
+                    }
+                });
+            }
+            callBack.onSuccess("Kişi, gruba başarıyla eklendi");
+        }else {
+            callBack.onError(NO_SELECTED_FRIEND, "Lütfen arkadaş seçiniz");
+        }
+    }
+
+    public void removeFromGroup(final String selected_person_id, final Groups group, final DatabaseCallBack callBack){
+        if (selected_person_id == null) {
+            callBack.onError(KEY_NOT_FOUND, "silinecek key null");
+            return;
+        }
+        final String group_key = group.getKey();
+
+        final DatabaseReference user_groups_ref = user_reference.child(selected_person_id).child("groups");
+        user_groups_ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (!snapshot.exists()) {
+                    callBack.onError(VALUE_NOT_FOUND, "Burası boş");
+                    return;
+                }
+                ArrayList<String> current_users_groups = (ArrayList<String>) snapshot.getValue();
+                if (current_users_groups.contains(group_key)){
+                    current_users_groups.remove(group_key);
+                }else{
+                    callBack.onError(ALREADY_REMOVED_FROM_GROUP, "Bu gruptan zaten silinmiş");
+                }
+                user_groups_ref.setValue(current_users_groups);
+
+                int group_members_size = group.getGroup_members().size();
+                if(group_members_size <= 2) {
+                    group_reference.child(group_key).setValue(null);
+                    group.removeFriend(selected_person_id);
+                    String last_person_key = group.getGroup_members().get(0);
+                    final DatabaseReference l_user_groups_ref = user_reference.child(last_person_key).child("groups");
+                    l_user_groups_ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (!snapshot.exists()) {
+                                callBack.onError(VALUE_NOT_FOUND, "Burası boş");
+                                return;
+                            }
+                            ArrayList<String> current_users_groups = (ArrayList<String>) snapshot.getValue();
+                            if (current_users_groups.contains(group_key)){
+                                current_users_groups.remove(group_key);
+                            }else{
+                                callBack.onError(ALREADY_REMOVED_FROM_GROUP, "Bu gruptan zaten silinmiş");
+                            }
+                            l_user_groups_ref.setValue(current_users_groups);
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            callBack.onError(DATABASE_ERROR, error.getMessage());
+                        }
+                    });
+                }else{
+                    group.removeFriend(selected_person_id);
+                    group_reference.child(group_key).setValue(group);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                callBack.onError(DATABASE_ERROR, error.getMessage());
+            }
+        });
+        callBack.onSuccess("Gruptan başarıyla çıkarıldı");
+    }
+
+    public void deleteGroup(final Groups group, final DatabaseCallBack callBack){
+        final String group_key = group.getKey();
+        final ArrayList<String> group_members_id = group.getGroup_members();
+        for(String friend_id: group_members_id){
+            final DatabaseReference user_groups_ref = user_reference.child(friend_id).child("groups");
+            user_groups_ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    ArrayList<String> current_users_groups = (ArrayList<String>) snapshot.getValue();
+                    if (current_users_groups.contains(group_key)){
+                        current_users_groups.remove(group_key);
+                    }else{
+                        callBack.onError(ALREADY_REMOVED_FROM_GROUP, "Bu gruptan zaten silinmiş");
+                    }
+                    user_groups_ref.setValue(current_users_groups);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        }
+
+        group_reference.child(group_key).setValue(null);
+        callBack.onSuccess("Grup başarıyla silindi");
+
+    }
+
+
+
 
 }

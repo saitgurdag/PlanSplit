@@ -17,13 +17,18 @@ public class Groups implements Serializable {
     public Groups() {
     }
 
-    public Groups(String group_name, String group_type) {
+    public Groups(String group_name, String group_type, String key) {
         this.group_name = group_name;
         this.group_type = group_type;
+        this.key = key;
     }
 
-    public void addFriend(String friendKey){
+    public void addFriend(String friendKey) {
         group_members.add(friendKey);
+    }
+
+    public void removeFriend(String friendKey){
+        group_members.remove(friendKey);
     }
 
     public ArrayList<String> getGroup_members() {
@@ -76,9 +81,5 @@ public class Groups implements Serializable {
 
     public String getKey() {
         return key;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
     }
 }

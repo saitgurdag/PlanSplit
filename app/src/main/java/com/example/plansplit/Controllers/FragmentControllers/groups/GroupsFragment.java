@@ -19,16 +19,15 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.plansplit.Controllers.Adapters.ExpensesAdapter;
 import com.example.plansplit.Controllers.Adapters.GroupAdapter;
 import com.example.plansplit.Controllers.FragmentControllers.AddExpenseFragment;
 import com.example.plansplit.Controllers.FragmentControllers.addgroups.AddGroupsFragment;
 import com.example.plansplit.Controllers.HomeActivity;
 import com.example.plansplit.Controllers.MyGroupActivity;
 import com.example.plansplit.Models.Database;
-import com.example.plansplit.Models.Objects.Expense;
 import com.example.plansplit.Models.Objects.Groups;
 import com.example.plansplit.R;
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -46,6 +45,8 @@ public class GroupsFragment extends Fragment {
     private String person_id;
     private String selectedFilter;
     private ImageView personImage;
+    Bundle extras;
+    String update_group_key;
 
 
     @Nullable
@@ -53,23 +54,36 @@ public class GroupsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_groups, container, false);
 
-
-
         final HomeActivity home = (HomeActivity) getContext();
         person_id = home.getPersonId();
-        groupsfilterBtn=root.findViewById(R.id.imageViewFilterGroup);
+        groupsfilterBtn = root.findViewById(R.id.imageViewFilterGroup);
 
         recyclerView = root.findViewById(R.id.recyclerGroups);
         recyclerView.setHasFixedSize(true);
         setOnClickListener();
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
-        personImage=root.findViewById(R.id.notification_image2);
+        personImage = root.findViewById(R.id.notification_image2);
         Picasso.with(getContext()).load(home.getPersonPhoto()).into(personImage);
 
         groupsArrayList = new ArrayList<>();
 
         groupAdapter = new GroupAdapter(this.getContext(), groupsArrayList, mListener);
         recyclerView.setAdapter(groupAdapter);
+
+        if (extras != null && extras.keySet().contains("update_group_key")) {
+            Gson gson = new Gson();
+            String json = null;
+            Intent intent = new Intent(getParentFragment().getContext(), MyGroupActivity.class);
+            update_group_key = (String) getArguments().get("update_group_key");
+            for (Groups group : groupsArrayList) {
+                if (group.getKey().equals(update_group_key)) {
+                    json = gson.toJson(group);
+                }
+            }
+            intent.putExtra("group", json);
+            startActivity(intent);
+        }
+
 
         groupsfilterBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,22 +95,22 @@ public class GroupsFragment extends Fragment {
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem menuItem) {
-                        switch(menuItem.getItemId()){
+                        switch (menuItem.getItemId()) {
                             case R.id.filter_house:
-                                selectedFilter=getResources().getString(R.string.title_house);
+                                selectedFilter = getResources().getString(R.string.title_house);
 
                                 break;
                             case R.id.filter_travel:
-                                selectedFilter=getResources().getString(R.string.title_travel);
+                                selectedFilter = getResources().getString(R.string.title_travel);
                                 break;
                             case R.id.filter_business:
-                                selectedFilter=getResources().getString(R.string.title_business);
+                                selectedFilter = getResources().getString(R.string.title_business);
                                 break;
                             case R.id.filter_others:
-                                selectedFilter=getResources().getString(R.string.title_others);
+                                selectedFilter = getResources().getString(R.string.title_others);
                                 break;
                             case R.id.filter_all:
-                                selectedFilter=getResources().getString(R.string.title_all);
+                                selectedFilter = getResources().getString(R.string.title_all);
                                 break;
 
                         }
@@ -132,6 +146,9 @@ public class GroupsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 AddGroupsFragment addGroupsFragment = new AddGroupsFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("person_id", person_id);
+                addGroupsFragment.setArguments(bundle);
                 FragmentManager fragmentManager = getParentFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.nav_host_fragment, addGroupsFragment);
@@ -141,7 +158,6 @@ public class GroupsFragment extends Fragment {
         });
 
 
-
         return root;
 
     }
@@ -149,17 +165,34 @@ public class GroupsFragment extends Fragment {
     private void setOnClickListener() {
         mListener = new GroupAdapter.RecyclerViewClickListener() {
             @Override
-            public void onClick(View v, int position) {
-                Intent intent = new Intent(getParentFragment().getContext(), MyGroupActivity.class);
-                intent.putExtra("group_title", groupsArrayList.get(position).getGroup_name());
-                intent.putExtra("group_image", groupsArrayList.get(position).getGroup_type());
+            public void onClick(View v, final int position) {
+                final String group_key = groupsArrayList.get(position).getKey();
+                final Intent intent = new Intent(getParentFragment().getContext(), MyGroupActivity.class);
+//                intent.putExtra("group_title", groupsArrayList.get(position).getGroup_name());
+//                intent.putExtra("group_image", groupsArrayList.get(position).getGroup_type());
+                intent.putExtra("person_id", person_id);
+                Gson gson = new Gson();
+                String json = gson.toJson(groupsArrayList.get(position));
+                intent.putExtra("group", json);
                 startActivity(intent);
+
             }
         };
     }
 
     public void getGroups() {
-        database.getAllGroups(person_id, groupsArrayList, groupAdapter);
+        database.getAllGroups(person_id, groupsArrayList, new Database.DatabaseCallBack() {
+            @Override
+            public void onSuccess(String success) {
+                Log.d(TAG, success);
+                groupAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onError(String error_tag, String error) {
+
+            }
+        });
     }
 
     public void filterList(String filtertype) {
@@ -177,8 +210,6 @@ public class GroupsFragment extends Fragment {
             recyclerView.setAdapter(groupAdapter);
         }
     }
-
-
 
 
 }

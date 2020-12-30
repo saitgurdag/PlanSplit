@@ -41,7 +41,7 @@
                             android:id="@+id/cardView_addgroupsPicture"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:foreground="@drawable/denemeresim"
+
                             android:layout_gravity="center"
                             app:cardCornerRadius="20dp"
                             app:layout_constraintStart_toStartOf="parent"
@@ -52,7 +52,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
-                                app:srcCompat="@drawable/denemeresim" />
+                                 />
                         </androidx.cardview.widget.CardView>
 
                         <LinearLayout

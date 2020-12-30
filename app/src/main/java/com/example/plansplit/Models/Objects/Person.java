@@ -1,5 +1,7 @@
 package com.example.plansplit.Models.Objects;
 
+import android.net.Uri;
+
 public class Person {
 
     private String name;
@@ -7,6 +9,7 @@ public class Person {
     private int cardView_shareMethodPersonPicture;
     private int checkBox_shareMethodPersonCheckBox;
     private int cardView_addgroupsPicture;
+    private String person_photo;
 
     /////////// BERKAY EKLEME KISMI ////////////
 
@@ -16,10 +19,18 @@ public class Person {
     private String groupDepth;
     private int backGroundPerson ;
 
-    public Person(int backGroundPerson,int cardView_shareMethodPersonPicture, String groupDepth) {           // Group Operations için kullandığım Contructor
+    public Person(int backGroundPerson,String person_photo, String groupDepth) {           // Group Operations için kullandığım Contructor
         this.backGroundPerson=backGroundPerson;
-        this.cardView_shareMethodPersonPicture = cardView_shareMethodPersonPicture;
+        this.person_photo = person_photo;
         this.groupDepth = groupDepth;
+    }
+
+    public Uri getPerson_photo() {
+        return Uri.parse(person_photo);
+    }
+
+    public void setPerson_photo(String person_photo) {
+        this.person_photo = person_photo;
     }
 
     public String getGroupDepth() {

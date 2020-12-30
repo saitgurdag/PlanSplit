@@ -24,6 +24,13 @@ public class Friend{
         return mail;
     }
 
+
+    public Friend(String person_image, String name, String key) {
+        this.person_image = person_image;
+        this.name = name;
+        this.key = key;
+    }
+
     public Friend(String person_image, String name, int amount, String key){
         if(!person_image.isEmpty()){
 

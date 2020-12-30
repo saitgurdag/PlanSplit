@@ -22,5 +22,10 @@
         android:label="@string/list"
         android:name="com.example.plansplit.Controllers.FragmentControllers.mygroup.ListFragment"
         tools:layout="@layout/fragment_list" />
+    <fragment
+        android:id="@+id/navi_group_options"
+        android:name="com.example.plansplit.Controllers.FragmentControllers.addgroups.AddGroupsFragment"
+        android:label="AddGroupsFragment"
+        tools:layout="@layout/fragment_addgroups"/>
 
 </navigation>

@@ -100,6 +100,7 @@
     <string name="isim_giriniz">İsim giriniz</string>
     <string name="select_friends">Lütfen arkadaş seçiniz</string>
     <string name="add_friends_to_group">Arkadaş Ekle</string>
+    <string name="add_friends_in_group">Gruba arkadaş ekle</string>
     <string name="title_house">ev</string>
     <string name="title_travel">seyehat</string>
     <string name="title_business">iş</string>

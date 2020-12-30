@@ -1,5 +1,6 @@
 package com.example.plansplit.Controllers.Adapters;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,12 +13,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.plansplit.Controllers.FragmentControllers.mygroup.GroupOperationsFragment;
 import com.example.plansplit.Models.Objects.Person;
 import com.example.plansplit.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
 public class GroupOperationsAdapter extends RecyclerView.Adapter<GroupOperationsAdapter.GroupOperationsViewHolder> {
 
     private ArrayList<Person> groupOperationsPersonList;
+    Context mCtx;
 
     public GroupOperationsAdapter(ArrayList<Person> operationsPersonList){
         groupOperationsPersonList = operationsPersonList;
@@ -34,7 +37,8 @@ public class GroupOperationsAdapter extends RecyclerView.Adapter<GroupOperations
     public void onBindViewHolder(@NonNull GroupOperationsViewHolder holder, int position) {
         Person persons = groupOperationsPersonList.get(position);
         holder.background.setColorFilter(GroupOperationsFragment.colourArrayInteger.get(position));
-        holder.personImage.setImageResource(persons.getCardView_shareMethodPersonPicture());
+        Picasso.with(mCtx).load(persons.getPerson_photo()).into(holder.personImage);
+        //holder.personImage.setImageResource(persons.getCardView_shareMethodPersonPicture());
         holder.personGroupDepth.setText(persons.getGroupDepth());
 
     }

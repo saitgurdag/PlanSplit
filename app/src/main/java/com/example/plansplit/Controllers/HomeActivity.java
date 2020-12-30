@@ -17,9 +17,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -37,10 +34,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemSelectedListener {
 
@@ -96,9 +90,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         NavigationUI.setupWithNavController(navView, navController);
 
 
-
-
-
         navView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener(){
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item){
@@ -131,14 +122,12 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             setHeader(personPhoto,name,email);
             String image=personPhoto.toString();
 
-
-
-
             database.registerUser(personId, name, email, surname,image);
             Log.d(TAG, "user registered with this email: " + email + "\n" + "and this key: " + personId);
         }
       
         Bundle extras = getIntent().getExtras();
+
         if(extras != null && extras.keySet().contains("navigation")) {
             navigation_key = extras.getString("navigation");
             bundle = new Bundle();

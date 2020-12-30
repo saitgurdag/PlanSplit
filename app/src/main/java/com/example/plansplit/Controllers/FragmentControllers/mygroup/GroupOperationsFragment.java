@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.plansplit.Controllers.Adapters.GroupOperationsAdapter;
+import com.example.plansplit.Models.Database;
+import com.example.plansplit.Models.Objects.Groups;
 import com.example.plansplit.Models.Objects.Person;
 import com.example.plansplit.R;
 import com.github.mikephil.charting.charts.PieChart;
@@ -25,10 +27,11 @@ import java.util.ArrayList;
 
 public class GroupOperationsFragment extends Fragment {
     //BERKAY EKLEME KISMI
-
+    private static final Database database = Database.getInstance();
     RecyclerView recyclerView;
     GroupOperationsAdapter adapter;
-    ArrayList<Person> groupOperationsPersonList;
+    ArrayList<Person> groupOperationsPersonList = new ArrayList<>();
+    Groups group;
 
     ArrayList<Integer> depthInInteger = new ArrayList();
     public static ArrayList<Integer> colourArrayInteger = new ArrayList<>();
@@ -52,17 +55,17 @@ public class GroupOperationsFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this.getContext(),3);
         recyclerView.setLayoutManager(mLayoutManager);
+        group = (Groups) getArguments().getSerializable("group");
 
-        groupOperationsPersonList = new ArrayList<>();
+        getAllGroupMembers();
 
-
-        groupOperationsPersonList.add(new Person(background,R.drawable.denemeresim,"100"));
-        groupOperationsPersonList.add(new Person(background,R.drawable.denemeresim,"300"));
-        groupOperationsPersonList.add(new Person(background,R.drawable.denemeresim,"400"));
-        groupOperationsPersonList.add(new Person(background,R.drawable.denemeresim,"500"));
-        groupOperationsPersonList.add(new Person(background,R.drawable.denemeresim,"1000"));
-        groupOperationsPersonList.add(new Person(background,R.drawable.denemeresim,"700"));
-        groupOperationsPersonList.add(new Person(background,R.drawable.denemeresim,"1200"));
+//        groupOperationsPersonList.add(new Person(background,R.drawable.denemeresim,"100"));
+//        groupOperationsPersonList.add(new Person(background,R.drawable.denemeresim,"300"));
+//        groupOperationsPersonList.add(new Person(background,R.drawable.denemeresim,"400"));
+//        groupOperationsPersonList.add(new Person(background,R.drawable.denemeresim,"500"));
+//        groupOperationsPersonList.add(new Person(background,R.drawable.denemeresim,"1000"));
+//        groupOperationsPersonList.add(new Person(background,R.drawable.denemeresim,"700"));
+//        groupOperationsPersonList.add(new Person(background,R.drawable.denemeresim,"1200"));
 
 
         recyclerView = root.findViewById(R.id.recyclerGroupOperations);
@@ -72,6 +75,8 @@ public class GroupOperationsFragment extends Fragment {
         recyclerView.setAdapter(adapter);
         yazdir(groupOperationsPersonList);
         totalDepth(depthInInteger);
+
+
 
         System.out.println("TOPLAM BORC : "+totalDepth);
 
@@ -166,4 +171,9 @@ public class GroupOperationsFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
     }
+
+    public void getAllGroupMembers(){
+        database.getAllGroupMembers(group, groupOperationsPersonList, background,adapter);
+    }
+
 }
