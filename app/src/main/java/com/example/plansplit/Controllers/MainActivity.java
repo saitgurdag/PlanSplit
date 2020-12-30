@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     ImageView loginWalletAnimation;
     Animation frombottomLoginWallet;
 
+    static int languageFlag;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,16 +113,20 @@ public class MainActivity extends AppCompatActivity {
                 if(i == 0){
                     //Deutsch
                     setLocale("de");
-                    recreate();
+                   languageFlag = 0;
+
+                   recreate();
                 }
                 else if(i == 1){
                     //Englisch
                     setLocale("en");
+                    languageFlag = 1;
                     recreate();
                 }
                 else if(i == 2){
                     //Türkce
                     setLocale("tr-rTR");
+                    languageFlag = 2;
                     recreate();
                 }
                  dialogInterface.dismiss();

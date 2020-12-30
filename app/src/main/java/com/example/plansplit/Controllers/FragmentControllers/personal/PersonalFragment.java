@@ -34,6 +34,7 @@ import com.example.plansplit.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Objects;
 
 import static android.R.layout.simple_spinner_item;
@@ -103,8 +104,21 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemSele
         recyclerView.setLayoutManager(mLayoutManager);
 
         update();
+//Bergay
+      /*   Sacma
+        if((Locale.getDefault().toString().equals("en"))){
+            for(int i = 0 ; i<expenseList.size();i++){
+                if (expenseList.get(i).getExpense_type().equals("food")){
+                    System.out.println("DELİRDİM LAAAAAAAAAAAAN");
+                    expenseList.get(i).getExpense_type().replaceFirst("food","yiyecek");
+                }
+            }
+        }
+*/
+        //Bergay
 
-        adapter = new ExpensesAdapter(this.getContext(), expenseList);
+
+            adapter = new ExpensesAdapter(this.getContext(), expenseList);
         recyclerView.setAdapter(adapter);
 
         addExpense.setOnClickListener(this);
@@ -122,24 +136,30 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemSele
                     @Override
                     public boolean onMenuItemClick(MenuItem menuItem) {
                         switch(menuItem.getItemId()){
-                            case R.id.filter_food:
-                                selectedFilter=getResources().getString(R.string.title_food);
 
+                            case R.id.filter_food:
+                                //selectedFilter=getResources().getString(R.string.title_food);
+                                selectedFilter="yiyecek";
                                 break;
                             case R.id.filter_wear:
-                                selectedFilter=getResources().getString(R.string.title_wear);
+                                //selectedFilter=getResources().getString(R.string.title_wear);
+                                selectedFilter="giyecek";
                                 break;
                             case R.id.filter_stationery:
-                                selectedFilter=getResources().getString(R.string.title_stationery);
+                                //selectedFilter=getResources().getString(R.string.title_stationery);
+                                selectedFilter="kırtasiye";
                                 break;
                             case R.id.filter_hygiene:
-                                selectedFilter=getResources().getString(R.string.title_hygiene);
+                                //selectedFilter=getResources().getString(R.string.title_hygiene);
+                                selectedFilter="temizlik";
                                 break;
                             case R.id.filter_others:
-                                selectedFilter=getResources().getString(R.string.title_others);
+                                //selectedFilter=getResources().getString(R.string.title_others);
+                                selectedFilter="diğer";
                                 break;
                             case R.id.filter_all:
-                                selectedFilter=getResources().getString(R.string.title_all);
+                               // selectedFilter=getResources().getString(R.string.title_all);
+                                selectedFilter = "hepsi";
                                 break;
 
                         }
@@ -174,8 +194,6 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemSele
             adapter = new ExpensesAdapter(this.getContext(), expenseList);
             recyclerView.setAdapter(adapter);
         }
-
-
     }
 
     @Override
@@ -194,6 +212,35 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemSele
             if(!price.getText().toString().matches("") && !expenseName.getText().toString().matches("")) {
                 String name = String.valueOf(expenseName.getText());
                 int p = Integer.parseInt(String.valueOf(price.getText()));
+
+
+                if(type.equals("food") || type.equals("nahrung")){
+                     type ="yiyecek";
+                }else if(type.equals("wear") || type.equals("kleidung")){
+                        type = "giyecek";
+                }else if(type.equals("stationary") || type.equals("schreibwaren")){
+                            type = "kırtasiye";
+                }else if(type.equals("cleaning") || type.equals("reinigungsmittel")){
+                                 type = "temizlik";
+                }else if(type.equals("others") || type.equals("andere")){
+                                       type = "diğer";
+                }
+
+
+                /*
+                if(type.equals("Food") || type.equals("Nahrung")||type.equals("Yiyecek")){
+                    type ="1";
+                }else if(type.equals("Wear") || type.equals("Kleidung") || type.equals("Giyecek")){
+                    type = "2";
+                }else if(type.equals("Stationary") || type.equals("Schreibwaren") || type.equals("Kırtasiye")){
+                    type = "3";
+                }else if(type.equals("Cleaning") || type.equals("Reinigungsmittel") || type.equals("Temizlik")){
+                    type = "4";
+                }else if(type.equals("Others") || type.equals("Andere") || type.equals("Diğer")){
+                    type = "5";
+                }
+                */
+
                 db.addExpense(name, type, String.valueOf(p));
             }
         }else if(v.getId()==progressText.getId()){
