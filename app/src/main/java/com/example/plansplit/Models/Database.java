@@ -1546,15 +1546,15 @@ public class Database {
                     String date = (String) ds.child("date").getValue();
                     int image = R.drawable.ic_other;;
                     if(type!=null && name!=null && price!=null && addedBy!=null) {
-                        if (type.equals("yiyecek")) {
+                        if (type.equals("Yiyecek")) {
                             image = R.drawable.ic_baseline_fastfood_24;
-                        } else if (type.equals("giyecek")) {
+                        } else if (type.equals("Giyecek")) {
                             image = R.drawable.ic_baseline_wear_24;
-                        } else if (type.equals("temizlik")) {
+                        } else if (type.equals("Temizlik")) {
                             image = R.drawable.ic_baseline_hygiene_24;
-                        } else if (type.equals("kırtasiye")) {
+                        } else if (type.equals("Kırtasiye")) {
                             image = R.drawable.ic_baseline_school_24;
-                        } else if (type.equals("diğer")) {
+                        } else if (type.equals("Diğer")) {
                             image = R.drawable.ic_other;
                         }
                         expenses.add(new Transfers(0, image, name, addedBy, price, "50"));
@@ -1586,15 +1586,15 @@ public class Database {
                     String date = (String) ds.child("date").getValue();
                     int image = R.drawable.ic_other;;
                     if(type!=null && name!=null && price!=null && addedBy!=null) {
-                        if (type.equals("yiyecek")) {
+                        if (type.equals("Yiyecek")) {
                             image = R.drawable.ic_baseline_fastfood_24;
-                        } else if (type.equals("giyecek")) {
+                        } else if (type.equals("Giyecek")) {
                             image = R.drawable.ic_baseline_wear_24;
-                        } else if (type.equals("temizlik")) {
+                        } else if (type.equals("Temizlik")) {
                             image = R.drawable.ic_baseline_hygiene_24;
-                        } else if (type.equals("kırtasiye")) {
+                        } else if (type.equals("Kırtasiye")) {
                             image = R.drawable.ic_baseline_school_24;
-                        } else if (type.equals("diğer")) {
+                        } else if (type.equals("Diğer")) {
                             image = R.drawable.ic_other;
                         }
                         expenses.add(new Transfers(0, image, name, addedBy, price, "50"));
