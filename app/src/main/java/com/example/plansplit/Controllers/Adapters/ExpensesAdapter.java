@@ -50,36 +50,37 @@ public class ExpensesAdapter extends RecyclerView.Adapter<ExpensesAdapter.Expens
         holder.price.setText(expense.getPrice());
         holder.name.setText(expense.getExpense_name());
 
-        //BERGAY
-/*
-        if((Locale.getDefault().toString().equals("en"))){
-                if (expense.getExpense_type().equals("yiyecek") || expense.getExpense_type().equals("nahrung")){
-                       // holder.type.setText(R.string.title_food); // food
-                    holder.type.setText("food");
-                     }if (expense.getExpense_type().equals("giyecek") || expense.getExpense_type().equals("kleidung")){
-                             holder.type.setText("wear"); // clothing
-                        }if (expense.getExpense_type().equals("kırtasiye") || expense.getExpense_type().equals("schreibwaren")){
-                                     holder.type.setText("stationary"); // kırtasiye
-                            }if(expense.getExpense_type().equals("Temizlik") || expense.getExpense_type().equals("reinigungsmittel")){
-                                             holder.type.setText("cleaning"); // temizlik
-                                }if (expense.getExpense_type().equals("Diğer") || expense.getExpense_type().equals("andere")){
-                                holder.type.setText("others"); // temizlik
-                                         }
-        }else if (Locale.getDefault().toString().equals("de")){
-            if (expense.getExpense_type().equals("yiyecek") || expense.getExpense_type().equals("food")){
-                holder.type.setText("Nahrung"); // food
-            }if (expense.getExpense_type().equals("giyecek") || expense.getExpense_type().equals("clothing")){
-                holder.type.setText("Kleidung"); // clothing
-            }if (expense.getExpense_type().equals("kırtasiye") || expense.getExpense_type().equals("stationery")){
-                holder.type.setText("schreibwaren"); // kırtasiye
-            }if(expense.getExpense_type().equals("temizlik") || expense.getExpense_type().equals("wear")){
-                holder.type.setText("reinigungsmittel"); // temizlik
-            }if (expense.getExpense_type().equals("diğer") || expense.getExpense_type().equals("other")){
-                holder.type.setText("andere"); // diğer
-            }else holder.type.setText(expense.getExpense_type());
+        String type = "";
+        if(Locale.getDefault().toString().equals("en")){   //Eger kullanıcı ingilizce kullanıyorsa
+            System.out.println("DİLİ ENG GÖRDÜ DONE");
+            if (expense.getExpense_type().toLowerCase().equals("yiyecek")){
+                type = "food";
+            }else if(expense.getExpense_type().toLowerCase().equals("giyecek")){
+                type = "wear";
+            }else if (expense.getExpense_type().toLowerCase().equals("kırtasiye")){
+                type = "stationary";
+            }else if (expense.getExpense_type().toLowerCase().equals("temizlik")){
+                type = "cleaning";
+            }else if(expense.getExpense_type().toLowerCase().equals("diğer")){
+                type = "others";
+            }
+        }else if(Locale.getDefault().toString().equals("de")){  //Eger Kullanıcı almanca kullanıyosa
+            System.out.println("DİLİ ALM GÖRDÜ DONE");
+            if (expense.getExpense_type().toLowerCase().equals("yiyecek")){
+                type = "nahrung";
+            }else if(expense.getExpense_type().toLowerCase().equals("giyecek")){
+                type = "kleidung";
+            }else if (expense.getExpense_type().toLowerCase().equals("kırtasiye")){
+                type = "schreibwaren";
+            }else if(expense.getExpense_type().toLowerCase().equals("temizlik")){
+                type = "reinigungsmittel";
+            }else if(expense.getExpense_type().toLowerCase().equals("diğer")){
+                type = "andere";
+            }
+        }else{
+            type = expense.getExpense_type();
         }
-*/
-        holder.type.setText(expense.getExpense_type());
+        holder.type.setText(type);
 
     }
 

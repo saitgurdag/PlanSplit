@@ -1621,53 +1621,7 @@ public class Database {
                 totExpense = 0;
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     String name = (String) ds.child("name").getValue();
-
-                    //Berkay begin
-
-                    System.out.println(Locale.getDefault()+"Güncel Dil"); //Suanki dili algılatabiliyorum
-
-                   // String type="Expense";
-                    /*
-                    if (ds.child("type").getValue() != null ) {
-                        buna
-                    }ad
-                     */
-
-                    String type ="Expense";
-                    if( ds.child("type").getValue() != null && Locale.getDefault().toString().equals("en")){   //Eger kullanıcı ingilizce kullanıyorsa
-                        System.out.println("DİLİ ENG GÖRDÜ DONE");
-                        if (ds.child("type").getValue().equals("yiyecek")){
-                                  type = "food";
-                            }else if(ds.child("type").getValue().equals("giyecek")){
-                                      type = "wear";
-                              }else if (ds.child("type").getValue().equals("kırtasiye")){
-                                            type = "stationary";
-                                }else if (ds.child("type").getValue().equals("temizlik")){
-                                                type = "cleaning";
-                                    }else if(ds.child("type").getValue().equals("diğer")){
-                                                    type = "others";
-                                     }
-                    }else if( ds.child("type").getValue() != null && Locale.getDefault().toString().equals("de")){  //Eger Kullanıcı almanca kullanıyosa
-                        System.out.println("DİLİ ALM GÖRDÜ DONE");
-                        if (ds.child("type").getValue().equals("yiyecek")){
-                                type = "nahrung";
-                            }else if(ds.child("type").getValue().equals("giyecek")){
-                                     type = "kleidung";
-                                }else if (ds.child("type").getValue().equals("kırtasiye")){
-                                         type = "schreibwaren";
-                                     }else if (ds.child("type").getValue().equals("temizlik")){
-                                            type = "reinigungsmittel";
-                                        }else if(ds.child("type").getValue().equals("diğer")){
-                                                type = "andere";
-                                         }
-                    }else if (ds.child("type").getValue() != null && Locale.getDefault().toString().equals("tr-rtr")) {
-                        type = (String) ds.child("type").getValue();
-                    }
-
-
-                    //Berkay end
-
-                    //String type = (String) ds.child("type").getValue();   //bilmiom
+                    String type = (String) ds.child("type").getValue();
                     String price = (String) ds.child("price").getValue();
                     if (price != null) {
                         int p = Integer.parseInt(price);
