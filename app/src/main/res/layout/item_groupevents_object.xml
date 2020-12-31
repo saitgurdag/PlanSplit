@@ -119,18 +119,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/group_events_object_user_depth"
-                    android:fontFamily="@font/avenir"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:textAlignment="center"
-                    android:gravity="center"
-                    android:textColor="@color/red"
-                    android:text="TextView" />
-
-                <TextView
-                    android:id="@+id/group_events_object_user_depth_status"
+                    android:id="@+id/day"
                     android:fontFamily="@font/avenir"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"

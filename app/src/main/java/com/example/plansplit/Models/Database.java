@@ -1574,6 +1574,7 @@ public class Database {
         dbRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                expenses.clear();
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     String name = (String) ds.child("name").getValue();
                     String addedBy = (String) ds.child("addedBy").getValue();
@@ -1593,7 +1594,7 @@ public class Database {
                         } else if (type.equals("Diğer")) {
                             image = R.drawable.ic_other;
                         }
-                        expenses.add(new Transfers(0, image, name, addedBy, price, "50"));
+                        expenses.add(new Transfers(0, image, name, addedBy, price, date));
                     }
                 }
                 if(fragment!=null){
@@ -1614,13 +1615,14 @@ public class Database {
         dbRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                expenses.clear();
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     String name = (String) ds.child("name").getValue();
                     String addedBy = (String) ds.child("addedBy").getValue();
                     String type = (String) ds.child("type").getValue();
                     String price = (String) ds.child("price").getValue();
                     String date = (String) ds.child("date").getValue();
-                    int image = R.drawable.ic_other;;
+                    int image = R.drawable.ic_other;
                     if(type!=null && name!=null && price!=null && addedBy!=null) {
                         if (type.equals("Yiyecek")) {
                             image = R.drawable.ic_baseline_fastfood_24;
@@ -1633,7 +1635,7 @@ public class Database {
                         } else if (type.equals("Diğer")) {
                             image = R.drawable.ic_other;
                         }
-                        expenses.add(new Transfers(0, image, name, addedBy, price, "50"));
+                        expenses.add(new Transfers(0, image, name, addedBy, price, date));
                     }
                 }
                 if(fragment!=null){
@@ -1889,32 +1891,36 @@ public class Database {
         dbRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot ds : snapshot.getChildren()){
-                    if(ds.getKey().equals(userId)) {
-                        final float[] credit = {0};         // kullanıcının diğer kullanıcıdan alması gereken para miktarı
-                        final float[] debt = {0};           // kullanıcının borcu
-                        debt[0] += Float.parseFloat(ds.getValue().toString());
-                        DatabaseReference myRef = group_reference.child(friend.getFriendshipsKey()).child("debts").child(userId);
-                        myRef.addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot s) {
-                                for(DataSnapshot dds : s.getChildren()){
-                                    if(dds.getKey().equals(friend.getKey())){
-                                        credit[0] += Float.parseFloat(dds.getValue().toString());
-                                        debt[0] = debt[0] -credit[0];
-                                        if(debt[0] <0){
-                                            debt[0] =0;
+                if(snapshot.getValue()==null){
+                    callBack.onGetDebtFromGroupRetrieveSuccess(0);
+                }else {
+                    for (final DataSnapshot ds : snapshot.getChildren()) {
+                        if (ds.getKey().equals(userId)) {
+                            DatabaseReference myRef = group_reference.child(friend.getFriendshipsKey()).child("debts").child(userId);
+                            myRef.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot s) {
+                                    for (DataSnapshot dds : s.getChildren()) {
+                                        if (dds.getKey().equals(friend.getKey())) {
+                                            float credit = 0;         // kullanıcının diğer kullanıcıdan alması gereken para miktarı
+                                            float debt = 0;           // kullanıcının borcu
+                                            debt += Float.parseFloat(ds.getValue().toString());
+                                            credit += Float.parseFloat(dds.getValue().toString());
+                                            debt = debt - credit;
+                                            if (debt <= 0) {
+                                                debt = 0;
+                                            }
+                                            callBack.onGetDebtFromGroupRetrieveSuccess(debt);
                                         }
-                                        callBack.onGetDebtFromGroupRetrieveSuccess(debt[0]);
                                     }
                                 }
-                            }
 
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-                                callBack.onGetDebtFromGroupRetrieveSuccess(debt[0]);
-                            }
-                        });
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+                                    callBack.onError("Hata : ", "gruptan borç çekme hatası");
+                                }
+                            });
+                        }
                     }
                 }
             }
@@ -1932,9 +1938,13 @@ public class Database {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(ctrlFirst[0]) {
+                    System.out.println("dogruuuu2");
                     for (DataSnapshot ds : snapshot.getChildren()) {
                         if (ds.getKey().equals(userId)) {
+                            System.out.println("dogruuu3");
+                            System.out.println("hesapppp : " + ds.getValue().toString());
                             final String newDebt = String.valueOf(Float.parseFloat(ds.getValue().toString()) - Float.parseFloat(amount));
+                            System.out.println("hesap 2 2 : " + newDebt);
                             group_reference.child(friend.getFriendshipsKey()).child("debts").child(friend.getKey()).child(userId)
                                     .setValue(newDebt);
                             group_reference.child(friend.getFriendshipsKey()).child("debts").child(userId)
@@ -1943,6 +1953,7 @@ public class Database {
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                                     for (DataSnapshot d : snapshot.getChildren()){
                                         if(d.getKey().equals(friend.getKey())){
+                                            System.out.println("eşitlendi");
                                             Float m = Float.parseFloat(d.getValue().toString());           //benim ondan alacağım
                                             if (m == Float.parseFloat(newDebt)) {
                                                 group_reference.child(friend.getFriendshipsKey()).child("debts").child(friend.getKey()).child(userId)

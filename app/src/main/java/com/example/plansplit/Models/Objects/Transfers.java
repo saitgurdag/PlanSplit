@@ -44,8 +44,6 @@ public class Transfers {   //bu clasın amacı kişiler arasındaki para alışv
             this.groupEvents_object_depthStatus = R.string.group_events_object_depth_status_claimant; //Alacaklısın
             this.object_payOrPayed = R.string.group_events_object_payOrpayed_pay;//ödeyen Sen yani bensem değilsem paranın sağında ödedin yazmalı ama solunda TL YAZIYO
 
-//group_events_object_user_depth
-//group_events_object_user_depth_status
         }
     }
     public Transfers(int type, int groupEvents_payment_money_image, String groupEvents_payments_payerName, String groupEvents_payments_payedName, String groupEvents_payments_payAmount) {
