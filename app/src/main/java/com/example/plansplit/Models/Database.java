@@ -1820,6 +1820,7 @@ public class Database {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 float credit=0;         // kullanıcının diğer kullanıcıdan alması gereken para miktarı
                 float debt=0;           // kullanıcının borcu
+
                 for(DataSnapshot ds : snapshot.getChildren()){
                     if(ds.getKey().equals(userId)){
                         credit +=Float.parseFloat((String)ds.getValue());
@@ -1828,7 +1829,7 @@ public class Database {
                     }
                 }
                 debt = debt-credit;
-                if(debt<0){
+                if(debt<=0){
                     debt=0;
                 }
                 callBack.onGetDebtFromFriendRetrieveSuccess(debt);
@@ -1856,12 +1857,14 @@ public class Database {
                     friend_reference.child(friend.getFriendshipsKey()).child("debts").child(userId).addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            Float m = Float.parseFloat(snapshot.getValue().toString());           //benim ondan alacağım
-                            if (m == Float.parseFloat(newDebt)) {
-                                friend_reference.child(friend.getFriendshipsKey()).child("debts").child(friend.getKey())
-                                        .setValue("0");
-                                friend_reference.child(friend.getFriendshipsKey()).child("debts").child(userId)
-                                        .setValue("0");
+                            if(!(snapshot.getValue()==null)) {
+                                Float m = Float.parseFloat(snapshot.getValue().toString());           //benim ondan alacağım
+                                if (m == Float.parseFloat(newDebt)) {
+                                    friend_reference.child(friend.getFriendshipsKey()).child("debts").child(friend.getKey())
+                                            .setValue("0");
+                                    friend_reference.child(friend.getFriendshipsKey()).child("debts").child(userId)
+                                            .setValue("0");
+                                }
                             }
                         }
 
