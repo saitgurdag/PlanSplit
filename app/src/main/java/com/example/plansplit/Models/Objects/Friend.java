@@ -29,7 +29,7 @@ public class Friend{
         return friendshipsKey;
     }
 
-    public void setFriendshipsKey(String friendshipsKey) {
+    public void setFriendshipsKey(String friendshipsKey) {      //pay classında group id yi grup elemanından almak gerekiyordu o durumdam buraya group id geliyor.
         this.friendshipsKey = friendshipsKey;
     }
 
@@ -58,6 +58,12 @@ public class Friend{
             this.color = R.color.brightGreen;
             this.amount_text = R.string.friend_amount_friend_owes;//borçlu
         }
+    }
+
+    public Friend(String person_image, String name, String key){
+        this.person_image=person_image;
+        this.name=name;
+        this.key=key;
     }
 
     public Uri getPerson_image(){

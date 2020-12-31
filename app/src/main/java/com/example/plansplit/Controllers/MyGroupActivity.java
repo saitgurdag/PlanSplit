@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -28,6 +29,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+
 public class MyGroupActivity extends AppCompatActivity {
     private static final String TAG = "MyGroupActivity";
     Database database = Database.getInstance();
@@ -43,9 +46,12 @@ public class MyGroupActivity extends AppCompatActivity {
     int workPicture = R.drawable.ic_suitcase_radius;
     int tripPicture = R.drawable.ic_trip_radius;
     int otherPicture = R.drawable.ic_other;
+    ArrayList<Friend> groupMembersInfos = new ArrayList<>();
     String todolistfriend=null;
     Bundle extras;
     private ImageView add_expense_btn;
+    NavController navController;
+    private int naviIdPay;
 
     public String getType(){
         if(ctrlType){
@@ -144,7 +150,7 @@ public class MyGroupActivity extends AppCompatActivity {
         });
 
 
-        final NavController navController = Navigation.findNavController(this, R.id.fragment_place_mygroup);
+        navController = Navigation.findNavController(this, R.id.fragment_place_mygroup);
 
         String group_title = "Group title";
 
@@ -297,6 +303,48 @@ public class MyGroupActivity extends AppCompatActivity {
 
         });
 
+    }
+    private final Database.GetMemberInfoCallBack databaseCallBack = new Database.GetMemberInfoCallBack() {
+        @Override
+        public void onGetMemberInfoRetrieveSuccess(ArrayList<Friend> members) {
+            Bundle bundle = new Bundle();
+            if(members.size()==1){
+                members.get(0).setFriendshipsKey(friend.getFriendshipsKey());
+            }else{
+                for (Friend member : members){
+                    member.setFriendshipsKey(group.getKey());
+                }
+            }
+
+            bundle.putString("membersInfos", new Gson().toJson(members));
+            navController.navigate(naviIdPay, bundle);
+            add_expense_btn.setVisibility(View.GONE);
+
+        }
+
+        @Override
+        public void onError(String error_tag, String error) {
+            Log.e(error_tag, error);
+
+        }
+    };
+
+
+    public void setNaviPay(int id){
+        naviIdPay = id;
+        ArrayList<Friend> members = new ArrayList<>();
+        if(!ctrlType) {
+            database.getGroupMembersInfo(group.getGroup_members(), members, databaseCallBack);
+        }else{
+            ArrayList<String> f = new ArrayList<>();
+            f.add(friend.getKey());
+            database.getGroupMembersInfo(f, members, databaseCallBack);
+        }
+    }
+
+    public void setNavController(int i){
+        navController.navigate(i);
+        add_expense_btn.setVisibility(View.VISIBLE);
     }
 
 

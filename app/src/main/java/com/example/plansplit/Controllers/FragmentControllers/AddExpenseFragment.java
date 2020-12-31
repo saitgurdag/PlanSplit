@@ -183,49 +183,31 @@ public class AddExpenseFragment extends Fragment {
                     Toast.makeText(getContext(), "Hatalı girdi", Toast.LENGTH_LONG).show();
                 } else{
                     if(expenseType==null){
-                        expenseType="diğer";
+                        expenseType="Diğer";
                     }
                     Gson gson = new Gson();
                     String json;
                     Intent intent = new Intent(getContext(), MyGroupActivity.class);
                     intent.putExtra("person_id", personId);
+
+                    if(expenseType.equals("Food") || expenseType.equals("Nahrung") || expenseType.equals("yiyecek")){
+                        expenseType ="Yiyecek";
+                    }else if(expenseType.equals("Clothing") || expenseType.equals("Kleidung") || expenseType.equals("giyecek")){
+                        expenseType = "Giyecek";
+                    }else if(expenseType.equals("Stationery") || expenseType.equals("Schreibwaren") || expenseType.equals("kırtasiye")){
+                        expenseType = "Kırtasiye";
+                    }else if(expenseType.equals("Cleaning") || expenseType.equals("Reinigungsmittel")|| expenseType.equals("temizlik")){
+                        expenseType = "Temizlik";
+                    }else if(expenseType.equals("Others") || expenseType.equals("Andere")|| expenseType.equals("diğer")){
+                        expenseType = "Diğer";
+                    }
+
                     if(ctrlFG) {
-
-                        //BERKAY
-
-                        if(expenseType.equals("Food") || expenseType.equals("Nahrung") || expenseType.equals("yiyecek")){
-                            expenseType ="Yiyecek";
-                        }else if(expenseType.equals("Clothing") || expenseType.equals("Kleidung") || expenseType.equals("giyecek")){
-                            expenseType = "Giyecek";
-                        }else if(expenseType.equals("Stationery") || expenseType.equals("Schreibwaren") || expenseType.equals("kırtasiye")){
-                            expenseType = "Kırtasiye";
-                        }else if(expenseType.equals("Cleaning") || expenseType.equals("Reinigungsmittel")|| expenseType.equals("temizlik")){
-                            expenseType = "Temizlik";
-                        }else if(expenseType.equals("Others") || expenseType.equals("Andere")|| expenseType.equals("diğer")){
-                            expenseType = "Diğer";
-                        }
-
-                        //BERKAY
-
                         db.addExpenseToFriends(expensename, expenseType, expenseamounth, friend.getFriendshipsKey(), date);
                         json = gson.toJson(friend);
                         intent.putExtra("friend", json);
                     }else {
-
-                        if(expenseType.equals("Food") || expenseType.equals("Nahrung") || expenseType.equals("yiyecek")){
-                            expenseType ="Yiyecek";
-                        }else if(expenseType.equals("Clothing") || expenseType.equals("Kleidung") || expenseType.equals("giyecek")){
-                            expenseType = "Giyecek";
-                        }else if(expenseType.equals("Stationery") || expenseType.equals("Schreibwaren") || expenseType.equals("kırtasiye")){
-                            expenseType = "Kırtasiye";
-                        }else if(expenseType.equals("Cleaning") || expenseType.equals("Reinigungsmittel")|| expenseType.equals("temizlik")){
-                            expenseType = "Temizlik";
-                        }else if(expenseType.equals("Others") || expenseType.equals("Andere")|| expenseType.equals("diğer")){
-                            expenseType = "Diğer";
-                        }
-
-
-                        db.addExpenseToGroups(expensename, expenseType, expenseamounth, group.getGroupKey(), date);
+                        db.addExpenseToGroups(expensename, expenseType, expenseamounth, group.getGroupKey(), date, group.getGroup_members());
                         json = gson.toJson(group);
                         intent.putExtra("group", json);
                     }
