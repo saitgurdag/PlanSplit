@@ -1,7 +1,9 @@
 package com.example.plansplit.Controllers.Adapters;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,12 +15,25 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.fragment.app.ListFragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.plansplit.Controllers.FragmentControllers.AddExpenseFragment;
+import com.example.plansplit.Controllers.FragmentControllers.friends.FriendsFragment;
+import com.example.plansplit.Controllers.FragmentControllers.groups.GroupsFragment;
+import com.example.plansplit.Controllers.HomeActivity;
+import com.example.plansplit.Controllers.MyGroupActivity;
 import com.example.plansplit.Models.Database;
+import com.example.plansplit.Models.Objects.Friend;
+import com.example.plansplit.Models.Objects.Groups;
 import com.example.plansplit.Models.Objects.ToDoList;
 import com.example.plansplit.R;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
@@ -166,7 +181,6 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ToDoLi
                     mSave.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Toast.makeText(view.getRootView().getContext(), "Başarıyla kaydedildi", Toast.LENGTH_SHORT).show();
                             if(operation.equals("friend")){
                                 database.updateDoListFriend(key, toDoList.get(holder.getAdapterPosition()).getKey(), "save",databaseCallBack);
                             }else{
@@ -216,6 +230,8 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ToDoLi
                     mSave.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+                            Groups groups2=null;
+                            Friend friend2=null;
                             Toast.makeText(view.getRootView().getContext(), "Harcama ekranına gönderildi", Toast.LENGTH_SHORT).show();
                           /*  if(operation.equals("friend")) {
                                 database.updateDoListFriend(key, toDoList.get(holder.getAdapterPosition()).getKey(), "delete", databaseCallBack);
@@ -225,6 +241,47 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ToDoLi
                             }*/
                             //TODO:Harcama ekranına yollanacak ve harcama eklendiği anda yukarıdaki fonksiyonlar çalışacak!!!
                             dialog.dismiss();
+                            MyGroupActivity myGroupActivity=new MyGroupActivity();
+                            Intent intent = new Intent(view.getContext(), HomeActivity.class);
+                            if(operation.equals("group")) {
+
+
+                                intent.putExtra("group_key_list", key);
+                                intent.putExtra("description", toDo.getDescription());
+                                intent.putExtra("todo_key", toDo.getKey());
+                                for (Groups groups : GroupsFragment.groupsArrayList) {
+                                    if (groups.getGroupKey().equals(key)) {
+                                        groups2 = groups;
+
+                                    }
+                                }
+                                Gson gson = new Gson();
+                                String json = gson.toJson(groups2);
+                                System.out.println(json);
+                                intent.putExtra("group_from_list", json);
+                            }
+                            else{
+
+                                intent.putExtra("description", toDo.getDescription());
+                                intent.putExtra("todo_key", toDo.getKey());
+                                for (Friend friend : FriendsAdapter.friends) {
+                                    if (friend.getKey().equals(key)) {
+                                        friend2=friend;
+                                    intent.putExtra("friend_key_list", friend.getFriendshipsKey());
+
+                                    }
+                                }
+                                Gson gson = new Gson();
+                                String json = gson.toJson(friend2);
+                                System.out.println(json);
+                                intent.putExtra("friend_from_list", json);
+                            }
+
+                           view.getContext().startActivity(intent);
+
+
+
+
                         }
                     });
 

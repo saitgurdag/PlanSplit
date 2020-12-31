@@ -86,7 +86,7 @@
     <string name="add_requierement" translatable="false">Add Requirement</string>
     <string name="back" translatable="false">Back</string>
     <string name="resp_question" translatable="false">Do you want to provide this Requirement ?</string>//Bu ihtiyacı karşılamak istiyor musunuz?
-    <string name="cancel_resp" translatable="false">Do you want to cancel to provide this Requirement ?</string>//Bu ihtiyacı karşılamayı iptal etmek istiyor musunuz?
+    <string name="cancel_resp" translatable="false">Do you want to buy this Requirement ?</string>//Bu ihtiyacı karşılamayı iptal etmek istiyor musunuz?
     <string name="yes" translatable="false">Yes</string>
     <string name="enter_note" translatable="false">Enter Note</string>
     <string name="group_expense_note_dialog_title" translatable="false">Enter Note</string>

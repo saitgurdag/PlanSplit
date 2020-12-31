@@ -36,6 +36,7 @@ public class FriendsFragment extends Fragment {
     private String person_id = "";
     public static SearchView searchView;
     private ImageView personImage;
+    Bundle extras;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {

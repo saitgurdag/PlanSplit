@@ -85,7 +85,7 @@
     <string name="add_requierement" translatable="false">İhtiyaç ekleyiniz</string>
     <string name="back" translatable="false">Geri Dön</string>
     <string name="resp_question" translatable="false">Bu ihtiyacı karşılamak istiyor musunuz?</string>
-    <string name="cancel_resp" translatable="false">Bu ihtiyacı karşılamayı iptal etmek istiyor musunuz?</string>
+    <string name="cancel_resp" translatable="false">Bu ihtiyacı ödemek istiyor musunuz?</string>
     <string name="yes" translatable="false">Evet</string>
     <string name="enter_note" translatable="false">enter note</string>
     <string name="group_expense_note_dialog_title" translatable="false">Not Ekle</string>
@@ -134,5 +134,6 @@
     <string name="add_friend" translatable="false">Arkadaş Ekle</string>
 
     <string name="add_new_group" translatable="false">YENİ GRUP EKLE</string>
+    <string name="title_expenses">Harcamalar</string>
 
 </resources>

@@ -26,6 +26,9 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private String group_type_option_other = "diğer";
     int homePicture, workPicture, tripPicture, otherPicture;
 
+    public ArrayList<Groups> getGroups() {
+        return groups;
+    }
 
     public GroupAdapter(Context mContx, ArrayList<Groups> groups, RecyclerViewClickListener mListener) {
         this.mContx = mContx;

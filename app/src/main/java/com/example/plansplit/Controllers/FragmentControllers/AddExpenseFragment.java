@@ -4,10 +4,14 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.plansplit.Controllers.HomeActivity;
 import com.example.plansplit.Controllers.MyGroupActivity;
 import com.example.plansplit.Models.Database;
 import com.example.plansplit.Models.Objects.Friend;
@@ -29,7 +34,6 @@ import com.example.plansplit.Controllers.FragmentControllers.ShareMethod.ShareMe
 import com.google.gson.Gson;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
@@ -50,17 +54,71 @@ public class AddExpenseFragment extends Fragment {
     Database db;
     Friend friend;
     Groups group;
+    Bundle extras;
+
+
+
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+
         final View root = inflater.inflate(R.layout.fragment_expense, container, false);
         ctrlDate=false;
         db = new Database(this.getContext());
+        final NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
+
+        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+            @Override
+            public void handleOnBackPressed() {
+                if (extras.keySet().contains("friend")) {
+                    Intent intent = new Intent(getParentFragment().getContext(), MyGroupActivity.class);
+                    Gson gson = new Gson();
+                    String json = extras.getString("friend");
+                    friend = gson.fromJson(json, Friend.class);
+                    intent.putExtra("friend", json);
+                    intent.putExtra("friend_back", "back");
+                    startActivity(intent);
+                }
+                if (extras.keySet().contains("group")) {
+                    Intent intent = new Intent(getParentFragment().getContext(), MyGroupActivity.class);
+                    Gson gson = new Gson();
+                    String json = extras.getString("group");
+                    group = gson.fromJson(json, Groups.class);
+                    intent.putExtra("group", json);
+                    intent.putExtra("friend_back", "back");
+                    startActivity(intent);
+                }
+                if (extras.keySet().contains("friend_key_list")) {
+                    Intent intent = new Intent(getParentFragment().getContext(), MyGroupActivity.class);
+                    Gson gson = new Gson();
+                    String json = extras.getString("friend_from_list");
+                    friend = gson.fromJson(json, Friend.class);
+                    intent.putExtra("friend_to_list", json);
+                    intent.putExtra("group_back", "back");
+                    startActivity(intent);
+
+                }
+                if (extras.keySet().contains("group_key_list")) {
+                    Intent intent = new Intent(getParentFragment().getContext(), MyGroupActivity.class);
+                    Gson gson = new Gson();
+                    String json = extras.getString("group_from_list");
+                    group = gson.fromJson(json, Groups.class);
+                    intent.putExtra("group_to_list", json);
+                    startActivity(intent);
+
+                }
+
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), callback);
+
         edittextexpensename=root.findViewById(R.id.editTextExpenseName);
         edittextexpenseamounth=root.findViewById(R.id.editTextExpenseAmounth);
         saveexpenseBtn=root.findViewById(R.id.saveExpenseButton);
-
+        expensename=edittextexpensename.getText().toString();
+        expenseamounth=edittextexpenseamounth.getText().toString();
         dialogBtn = root.findViewById(R.id.payer_button);
         calenderBtn = root.findViewById(R.id.calendarButton);
         noteBtn = root.findViewById(R.id.noteButton);
@@ -68,20 +126,35 @@ public class AddExpenseFragment extends Fragment {
         expensetypeBtn=root.findViewById(R.id.expense_type_button);
         date=new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date());
         calenderBtn.setText(date);
+        extras = getArguments();
 
-        Bundle extras = getArguments();
         if(extras != null) {
             personId = extras.getString("person_id");
             if (extras.keySet().contains("friend")) {
+                HomeActivity.navView.getMenu().getItem(1).setChecked(true);
                 ctrlFG=true;
                 Gson gson = new Gson();
                 String json = extras.getString("friend");
                 friend = gson.fromJson(json, Friend.class);
             } else if (extras.keySet().contains("group")) {
+                HomeActivity.navView.getMenu().getItem(2).setChecked(true);
                 ctrlFG=false;
                 Gson gson = new Gson();
                 String json = extras.getString("group");
                 group = gson.fromJson(json, Groups.class);
+
+            }
+            else{
+                edittextexpensename.setText(extras.getString("description"));
+                edittextexpensename.setSelection(edittextexpensename.getText().length());
+                if((extras.keySet().contains("friend_key_list"))){
+                    HomeActivity.navView.getMenu().getItem(1).setChecked(true);
+
+                }
+                if((extras.keySet().contains("group_key_list"))){
+                    HomeActivity.navView.getMenu().getItem(2).setChecked(true);
+
+                }
             }
         }
 
@@ -167,11 +240,27 @@ public class AddExpenseFragment extends Fragment {
             }
         });
 
+        final Database.DatabaseCallBack databaseCallBack=new Database.DatabaseCallBack() {
+            @Override
+            public void onSuccess(String success) {
+
+            }
+
+            @Override
+            public void onError(String error_tag, String error) {
+
+            }
+        };
+
         saveexpenseBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent = new Intent(getContext(), MyGroupActivity.class);
+
                 expensename=edittextexpensename.getText().toString();
                 expenseamounth=edittextexpenseamounth.getText().toString();
+
+
                 if(!android.text.TextUtils.isDigitsOnly(expenseamounth) || expenseamounth.matches("")
                         || expensename.matches("")){
                     Toast.makeText(getContext(), "Hatalı girdi", Toast.LENGTH_LONG).show();
@@ -179,27 +268,56 @@ public class AddExpenseFragment extends Fragment {
                     if(expenseType==null){
                         expenseType="diğer";
                     }
-                    Gson gson = new Gson();
-                    String json;
-                    Intent intent = new Intent(getContext(), MyGroupActivity.class);
-                    intent.putExtra("person_id", personId);
-                    if(ctrlFG) {
-                        db.addExpenseToFriends(expensename, expenseType, expenseamounth, friend.getFriendshipsKey(), date);
-                        json = gson.toJson(friend);
+
+                    if(extras != null&&extras.keySet().contains("friend_key_list")&&extras.keySet().contains("friend_from_list")){
+                        Gson gson = new Gson();
+                        String json = extras.getString("friend_from_list");
+                        String friendkey=extras.getString("friend_key_list");
+                        String todo_key=extras.getString("todo_key");
+                        String description=extras.getString("description");
+                        friend = gson.fromJson(json, Friend.class);
+                        db.addExpenseToFriends(expensename, expenseType, expenseamounth, friendkey, date);
+                        db.updateDoListFriend(friend.getKey(),todo_key,"delete",databaseCallBack );
                         intent.putExtra("friend", json);
-                    }else {
-                        db.addExpenseToGroups(expensename, expenseType, expenseamounth, group.getGroupKey(), date);
-                        json = gson.toJson(group);
-                        intent.putExtra("group", json);
+                        getContext().startActivity(intent);
                     }
-                    getContext().startActivity(intent);
+
+                    if(extras != null&&extras.keySet().contains("group_key_list")){
+                        Gson gson = new Gson();
+                        String json = extras.getString("group_from_list");
+                        String groupkey=extras.getString("group_key_list");
+                        String todo_key=extras.getString("todo_key");
+                        String description=extras.getString("description");
+                        db.addExpenseToGroups(expensename, expenseType, expenseamounth, groupkey, date);
+                        db.updateDoListGroup(groupkey,todo_key,"delete",databaseCallBack );
+                        intent.putExtra("group", json);
+                        getContext().startActivity(intent);
+                    }
+                    if(extras.keySet().contains("friend")||extras.keySet().contains("group")) {
+
+                        Gson gson = new Gson();
+                        String json;
+                        intent.putExtra("person_id", personId);
+                        if (ctrlFG) {
+                            db.addExpenseToFriends(expensename, expenseType, expenseamounth, friend.getFriendshipsKey(), date);
+                            json = gson.toJson(friend);
+                            intent.putExtra("friend", json);
+                        } else {
+                            db.addExpenseToGroups(expensename, expenseType, expenseamounth, group.getGroupKey(), date);
+                            json = gson.toJson(group);
+                            intent.putExtra("group", json);
+                        }
+                        getContext().startActivity(intent);
+                    }
                 }
             }
         });
 
+
         return root;
 
     }
+
 
     public void openShareMethodDialog() {//// aynı oldu
         ShareMethodFriendsFragment shareDialogFriend = new ShareMethodFriendsFragment();
@@ -231,6 +349,8 @@ public class AddExpenseFragment extends Fragment {
         dialog.show();
 
     }
+
+
 
 
 
@@ -281,4 +401,6 @@ public class AddExpenseFragment extends Fragment {
 
         dialog.show();
     }
+
+
 }
