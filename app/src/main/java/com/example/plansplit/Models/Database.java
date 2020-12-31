@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -165,6 +166,11 @@ public class Database {
 
     public interface getDebtFromFriendCallBack{
         void onGetDebtFromFriendRetrieveSuccess(float debt);
+        void onError(String error_tag, String error);
+    }
+
+    public interface getDebtFromGroupCallBack{
+        void onGetDebtFromGroupRetrieveSuccess(float debt);
         void onError(String error_tag, String error);
     }
 
@@ -1808,7 +1814,6 @@ public class Database {
     }
 
     public void getDebtFromFriend(final String userId, Friend friend, final getDebtFromFriendCallBack callBack){
-        System.out.println("friendship : " + friend.getFriendshipsKey());
         DatabaseReference dbRef = friend_reference.child(friend.getFriendshipsKey()).child("debts");
         dbRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -1845,18 +1850,13 @@ public class Database {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                 if(ctrlFirst[0]) {
-                    System.out.println("burdaaaaaaaaaa");
                     final String newDebt = String.valueOf(Float.parseFloat(snapshot.getValue().toString()) - Float.parseFloat(amount));
-                    System.out.println("yenii :  : : " + newDebt);
                     friend_reference.child(friend.getFriendshipsKey()).child("debts").child(friend.getKey())
                             .setValue(newDebt);
-
                     friend_reference.child(friend.getFriendshipsKey()).child("debts").child(userId).addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             Float m = Float.parseFloat(snapshot.getValue().toString());           //benim ondan alacağım
-                            System.out.println("my : : : " + m);
-                            System.out.println("yenii22 :  : : " + newDebt);
                             if (m == Float.parseFloat(newDebt)) {
                                 friend_reference.child(friend.getFriendshipsKey()).child("debts").child(friend.getKey())
                                         .setValue("0");
@@ -1871,6 +1871,94 @@ public class Database {
                         }
                     });
                     ctrlFirst[0] =false;
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    public void getDebtFromGroups(final String userId, final Friend friend, final getDebtFromGroupCallBack callBack){
+        DatabaseReference dbRef = group_reference.child(friend.getFriendshipsKey()).child("debts").child(friend.getKey());
+        dbRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot ds : snapshot.getChildren()){
+                    if(ds.getKey().equals(userId)) {
+                        final float[] credit = {0};         // kullanıcının diğer kullanıcıdan alması gereken para miktarı
+                        final float[] debt = {0};           // kullanıcının borcu
+                        debt[0] += Float.parseFloat(ds.getValue().toString());
+                        DatabaseReference myRef = group_reference.child(friend.getFriendshipsKey()).child("debts").child(userId);
+                        myRef.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot s) {
+                                for(DataSnapshot dds : s.getChildren()){
+                                    if(dds.getKey().equals(friend.getKey())){
+                                        credit[0] += Float.parseFloat(dds.getValue().toString());
+                                        debt[0] = debt[0] -credit[0];
+                                        if(debt[0] <0){
+                                            debt[0] =0;
+                                        }
+                                        callBack.onGetDebtFromGroupRetrieveSuccess(debt[0]);
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                                callBack.onGetDebtFromGroupRetrieveSuccess(debt[0]);
+                            }
+                        });
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                callBack.onError("Hata : " , "Bu kişi henüz hiç harcama yapmamış");
+            }
+        });
+    }
+
+    public void payToGroupsMember(final String userId, final Friend friend, final String amount){
+        final boolean[] ctrlFirst = {true};
+        group_reference.child(friend.getFriendshipsKey()).child("debts").child(friend.getKey()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(ctrlFirst[0]) {
+                    for (DataSnapshot ds : snapshot.getChildren()) {
+                        if (ds.getKey().equals(userId)) {
+                            final String newDebt = String.valueOf(Float.parseFloat(ds.getValue().toString()) - Float.parseFloat(amount));
+                            group_reference.child(friend.getFriendshipsKey()).child("debts").child(friend.getKey()).child(userId)
+                                    .setValue(newDebt);
+                            group_reference.child(friend.getFriendshipsKey()).child("debts").child(userId)
+                                    .addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    for (DataSnapshot d : snapshot.getChildren()){
+                                        if(d.getKey().equals(friend.getKey())){
+                                            Float m = Float.parseFloat(d.getValue().toString());           //benim ondan alacağım
+                                            if (m == Float.parseFloat(newDebt)) {
+                                                group_reference.child(friend.getFriendshipsKey()).child("debts").child(friend.getKey()).child(userId)
+                                                        .setValue("0");
+                                                group_reference.child(friend.getFriendshipsKey()).child("debts").child(userId).child(friend.getKey())
+                                                        .setValue("0");
+                                            }
+                                        }
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                }
+                            });
+                        }
+                    }
+                    ctrlFirst[0]=false;
                 }
             }
 

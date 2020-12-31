@@ -116,7 +116,7 @@ public class PayFragment extends Fragment {
             database.getDebtFromFriend(HomeActivity.getPersonId(), selectedFriend, callBack);
         }else{
             if(selectedFriend!=null){
-
+                database.getDebtFromGroups(HomeActivity.getPersonId(), selectedFriend, groupCallBack);
             }
         }
 
@@ -129,7 +129,8 @@ public class PayFragment extends Fragment {
                         database.payToFriend(HomeActivity.getPersonId(), selectedFriend, amount);
                         ((MyGroupActivity) getContext()).setNavController(R.id.navi_events);
                     }else{
-
+                        database.payToGroupsMember(HomeActivity.getPersonId(), selectedFriend, amount);
+                        ((MyGroupActivity) getContext()).setNavController(R.id.navi_events);
                     }
                 }else if(!amount.matches("") && android.text.TextUtils.isDigitsOnly(amount) && Float.parseFloat(amount)>debt){
                     Toast.makeText(getContext(), "Borcunuzdan fazla para miktarı girdiniz!", Toast.LENGTH_LONG).show();
@@ -152,6 +153,19 @@ public class PayFragment extends Fragment {
         @Override
         public void onError(String error_tag, String error) {
             Log.d(error_tag, error);
+        }
+    };
+
+    final Database.getDebtFromGroupCallBack groupCallBack = new Database.getDebtFromGroupCallBack() {
+        @Override
+        public void onGetDebtFromGroupRetrieveSuccess(float debt) {
+            setDebt(debt);
+            debtTxt.setText(getResources().getString(R.string.personal_debt) + " : " + String.valueOf(debt) + " TL");
+        }
+
+        @Override
+        public void onError(String error_tag, String error) {
+            Toast.makeText(getContext(), error, Toast.LENGTH_LONG).show();
         }
     };
 

@@ -310,6 +310,10 @@ public class MyGroupActivity extends AppCompatActivity {
             Bundle bundle = new Bundle();
             if(members.size()==1){
                 members.get(0).setFriendshipsKey(friend.getFriendshipsKey());
+            }else{
+                for (Friend member : members){
+                    member.setFriendshipsKey(group.getKey());
+                }
             }
 
             bundle.putString("membersInfos", new Gson().toJson(members));

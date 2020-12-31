@@ -29,7 +29,7 @@ public class Friend{
         return friendshipsKey;
     }
 
-    public void setFriendshipsKey(String friendshipsKey) {
+    public void setFriendshipsKey(String friendshipsKey) {      //pay classında group id yi grup elemanından almak gerekiyordu o durumdam buraya group id geliyor.
         this.friendshipsKey = friendshipsKey;
     }
 
