@@ -1513,11 +1513,17 @@ public class Database {
         dbr.child("price").setValue(price);
         dbr.child("addedBy").setValue(userName);
         dbr.child("date").setValue(date);
+
+        //borç bilgisi -----
+        DatabaseReference dbDebts = friend_reference.child(friendshipKey).child("debts").child(userId);
+        dbDebts.setValue(String.valueOf(Integer.parseInt(price)/2));    //kullanıcının arkadaşından alması gereken para miktarı
+        // -----------------
+
         getExpensesFromFriend(friendshipKey);
 
     }
 
-    public void addExpenseToGroups(String name, String type, String price, String groupsKey, String date) {
+    public void addExpenseToGroups(String name, String type, String price, String groupsKey, String date, ArrayList<String> groupMembers) {
 
         mPrefs = context.getSharedPreferences("userName", Context.MODE_PRIVATE);
         String userName = mPrefs.getString("userName","");
@@ -1529,6 +1535,15 @@ public class Database {
         dbr.child("price").setValue(price);
         dbr.child("addedBy").setValue(userName);
         dbr.child("date").setValue(date);
+
+        //borç bilgisi -----
+        DatabaseReference dbDebts = group_reference.child(groupsKey).child("debts").child(userId);
+        for(String member : groupMembers){
+            if(!member.equals(userId)) {
+                dbDebts.child(member).setValue(String.valueOf(Integer.parseInt(price)/groupMembers.size()));
+            }
+        }
+
 
     }
 
