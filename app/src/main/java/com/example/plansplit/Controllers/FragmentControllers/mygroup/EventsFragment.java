@@ -88,11 +88,9 @@ public class EventsFragment extends Fragment {
     }
 
     public void setArray(ArrayList a){
-        GroupEventsObjectList.clear();
         GroupEventsObjectList = a;
         adapter = new GroupEventsAdapter(GroupEventsObjectList);
         adapter.notifyDataSetChanged();
         recyclerView.setAdapter(adapter);
-
     }
 }

@@ -1,20 +1,15 @@
 package com.example.plansplit.Controllers.FragmentControllers;
 
-import android.app.Dialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,8 +18,6 @@ import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
-import com.example.plansplit.Controllers.FragmentControllers.AddExpenseFragment;
-import com.example.plansplit.Controllers.FragmentControllers.ShareMethod.ShareMethodFriendsFragment;
 import com.example.plansplit.Controllers.HomeActivity;
 import com.example.plansplit.Controllers.MyGroupActivity;
 import com.example.plansplit.Models.Database;
@@ -35,10 +28,7 @@ import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
 
 import java.lang.reflect.Type;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
 
 public class PayFragment extends Fragment {
 
@@ -50,12 +40,16 @@ public class PayFragment extends Fragment {
     boolean ctrlFriend=false;
     Database database = Database.getInstance();
     TextView debtTxt;
-    private float debt;
+    private float debt=0;
     Button saveBtn;
     EditText payEdit;
 
     public void setDebt(float debt) {
         this.debt = debt;
+    }
+
+    public float getDebt() {
+        return debt;
     }
 
     @Override
@@ -78,6 +72,13 @@ public class PayFragment extends Fragment {
         if(memberInfos.size()==1){      //arkadaşlardan geldiğini anlamak için
             ctrlFriend=true;
         }
+        ArrayList<Friend> m2 = new ArrayList<>();
+        for (Friend f : memberInfos){
+            if(!f.getKey().equals(HomeActivity.getPersonId())){
+                m2.add(f);
+            }
+        }
+        memberInfos=m2;
 
         if (memberInfos.size()>2) {
             who.setOnClickListener(new View.OnClickListener() {
@@ -91,13 +92,13 @@ public class PayFragment extends Fragment {
                     popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                         @Override
                         public boolean onMenuItemClick(MenuItem menuItem) {
-
                             for (Friend friend : memberInfos) {
                                 if (friend.getName().equals(menuItem.toString())) {
                                     selectedFriend = friend;
                                 }
                             }
                             Picasso.with(getContext()).load(selectedFriend.getPerson_image()).into(whoImage);
+                            database.getDebtFromGroups(HomeActivity.getPersonId(), selectedFriend, groupCallBack);
                             return true;
                         }
                     });
@@ -129,6 +130,7 @@ public class PayFragment extends Fragment {
                         database.payToFriend(HomeActivity.getPersonId(), selectedFriend, amount);
                         ((MyGroupActivity) getContext()).setNavController(R.id.navi_events);
                     }else{
+                        System.out.println("dogruuuuuu");
                         database.payToGroupsMember(HomeActivity.getPersonId(), selectedFriend, amount);
                         ((MyGroupActivity) getContext()).setNavController(R.id.navi_events);
                     }
@@ -166,6 +168,7 @@ public class PayFragment extends Fragment {
         @Override
         public void onError(String error_tag, String error) {
             Toast.makeText(getContext(), error, Toast.LENGTH_LONG).show();
+            database.getDebtFromGroups(HomeActivity.getPersonId(), selectedFriend, groupCallBack);
         }
     };
 
