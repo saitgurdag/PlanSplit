@@ -60,6 +60,12 @@ public class Friend{
         }
     }
 
+    public Friend(String person_image, String name, String key){
+        this.person_image=person_image;
+        this.name=name;
+        this.key=key;
+    }
+
     public Uri getPerson_image(){
         return Uri.parse(person_image);
     }

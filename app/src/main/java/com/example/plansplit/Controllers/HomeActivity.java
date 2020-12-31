@@ -57,7 +57,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     GoogleSignInClient mGoogleSignInClient;
     private static final String TAG = "HomeActivity";
-    private String personId;
+    private static String personId;
     private DrawerLayout drawerLayout;
     NavigationView navigationView;
     Bundle bundle;
@@ -71,7 +71,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
 
 
-    public String getPersonId() {
+    public static String getPersonId() {
         return personId;
     }
 

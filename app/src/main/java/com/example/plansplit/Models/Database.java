@@ -34,6 +34,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import javax.security.auth.callback.Callback;
+
 import static android.provider.Contacts.SettingsColumns.KEY;
 
 public class Database {
@@ -156,6 +158,16 @@ public class Database {
         void onError(String error_tag, String error);
     }
 
+       public interface GetMemberInfoCallBack {
+        void onGetMemberInfoRetrieveSuccess(ArrayList<Friend> members);
+        void onError(String error_tag, String error);
+    }
+
+    public interface getDebtFromFriendCallBack{
+        void onGetDebtFromFriendRetrieveSuccess(float debt);
+        void onError(String error_tag, String error);
+    }
+
     /**
      * A private handler for adding new friend, removing request and removing friends node on error
      */
@@ -196,7 +208,10 @@ public class Database {
 
     private interface ToDoListHandler{
         void handler(String key);
+    }
 
+    private interface MemberInfoHandler{
+        void handler(Friend friend);
     }
 
     /**
@@ -1761,6 +1776,107 @@ public class Database {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Log.w(TAG, "Failed to read value.", error.toException());
+            }
+        });
+    }
+
+    public void getGroupMembersInfo(final ArrayList<String> groupMembers, final ArrayList<Friend> members, final GetMemberInfoCallBack callBack){
+
+        DatabaseReference dbRef = user_reference;
+        dbRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    for (String member : groupMembers) {
+                        if (ds.getKey().toString().equals(member)) {
+                            String name = (String) ds.child("name").getValue();
+                            String image = (String) ds.child("image").getValue();
+                            members.add(new Friend(image, name, member));
+                        }
+                    }
+                }
+
+                callBack.onGetMemberInfoRetrieveSuccess(members);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    public void getDebtFromFriend(final String userId, Friend friend, final getDebtFromFriendCallBack callBack){
+        System.out.println("friendship : " + friend.getFriendshipsKey());
+        DatabaseReference dbRef = friend_reference.child(friend.getFriendshipsKey()).child("debts");
+        dbRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                float credit=0;         // kullanıcının diğer kullanıcıdan alması gereken para miktarı
+                float debt=0;           // kullanıcının borcu
+                for(DataSnapshot ds : snapshot.getChildren()){
+                    if(ds.getKey().equals(userId)){
+                        credit +=Float.parseFloat((String)ds.getValue());
+                    }else{
+                        debt += Float.parseFloat((String)ds.getValue());
+                    }
+                }
+                debt = debt-credit;
+                if(debt<0){
+                    debt=0;
+                }
+                callBack.onGetDebtFromFriendRetrieveSuccess(debt);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                callBack.onError("Error : ", "Borç verisi hatalı.");
+            }
+        });
+
+    }
+
+    public void payToFriend(final String userId, final Friend friend, final String amount){
+        final boolean[] ctrlFirst = {true};
+        friend_reference.child(friend.getFriendshipsKey()).child("debts").child(friend.getKey()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                if(ctrlFirst[0]) {
+                    System.out.println("burdaaaaaaaaaa");
+                    final String newDebt = String.valueOf(Float.parseFloat(snapshot.getValue().toString()) - Float.parseFloat(amount));
+                    System.out.println("yenii :  : : " + newDebt);
+                    friend_reference.child(friend.getFriendshipsKey()).child("debts").child(friend.getKey())
+                            .setValue(newDebt);
+
+                    friend_reference.child(friend.getFriendshipsKey()).child("debts").child(userId).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            Float m = Float.parseFloat(snapshot.getValue().toString());           //benim ondan alacağım
+                            System.out.println("my : : : " + m);
+                            System.out.println("yenii22 :  : : " + newDebt);
+                            if (m == Float.parseFloat(newDebt)) {
+                                friend_reference.child(friend.getFriendshipsKey()).child("debts").child(friend.getKey())
+                                        .setValue("0");
+                                friend_reference.child(friend.getFriendshipsKey()).child("debts").child(userId)
+                                        .setValue("0");
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+                    ctrlFirst[0] =false;
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
     }

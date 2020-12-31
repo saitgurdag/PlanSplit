@@ -1,11 +1,9 @@
 package com.example.plansplit.Controllers.FragmentControllers.mygroup;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -13,16 +11,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.plansplit.Controllers.Adapters.ExpensesAdapter;
 import com.example.plansplit.Controllers.Adapters.GroupEventsAdapter;
-import com.example.plansplit.Controllers.FragmentControllers.AddExpenseFragment;
-import com.example.plansplit.Controllers.FragmentControllers.PayFragment;
-import com.example.plansplit.Controllers.FragmentControllers.notifications.NotificationsFragment;
 import com.example.plansplit.Controllers.HomeActivity;
 import com.example.plansplit.Controllers.MyGroupActivity;
 import com.example.plansplit.Models.Database;
@@ -30,7 +22,6 @@ import com.example.plansplit.Models.Objects.Transfers;
 import com.example.plansplit.R;
 import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
-import java.util.List;
 
 public class EventsFragment extends Fragment {
 
@@ -86,17 +77,14 @@ public class EventsFragment extends Fragment {
         recyclerView.setAdapter(adapter);
         return root;
     }
-        @Override
-        public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        }
 
-        public void openPayFragment(){
-        PayFragment payFragment = new PayFragment();
-        FragmentManager fragmentManager = getParentFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_place_mygroup,payFragment);
-        fragmentTransaction.commit();
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    super.onActivityCreated(savedInstanceState);
+    }
+
+    public void openPayFragment(){
+        myGroupActivity.setNaviPay(R.id.navi_pay);
     }
 
     public void setArray(ArrayList a){
