@@ -1487,7 +1487,7 @@ public class Database {
     }
 
     public void getBudget() {
-        user_reference.child(userId).child("budget").addValueEventListener(new ValueEventListener() {
+        user_reference.child(userId).child("budget").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
@@ -1571,7 +1571,7 @@ public class Database {
     public void getExpensesFromFriend(String friendshipKey){
         final ArrayList<Transfers> expenses = new ArrayList<>();
         DatabaseReference dbRef = friend_reference.child(friendshipKey).child("expenses");
-        dbRef.addValueEventListener(new ValueEventListener() {
+        dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 expenses.clear();
@@ -1612,7 +1612,7 @@ public class Database {
     public void getExpensesFromGroup(String groupKey){
         final ArrayList<Transfers> expenses = new ArrayList<>();
         DatabaseReference dbRef = group_reference.child(groupKey).child("expenses");
-        dbRef.addValueEventListener(new ValueEventListener() {
+        dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 expenses.clear();
@@ -1653,7 +1653,7 @@ public class Database {
     public ArrayList getExpenses() {
         final ArrayList<Expense> expenses = new ArrayList<>();
         DatabaseReference dbRef = user_reference.child(userId).child("expenses");
-        dbRef.addValueEventListener(new ValueEventListener() {
+        dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 totExpense = 0;
@@ -1758,7 +1758,7 @@ public class Database {
     }
 
     public void getAllGroups(final String person_id, final ArrayList<Groups> groupsArrayList, final GroupAdapter groupAdapter) {
-        group_reference.addValueEventListener(new ValueEventListener() {
+        group_reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 groupsArrayList.clear();
@@ -1791,7 +1791,7 @@ public class Database {
     public void getGroupMembersInfo(final ArrayList<String> groupMembers, final ArrayList<Friend> members, final GetMemberInfoCallBack callBack){
 
         DatabaseReference dbRef = user_reference;
-        dbRef.addValueEventListener(new ValueEventListener() {
+        dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot ds : snapshot.getChildren()) {
@@ -1817,7 +1817,7 @@ public class Database {
 
     public void getDebtFromFriend(final String userId, Friend friend, final getDebtFromFriendCallBack callBack){
         DatabaseReference dbRef = friend_reference.child(friend.getFriendshipsKey()).child("debts");
-        dbRef.addValueEventListener(new ValueEventListener() {
+        dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 float credit=0;         // kullanıcının diğer kullanıcıdan alması gereken para miktarı
@@ -1848,7 +1848,7 @@ public class Database {
 
     public void payToFriend(final String userId, final Friend friend, final String amount){
         final boolean[] ctrlFirst = {true};
-        friend_reference.child(friend.getFriendshipsKey()).child("debts").child(friend.getKey()).addValueEventListener(new ValueEventListener() {
+        friend_reference.child(friend.getFriendshipsKey()).child("debts").child(friend.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
@@ -1856,7 +1856,7 @@ public class Database {
                     final String newDebt = String.valueOf(Float.parseFloat(snapshot.getValue().toString()) - Float.parseFloat(amount));
                     friend_reference.child(friend.getFriendshipsKey()).child("debts").child(friend.getKey())
                             .setValue(newDebt);
-                    friend_reference.child(friend.getFriendshipsKey()).child("debts").child(userId).addValueEventListener(new ValueEventListener() {
+                    friend_reference.child(friend.getFriendshipsKey()).child("debts").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             if(!(snapshot.getValue()==null)) {
@@ -1888,7 +1888,7 @@ public class Database {
 
     public void getDebtFromGroups(final String userId, final Friend friend, final getDebtFromGroupCallBack callBack){
         DatabaseReference dbRef = group_reference.child(friend.getFriendshipsKey()).child("debts").child(friend.getKey());
-        dbRef.addValueEventListener(new ValueEventListener() {
+        dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.getValue()==null){
@@ -1897,7 +1897,7 @@ public class Database {
                     for (final DataSnapshot ds : snapshot.getChildren()) {
                         if (ds.getKey().equals(userId)) {
                             DatabaseReference myRef = group_reference.child(friend.getFriendshipsKey()).child("debts").child(userId);
-                            myRef.addValueEventListener(new ValueEventListener() {
+                            myRef.addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot s) {
                                     if(s.getValue()==null){
@@ -1938,7 +1938,7 @@ public class Database {
 
     public void payToGroupsMember(final String userId, final Friend friend, final String amount){
         final boolean[] ctrlFirst = {true};
-        group_reference.child(friend.getFriendshipsKey()).child("debts").child(friend.getKey()).addValueEventListener(new ValueEventListener() {
+        group_reference.child(friend.getFriendshipsKey()).child("debts").child(friend.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(ctrlFirst[0]) {
@@ -1952,7 +1952,7 @@ public class Database {
                             group_reference.child(friend.getFriendshipsKey()).child("debts").child(friend.getKey()).child(userId)
                                     .setValue(newDebt);
                             group_reference.child(friend.getFriendshipsKey()).child("debts").child(userId)
-                                    .addValueEventListener(new ValueEventListener() {
+                                    .addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                                     for (DataSnapshot d : snapshot.getChildren()){
