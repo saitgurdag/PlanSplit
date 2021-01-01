@@ -134,6 +134,6 @@
     <string name="add_friend" translatable="false">Arkadaş Ekle</string>
 
     <string name="add_new_group" translatable="false">YENİ GRUP EKLE</string>
-    <string name="title_expenses">Harcamalar</string>
+    <string name="title_expenses" translatable="false">Harcamalar</string>
 
 </resources>

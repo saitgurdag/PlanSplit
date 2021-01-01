@@ -154,6 +154,19 @@ public class MainActivity extends AppCompatActivity {
         String language = prefs.getString("My_Lang","");
         setLocale(language);
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        String currentLang = Locale.getDefault().toString();
+        setLocale(currentLang);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadLocale();
+    }
     //BERGAY DİL DİALOG END
 
     private void signIn() {
