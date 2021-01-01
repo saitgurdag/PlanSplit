@@ -80,7 +80,7 @@ public class PayFragment extends Fragment {
         }
         memberInfos=m2;
 
-        if (memberInfos.size()>2) {
+        if (memberInfos.size()>=2) {
             who.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -97,6 +97,7 @@ public class PayFragment extends Fragment {
                                     selectedFriend = friend;
                                 }
                             }
+                            System.out.println("içeride");
                             Picasso.with(getContext()).load(selectedFriend.getPerson_image()).into(whoImage);
                             database.getDebtFromGroups(HomeActivity.getPersonId(), selectedFriend, groupCallBack);
                             return true;
