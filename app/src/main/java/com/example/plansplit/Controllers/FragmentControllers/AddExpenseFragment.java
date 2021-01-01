@@ -8,10 +8,7 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +31,7 @@ import com.example.plansplit.Controllers.FragmentControllers.ShareMethod.ShareMe
 import com.google.gson.Gson;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
@@ -43,7 +41,7 @@ public class AddExpenseFragment extends Fragment {
             stationeryPicture, otherPicture;
     public static Dialog dialog;
     public static Button dialogBtn,calenderBtn,dpexitBtn,noteBtn,dpmenuBtn,shareBtn,expensetypeBtn,dpexpenseexitBtn,
-        dpexpenseokBtn,saveexpenseBtn,dpokBtn;
+            dpexpenseokBtn,saveexpenseBtn,dpokBtn;
     private String date,payer_name,expenseType,expenseamounth,expensename;
     public static String sharemethod;
     private EditText edittextexpensename,edittextexpenseamounth;
@@ -56,18 +54,12 @@ public class AddExpenseFragment extends Fragment {
     Groups group;
     Bundle extras;
 
-
-
-
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-
         final View root = inflater.inflate(R.layout.fragment_expense, container, false);
         ctrlDate=false;
         db = new Database(this.getContext());
-        final NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
 
         OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
             @Override
@@ -117,8 +109,7 @@ public class AddExpenseFragment extends Fragment {
         edittextexpensename=root.findViewById(R.id.editTextExpenseName);
         edittextexpenseamounth=root.findViewById(R.id.editTextExpenseAmounth);
         saveexpenseBtn=root.findViewById(R.id.saveExpenseButton);
-        expensename=edittextexpensename.getText().toString();
-        expenseamounth=edittextexpenseamounth.getText().toString();
+
         dialogBtn = root.findViewById(R.id.payer_button);
         calenderBtn = root.findViewById(R.id.calendarButton);
         noteBtn = root.findViewById(R.id.noteButton);
@@ -126,6 +117,7 @@ public class AddExpenseFragment extends Fragment {
         expensetypeBtn=root.findViewById(R.id.expense_type_button);
         date=new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date());
         calenderBtn.setText(date);
+
         extras = getArguments();
 
         if(extras != null) {
@@ -142,9 +134,7 @@ public class AddExpenseFragment extends Fragment {
                 Gson gson = new Gson();
                 String json = extras.getString("group");
                 group = gson.fromJson(json, Groups.class);
-
-            }
-            else{
+            }else{
                 edittextexpensename.setText(extras.getString("description"));
                 edittextexpensename.setSelection(edittextexpensename.getText().length());
                 if((extras.keySet().contains("friend_key_list"))){
@@ -261,12 +251,9 @@ public class AddExpenseFragment extends Fragment {
         saveexpenseBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getContext(), MyGroupActivity.class);
-
                 expensename=edittextexpensename.getText().toString();
                 expenseamounth=edittextexpenseamounth.getText().toString();
-
-
+                Intent intent = new Intent(getContext(), MyGroupActivity.class);
                 if(!android.text.TextUtils.isDigitsOnly(expenseamounth) || expenseamounth.matches("")
                         || expensename.matches("")){
                     Toast.makeText(getContext(), "Hatalı girdi", Toast.LENGTH_LONG).show();
@@ -294,12 +281,14 @@ public class AddExpenseFragment extends Fragment {
                         String groupkey=extras.getString("group_key_list");
                         String todo_key=extras.getString("todo_key");
                         String description=extras.getString("description");
-                        db.addExpenseToGroups(expensename, expenseType, expenseamounth, groupkey, date);
+                        db.addExpenseToGroups(expensename, expenseType, expenseamounth, group.getGroupKey(), date, group.getGroup_members());;
                         db.updateDoListGroup(groupkey,todo_key,"delete",databaseCallBack );
+                        intent.putExtra("group", json);
+                        getContext().startActivity(intent);
+                    }
 
                     Gson gson = new Gson();
                     String json;
-                    Intent intent = new Intent(getContext(), MyGroupActivity.class);
                     intent.putExtra("person_id", personId);
 
                     if(expenseType.equals("Food") || expenseType.equals("Nahrung") || expenseType.equals("yiyecek")){
@@ -322,33 +311,17 @@ public class AddExpenseFragment extends Fragment {
                         db.addExpenseToGroups(expensename, expenseType, expenseamounth, group.getGroupKey(), date, group.getGroup_members());
                         json = gson.toJson(group);
                         intent.putExtra("group", json);
-                        getContext().startActivity(intent);
                     }
-                    if(extras.keySet().contains("friend")||extras.keySet().contains("group")) {
+                    getContext().startActivity(intent);
 
-                        Gson gson = new Gson();
-                        String json;
-                        intent.putExtra("person_id", personId);
-                        if (ctrlFG) {
-                            db.addExpenseToFriends(expensename, expenseType, expenseamounth, friend.getFriendshipsKey(), date);
-                            json = gson.toJson(friend);
-                            intent.putExtra("friend", json);
-                        } else {
-                            db.addExpenseToGroups(expensename, expenseType, expenseamounth, group.getGroupKey(), date);
-                            json = gson.toJson(group);
-                            intent.putExtra("group", json);
-                        }
-                        getContext().startActivity(intent);
-                    }
+
                 }
             }
         });
 
-
         return root;
 
     }
-
 
     public void openShareMethodDialog() {//// aynı oldu
         ShareMethodFriendsFragment shareDialogFriend = new ShareMethodFriendsFragment();
@@ -380,8 +353,6 @@ public class AddExpenseFragment extends Fragment {
         dialog.show();
 
     }
-
-
 
 
 
@@ -432,6 +403,4 @@ public class AddExpenseFragment extends Fragment {
 
         dialog.show();
     }
-
-
 }
