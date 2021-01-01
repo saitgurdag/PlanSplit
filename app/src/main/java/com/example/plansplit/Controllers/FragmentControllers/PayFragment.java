@@ -57,6 +57,7 @@ public class PayFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         final View root = inflater.inflate(R.layout.fragment_pay, container, false);
+        memberInfos.clear();
         OnBackPressedCallback onBackPressedCallback=new OnBackPressedCallback(true ) {
             @Override
             public void handleOnBackPressed() {
