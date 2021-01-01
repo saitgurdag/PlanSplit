@@ -62,8 +62,12 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     NavigationView navigationView;
     Bundle bundle;
     String navigation_key;
+    public static  BottomNavigationView navView;
     public static Uri personPhoto;
     SharedPreferences mPrefs;
+   private ActionBarDrawerToggle toggle;
+
+
 
     FirebaseAuth mAuth;
     private static final Database database = Database.getInstance();
@@ -75,11 +79,13 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         return personId;
     }
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        BottomNavigationView navView = findViewById(R.id.nav_view);
+        navView = findViewById(R.id.nav_view);
         mAuth = FirebaseAuth.getInstance();
         mPrefs = getSharedPreferences("userName", Context.MODE_PRIVATE);
 
@@ -95,13 +101,14 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar =  findViewById(R.id.myToolBar);
         setSupportActionBar(toolbar);
         drawerLayout=findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle =new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
+        toggle =new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
 
+
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_personal, R.id.navigation_friends, R.id.navigation_groups, R.id.navigation_notifications)
+                R.id.navigation_personal, R.id.navigation_friends, R.id.navigation_groups, R.id.navigation_notifications,R.id.navigation_add_expense)
 
                 .build();
         final NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -154,6 +161,23 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         }
 
         Bundle extras = getIntent().getExtras();
+        if(extras != null && (extras.keySet().contains("group_key_list"))){
+            bundle = new Bundle();
+            bundle.putString("description", extras.getString("description"));
+            bundle.putString("todo_key", extras.getString("todo_key"));
+            bundle.putString("group_from_list", extras.getString("group_from_list"));
+            bundle.putString("group_key_list", extras.getString("group_key_list"));
+            navController.navigate(R.id.navigation_add_expense, bundle);
+        }
+        if(extras != null && (extras.keySet().contains("friend_key_list"))){
+            bundle = new Bundle();
+            bundle.putString("description", extras.getString("description"));
+            bundle.putString("todo_key", extras.getString("todo_key"));
+            bundle.putString("friend_from_list", extras.getString("friend_from_list"));
+            bundle.putString("friend_key_list", extras.getString("friend_key_list"));
+            System.out.println("arkadaş keyi "+extras.getString("friend_key_list"));
+            navController.navigate(R.id.navigation_add_expense, bundle);
+        }
         if(extras != null && (extras.keySet().contains("friend") || extras.keySet().contains("group"))) {
             bundle = new Bundle();
             bundle.putString("person_id", personId);
@@ -330,3 +354,4 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         return personPhoto;
     }
 }
+

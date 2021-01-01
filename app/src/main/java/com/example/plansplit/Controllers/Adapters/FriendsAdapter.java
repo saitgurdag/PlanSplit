@@ -27,12 +27,13 @@ import java.util.ArrayList;
 
 public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendsViewHolder>{
     private static final String TAG = "FriendsAdapter";
-    private  ArrayList<Friend> friends=new ArrayList<>();
+    public static ArrayList<Friend> friends=new ArrayList<>();
     private Context mCtx;
     private Database database = Database.getInstance();
     private String person_id;
     private RecyclerView m_RecyclerView;
     private ArrayList<Friend> friendsbuffer=new ArrayList<>();
+
 
     public FriendsAdapter(Context mCtx, String person_id, final RecyclerView m_RecyclerView){
         this.mCtx = mCtx;

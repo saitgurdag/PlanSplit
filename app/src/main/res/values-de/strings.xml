@@ -50,7 +50,7 @@
     </string-array>
     <string name="equal_sharing" translatable="false">Gleiches Teilen</string>
     <string name="personal_debt" translatable="false">Schulden</string>
-    <string name="personal_due" translatable="false">Gläubiger</string>
+    <string name="personal_due" translatable="false">Einnahme</string>
     <string name="total" translatable="false">Summe</string>
     <string name="expense_desc" translatable="false">Kostenbeschreibung</string>
     <string name="expense_count" translatable="false">Kostenbetrag</string>
@@ -86,7 +86,7 @@
     <string name="add_requierement" translatable="false">Addieren Sie Anforderung</string>
     <string name="back" translatable="false">Zurück</string>
     <string name="resp_question" translatable="false">Möchten Sie diese Anforderung bereitstellen ?</string>
-    <string name="cancel_resp" translatable="false">Möchten Sie stornieren, um diese Anforderung bereitstellen ?</string>
+    <string name="cancel_resp" translatable="false">Möchten Sie diese Anforderung bezahlen ?</string>
     <string name="yes" translatable="false">Ja</string>
     <string name="enter_note" translatable="false">Geben Notiz ein</string>
     <string name="group_expense_note_dialog_title" translatable="false">Geben Notiz ein</string>

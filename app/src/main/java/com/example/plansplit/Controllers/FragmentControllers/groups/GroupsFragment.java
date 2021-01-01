@@ -71,6 +71,8 @@ public class GroupsFragment extends Fragment {
         groupAdapter = new GroupAdapter(this.getContext(), groupsArrayList, mListener);
         recyclerView.setAdapter(groupAdapter);
 
+
+
         groupsfilterBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -132,6 +134,7 @@ public class GroupsFragment extends Fragment {
         return root;
 
     }
+
 
     private void setOnClickListener() {
         mListener = new GroupAdapter.RecyclerViewClickListener() {
