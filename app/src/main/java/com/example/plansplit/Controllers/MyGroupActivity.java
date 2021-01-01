@@ -459,12 +459,15 @@ public class MyGroupActivity extends AppCompatActivity {
     public void onBackPressed() {
         if(control_list.equals("friend_list")){
             loadActivity("friends");
+            finish();
         }
         if(control_list.equals("group_list")) {
             loadActivity("groups");
+            finish();
         }
         else{
             super.onBackPressed();
+            finish();
         }
 
     }
