@@ -99,9 +99,7 @@ public class AddExpenseFragment extends Fragment {
                     group = gson.fromJson(json, Groups.class);
                     intent.putExtra("group_to_list", json);
                     startActivity(intent);
-
                 }
-
             }
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), callback);
