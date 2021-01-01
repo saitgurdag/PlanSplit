@@ -100,9 +100,9 @@
     <string name="remove_friend" translatable="false">Sil</string>
     <string name="pay" translatable="false">Ödeme yap</string>
     <string name="home" translatable="false">Ev</string>
-    <string name="trip" translatable="false">Seyahat</string>
-    <string name="work" translatable="false">İş</string>
-    <string name="other" translatable="false">Diğer</string>
+    <string name="trip" translatable="false">seyahat</string>
+    <string name="work" translatable="false">iş</string>
+    <string name="other" translatable="false">diğer</string>
     <string name="title_wear" translatable="false">giyecek</string>
     <string name="title_food" translatable="false">yiyecek</string>
     <string name="title_others" translatable="false">diğer</string>
@@ -121,11 +121,11 @@
     <string name="personalfragment_moneyleft" translatable="false">Kalan Bütce :</string>
 
     <string-array name="expensePersonalItems">
-        <item>Yiyecek</item>
-        <item>Giyecek</item>
-        <item>Kırtasiye</item>
-        <item>Temizlik</item>
-        <item>Diğer</item>
+        <item>yiyecek</item>
+        <item>giyecek</item>
+        <item>kırtasiye</item>
+        <item>temizlik</item>
+        <item>diğer</item>
     </string-array>
    
     <string name="total_dept" translatable="false">Toplam borcunuz : </string>

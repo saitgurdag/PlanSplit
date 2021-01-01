@@ -34,6 +34,7 @@ import com.example.plansplit.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Objects;
 
 import static android.R.layout.simple_spinner_item;
@@ -103,6 +104,19 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemSele
         recyclerView.setLayoutManager(mLayoutManager);
 
         update();
+//Bergay
+      /*   Sacma
+        if((Locale.getDefault().toString().equals("en"))){
+            for(int i = 0 ; i<expenseList.size();i++){
+                if (expenseList.get(i).getExpense_type().equals("food")){
+                    System.out.println("DELİRDİM LAAAAAAAAAAAAN");
+                    expenseList.get(i).getExpense_type().replaceFirst("food","yiyecek");
+                }
+            }
+        }
+*/
+        //Bergay
+
 
         adapter = new ExpensesAdapter(this.getContext(), expenseList);
         recyclerView.setAdapter(adapter);
@@ -122,21 +136,26 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemSele
                     @Override
                     public boolean onMenuItemClick(MenuItem menuItem) {
                         switch(menuItem.getItemId()){
-                            case R.id.filter_food:
-                                selectedFilter=getResources().getString(R.string.title_food);
 
+                            case R.id.filter_food:
+                                //selectedFilter=getResources().getString(R.string.title_food);
+                                selectedFilter="yiyecek";
                                 break;
                             case R.id.filter_wear:
-                                selectedFilter=getResources().getString(R.string.title_wear);
+                                //selectedFilter=getResources().getString(R.string.title_wear);
+                                selectedFilter="giyecek";
                                 break;
                             case R.id.filter_stationery:
-                                selectedFilter=getResources().getString(R.string.title_stationery);
+                                //selectedFilter=getResources().getString(R.string.title_stationery);
+                                selectedFilter="kırtasiye";
                                 break;
                             case R.id.filter_hygiene:
-                                selectedFilter=getResources().getString(R.string.title_hygiene);
+                                //selectedFilter=getResources().getString(R.string.title_hygiene);
+                                selectedFilter="temizlik";
                                 break;
                             case R.id.filter_others:
-                                selectedFilter=getResources().getString(R.string.title_others);
+                                //selectedFilter=getResources().getString(R.string.title_others);
+                                selectedFilter="diğer";
                                 break;
                             case R.id.filter_all:
                                 selectedFilter=getResources().getString(R.string.title_all);
@@ -174,8 +193,6 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemSele
             adapter = new ExpensesAdapter(this.getContext(), expenseList);
             recyclerView.setAdapter(adapter);
         }
-
-
     }
 
     @Override
@@ -194,6 +211,20 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemSele
             if(!price.getText().toString().matches("") && !expenseName.getText().toString().matches("")) {
                 String name = String.valueOf(expenseName.getText());
                 int p = Integer.parseInt(String.valueOf(price.getText()));
+
+
+                if(type.equals("food") || type.equals("nahrung") || type.equals("yiyecek")){
+                    type ="Yiyecek";
+                }else if(type.equals("wear") || type.equals("kleidung") || type.equals("giyecek")){
+                    type = "Giyecek";
+                }else if(type.equals("stationary") || type.equals("schreibwaren") || type.equals("kırtasiye")){
+                    type = "Kırtasiye";
+                }else if(type.equals("cleaning") || type.equals("reinigungsmittel")|| type.equals("temizlik")){
+                    type = "Temizlik";
+                }else if(type.equals("others") || type.equals("andere")|| type.equals("diğer")){
+                    type = "Diğer";
+                }
+
                 db.addExpense(name, type, String.valueOf(p));
             }
         }else if(v.getId()==progressText.getId()){
@@ -253,7 +284,14 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemSele
     public void update(){
         progressText.setText(String.valueOf(budget) + " TL");
         progressBar.setMax(budget);
-        kalanbudget.setText(getString(R.string.personalfragment_moneyleft) + String.valueOf(budget - totExpense) + " TL");
+        if(Locale.getDefault().toString().equals("de")){
+            kalanbudget.setText("Budget Übrig : " + String.valueOf(budget - totExpense) + " TL");
+        }else if (Locale.getDefault().toString().equals("en")){
+            kalanbudget.setText("Budget Left : " + String.valueOf(budget - totExpense) + " TL");
+        }else{
+            kalanbudget.setText("Kalan Bütçe : " + String.valueOf(budget - totExpense) + " TL");
+        }
+
         progressBar.setProgress(totExpense);
 
     }

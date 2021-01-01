@@ -7,9 +7,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.plansplit.Controllers.MainActivity;
 import com.example.plansplit.Models.Objects.Expense;
 import com.example.plansplit.R;
 import java.util.List;
+import java.util.Locale;
 
 public class ExpensesAdapter extends RecyclerView.Adapter<ExpensesAdapter.ExpensesViewHolder> {
 
@@ -46,7 +49,36 @@ public class ExpensesAdapter extends RecyclerView.Adapter<ExpensesAdapter.Expens
         Expense expense = expensesList.get(position);
         holder.price.setText(expense.getPrice());
         holder.name.setText(expense.getExpense_name());
-        holder.type.setText(expense.getExpense_type());
+
+        String type = "";
+        if(Locale.getDefault().toString().equals("en")){   //Eger kullanıcı ingilizce kullanıyorsa
+            if (expense.getExpense_type().toLowerCase().equals("yiyecek")){
+                type = "food";
+            }else if(expense.getExpense_type().toLowerCase().equals("giyecek")){
+                type = "wear";
+            }else if (expense.getExpense_type().toLowerCase().equals("kırtasiye")){
+                type = "stationary";
+            }else if (expense.getExpense_type().toLowerCase().equals("temizlik")){
+                type = "cleaning";
+            }else if(expense.getExpense_type().toLowerCase().equals("diğer")){
+                type = "others";
+            }
+        }else if(Locale.getDefault().toString().equals("de")){  //Eger Kullanıcı almanca kullanıyosa
+            if (expense.getExpense_type().toLowerCase().equals("yiyecek")){
+                type = "nahrung";
+            }else if(expense.getExpense_type().toLowerCase().equals("giyecek")){
+                type = "kleidung";
+            }else if (expense.getExpense_type().toLowerCase().equals("kırtasiye")){
+                type = "schreibwaren";
+            }else if(expense.getExpense_type().toLowerCase().equals("temizlik")){
+                type = "reinigungsmittel";
+            }else if(expense.getExpense_type().toLowerCase().equals("diğer")){
+                type = "andere";
+            }
+        }else{
+            type = expense.getExpense_type();
+        }
+        holder.type.setText(type);
 
     }
 

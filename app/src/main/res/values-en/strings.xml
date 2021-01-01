@@ -42,11 +42,11 @@
         <item>Sharing by Surplus</item>
     </string-array>
     <string-array name="expenseSpinnerItems">
-        <item>food</item>
-        <item>clothing</item>
-        <item>stationery</item>
-        <item>cleaning</item>
-        <item>others</item>
+        <item>Food</item>
+        <item>Clothing</item>
+        <item>Stationery</item>
+        <item>Cleaning</item>
+        <item>Others</item>
     </string-array>
     <string name="equal_sharing" translatable="false">Equal Sharing</string>
     <string name="personal_debt" translatable="false">Dept</string>
@@ -104,12 +104,12 @@
     <string name="trip" translatable="false">Travel</string>
     <string name="work" translatable="false">Work</string>
     <string name="other" translatable="false">Other</string>
-    <string name="title_wear" translatable="false">Clothing</string>
-    <string name="title_food" translatable="false">Food</string>
-    <string name="title_others" translatable="false">Other</string>
-    <string name="title_stationery" translatable="false">Stationery</string>
-    <string name="title_hygiene" translatable="false">Cleaning</string>
-    <string name="title_all" translatable="false">All</string>
+    <string name="title_wear" translatable="false">wear</string>
+    <string name="title_food" translatable="false">food</string>
+    <string name="title_others" translatable="false">other</string>
+    <string name="title_stationery" translatable="false">stationery</string>
+    <string name="title_hygiene" translatable="false">cleaning</string>
+    <string name="title_all" translatable="false">all</string>
     <string name="add_budget_text" translatable="false">Please Enter your monthly budget.</string>//Lütfen Aylık Bütçenizi Giriniz.
     <string name="isim_giriniz" translatable="false">Enter Name</string>
     <string name="select_friends" translatable="false">Please select friend</string>//Lütfen arkadaş seçiniz

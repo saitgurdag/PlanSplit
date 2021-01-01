@@ -206,26 +206,32 @@ public class AddExpenseFragment extends Fragment {
                         switch (i){
                             case 0:
                                 expensePictureResourceID=foodPicture;
-
                                 break;
                             case 1:
                                 expensePictureResourceID=wearPicture;
-
                                 break;
                             case 2:
                                 expensePictureResourceID=stationeryPicture;
-
                                 break;
                             case 3:
                                 expensePictureResourceID=hygienePicture;
-
                                 break;
                             case 4:
                                 expensePictureResourceID=otherPicture;
-
                                 break;
                         }
-                        expensePicture.setImageResource(expensePictureResourceID);
+
+                        if(Locale.getDefault().toString().equals("de")){
+                            expensePicture.setImageResource(expensePictureResourceID);
+                            System.out.println("DİLİBULDUUUUUU   ALMANCA");
+                        }else if (Locale.getDefault().toString().equals("en")){
+                            System.out.println("DİLİBULDUUUUUU   ENGL");
+                            expensePicture.setImageResource(expensePictureResourceID);
+                        }else{
+                            System.out.println("DİLİBULDUUUUUU   TR");
+                            expensePicture.setImageResource(expensePictureResourceID);
+                        }
+                        //expensePicture.setImageResource(expensePictureResourceID);
                         expenseType=selectedtext;
                     }
 
@@ -266,7 +272,7 @@ public class AddExpenseFragment extends Fragment {
                     Toast.makeText(getContext(), "Hatalı girdi", Toast.LENGTH_LONG).show();
                 } else{
                     if(expenseType==null){
-                        expenseType="diğer";
+                        expenseType="Diğer";
                     }
 
                     if(extras != null&&extras.keySet().contains("friend_key_list")&&extras.keySet().contains("friend_from_list")){
@@ -290,6 +296,31 @@ public class AddExpenseFragment extends Fragment {
                         String description=extras.getString("description");
                         db.addExpenseToGroups(expensename, expenseType, expenseamounth, groupkey, date);
                         db.updateDoListGroup(groupkey,todo_key,"delete",databaseCallBack );
+
+                    Gson gson = new Gson();
+                    String json;
+                    Intent intent = new Intent(getContext(), MyGroupActivity.class);
+                    intent.putExtra("person_id", personId);
+
+                    if(expenseType.equals("Food") || expenseType.equals("Nahrung") || expenseType.equals("yiyecek")){
+                        expenseType ="Yiyecek";
+                    }else if(expenseType.equals("Clothing") || expenseType.equals("Kleidung") || expenseType.equals("giyecek")){
+                        expenseType = "Giyecek";
+                    }else if(expenseType.equals("Stationery") || expenseType.equals("Schreibwaren") || expenseType.equals("kırtasiye")){
+                        expenseType = "Kırtasiye";
+                    }else if(expenseType.equals("Cleaning") || expenseType.equals("Reinigungsmittel")|| expenseType.equals("temizlik")){
+                        expenseType = "Temizlik";
+                    }else if(expenseType.equals("Others") || expenseType.equals("Andere")|| expenseType.equals("diğer")){
+                        expenseType = "Diğer";
+                    }
+
+                    if(ctrlFG) {
+                        db.addExpenseToFriends(expensename, expenseType, expenseamounth, friend.getFriendshipsKey(), date);
+                        json = gson.toJson(friend);
+                        intent.putExtra("friend", json);
+                    }else {
+                        db.addExpenseToGroups(expensename, expenseType, expenseamounth, group.getGroupKey(), date, group.getGroup_members());
+                        json = gson.toJson(group);
                         intent.putExtra("group", json);
                         getContext().startActivity(intent);
                     }
