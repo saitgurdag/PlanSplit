@@ -268,8 +268,9 @@ public class AddExpenseFragment extends Fragment {
                         String friendkey=extras.getString("friend_key_list");
                         String todo_key=extras.getString("todo_key");
                         String description=extras.getString("description");
+                        ctrlFG=true;
                         friend = gson.fromJson(json, Friend.class);
-                        db.addExpenseToFriends(expensename, expenseType, expenseamounth, friendkey, date);
+                       // db.addExpenseToFriends(expensename, expenseType, expenseamounth, friendkey, date);
                         db.updateDoListFriend(friend.getKey(),todo_key,"delete",databaseCallBack );
                         intent.putExtra("friend", json);
                         getContext().startActivity(intent);
@@ -277,11 +278,13 @@ public class AddExpenseFragment extends Fragment {
 
                     if(extras != null&&extras.keySet().contains("group_key_list")){
                         Gson gson = new Gson();
+                        ctrlFG=false;
                         String json = extras.getString("group_from_list");
+                        group = gson.fromJson(json, Groups.class);
                         String groupkey=extras.getString("group_key_list");
                         String todo_key=extras.getString("todo_key");
                         String description=extras.getString("description");
-                        db.addExpenseToGroups(expensename, expenseType, expenseamounth, group.getGroupKey(), date, group.getGroup_members());;
+                      //  db.addExpenseToGroups(expensename, expenseType, expenseamounth, groupkey, date, group.getGroup_members());;
                         db.updateDoListGroup(groupkey,todo_key,"delete",databaseCallBack );
                         intent.putExtra("group", json);
                         getContext().startActivity(intent);
