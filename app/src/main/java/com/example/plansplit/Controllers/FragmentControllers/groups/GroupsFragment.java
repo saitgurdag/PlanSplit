@@ -154,7 +154,7 @@ public class GroupsFragment extends Fragment {
     }
 
     public void filterList(String filtertype) {
-        if (!filtertype.equals(getResources().getString(R.string.title_all))) {
+        if (!filtertype.equals("hepsi")) {
             ArrayList filteredgrouparray = new ArrayList();
             for (Groups groups : groupsArrayList) {
                 if (groups.getGroup_type().contains(filtertype)) {

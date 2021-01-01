@@ -48,7 +48,7 @@
     <fragment
         android:id="@+id/navigation_add_expense"
         android:name="com.example.plansplit.Controllers.FragmentControllers.AddExpenseFragment"
-        android:label="@string/title_expenses"
+        android:label="@string/expenses"
         tools:layout="@layout/fragment_expense" />
 
 </navigation>

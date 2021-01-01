@@ -55,6 +55,7 @@
     <string name="expense_count" translatable="false">Harcama Miktarı</string>
     <string name="expense_total" translatable="false">Harcama Toplamı :</string>
     <string name="expenses" translatable="false">Harcamalar</string>
+    <string name="title_remaining_budget" translatable="false">Kalan Bütçe :</string>
     <string name="add_expense" translatable="false">Harcama Ekle</string>
     <string name="payer" translatable="false">Ödeyen</string>
     <string name="payer_selector" translatable="false">Ödeyen(Siz)</string>

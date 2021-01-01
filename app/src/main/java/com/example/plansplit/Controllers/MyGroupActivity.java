@@ -204,7 +204,6 @@ public class MyGroupActivity extends AppCompatActivity {
             navView.getMenu().getItem(1).setChecked(true);
             if(extras.keySet().contains("friend_back")){
                 control_list="friend_list";
-                System.out.println("buraya kadar geldin lan");
             }
             Gson gson = new Gson();
             String json = extras.getString("friend");
