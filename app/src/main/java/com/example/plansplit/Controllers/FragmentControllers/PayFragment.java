@@ -63,7 +63,7 @@ public class PayFragment extends Fragment {
             public void handleOnBackPressed() {
                 getActivity().finish();
             }
-        };
+        }; requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(),onBackPressedCallback);
         ctrlFriend=false;
         saveBtn = root.findViewById(R.id.savePayButton);
         who = root.findViewById(R.id.CardViewFragmentPayPayed);
@@ -156,6 +156,7 @@ public class PayFragment extends Fragment {
     final Database.getDebtFromFriendCallBack callBack = new Database.getDebtFromFriendCallBack() {
         @Override
         public void onGetDebtFromFriendRetrieveSuccess(float debt) {
+            System.out.println("borçlar "+debt);
             setDebt(debt);
             debtTxt.setText(getResources().getString(R.string.personal_debt) + " : " + String.valueOf(debt) + " TL");
         }
@@ -169,8 +170,9 @@ public class PayFragment extends Fragment {
     final Database.getDebtFromGroupCallBack groupCallBack = new Database.getDebtFromGroupCallBack() {
         @Override
         public void onGetDebtFromGroupRetrieveSuccess(float debt) {
+            System.out.println("borçlar "+debt);
             setDebt(debt);
-            debtTxt.setText(getResources().getString(R.string.personal_debt) + " : " + String.valueOf(debt) + " TL");
+            debtTxt.setText(getResources().getString(R.string.personal_debt) + " : " + (debt) + " TL");
         }
 
         @Override

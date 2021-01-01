@@ -79,7 +79,7 @@ public class AddExpenseFragment extends Fragment {
                     String json = extras.getString("group");
                     group = gson.fromJson(json, Groups.class);
                     intent.putExtra("group", json);
-                    intent.putExtra("friend_back", "back");
+                    intent.putExtra("group_back", "back");
                     startActivity(intent);
                 }
                 if (extras.keySet().contains("friend_key_list")) {
@@ -88,7 +88,7 @@ public class AddExpenseFragment extends Fragment {
                     String json = extras.getString("friend_from_list");
                     friend = gson.fromJson(json, Friend.class);
                     intent.putExtra("friend_to_list", json);
-                    intent.putExtra("group_back", "back");
+                    intent.putExtra("friend_back", "back");
                     startActivity(intent);
 
                 }
@@ -98,6 +98,7 @@ public class AddExpenseFragment extends Fragment {
                     String json = extras.getString("group_from_list");
                     group = gson.fromJson(json, Groups.class);
                     intent.putExtra("group_to_list", json);
+                    intent.putExtra("group_to_back", "back");
                     startActivity(intent);
 
                 }
