@@ -18,6 +18,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.plansplit.Controllers.Adapters.FriendRequestsAdapter;
 import com.example.plansplit.Controllers.Adapters.NotificationsAdapter;
 import com.example.plansplit.Models.Objects.Notification;
 import com.example.plansplit.R;
@@ -44,6 +45,7 @@ public class NotificationsFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this.getContext(),1);
         recyclerView.setLayoutManager(mLayoutManager);
+
 
         notificationList = new ArrayList<>();
         notificationList.add(new Notification("Curie, İŞ grubuna harcama ekledi: Kartuş, 150 TL", "50 TL borçlusun", "20.10.2020", "20.50", R.drawable.denemeresim));
