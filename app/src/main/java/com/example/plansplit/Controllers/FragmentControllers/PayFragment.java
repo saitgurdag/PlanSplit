@@ -13,6 +13,7 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
@@ -56,6 +57,12 @@ public class PayFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         final View root = inflater.inflate(R.layout.fragment_pay, container, false);
+        OnBackPressedCallback onBackPressedCallback=new OnBackPressedCallback(true ) {
+            @Override
+            public void handleOnBackPressed() {
+                getActivity().finish();
+            }
+        };
         ctrlFriend=false;
         saveBtn = root.findViewById(R.id.savePayButton);
         who = root.findViewById(R.id.CardViewFragmentPayPayed);
@@ -97,7 +104,6 @@ public class PayFragment extends Fragment {
                                     selectedFriend = friend;
                                 }
                             }
-                            System.out.println("içeride");
                             Picasso.with(getContext()).load(selectedFriend.getPerson_image()).into(whoImage);
                             database.getDebtFromGroups(HomeActivity.getPersonId(), selectedFriend, groupCallBack);
                             return true;
