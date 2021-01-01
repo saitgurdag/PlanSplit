@@ -1900,17 +1900,21 @@ public class Database {
                             myRef.addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot s) {
-                                    for (DataSnapshot dds : s.getChildren()) {
-                                        if (dds.getKey().equals(friend.getKey())) {
-                                            float credit = 0;         // kullanıcının diğer kullanıcıdan alması gereken para miktarı
-                                            float debt = 0;           // kullanıcının borcu
-                                            debt += Float.parseFloat(ds.getValue().toString());
-                                            credit += Float.parseFloat(dds.getValue().toString());
-                                            debt = debt - credit;
-                                            if (debt <= 0) {
-                                                debt = 0;
+                                    if(s.getValue()==null){
+                                        callBack.onGetDebtFromGroupRetrieveSuccess(Float.parseFloat(ds.getValue().toString()));
+                                    }else {
+                                        for (DataSnapshot dds : s.getChildren()) {
+                                            if (dds.getKey().equals(friend.getKey())) {
+                                                float credit = 0;         // kullanıcının diğer kullanıcıdan alması gereken para miktarı
+                                                float debt = 0;           // kullanıcının borcu
+                                                debt += Float.parseFloat(ds.getValue().toString());
+                                                credit += Float.parseFloat(dds.getValue().toString());
+                                                debt = debt - credit;
+                                                if (debt <= 0) {
+                                                    debt = 0;
+                                                }
+                                                callBack.onGetDebtFromGroupRetrieveSuccess(debt);
                                             }
-                                            callBack.onGetDebtFromGroupRetrieveSuccess(debt);
                                         }
                                     }
                                 }
