@@ -11,17 +11,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.plansplit.Controllers.Adapters.FriendsAdapter;
-import com.example.plansplit.Controllers.FragmentControllers.AddExpenseFragment;
 import com.example.plansplit.Controllers.HomeActivity;
 import com.example.plansplit.Models.Database;
 import com.example.plansplit.R;
@@ -36,15 +34,20 @@ public class FriendsFragment extends Fragment {
     private String person_id = "";
     public static SearchView searchView;
     private ImageView personImage;
+    ImageView userBack;
     Bundle extras;
+    FriendsFragment fragment;
+    TextView totDebt;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         final View root = inflater.inflate(R.layout.fragment_friends, container, false);
+        fragment=this;
         Button add_friend_button = root.findViewById(R.id.friend_add_button);
         final EditText add_friend_email_text = root.findViewById(R.id.friends_add_email);
         final HomeActivity home = (HomeActivity) getContext();
-
+        totDebt = root.findViewById(R.id.personal_sum_countTv);
+        userBack = root.findViewById(R.id.back_circle);
         person_id = getArguments().get("person_id").toString();
         personImage=root.findViewById(R.id.notification_image2);
         Picasso.with(getContext()).load(home.getPersonPhoto()).into(personImage);
@@ -67,7 +70,7 @@ public class FriendsFragment extends Fragment {
                         Log.i(TAG, success);
                         Toast.makeText(getContext(), success, Toast.LENGTH_SHORT).show();
                         //m_Adapter.loadFriends();
-                        m_Adapter = new FriendsAdapter(getContext(), person_id, m_RecyclerView);
+                        m_Adapter = new FriendsAdapter(getContext(), person_id, m_RecyclerView, fragment);
                         add_friend_email_text.clearFocus();
                         add_friend_email_text.setText("");
                         InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -96,6 +99,18 @@ public class FriendsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        m_Adapter = new FriendsAdapter(getContext(), person_id, m_RecyclerView);
+        m_Adapter = new FriendsAdapter(getContext(), person_id, m_RecyclerView, this);
     }
+
+    public void setTotalDebt(float debt){
+        if(debt==0){
+            totDebt.setTextColor(getResources().getColor(R.color.brightGreen));
+            userBack.setImageResource(R.drawable.circle_background_green);
+        }else{
+            totDebt.setTextColor(getResources().getColor(R.color.red));
+            userBack.setImageResource(R.drawable.circle_background_red);
+        }
+        totDebt.setText(getResources().getString(R.string.total_dept)+ " " + debt + " TL");
+    }
+
 }

@@ -682,7 +682,7 @@ public class Database {
      *
      * @param user_key unique key whose friends would be searched for
      * @param callBack the callBack to be called whenever an error occurs or task successfully end
-     * @see #getFriend(String, FriendCallBack, String)
+     * @see #getFriend(String, FriendCallBack, String, String)
      */
     public void getFriends(final String user_key, final FriendCallBack callBack) {
         if (user_key == null) {
@@ -717,7 +717,7 @@ public class Database {
                             ArrayList<String> friends = (ArrayList<String>) snapshot.getValue();
                             for (String key : friends) {
                                 if (!user_key.equals(key)) {
-                                    getFriend(key, callBack, friend_list_key);
+                                    getFriend(key, callBack, friend_list_key, user_key);
                                     return;
                                 }
                             }
@@ -749,7 +749,7 @@ public class Database {
      * @param callBack   the callBack to be called whenever an error occurs or task successfully end
      * @see Friend
      */
-    public void getFriend(final String friend_key, final FriendCallBack callBack , final String friendshipsKey) {      //friendshipsKey arkadaşlığın bağlı olduğu friends klasındaki keyi tututyor.
+    public void getFriend(final String friend_key, final FriendCallBack callBack , final String friendshipsKey, final String userId) {      //friendshipsKey arkadaşlığın bağlı olduğu friends klasındaki keyi tututyor.
         if (friend_key == null) {
             callBack.onError(KEY_NOT_FOUND, "aranan key null");
             return;
@@ -780,10 +780,26 @@ public class Database {
                     //using email as name would be better to show user to recognize the person
                     name = snapshot.child("email").getValue().toString();
                 }
-                int amount = 0;
-                Friend friend = new Friend(photo, name, amount, friend_key);
+                final Friend friend = new Friend(photo, name, 0, friend_key);
+                getDebtFromFriendCallBack friendCallBack = new getDebtFromFriendCallBack() {
+                    @Override
+                    public void onGetDebtFromFriendRetrieveSuccess(float debt) {
+                        friend.setAmount(debt);
+
+                        callBack.onFriendRetrieveSuccess(friend);
+                        System.out.println("debt   : "  + debt);
+                    }
+
+                    @Override
+                    public void onError(String error_tag, String error) {
+
+                    }
+                };
+
                 friend.setFriendshipsKey(friendshipsKey);
-                callBack.onFriendRetrieveSuccess(friend);
+                getDebtFromFriend(userId, friend, friendCallBack);
+
+
             }
 
             @Override
@@ -1522,7 +1538,7 @@ public class Database {
 
     }
 
-    public void addExpenseToFriends(String name, String type, String price, String friendshipKey , String date) {
+    public void addExpenseToFriends(String name, String type, final String price, String friendshipKey , String date) {
 
         mPrefs = context.getSharedPreferences("userName", Context.MODE_PRIVATE);
         String userName = mPrefs.getString("userName","");
@@ -1536,15 +1552,28 @@ public class Database {
         dbr.child("date").setValue(date);
 
         //borç bilgisi -----
-        DatabaseReference dbDebts = friend_reference.child(friendshipKey).child("debts").child(userId);
-        dbDebts.setValue(String.valueOf(Integer.parseInt(price)/2));    //kullanıcının arkadaşından alması gereken para miktarı
-        // -----------------
+        final DatabaseReference dbDebts = friend_reference.child(friendshipKey).child("debts").child(userId);
+        dbDebts.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(!snapshot.exists()){
+                    dbDebts.setValue(String.valueOf(Integer.parseInt(price)/2));
+                }else {
+                    dbDebts.setValue(String.valueOf(Float.parseFloat(snapshot.getValue().toString()) + Float.parseFloat(price) / 2));    //kullanıcının arkadaşından alması gereken para miktarı
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
         getExpensesFromFriend(friendshipKey);
 
     }
 
-    public void addExpenseToGroups(String name, String type, String price, String groupsKey, String date, ArrayList<String> groupMembers) {
+    public void addExpenseToGroups(String name, String type, final String price, String groupsKey, String date, final ArrayList<String> groupMembers) {
 
         mPrefs = context.getSharedPreferences("userName", Context.MODE_PRIVATE);
         String userName = mPrefs.getString("userName","");
@@ -1558,10 +1587,25 @@ public class Database {
         dbr.child("date").setValue(date);
 
         //borç bilgisi -----
-        DatabaseReference dbDebts = group_reference.child(groupsKey).child("debts").child(userId);
-        for(String member : groupMembers){
+        final DatabaseReference dbDebts = group_reference.child(groupsKey).child("debts").child(userId);
+        for(final String member : groupMembers){
             if(!member.equals(userId)) {
-                dbDebts.child(member).setValue(String.valueOf(Integer.parseInt(price)/groupMembers.size()));
+                dbDebts.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (!snapshot.exists()) {
+                            dbDebts.child(member).setValue(String.valueOf(Integer.parseInt(price) / groupMembers.size()));
+                        } else {
+                            for (DataSnapshot ds : snapshot.getChildren()) {
+                                dbDebts.child(member).setValue(String.valueOf(Float.parseFloat(ds.getValue().toString()) + Float.parseFloat(price) / groupMembers.size()));    //kullanıcının arkadaşından alması gereken para miktarı
+                            }
+                        }
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
             }
         }
 
