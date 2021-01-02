@@ -130,4 +130,5 @@
     <string name="total_claimant" translatable="false">Total benehmen : </string>
     <string name="add_friend" translatable="false">Addiere Freund</string>
     <string name="add_new_group" translatable="false">ADDIERE NEUE GRUPPE</string>
+    <string name="title_expenses" translatable="false">Kosten</string>
 </resources>

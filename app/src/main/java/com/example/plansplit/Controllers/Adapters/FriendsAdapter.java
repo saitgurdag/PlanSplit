@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.plansplit.Controllers.FragmentControllers.friends.FriendsFragment;
@@ -33,9 +34,17 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendsV
     private String person_id;
     private RecyclerView m_RecyclerView;
     private ArrayList<Friend> friendsbuffer=new ArrayList<>();
+    Friend friend;
+    private Fragment fragment;
+    private float totalDebt;
 
+    public void setFriend(Friend friend) {
+        this.friend = friend;
+    }
 
-    public FriendsAdapter(Context mCtx, String person_id, final RecyclerView m_RecyclerView){
+    public FriendsAdapter(Context mCtx, String person_id, final RecyclerView m_RecyclerView, Fragment fragment){
+        totalDebt=0f;
+        this.fragment=fragment;
         this.mCtx = mCtx;
         this.person_id = person_id;
         this.m_RecyclerView = m_RecyclerView;
@@ -76,7 +85,8 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendsV
     private final Database.FriendCallBack friendsCallBack = new Database.FriendCallBack() {
         @Override
         public void onFriendRetrieveSuccess(final Friend friend) {
-
+            totalDebt+=Float.parseFloat(friend.getAmount());
+            setFriend(friend);
             friendsbuffer.add(friend);
             friends.clear();
             friends.addAll(friendsbuffer);
@@ -103,14 +113,14 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendsV
 
     @Override
     public void onBindViewHolder(@NonNull FriendsViewHolder holder, int position){
-        Friend friend = friends.get(position);
+        friend = friends.get(position);
         if(friend.getPerson_image().toString().isEmpty()){
             holder.friend_image.setImageResource(R.drawable.denemeresim);
         }
         if(!friend.getPerson_image().toString().isEmpty()){
             Picasso.with(mCtx).load(friend.getPerson_image()).into(holder.friend_image);
         }
-        //holder.friend_image.setImageResource(friend.getPerson_image());
+        ((FriendsFragment)fragment).setTotalDebt(totalDebt);
 
         holder.friend_name.setText(friend.getName());
         holder.friend_amount.setText(friend.getAmount());
@@ -121,6 +131,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendsV
                 getColor(holder.itemView.getContext(), friend.getColor()));
         holder.friend_layout.setBackgroundResource(friend.getLayout_background());
         holder.friend_image_balance.setImageResource(friend.getImage_background());
+
 
 
     }

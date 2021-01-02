@@ -33,7 +33,7 @@ public class Friend{
         this.friendshipsKey = friendshipsKey;
     }
 
-    public Friend(String person_image, String name, int amount, String key){
+    public Friend(String person_image, String name, float amount, String key){
         if(!person_image.isEmpty()){
 
             this.person_image = person_image;
@@ -47,7 +47,7 @@ public class Friend{
 
         //fixme: firebasede borç pozitif mi negatif mi karar vermek lazım
         //eğer kullanıcı arkadaşa borçlu ise
-        if(amount < 0){
+        if(amount <= 0){
             this.layout_background = R.drawable.itemview_bg_border_red;
             this.image_background = R.drawable.circle_background_red;
             this.color = R.color.red;
@@ -76,6 +76,22 @@ public class Friend{
 
     public String getAmount(){
         return amount;
+    }
+
+    public void setAmount(float amount) {
+        this.amount = String.valueOf(amount);
+        if(amount>0){
+            this.layout_background = R.drawable.itemview_bg_border_red;
+            this.image_background = R.drawable.circle_background_red;
+            this.color = R.color.red;
+            this.amount_text =  R.string.friend_amount_user_owes;//borçlusun
+        }else {
+            this.layout_background = R.drawable.itemview_bg_border_green;
+            this.image_background = R.drawable.circle_background_green;
+            this.color = R.color.brightGreen;
+            this.amount_text = R.string.friend_amount_friend_owes;//borç yok
+        }
+
     }
 
     public int getAmount_text(){

@@ -130,4 +130,5 @@
     <string name="total_claimant" translatable="false">Total claim amount : </string>
     <string name="add_friend" translatable="false">Add Friend</string>
     <string name="add_new_group" translatable="false">ADD NEW GROUP</string>
+    <string name="title_expenses" translatable="false">Expenses</string>
 </resources>

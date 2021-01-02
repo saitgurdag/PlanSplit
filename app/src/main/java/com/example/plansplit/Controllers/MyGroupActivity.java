@@ -412,6 +412,7 @@ public class MyGroupActivity extends AppCompatActivity {
         });
 
     }
+
     private final Database.GetMemberInfoCallBack databaseCallBack = new Database.GetMemberInfoCallBack() {
         @Override
         public void onGetMemberInfoRetrieveSuccess(ArrayList<Friend> members) {

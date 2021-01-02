@@ -128,12 +128,12 @@
         <item>diğer</item>
     </string-array>
    
-    <string name="total_dept" translatable="false">Toplam borcunuz : </string>
-    <string name="total_claimant" translatable="false">Toplam alacağınız : </string>
+    <string name="total_dept" translatable="false">Toplam Borcunuz : </string>
+    <string name="total_claimant" translatable="false">Toplam Alacağınız : </string>
 
     <string name="add_friend" translatable="false">Arkadaş Ekle</string>
 
     <string name="add_new_group" translatable="false">YENİ GRUP EKLE</string>
-    <string name="title_expenses">Harcamalar</string>
+    <string name="title_expenses" translatable="false">Harcamalar</string>
 
 </resources>
