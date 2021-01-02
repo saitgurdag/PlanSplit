@@ -18,6 +18,7 @@ import com.example.plansplit.Controllers.Adapters.GroupEventsAdapter;
 import com.example.plansplit.Controllers.HomeActivity;
 import com.example.plansplit.Controllers.MyGroupActivity;
 import com.example.plansplit.Models.Database;
+import com.example.plansplit.Models.Objects.Friend;
 import com.example.plansplit.Models.Objects.Transfers;
 import com.example.plansplit.R;
 import com.squareup.picasso.Picasso;
@@ -30,12 +31,13 @@ public class EventsFragment extends Fragment {
     Database db;
     ImageView userImage;
     TextView userDeptText;
-    int userTotalDept;
     ImageButton payButton;
     boolean ctrlType;   // friend => true       group=> false
     String personId;
     MyGroupActivity myGroupActivity;
     ArrayList<Transfers>GroupEventsObjectList = new ArrayList<>();
+    ImageView backCircle;
+    float totDept;
 
     public static EventsFragment newInstance() {
         return new EventsFragment();
@@ -50,10 +52,10 @@ public class EventsFragment extends Fragment {
         myGroupActivity=(MyGroupActivity) getContext();
         userImage=root.findViewById(R.id.user_image_groupEvents);
         payButton=root.findViewById(R.id.pay_IButton);
+        backCircle = root.findViewById(R.id.user_image_balance_groupEvents);
         Picasso.with(getContext()).load(HomeActivity.getPersonPhoto()).into(userImage);
         userDeptText = root.findViewById(R.id.user_debt_groupEvents_text);
-        userTotalDept = 15;
-        userDeptText.setText(getString(R.string.total_dept)+String.valueOf(userTotalDept)+"TL");
+        userDeptText.setText(getString(R.string.total_dept)+String.valueOf(0)+"TL");
         recyclerView=(RecyclerView) root.findViewById(R.id.RecyclerViewGroupEvents);
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this.getContext(),1);
@@ -66,9 +68,12 @@ public class EventsFragment extends Fragment {
             }
         });
         if(myGroupActivity.getType().equals("group")){
-            db.getExpensesFromGroup(myGroupActivity.getGroup().getGroupKey());
+            db.getExpensesFromGroup(myGroupActivity.getGroup().getGroupKey());      //mygroupp hatası olabilir
+            ArrayList<Friend> members = new ArrayList<>();
+            db.getGroupMembersInfo(((MyGroupActivity) getContext()).getGroup().getGroup_members(),members, memberCallBack );
         }else if(myGroupActivity.getType().equals("friend")){
-            db.getExpensesFromFriend(myGroupActivity.getFriend().getFriendshipsKey());
+            db.getExpensesFromFriend(myGroupActivity.getFriend().getFriendshipsKey());      //mygroupp hatası olabilir
+            db.getDebtFromFriend(HomeActivity.getPersonId(), ((MyGroupActivity) getContext()).getFriend(), friendCallBack);
         }
 
         adapter =new GroupEventsAdapter(GroupEventsObjectList);
@@ -93,4 +98,63 @@ public class EventsFragment extends Fragment {
         adapter.notifyDataSetChanged();
         recyclerView.setAdapter(adapter);
     }
+
+    private  final Database.getDebtFromFriendCallBack friendCallBack = new Database.getDebtFromFriendCallBack() {
+        @Override
+        public void onGetDebtFromFriendRetrieveSuccess(float debt) {
+            userDeptText.setText(getString(R.string.personal_debt) + " : " +String.valueOf(debt)+" TL");
+            if(debt>0){
+                backCircle.setImageResource(R.drawable.circle_background_red);
+                userDeptText.setTextColor(getResources().getColor(R.color.red));
+            }else{
+                backCircle.setImageResource(R.drawable.circle_background_green);
+                userDeptText.setTextColor(getResources().getColor(R.color.brightGreen));
+            }
+        }
+
+        @Override
+        public void onError(String error_tag, String error) {
+
+        }
+    };
+
+    Database.GetMemberInfoCallBack memberCallBack = new Database.GetMemberInfoCallBack() {
+        @Override
+        public void onGetMemberInfoRetrieveSuccess(ArrayList<Friend> members) {
+            totDept=0;
+            for (Friend f : members){
+                if(!HomeActivity.getPersonId().equals(f.getKey())) {
+                    f.setFriendshipsKey(((MyGroupActivity)getContext()).getGroup().getKey());
+                    db.getDebtFromGroups(HomeActivity.getPersonId(), f, groupCallBack);
+                }
+            }
+        }
+
+        @Override
+        public void onError(String error_tag, String error) {
+
+        }
+    };
+
+    Database.getDebtFromGroupCallBack groupCallBack = new Database.getDebtFromGroupCallBack() {
+        @Override
+        public void onGetDebtFromGroupRetrieveSuccess(float debt) {
+            totDept+=debt;
+            userDeptText.setText(getString(R.string.personal_debt) + " : " +String.valueOf(totDept)+" TL");
+            if(debt>0){
+                backCircle.setImageResource(R.drawable.circle_background_red);
+                userDeptText.setTextColor(getResources().getColor(R.color.red));
+            }else{
+                backCircle.setImageResource(R.drawable.circle_background_green);
+                userDeptText.setTextColor(getResources().getColor(R.color.brightGreen));
+            }
+
+        }
+
+        @Override
+        public void onError(String error_tag, String error) {
+
+        }
+    };
+
 }
