@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.plansplit.Models.Database;
 import com.example.plansplit.Models.Objects.Friend;
 import com.example.plansplit.R;
+import com.google.android.gms.common.util.JsonUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;

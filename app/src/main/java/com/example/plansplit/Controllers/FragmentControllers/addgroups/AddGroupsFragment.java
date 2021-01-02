@@ -49,7 +49,7 @@ public class AddGroupsFragment extends Fragment {
 
         final View root = inflater.inflate(R.layout.fragment_addgroups, container, false);
         Database db = new Database(getContext());
-
+        System.out.println("ilk deneme");
         person_id = db.getUserId();
 
         recyclerView = root.findViewById(R.id.recycler_addgroups);
