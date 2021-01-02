@@ -19,6 +19,7 @@
     <string name="title_contact" translatable="false">Kontakt</string>
     <string name="title_rate" translatable="false">Bewerten</string>
     <string name="title_home" translatable="false">Startseite</string>
+    <string name="title_remaining_budget" translatable="false">Budget Übrig :</string>
     <string name="header_user_name" translatable="false">Albert Einstein</string>
     <string name="header_gmail" translatable="false"> albertenisten@gmail.com</string>
     <string name="header_profile_button" translatable="false">Profil</string>

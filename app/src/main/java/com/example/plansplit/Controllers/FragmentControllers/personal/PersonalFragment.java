@@ -2,7 +2,7 @@ package com.example.plansplit.Controllers.FragmentControllers.personal;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -50,9 +50,10 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemSele
     int totExpense;                   //toplam harcamayı gösteriyor.
     ArrayList<Expense> expenseList;
     ProgressBar progressBar;
-    TextView progressText, kalanbudget;
+    TextView progressText, remainingbudget;
     Button addExpense;
     ImageView filter;
+    ImageView personstatus;
     ImageView personPhoto;
     EditText expenseName, price;
     String type;
@@ -71,6 +72,7 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemSele
         expenseList = db.getExpenses();
         totExpense = db.getTotExpense();
         final HomeActivity home = (HomeActivity) getContext();
+        personstatus=root.findViewById(R.id.personalOperations_PersonBackGround);
 
         personPhoto=root.findViewById(R.id.personalOperations_imagePerson);
         Picasso.with(getContext()).load(home.getPersonPhoto()).into(personPhoto);
@@ -96,7 +98,9 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemSele
         addExpense = root.findViewById(R.id.add_expense);
         price = root.findViewById(R.id.price);
         expenseName = root.findViewById(R.id.name);
-        kalanbudget = root.findViewById(R.id.kalan_butce);
+        remainingbudget = root.findViewById(R.id.remaining_budget);
+
+
 
         recyclerView = (RecyclerView) root.findViewById(R.id.recycler_expense);
         recyclerView.setHasFixedSize(true);
@@ -276,7 +280,6 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemSele
             addBudgetDialog();
         }else{
             budget = Integer.parseInt(i);
-            System.out.println("Aylık Bütçe : " + budget);
             update();
         }
     }
@@ -284,12 +287,17 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemSele
     public void update(){
         progressText.setText(String.valueOf(budget) + " TL");
         progressBar.setMax(budget);
-        if(Locale.getDefault().toString().equals("de")){
-            kalanbudget.setText("Budget Übrig : " + String.valueOf(budget - totExpense) + " TL");
-        }else if (Locale.getDefault().toString().equals("en")){
-            kalanbudget.setText("Budget Left : " + String.valueOf(budget - totExpense) + " TL");
-        }else{
-            kalanbudget.setText("Kalan Bütçe : " + String.valueOf(budget - totExpense) + " TL");
+        remainingbudget.setText((budget - totExpense)+ " TL");
+
+        if((budget - totExpense)<0){
+            personstatus.setImageResource(R.drawable.circle_background_red);
+            progressBar.getProgressDrawable().setColorFilter(
+                    getResources().getColor(R.color.red), android.graphics.PorterDuff.Mode.SRC_IN);
+        }
+        if((budget - totExpense)>=0){
+            personstatus.setImageResource(R.drawable.circle_background_green);
+            progressBar.getProgressDrawable().setColorFilter(
+                    getResources().getColor(R.color.blue), android.graphics.PorterDuff.Mode.SRC_IN);
         }
 
         progressBar.setProgress(totExpense);

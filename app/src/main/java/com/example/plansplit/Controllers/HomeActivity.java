@@ -65,6 +65,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     public static  BottomNavigationView navView;
     public static Uri personPhoto;
     SharedPreferences mPrefs;
+    ImageView personImageBackground;
    private ActionBarDrawerToggle toggle;
 
 
@@ -104,9 +105,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         toggle =new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
-
-
-
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.navigation_personal, R.id.navigation_friends, R.id.navigation_groups, R.id.navigation_notifications,R.id.navigation_add_expense)
 
@@ -114,10 +112,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         final NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
-
-
-
-
         navView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener(){
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item){
@@ -224,6 +218,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 if(id == R.id.navigation_language){
                     showChangeLanguageDialog();
                     loadLocale();
+
                 }
 
                 if (id==R.id.navigation_logout){
@@ -276,6 +271,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     recreate();
                 }
                 dialogInterface.dismiss();
+                drawerLayout.close();
             }
 
         });
