@@ -1386,7 +1386,7 @@ public class Database {
                 handler.removeFromRequests(user_key, friend_reqs);
                 callBack.onSuccess("arkadaş eklendi");
                 notificationListener.onPersonalEvent("friend_add",
-                        user_key,
+                        friend_key,
                         snapshot.child("image").getValue().toString(),
                         snapshot.child("name").getValue().toString());
             }
@@ -1433,7 +1433,7 @@ public class Database {
                 handler.addAsFriend(friend_key, friends);
                 handler.removeFromRequests(friend_key, friend_reqs);
                 notificationListener.onPersonalEvent("friend_add",
-                        friend_key,
+                        user_key,
                         snapshot.child("image").getValue().toString(),
                         snapshot.child("name").getValue().toString());
                 //no success will be send as it would be send in user_key's snapshot
