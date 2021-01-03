@@ -286,10 +286,7 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ToDoLi
                                 intent.putExtra("friend_from_list", json);
                             }
 
-                           view.getContext().startActivity(intent);
-
-
-
+                            mContext.startActivity(intent);
 
                         }
                     });

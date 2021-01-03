@@ -129,6 +129,7 @@
         <item>others</item>
     </string-array>
     <string name="total_dept" translatable="false">Total dept amount: </string>
+    <string name="total_dept_0" translatable="false">Total dept amount: 0 TL</string>
     <string name="total_claimant" translatable="false">Total claim amount : </string>
     <string name="add_friend" translatable="false">Add Friend</string>
     <string name="add_new_group" translatable="false">ADD NEW GROUP</string>

@@ -131,6 +131,7 @@
     </string-array>
 
     <string name="total_dept" translatable="false">Toplam Borcunuz : </string>
+    <string name="total_dept_0" translatable="false">Toplam Borcunuz : 0 TL</string>
     <string name="total_claimant" translatable="false">Toplam Alacağınız : </string>
 
     <string name="add_friend" translatable="false">Arkadaş Ekle</string>
