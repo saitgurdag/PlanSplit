@@ -31,6 +31,7 @@
     <string name="group_settings" translatable="false">Grup Settings</string>
     <string name="create_group" translatable="false">Make Group</string>
     <string name="group_members" translatable="false">Group Members</string>
+    <string name="add_friends_in_group" translatable="false">Add friends to the group</string>
     <string name="please_give_group_name" translatable="false">Please Enter Group Name</string>
     <string name="current_dept_status" translatable="false">Current Dept Information</string>
     <string name="enter_amount" translatable="false">Enter Amount</string>

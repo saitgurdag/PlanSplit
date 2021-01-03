@@ -2,7 +2,6 @@ package com.example.plansplit.Controllers.FragmentControllers.personal;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -34,7 +33,6 @@ import com.example.plansplit.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.Locale;
 import java.util.Objects;
 
 import static android.R.layout.simple_spinner_item;
@@ -185,7 +183,7 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemSele
             selectedFilter = status;
             ArrayList filteredList = new ArrayList<>();
             for (Expense expense : expenseList) {
-                if (expense.getExpense_type().toLowerCase().contains(status)) {
+                if (expense.getType().toLowerCase().contains(status)) {
                     filteredList.add(expense);
                 }
 

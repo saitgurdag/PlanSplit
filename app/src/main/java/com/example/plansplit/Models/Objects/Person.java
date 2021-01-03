@@ -4,31 +4,49 @@ public class Person {
 
     private String name;
     private String mail;
+    private String person_id;
     private int cardView_shareMethodPersonPicture;
     private int checkBox_shareMethodPersonCheckBox;
     private int cardView_addgroupsPicture;
+    private String person_photo;
 
     /////////// BERKAY EKLEME KISMI ////////////
 
     // bu ekleme yeri grup işlemleri ekranı içinyapıldı
     //Resim olarak hazır attribute cardView_shareMethodPersonPicture kullandım kişi resmi ile eşit çünki bu , groupDepth ekledim =  kişinin gruba olan borcu
 
-    private String groupDepth;
+    private String total_expense = "0";
     private int backGroundPerson ;
 
-    public Person(int backGroundPerson,int cardView_shareMethodPersonPicture, String groupDepth) {           // Group Operations için kullandığım Contructor
-        this.backGroundPerson=backGroundPerson;
-        this.cardView_shareMethodPersonPicture = cardView_shareMethodPersonPicture;
-        this.groupDepth = groupDepth;
+    public Person(String person_id, String person_photo) {           // Group Operations için kullandığım Contructor
+        this.person_id = person_id;
+        this.person_photo = person_photo;
     }
 
-    public String getGroupDepth() {
-        return groupDepth;
+    public String getPerson_id() {
+        return person_id;
     }
 
-    public void setGroupDepth(String groupDepth) {
-        this.groupDepth = groupDepth;
+    public void setPerson_id(String person_id) {
+        this.person_id = person_id;
     }
+
+    public String getPerson_photo() {
+        return person_photo;
+    }
+
+    public void setPerson_photo(String person_photo) {
+        this.person_photo = person_photo;
+    }
+
+    public String getTotal_expense() {
+        return total_expense;
+    }
+
+    public void setTotal_expense(String total_expense) {
+        this.total_expense = total_expense;
+    }
+
     public int getBackGroundPerson() {
         return backGroundPerson;
     }
