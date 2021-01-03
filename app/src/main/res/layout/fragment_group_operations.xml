@@ -23,7 +23,7 @@
                 android:fontFamily="@font/avenir"
                 android:textSize="20sp"
                 android:textColor="@color/grey"
-                android:text="Grup Harcama Toplamları"
+                android:text="@string/group_totalExpense"
                 android:textStyle="bold"/>
 
             <androidx.recyclerview.widget.RecyclerView

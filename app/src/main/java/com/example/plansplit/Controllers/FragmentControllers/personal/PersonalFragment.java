@@ -3,8 +3,6 @@ package com.example.plansplit.Controllers.FragmentControllers.personal;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -34,10 +32,8 @@ import com.example.plansplit.Models.Objects.Expense;
 import com.example.plansplit.R;
 import com.squareup.picasso.Picasso;
 
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Objects;
 
 import static android.R.layout.simple_spinner_item;
@@ -53,13 +49,15 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemSele
     int totExpense;                   //toplam harcamayı gösteriyor.
     ArrayList<Expense> expenseList;
     ProgressBar progressBar;
-    TextView progressText, kalanbudget;
+    TextView progressText, remainingbudget;
     Button addExpense;
     ImageView filter;
+    ImageView personstatus;
     ImageView personPhoto;
     EditText expenseName, price;
     String type;
     String selectedFilter;
+    Boolean control=false;
     Spinner spin;
 
 
@@ -75,7 +73,14 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemSele
         personPhoto=root.findViewById(R.id.personalOperations_imagePerson);
         Picasso.with(getContext()).load(db.getPerson().getImage()).into(personPhoto);
 
-        country = new String[]{"Yiyecek", "Giyecek", "Kırtasiye", "Temizlik" , "Diğer"};
+
+        //country = new String[]{"Yiyecek", "Giyecek", "Kırtasiye", "Temizlik" , "Diğer"};
+        country = new String[]{getResources().getStringArray(R.array.expensePersonalItems)[0],
+                getResources().getStringArray(R.array.expensePersonalItems)[1],
+                getResources().getStringArray(R.array.expensePersonalItems)[2],
+                getResources().getStringArray(R.array.expensePersonalItems)[3],
+                getResources().getStringArray(R.array.expensePersonalItems)[4]};
+
         spin = (Spinner) root.findViewById(R.id.spinner);
         spin.setOnItemSelectedListener(this);
         ArrayAdapter aa = new ArrayAdapter(this.getContext(), simple_spinner_item, country);
@@ -89,7 +94,9 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemSele
         addExpense = root.findViewById(R.id.add_expense);
         price = root.findViewById(R.id.price);
         expenseName = root.findViewById(R.id.name);
-        kalanbudget = root.findViewById(R.id.kalan_butce);
+        remainingbudget = root.findViewById(R.id.remaining_budget);
+
+
 
         recyclerView = (RecyclerView) root.findViewById(R.id.recycler_expense);
         recyclerView.setHasFixedSize(true);
@@ -110,21 +117,26 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemSele
                     @Override
                     public boolean onMenuItemClick(MenuItem menuItem) {
                         switch(menuItem.getItemId()){
-                            case R.id.filter_food:
-                                selectedFilter=getResources().getString(R.string.title_food);
 
+                            case R.id.filter_food:
+                                //selectedFilter=getResources().getString(R.string.title_food);
+                                selectedFilter="yiyecek";
                                 break;
                             case R.id.filter_wear:
-                                selectedFilter=getResources().getString(R.string.title_wear);
+                                //selectedFilter=getResources().getString(R.string.title_wear);
+                                selectedFilter="giyecek";
                                 break;
                             case R.id.filter_stationery:
-                                selectedFilter=getResources().getString(R.string.title_stationery);
+                                //selectedFilter=getResources().getString(R.string.title_stationery);
+                                selectedFilter="kırtasiye";
                                 break;
                             case R.id.filter_hygiene:
-                                selectedFilter=getResources().getString(R.string.title_hygiene);
+                                //selectedFilter=getResources().getString(R.string.title_hygiene);
+                                selectedFilter="temizlik";
                                 break;
                             case R.id.filter_others:
-                                selectedFilter=getResources().getString(R.string.title_others);
+                                //selectedFilter=getResources().getString(R.string.title_others);
+                                selectedFilter="diğer";
                                 break;
                             case R.id.filter_all:
                                 selectedFilter=getResources().getString(R.string.title_all);
@@ -223,7 +235,7 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemSele
             selectedFilter = status;
             ArrayList filteredList = new ArrayList<>();
             for (Expense expense : expenseList) {
-                if (expense.getExpense_type().toLowerCase().contains(status)) {
+                if (expense.getType().toLowerCase().contains(status)) {
                     filteredList.add(expense);
                 }
 
@@ -235,8 +247,6 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemSele
             adapter = new ExpensesAdapter(this.getContext(), expenseList);
             recyclerView.setAdapter(adapter);
         }
-
-
     }
 
     @Override
@@ -255,6 +265,20 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemSele
             if(!price.getText().toString().matches("") && !expenseName.getText().toString().matches("")) {
                 String name = String.valueOf(expenseName.getText());
                 int p = Integer.parseInt(String.valueOf(price.getText()));
+
+
+                if(type.equals("food") || type.equals("nahrung") || type.equals("yiyecek")){
+                    type ="Yiyecek";
+                }else if(type.equals("wear") || type.equals("kleidung") || type.equals("giyecek")){
+                    type = "Giyecek";
+                }else if(type.equals("stationary") || type.equals("schreibwaren") || type.equals("kırtasiye")){
+                    type = "Kırtasiye";
+                }else if(type.equals("cleaning") || type.equals("reinigungsmittel")|| type.equals("temizlik")){
+                    type = "Temizlik";
+                }else if(type.equals("others") || type.equals("andere")|| type.equals("diğer")){
+                    type = "Diğer";
+                }
+
                 db.addExpense(name, type, String.valueOf(p), new Database.DatabaseCallBack() {
                     @Override
                     public void onSuccess(String success) {
@@ -304,7 +328,6 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemSele
         if(i == null) {
             addBudgetDialog();
         }else{
-            System.out.println("Aylık Bütçe : " + i);
             budget = i;
             update();
         }
@@ -349,7 +372,28 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemSele
     public void update(){
         progressText.setText(getString(R.string.budget, budget));
         progressBar.setMax(budget);
-        kalanbudget.setText(getString(R.string.remaining_budget, (budget - totExpense)));
+        remainingbudget.setText(getString(R.string.remaining_budget, (budget - totExpense)));
+
+        if((budget - totExpense)<=0){
+            control=true;
+            personstatus.setImageResource(R.drawable.circle_background_red);
+            progressBar.getProgressDrawable().setColorFilter(
+                    getResources().getColor(R.color.red), android.graphics.PorterDuff.Mode.SRC_IN);
+
+
+        }
+        if((budget - totExpense)>0){
+            personstatus.setImageResource(R.drawable.circle_background_green);
+            if(control==true){
+                progressBar.setProgressDrawable(getResources().getDrawable(R.drawable.progressbar_custom));
+            }
+            control=false;
+
+
+        /*   progressBar.getIndeterminateDrawable().setColorFilter(
+                    getResources().getColor(R.color.blue), android.graphics.PorterDuff.Mode.SRC_IN);*/
+        }
+
         progressBar.setProgress(totExpense);
         adapter = new ExpensesAdapter(this.getContext(), expenseList);
         recyclerView.setAdapter(adapter);

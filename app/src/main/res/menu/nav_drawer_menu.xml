@@ -5,9 +5,9 @@
         android:icon="@drawable/ic_home_black_24dp"
         android:title="@string/title_home" />
     <item
-        android:id="@+id/navigation_settings"
-        android:icon="@drawable/ic_baseline_settings_24"
-        android:title="@string/title_settings" />
+        android:id="@+id/navigation_language"
+        android:icon="@drawable/ic_language"
+        android:title="@string/title_change_language" />
 
     <item
         android:id="@+id/navigation_logout"

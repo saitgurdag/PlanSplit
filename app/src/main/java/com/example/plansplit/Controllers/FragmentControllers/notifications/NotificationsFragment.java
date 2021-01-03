@@ -18,6 +18,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.plansplit.Controllers.Adapters.FriendRequestsAdapter;
 import com.example.plansplit.Controllers.Adapters.NotificationsAdapter;
 import com.example.plansplit.Models.Database;
 import com.example.plansplit.Models.Objects.Notification;

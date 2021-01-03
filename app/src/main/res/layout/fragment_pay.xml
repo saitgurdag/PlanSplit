@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_pay"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+         android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="15dp"
+            android:paddingBottom="5dp">
+
+            <TextView
+                android:id="@+id/debt_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="32sp"
+                android:textColor="@color/black"
+                android:fontFamily="@font/avenir"
+                android:text="         "/>
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/RelativeLayoutPayPersons"
+            android:layout_marginTop="10dp"
+            android:gravity="center_horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="10dp">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/CardViewFragmentPayPayer"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_toRightOf="@+id/directionImage"
+                android:layout_marginTop="10dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="50dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:backgroundTint="@color/green">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardViewPayerImage"
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
+                    android:layout_gravity="center"
+                    app:cardCornerRadius="45dp">
+
+                    <ImageView
+                        android:id="@+id/userPhoto"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        app:srcCompat="@drawable/denemeresim" />
+                </androidx.cardview.widget.CardView>
+            </androidx.cardview.widget.CardView>
+            <ImageView
+                android:id="@+id/directionImage"
+                android:layout_width="wrap_content"
+               android:layout_marginLeft="10dp"
+                android:layout_centerVertical="true"
+                android:layout_height="wrap_content"
+                android:src="@drawable/directionimage"
+                android:layout_gravity="center_vertical"
+                android:layout_toRightOf="@+id/CardViewFragmentPayPayer">
+            </ImageView>
+            <androidx.cardview.widget.CardView
+                android:id="@+id/CardViewFragmentPayPayed"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+               android:layout_toRightOf="@+id/directionImage"
+                android:layout_marginTop="10dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="50dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:backgroundTint="@color/green">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
+                    android:layout_gravity="center"
+                    app:cardCornerRadius="45dp">
+
+                    <ImageView
+                        android:id="@+id/who_image"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        app:srcCompat="@drawable/who" />
+                </androidx.cardview.widget.CardView>
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+        <RelativeLayout
+            android:id="@+id/fragmentPayOperations"
+            android:gravity="center_horizontal"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="20dp">
+            <ImageView
+                android:id="@+id/moneyTypeImage"
+                android:layout_width="45dp"
+                android:layout_marginLeft="20dp"
+                android:src="@drawable/ic_para_birimi"
+                android:layout_height="45dp">
+            </ImageView>
+            <EditText
+                 android:id="@+id/payEdt"
+                android:layout_toRightOf="@id/moneyTypeImage"
+                android:layout_width="170dp"
+                android:hint="@string/enter_amount"
+                android:layout_height="wrap_content">
+            </EditText>
+        </RelativeLayout>
+        <RelativeLayout
+
+            android:layout_width="match_parent"
+            android:layout_below="@+id/fragmentPayOperations"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:gravity="center_horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="20dp">
+
+                <Button
+                    android:id="@+id/savePayButton"
+                    android:layout_width="224dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_height="34dp"
+                    android:background="@drawable/custom_button2"
+                    android:fontFamily="@font/avenir"
+                    android:text="@string/save"
+                    android:textColor="@color/grey">
+
+                </Button>
+            </LinearLayout>
+        </RelativeLayout>
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

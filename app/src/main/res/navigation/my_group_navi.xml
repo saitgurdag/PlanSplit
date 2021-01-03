@@ -23,4 +23,14 @@
         android:name="com.example.plansplit.Controllers.FragmentControllers.mygroup.ListFragment"
         tools:layout="@layout/fragment_list" />
 
+    <fragment
+        android:id="@+id/navi_pay"
+        android:name="com.example.plansplit.Controllers.FragmentControllers.PayFragment"
+        tools:layout="@layout/fragment_pay" />
+
+    <fragment
+        android:id="@+id/navi_group_operation"
+        android:name="com.example.plansplit.Controllers.FragmentControllers.addgroups.AddGroupsFragment"
+        tools:layout="@layout/fragment_addgroups" />
+
 </navigation>

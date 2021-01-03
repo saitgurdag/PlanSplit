@@ -9,19 +9,34 @@
         android:id="@+id/navigation_friends"
         android:name="com.example.plansplit.Controllers.FragmentControllers.friends.FriendsFragment"
         android:label="@string/title_friends"
-        tools:layout="@layout/fragment_friends" />
+        tools:layout="@layout/fragment_friends" >
+        <action
+            android:id="@+id/action_navigation_friends_to_navigation_add_expense"
+            app:destination="@id/navigation_add_expense" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_personal"
         android:name="com.example.plansplit.Controllers.FragmentControllers.personal.PersonalFragment"
         android:label="@string/title_personal"
-        tools:layout="@layout/fragment_personal" />
+        tools:layout="@layout/fragment_personal" >
+        <action
+            android:id="@+id/action_navigation_personal_to_navigation_friends"
+            app:destination="@id/navigation_friends" />
+        <action
+            android:id="@+id/action_navigation_personal_to_navigation_groups"
+            app:destination="@id/navigation_groups" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_groups"
         android:name="com.example.plansplit.Controllers.FragmentControllers.groups.GroupsFragment"
         android:label="@string/title_groups"
-        tools:layout="@layout/fragment_groups" />
+        tools:layout="@layout/fragment_groups" >
+        <action
+            android:id="@+id/action_navigation_groups_to_navigation_add_expense"
+            app:destination="@id/navigation_add_expense" />
+    </fragment>
 
 
     <fragment
@@ -33,6 +48,7 @@
     <fragment
         android:id="@+id/navigation_add_expense"
         android:name="com.example.plansplit.Controllers.FragmentControllers.AddExpenseFragment"
+        android:label="@string/expenses"
         tools:layout="@layout/fragment_expense" />
 
 </navigation>

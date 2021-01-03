@@ -5,10 +5,4 @@
         android:title="@string/group_settings"
         android:icon="@drawable/ic_menu_line"
         app:showAsAction="never"/>
-    <item android:id="@+id/mygroup_table_export"
-        android:title="@string/as_table_export"
-        app:showAsAction="never"/>
-    <item android:id="@+id/mygroup_quick_add"
-        android:title="@string/quick_add"
-        app:showAsAction="never"/>
 </menu>

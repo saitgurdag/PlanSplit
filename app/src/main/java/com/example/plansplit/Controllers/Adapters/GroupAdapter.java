@@ -1,6 +1,7 @@
 package com.example.plansplit.Controllers.Adapters;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,9 +26,14 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private String group_type_option_trip = "seyahat";
     private String group_type_option_other = "diğer";
     int homePicture, workPicture, tripPicture, otherPicture;
+    SharedPreferences mPrefs;
 
+    public ArrayList<Groups> getGroups() {
+        return groups;
+    }
 
     public GroupAdapter(Context mContx, ArrayList<Groups> groups, RecyclerViewClickListener mListener) {
+        mPrefs =mContx.getSharedPreferences("listbell", Context.MODE_PRIVATE);
         this.mContx = mContx;
         this.groups = groups;
         this.mListener = mListener;
@@ -51,6 +57,17 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         workPicture = R.drawable.ic_suitcase_radius;
         tripPicture = R.drawable.ic_trip_radius;
         otherPicture = R.drawable.ic_other;
+        String k=mPrefs.getString("listbell_key","");
+        boolean c=mPrefs.getBoolean("listbell",false);
+        if(groups.get(position).getGroupKey().equals(k)){
+            if(c==true){
+                ((MyViewHolder) holder).mImageView_extra.setVisibility(View.VISIBLE);
+            }
+            else{
+                ((MyViewHolder) holder).mImageView_extra.setVisibility(View.INVISIBLE);
+            }
+
+        }
 
         String group_type = groups.get(position).getGroup_type();
         if(group_type.equals(group_type_option_home)){
@@ -75,6 +92,7 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         ImageView mGroupIcon, mImageView_extra;
         TextView mTitle, mCost;
+
 
         public MyViewHolder(@NonNull View itemView) {
 

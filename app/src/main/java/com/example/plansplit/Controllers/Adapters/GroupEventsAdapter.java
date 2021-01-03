@@ -26,7 +26,6 @@ public class GroupEventsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public int getItemViewType(int position) {
-        System.out.println("POZİSYON"+position);
         if(transfersList.get(position).getType()==0){
            return 0;
        }else return 1;
@@ -58,10 +57,6 @@ public class GroupEventsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             viewHolderGroupObject.object_depthamount.setTextColor(ContextCompat                                      //borçlu isen kırmızı olcak renk seçio
                     .getColor(holder.itemView.getContext(),transfers.getColor()));
 
-            viewHolderGroupObject.object_depthtatus.setText(transfers.getGroupEvents_object_depthStatus());
-                viewHolderGroupObject.object_depthtatus.setTextColor(ContextCompat                                       //borçlu - alacaklı yazısı rengini seçiyor
-                        .getColor(holder.itemView.getContext(),transfers.getColor()));
-
                 viewHolderGroupObject.object_depthamount.setTextColor(ContextCompat
                     .getColor(holder.itemView.getContext(),transfers.getColor()));
                 //payorPayed
@@ -81,7 +76,6 @@ public class GroupEventsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public int getItemCount() {
-        System.out.println("HATA BULMA"+transfersList.size());
         return transfersList.size();
     }
 
@@ -101,8 +95,7 @@ public class GroupEventsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             object_payer_name=itemView.findViewById(R.id.group_events_object_payer_name);
             object_payer_payAmount=itemView.findViewById(R.id.group_events_object_coast);
             object_payOrPayed=itemView.findViewById(R.id.group_events_object_payOrpayed_Text);
-            object_depthamount=itemView.findViewById(R.id.group_events_object_user_depth);
-            object_depthtatus = itemView.findViewById(R.id.group_events_object_user_depth_status);
+            object_depthamount=itemView.findViewById(R.id.day);
         }
     }
     class GroupEventsViewHolderPayments extends ViewHolder {

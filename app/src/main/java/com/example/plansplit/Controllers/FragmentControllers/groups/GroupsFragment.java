@@ -68,6 +68,8 @@ public class GroupsFragment extends Fragment {
         groupAdapter = new GroupAdapter(this.getContext(), groupsArrayList, mListener);
         recyclerView.setAdapter(groupAdapter);
 
+
+
         groupsfilterBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -80,22 +82,25 @@ public class GroupsFragment extends Fragment {
                     public boolean onMenuItemClick(MenuItem menuItem) {
                         switch(menuItem.getItemId()){
                             case R.id.filter_house:
-                                selectedFilter=getResources().getString(R.string.title_house);
-
+                                //selectedFilter=getResources().getString(R.string.title_house);
+                                selectedFilter="ev";
                                 break;
                             case R.id.filter_travel:
-                                selectedFilter=getResources().getString(R.string.title_travel);
+                                //selectedFilter=getResources().getString(R.string.title_travel);
+                                selectedFilter="seyahat";
                                 break;
                             case R.id.filter_business:
-                                selectedFilter=getResources().getString(R.string.title_business);
+                                //selectedFilter=getResources().getString(R.string.title_business);
+                                selectedFilter="iş";
                                 break;
                             case R.id.filter_others:
-                                selectedFilter=getResources().getString(R.string.title_others);
+                                //selectedFilter=getResources().getString(R.string.title_others);
+                                selectedFilter="diğer";
                                 break;
                             case R.id.filter_all:
-                                selectedFilter=getResources().getString(R.string.title_all);
+                               // selectedFilter=getResources().getString(R.string.title_all);
+                                selectedFilter="hepsi";
                                 break;
-
                         }
                         filterList(selectedFilter);
                         return false;
@@ -127,6 +132,7 @@ public class GroupsFragment extends Fragment {
 
     }
 
+
     private void setOnClickListener() {
         mListener = new GroupAdapter.RecyclerViewClickListener() {
             @Override
@@ -145,7 +151,7 @@ public class GroupsFragment extends Fragment {
     }
 
     public void filterList(String filtertype) {
-        if (!filtertype.equals(getResources().getString(R.string.title_all))) {
+        if (!filtertype.equals("hepsi")) {
             ArrayList filteredgrouparray = new ArrayList();
             for (Groups groups : groupsArrayList) {
                 if (groups.getGroup_type().contains(filtertype)) {

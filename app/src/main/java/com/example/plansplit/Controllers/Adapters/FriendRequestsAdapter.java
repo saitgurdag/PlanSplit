@@ -136,6 +136,8 @@ public class FriendRequestsAdapter extends RecyclerView.Adapter<FriendRequestsAd
             });
         }
     }
+
+
 }
 
 

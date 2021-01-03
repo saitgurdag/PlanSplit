@@ -1,14 +1,20 @@
 package com.example.plansplit.Controllers;
 
+import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.plansplit.R;
@@ -25,7 +31,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
+import java.util.Locale;
+
 public class MainActivity extends AppCompatActivity {
+
+    Button selectLanguageButton;
 
     GoogleSignInClient mGoogleSignInClient;
     int RC_SIGN_IN = 0;
@@ -38,12 +48,16 @@ public class MainActivity extends AppCompatActivity {
     ImageView loginWalletAnimation;
     Animation frombottomLoginWallet;
 
+    static int languageFlag;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //BERGAY DİL
+        loadLocale();
+        //BERGAY DİL END
+
         setContentView(R.layout.activity_login);
-
-
         findViewById(R.id.sign_in_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,7 +87,88 @@ public class MainActivity extends AppCompatActivity {
         loginWalletAnimation = findViewById(R.id.imageViewLoginWallet);
         loginWalletAnimation.setAnimation(frombottomLoginWallet);
         //berkay animasyon bitiş
+
+        //BERGAY DİL
+
+        selectLanguageButton = findViewById(R.id.select_language_button);
+        selectLanguageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showChangeLanguageDialog();
+            }
+        });
+
     }
+    //BERGAY DİL  DİALOG
+
+
+    private  void showChangeLanguageDialog(){
+        final String[] listItems = {"Deutsch","Englisch","Türkçe"};
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(MainActivity.this);
+        mBuilder.setTitle("Choose Language Please");
+        mBuilder.setSingleChoiceItems(listItems, -1, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                if(i == 0){
+                    //Deutsch
+                    setLocale("de");
+                   languageFlag = 0;
+
+                   recreate();
+                }
+                else if(i == 1){
+                    //Englisch
+                    setLocale("en");
+                    languageFlag = 1;
+                    recreate();
+                }
+                else if(i == 2){
+                    //Türkce
+                    setLocale("tr-rTR");
+                    languageFlag = 2;
+                    recreate();
+                }
+                 dialogInterface.dismiss();
+            }
+
+        });
+        AlertDialog mDialog = mBuilder.create();
+        mDialog.show();
+    }
+
+    private void setLocale(String language) {
+        Locale locale = new Locale(language);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getBaseContext().getResources().updateConfiguration(config,getBaseContext().getResources().getDisplayMetrics());
+
+        SharedPreferences.Editor editor = getSharedPreferences("LanguageSettings",MODE_PRIVATE).edit();
+        editor.putString("My_Lang",language);
+        editor.apply();
+    }
+    //Load language in shared prefences
+    public void loadLocale(){
+        SharedPreferences prefs = getSharedPreferences("LanguageSettings", Activity.MODE_PRIVATE);
+        String language = prefs.getString("My_Lang","");
+        setLocale(language);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        String currentLang = Locale.getDefault().toString();
+        setLocale(currentLang);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadLocale();
+    }
+
+    //BERGAY DİL DİALOG END
 
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();

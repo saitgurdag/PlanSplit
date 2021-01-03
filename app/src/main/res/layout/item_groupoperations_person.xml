@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:gravity="center"
-    android:layout_gravity="center|top">
+    android:layout_gravity="center|top"
+    android:gravity="center">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/groupOperations_card"
@@ -21,38 +21,43 @@
 
             <FrameLayout
                 android:id="@+id/friend_frame"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:padding="5dp">
-
-
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_centerVertical="true">
 
                 <ImageView
-                    android:id="@+id/personalOperations_PersonBackGround"
+                    android:id="@+id/groupOperations_PersonBackGround"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_gravity="center"
-                    android:padding="5dp"
                     android:src="@drawable/circle_background_green" />
 
-                <ImageView
-                    android:id="@+id/groupOperations_image"
-                    android:layout_width="46dp"
-                    android:layout_height="46dp"
+                <androidx.cardview.widget.CardView
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
                     android:layout_gravity="center"
-                    android:padding="5dp"
-                    app:srcCompat="@drawable/denemeresim" />
+                    app:cardCornerRadius="17.5dp">
+
+                    <ImageView
+                        android:id="@+id/groupOperations_image"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        app:srcCompat="@drawable/denemeresim" />
+
+
+                </androidx.cardview.widget.CardView>
+
 
             </FrameLayout>
 
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toEndOf="@+id/friend_frame"
-                android:gravity="center"
+                android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true">
+                android:layout_toEndOf="@+id/friend_frame"
+                android:gravity="center">
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
@@ -60,7 +65,7 @@
                     android:gravity="center">
 
                     <TextView
-                        android:id="@+id/groupOperations_amount"
+                        android:id="@+id/groupOperations_expense_amount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/avenir"

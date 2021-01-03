@@ -3,6 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item android:id="@+id/friend_requests_item"
         android:title="@string/group_settings"
-        android:icon="@drawable/ic_menu_line"
+        android:icon="@drawable/ic_friend_request_icon"
         app:showAsAction="always"/>
 </menu>

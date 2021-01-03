@@ -1,8 +1,11 @@
 package com.example.plansplit.Controllers;
 
-import android.content.Context;
+import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +18,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -47,6 +51,8 @@ import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+import java.util.Locale;
+
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemSelectedListener {
 
     GoogleSignInClient mGoogleSignInClient;
@@ -55,15 +61,22 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     NavigationView navigationView;
     Bundle bundle;
     String navigation_key;
+    public static  BottomNavigationView navView;
+
+    private ActionBarDrawerToggle toggle;
+
+
 
     FirebaseAuth mAuth;
     private static final Database database = Database.getInstance();
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        BottomNavigationView navView = findViewById(R.id.nav_view);
+        navView = findViewById(R.id.nav_view);
         mAuth = FirebaseAuth.getInstance();
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -77,22 +90,16 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar =  findViewById(R.id.myToolBar);
         setSupportActionBar(toolbar);
         drawerLayout=findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle =new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
+        toggle =new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
-
-
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_personal, R.id.navigation_friends, R.id.navigation_groups, R.id.navigation_notifications)
+                R.id.navigation_personal, R.id.navigation_friends, R.id.navigation_groups, R.id.navigation_notifications,R.id.navigation_add_expense)
 
                 .build();
         final NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
-
-
-
-
         navView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener(){
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item){
@@ -129,6 +136,23 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         }
 
         Bundle extras = getIntent().getExtras();
+        if(extras != null && (extras.keySet().contains("group_key_list"))){
+            bundle = new Bundle();
+            bundle.putString("description", extras.getString("description"));
+            bundle.putString("todo_key", extras.getString("todo_key"));
+            bundle.putString("group_from_list", extras.getString("group_from_list"));
+            bundle.putString("group_key_list", extras.getString("group_key_list"));
+            navController.navigate(R.id.navigation_add_expense, bundle);
+        }
+        if(extras != null && (extras.keySet().contains("friend_key_list"))){
+            bundle = new Bundle();
+            bundle.putString("description", extras.getString("description"));
+            bundle.putString("todo_key", extras.getString("todo_key"));
+            bundle.putString("friend_from_list", extras.getString("friend_from_list"));
+            bundle.putString("friend_key_list", extras.getString("friend_key_list"));
+            System.out.println("arkadaş keyi "+extras.getString("friend_key_list"));
+            navController.navigate(R.id.navigation_add_expense, bundle);
+        }
         if(extras != null && (extras.keySet().contains("friend") || extras.keySet().contains("group"))) {
             if (extras.keySet().contains("friend")) {
                 bundle.putString("friend", extras.getString("friend"));
@@ -155,7 +179,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             }
         }
 
-      
+
+
+
         //----------------------------------------------------------------------
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -166,6 +192,12 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
 
                 //it's possible to do more actions on several items, if there is a large amount of items I prefer switch(){case} instead of if()
+                if(id == R.id.navigation_language){
+                    showChangeLanguageDialog();
+                    loadLocale();
+
+                }
+
                 if (id==R.id.navigation_logout){
                     if (id == R.id.navigation_logout) {
                       
@@ -187,6 +219,59 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         });
 
     }
+
+    //////BERKAY HEADER DAN DİL BAŞLA///////
+
+    private  void showChangeLanguageDialog(){
+        final String[] listItems = {"Deutsch","Englisch","Türkçe"};
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(HomeActivity.this);
+        mBuilder.setTitle("Choose Language Please");
+        mBuilder.setSingleChoiceItems(listItems, -1, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                if(i == 0){
+                    //Deutsch
+                    setLocale("de");
+                    recreate();
+                }
+                else if(i == 1){
+                    //Englisch
+                    setLocale("en");
+                    recreate();
+                }
+                else if(i == 2){
+                    //Türkce
+                    setLocale("tr-rTR");
+                    recreate();
+                }
+                dialogInterface.dismiss();
+                drawerLayout.close();
+            }
+
+        });
+        AlertDialog mDialog = mBuilder.create();
+        mDialog.show();
+    }
+
+    private void setLocale(String language) {
+        Locale locale = new Locale(language);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getBaseContext().getResources().updateConfiguration(config,getBaseContext().getResources().getDisplayMetrics());
+
+        SharedPreferences.Editor editor = getSharedPreferences("LanguageSettings",MODE_PRIVATE).edit();
+        editor.putString("My_Lang",language);
+        editor.apply();
+    }
+    //Load language in shared prefences
+    public void loadLocale(){
+        SharedPreferences prefs = getSharedPreferences("LanguageSettings", Activity.MODE_PRIVATE);
+        String language = prefs.getString("My_Lang","");
+        setLocale(language);
+    }
+//////BERKAY HEADER DAN DİL BİTİŞ///////
 
     private void setHeader(Uri personphoto,String name,String email) {
         View header = navigationView.getHeaderView(0);
@@ -236,3 +321,4 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     }
 }
+
