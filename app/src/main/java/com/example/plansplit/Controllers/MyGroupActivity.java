@@ -112,10 +112,7 @@ public class MyGroupActivity extends AppCompatActivity {
                         removeGroupBttn.setVisibility(View.VISIBLE);
                     }
                 }
-                if (menuItem.getItemId() == R.id.mygroup_table_export)
-                    Toast.makeText(MyGroupActivity.this, "Tablo Olarak Çıkar Seçildi", Toast.LENGTH_SHORT).show();
-                if (menuItem.getItemId() == R.id.mygroup_quick_add)
-                    Toast.makeText(MyGroupActivity.this, "Hızlı Ekle Seçildi", Toast.LENGTH_SHORT).show();
+
                 return true;
             }
         });

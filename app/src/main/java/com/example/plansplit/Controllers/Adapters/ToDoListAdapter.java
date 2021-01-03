@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,10 +51,12 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ToDoLi
     private String key;
     private RecyclerView m_RecyclerView;
     private String operation;
+    SharedPreferences mPrefs;
     ItemTouchHelper.SimpleCallback itemtouchhelpercallback;
 
 
     public ToDoListAdapter(Context mContext, String key,RecyclerView m_RecyclerView, String operation) {
+        mPrefs = mContext.getSharedPreferences("listbell", Context.MODE_PRIVATE);
         database = new Database(mContext);
         this.mContext = mContext;
         this.m_RecyclerView=m_RecyclerView;
@@ -185,6 +188,10 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ToDoLi
                                 database.updateDoListFriend(key, toDoList.get(holder.getAdapterPosition()).getKey(), "save",databaseCallBack);
                             }else{
                                 database.updateDoListGroup(key, toDoList.get(holder.getAdapterPosition()).getKey(),"save",databaseCallBack);
+                                SharedPreferences.Editor prefsEditor = mPrefs.edit();
+                                prefsEditor.putBoolean("listbell", true);
+                                prefsEditor.putString("listbell_key", key);
+                                prefsEditor.apply();
                             }
                             dialog.dismiss();
                         }
@@ -193,7 +200,10 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ToDoLi
                     mBack.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-
+                            SharedPreferences.Editor prefsEditor = mPrefs.edit();
+                            prefsEditor.putBoolean("listbell", false);
+                            prefsEditor.putString("listbell_key", key);
+                            prefsEditor.apply();
                             dialog.dismiss();
                         }
                     });
@@ -232,7 +242,6 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ToDoLi
                         public void onClick(View view) {
                             Groups groups2=null;
                             Friend friend2=null;
-                            Toast.makeText(view.getRootView().getContext(), "Harcama ekranına gönderildi", Toast.LENGTH_SHORT).show();
                           /*  if(operation.equals("friend")) {
                                 database.updateDoListFriend(key, toDoList.get(holder.getAdapterPosition()).getKey(), "delete", databaseCallBack);
                             }
@@ -292,6 +301,11 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ToDoLi
                                 database.updateDoListFriend(key, toDoList.get(holder.getAdapterPosition()).getKey(), "cancel",databaseCallBack);
                             }else{
                                 database.updateDoListGroup(key, toDoList.get(holder.getAdapterPosition()).getKey(),"cancel",databaseCallBack);
+                                SharedPreferences.Editor prefsEditor = mPrefs.edit();
+                                prefsEditor.putBoolean("listbell", false);
+                                prefsEditor.putString("listbell_key", key);
+                                prefsEditor.apply();
+                                dialog.dismiss();
                             }
                             dialog.dismiss();
                         }

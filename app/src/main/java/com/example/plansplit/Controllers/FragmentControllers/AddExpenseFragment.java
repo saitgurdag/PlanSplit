@@ -1,7 +1,9 @@
 package com.example.plansplit.Controllers.FragmentControllers;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
@@ -53,6 +55,7 @@ public class AddExpenseFragment extends Fragment {
     Friend friend;
     Groups group;
     Bundle extras;
+    SharedPreferences mPrefs;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -60,6 +63,7 @@ public class AddExpenseFragment extends Fragment {
         final View root = inflater.inflate(R.layout.fragment_expense, container, false);
         ctrlDate=false;
         db = new Database(this.getContext());
+        mPrefs = getContext().getSharedPreferences("listbell", Context.MODE_PRIVATE);
 
         OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
             @Override
@@ -285,6 +289,10 @@ public class AddExpenseFragment extends Fragment {
                         String todo_key=extras.getString("todo_key");
                         String description=extras.getString("description");
                         db.updateDoListGroup(groupkey,todo_key,"delete",databaseCallBack );
+                        SharedPreferences.Editor prefsEditor = mPrefs.edit();
+                        prefsEditor.putBoolean("listbell", false);
+                        prefsEditor.putString("listbell_key", groupkey);
+                        prefsEditor.apply();
                         intent.putExtra("group", json);
                         getContext().startActivity(intent);
                     }
