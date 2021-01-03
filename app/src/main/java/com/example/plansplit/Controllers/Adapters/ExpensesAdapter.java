@@ -55,63 +55,60 @@ public class ExpensesAdapter extends RecyclerView.Adapter<ExpensesAdapter.Expens
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 if(Locale.getDefault().getLanguage().equals("en")){   //Eger kullanıcı ingilizce kullanıyorsa
-                    System.out.println("SDK BURDA eng ");
-                    if (expense.getExpense_type().toLowerCase().equals("yiyecek")){
+                    if (expense.getType().toLowerCase().equals("yiyecek")){
                         type = "food";
-                    }else if(expense.getExpense_type().toLowerCase().equals("giyecek")){
+                    }else if(expense.getType().toLowerCase().equals("giyecek")){
                         type = "wear";
-                    }else if (expense.getExpense_type().toLowerCase().equals("kırtasiye")){
+                    }else if (expense.getType().toLowerCase().equals("kırtasiye")){
                         type = "stationary";
-                    }else if (expense.getExpense_type().toLowerCase().equals("temizlik")){
+                    }else if (expense.getType().toLowerCase().equals("temizlik")){
                         type = "cleaning";
-                    }else if(expense.getExpense_type().toLowerCase().equals("diğer")){
+                    }else if(expense.getType().toLowerCase().equals("diğer")){
                         type = "others";
                     }
                 }else if(Locale.getDefault().getLanguage().equals("de")){  //Eger Kullanıcı almanca kullanıyosa
-                    System.out.println("SDK BURDA ALMANCA ");
-                    if (expense.getExpense_type().toLowerCase().equals("yiyecek")){
+                    if (expense.getType().toLowerCase().equals("yiyecek")){
                         type = "nahrung";
-                    }else if(expense.getExpense_type().toLowerCase().equals("giyecek")){
+                    }else if(expense.getType().toLowerCase().equals("giyecek")){
                         type = "kleidung";
-                    }else if (expense.getExpense_type().toLowerCase().equals("kırtasiye")){
+                    }else if (expense.getType().toLowerCase().equals("kırtasiye")){
                         type = "schreibwaren";
-                    }else if(expense.getExpense_type().toLowerCase().equals("temizlik")){
+                    }else if(expense.getType().toLowerCase().equals("temizlik")){
                         type = "reinigungsmittel";
-                    }else if(expense.getExpense_type().toLowerCase().equals("diğer")){
+                    }else if(expense.getType().toLowerCase().equals("diğer")){
                         type = "andere";
                     }
                 }else{
-                    type = expense.getExpense_type();
+                    type = expense.getType();
                 }
                 holder.type.setText(type);
         }else {
             if(Locale.getDefault().toString().equals("en")){   //Eger kullanıcı ingilizce kullanıyorsa
-                System.out.println("API KUCUK 24 ");
-                if (expense.getExpense_type().toLowerCase().equals("yiyecek")){
+                if (expense.getType().toLowerCase().equals("yiyecek")){
                     type = "food";
-                }else if(expense.getExpense_type().toLowerCase().equals("giyecek")){
+                }else if(expense.getType().toLowerCase().equals("giyecek")){
                     type = "wear";
-                }else if (expense.getExpense_type().toLowerCase().equals("kırtasiye")){
+                }else if (expense.getType().toLowerCase().equals("kırtasiye")){
                     type = "stationary";
-                }else if (expense.getExpense_type().toLowerCase().equals("temizlik")){
+                }else if (expense.getType().toLowerCase().equals("temizlik")){
                     type = "cleaning";
-                }else if(expense.getExpense_type().toLowerCase().equals("diğer")){
+                }else if(expense.getType().toLowerCase().equals("diğer")){
                     type = "others";
                 }
             }else if(Locale.getDefault().toString().equals("de")){  //Eger Kullanıcı almanca kullanıyosa
-                if (expense.getExpense_type().toLowerCase().equals("yiyecek")){
+                if (expense.getType().toLowerCase().equals("yiyecek")){
                     type = "nahrung";
-                }else if(expense.getExpense_type().toLowerCase().equals("giyecek")){
+                }else if(expense.getType().toLowerCase().equals("giyecek")){
                     type = "kleidung";
-                }else if (expense.getExpense_type().toLowerCase().equals("kırtasiye")){
+                }else if (expense.getType().toLowerCase().equals("kırtasiye")){
                     type = "schreibwaren";
-                }else if(expense.getExpense_type().toLowerCase().equals("temizlik")){
+                }else if(expense.getType().toLowerCase().equals("temizlik")){
                     type = "reinigungsmittel";
-                }else if(expense.getExpense_type().toLowerCase().equals("diğer")){
+                }else if(expense.getType().toLowerCase().equals("diğer")){
                     type = "andere";
                 }
             }else{
-                type = expense.getExpense_type();
+                type = expense.getType();
             }
             holder.type.setText(type);
         }
