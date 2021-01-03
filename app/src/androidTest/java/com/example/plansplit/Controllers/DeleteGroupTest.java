@@ -40,7 +40,7 @@ import static org.hamcrest.Matchers.is;
 public class DeleteGroupTest {
 
     @Rule
-    public ActivityScenarioRule<MainActivity> mActivityTestRule = new ActivityScenarioRule<MainActivity>(MainActivity.class);
+    public ActivityScenarioRule<MainActivity> mActivityTestRule = new ActivityScenarioRule(MainActivity.class);
 
     @Test
     public void deleteGroupTest() {

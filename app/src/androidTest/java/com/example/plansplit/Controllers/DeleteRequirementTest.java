@@ -40,7 +40,7 @@ import static org.hamcrest.Matchers.is;
 public class DeleteRequirementTest {
 
     @Rule
-    public ActivityScenarioRule<MainActivity> mActivityTestRule = new ActivityScenarioRule<MainActivity>(MainActivity.class);
+    public ActivityScenarioRule<MainActivity> mActivityTestRule = new ActivityScenarioRule(MainActivity.class);
 
     @Test
     public void deleteRequirementTest() {
