@@ -39,12 +39,6 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 
 public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ToDoListViewHolder> {
-
-    //uzun basınca silme diyaloğu
-    //tek basmada reserved waiting
-    //ikinci basış reserved ve resp sensen harcama ekranına gönder
-    //resp sen değilsen uyarı
-
     private Context mContext;
     public static ArrayList<ToDoList> toDoList;
     private Database database;
@@ -242,13 +236,6 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ToDoLi
                         public void onClick(View view) {
                             Groups groups2=null;
                             Friend friend2=null;
-                          /*  if(operation.equals("friend")) {
-                                database.updateDoListFriend(key, toDoList.get(holder.getAdapterPosition()).getKey(), "delete", databaseCallBack);
-                            }
-                            else{
-                                database.updateDoListGroup(key, toDoList.get(holder.getAdapterPosition()).getKey(), "delete", databaseCallBack);
-                            }*/
-                            //TODO:Harcama ekranına yollanacak ve harcama eklendiği anda yukarıdaki fonksiyonlar çalışacak!!!
                             dialog.dismiss();
                             MyGroupActivity myGroupActivity=new MyGroupActivity();
                             Intent intent = new Intent(view.getContext(), HomeActivity.class);
@@ -286,7 +273,7 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ToDoLi
                                 intent.putExtra("friend_from_list", json);
                             }
 
-                            mContext.startActivity(intent);
+                          mContext.startActivity(intent);
 
                         }
                     });

@@ -144,7 +144,7 @@
                                         android:layout_width="24dp"
                                         android:layout_height="24dp"
                                         android:layout_gravity="center|right"
-                                        android:layout_marginStart="6dp"
+                                        android:layout_marginStart="3dp"
                                         android:background="@drawable/alacak" />
 
 
@@ -192,7 +192,7 @@
                 android:layout_marginHorizontal="30dp"
                 android:background="@android:color/transparent"
                 android:text="@string/cancel"
-                android:textColor="@color/button_gray" />
+                android:textColor="@color/red_save" />
 
             <Button
                 android:id="@+id/cancel_question_save_button"
@@ -201,7 +201,7 @@
                 android:layout_marginHorizontal="30dp"
                 android:background="@android:color/transparent"
                 android:text="@string/yes"
-                android:textColor="@color/red_save" />
+                android:textColor="@color/dialog_positive_button_color" />
 
         </LinearLayout>
 
