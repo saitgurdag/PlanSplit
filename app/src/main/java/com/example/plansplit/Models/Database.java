@@ -1600,8 +1600,20 @@ public class Database {
                         if (!snapshot.exists()) {
                             dbDebts.child(member).setValue(String.valueOf(Integer.parseInt(price) / groupMembers.size()));
                         } else {
-                            for (DataSnapshot ds : snapshot.getChildren()) {
-                                dbDebts.child(member).setValue(String.valueOf(Float.parseFloat(ds.getValue().toString()) + Float.parseFloat(price) / groupMembers.size()));    //kullanıcının arkadaşından alması gereken para miktarı
+                            boolean ctrlExist = false;
+                            for(DataSnapshot ds : snapshot.getChildren()){
+                                if(ds.getKey().equals(member)) {
+                                    ctrlExist=true;
+                                }
+                            }
+                            if(!ctrlExist){
+                                dbDebts.child(member).setValue(String.valueOf(Integer.parseInt(price) / groupMembers.size()));
+                            }else {
+                                for (DataSnapshot ds : snapshot.getChildren()) {
+                                    if (ds.getKey().equals(member)) {
+                                        dbDebts.child(member).setValue(String.valueOf(Float.parseFloat(ds.getValue().toString()) + Float.parseFloat(price) / groupMembers.size()));    //kullanıcının arkadaşından alması gereken para miktarı
+                                    }
+                                }
                             }
                         }
                     }

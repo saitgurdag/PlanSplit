@@ -271,7 +271,6 @@ public class AddExpenseFragment extends Fragment {
                         String description=extras.getString("description");
                         ctrlFG=true;
                         friend = gson.fromJson(json, Friend.class);
-                       // db.addExpenseToFriends(expensename, expenseType, expenseamounth, friendkey, date);
                         db.updateDoListFriend(friend.getKey(),todo_key,"delete",databaseCallBack );
                         intent.putExtra("friend", json);
                         getContext().startActivity(intent);
@@ -285,7 +284,6 @@ public class AddExpenseFragment extends Fragment {
                         String groupkey=extras.getString("group_key_list");
                         String todo_key=extras.getString("todo_key");
                         String description=extras.getString("description");
-                      //  db.addExpenseToGroups(expensename, expenseType, expenseamounth, groupkey, date, group.getGroup_members());;
                         db.updateDoListGroup(groupkey,todo_key,"delete",databaseCallBack );
                         intent.putExtra("group", json);
                         getContext().startActivity(intent);
