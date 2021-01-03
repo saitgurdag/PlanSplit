@@ -70,7 +70,7 @@ public class GroupsFragment extends Fragment {
 
         groupsArrayList = new ArrayList<>();
 
-        groupAdapter = new GroupAdapter(this.getContext(), groupsArrayList, mListener, HomeActivity.getPersonId(), this);
+        groupAdapter = new GroupAdapter(this.getContext(), groupsArrayList, mListener, database.getPerson().getKey(), this);
         recyclerView.setAdapter(groupAdapter);
 
 
@@ -163,10 +163,10 @@ public class GroupsFragment extends Fragment {
                     filteredgrouparray.add(groups);
                 }
             }
-            groupAdapter = new GroupAdapter(getContext(), filteredgrouparray, mListener, HomeActivity.getPersonId(), this);
+            groupAdapter = new GroupAdapter(getContext(), filteredgrouparray, mListener, database.getPerson().getKey(), this);
             recyclerView.setAdapter(groupAdapter);
         } else {
-            groupAdapter = new GroupAdapter(getContext(), groupsArrayList, mListener, HomeActivity.getPersonId(), this);
+            groupAdapter = new GroupAdapter(getContext(), groupsArrayList, mListener, database.getPerson().getKey(), this);
             recyclerView.setAdapter(groupAdapter);
         }
     }

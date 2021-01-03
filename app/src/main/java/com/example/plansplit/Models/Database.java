@@ -2025,9 +2025,9 @@ public class Database {
                                     };
 
                                     for(Friend friend : members){
-                                        if(!HomeActivity.getPersonId().equals(friend.getKey())) {
+                                        if(!getPerson().getKey().equals(friend.getKey())) {
                                             friend.setFriendshipsKey(group.getKey());
-                                            getDebtFromGroups(HomeActivity.getPersonId(), friend, debtCallBack);
+                                            getDebtFromGroups(getPerson().getKey(), friend, debtCallBack);
                                         }
                                     }
                                 }
