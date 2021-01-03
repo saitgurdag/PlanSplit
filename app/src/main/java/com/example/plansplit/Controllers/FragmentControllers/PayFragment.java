@@ -71,7 +71,7 @@ public class PayFragment extends Fragment {
         debtTxt = root.findViewById(R.id.debt_text);
         payEdit = root.findViewById(R.id.payEdt);
         ImageView userPhoto = root.findViewById(R.id.userPhoto);
-        Picasso.with(getContext()).load(HomeActivity.getPersonPhoto()).into(userPhoto);
+        Picasso.with(getContext()).load(database.getPerson().getImage()).into(userPhoto);
 
         Type type = new TypeToken<ArrayList<Friend>>() {
         }.getType();
@@ -82,7 +82,7 @@ public class PayFragment extends Fragment {
         }
         ArrayList<Friend> m2 = new ArrayList<>();
         for (Friend f : memberInfos){
-            if(!f.getKey().equals(HomeActivity.getPersonId())){
+            if(!f.getKey().equals(database.getPerson().getKey())){
                 m2.add(f);
             }
         }
@@ -94,7 +94,7 @@ public class PayFragment extends Fragment {
                 public void onClick(View view) {
                     PopupMenu popup = new PopupMenu(getContext(), who);
                     for (Friend member : memberInfos) {
-                        if (!member.getKey().equals(HomeActivity.getPersonId()))
+                        if (!member.getKey().equals(database.getPerson().getKey()))
                             popup.getMenu().add(member.getName());
                     }
                     popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -106,7 +106,7 @@ public class PayFragment extends Fragment {
                                 }
                             }
                             Picasso.with(getContext()).load(selectedFriend.getPerson_image()).into(whoImage);
-                            database.getDebtFromGroups(HomeActivity.getPersonId(), selectedFriend, groupCallBack);
+                            database.getDebtFromGroups(database.getPerson().getKey(), selectedFriend, groupCallBack);
                             return true;
                         }
                     });
@@ -115,17 +115,17 @@ public class PayFragment extends Fragment {
             });
         }else {
             for (Friend member : memberInfos) {
-                if (!member.getKey().equals(HomeActivity.getPersonId()))
+                if (!member.getKey().equals(database.getPerson().getKey()))
                     selectedFriend=member;
             }
             Picasso.with(getContext()).load(selectedFriend.getPerson_image()).into(whoImage);
         }
 
         if(ctrlFriend){
-            database.getDebtFromFriend(HomeActivity.getPersonId(), selectedFriend, callBack);
+            database.getDebtFromFriend(database.getPerson().getKey(), selectedFriend, callBack);
         }else{
             if(selectedFriend!=null){
-                database.getDebtFromGroups(HomeActivity.getPersonId(), selectedFriend, groupCallBack);
+                database.getDebtFromGroups(database.getPerson().getKey(), selectedFriend, groupCallBack);
             }
         }
 
@@ -135,11 +135,11 @@ public class PayFragment extends Fragment {
                 String amount = payEdit.getText().toString();
                 if(!amount.matches("") && android.text.TextUtils.isDigitsOnly(amount) && Float.parseFloat(amount)<=debt) {
                     if(ctrlFriend){
-                        database.payToFriend(HomeActivity.getPersonId(), selectedFriend, amount);
+                        database.payToFriend(database.getPerson().getKey(), selectedFriend, amount);
                         ((MyGroupActivity) getContext()).setNavController(R.id.navi_events);
                     }else{
                         System.out.println("dogruuuuuu");
-                        database.payToGroupsMember(HomeActivity.getPersonId(), selectedFriend, amount);
+                        database.payToGroupsMember(database.getPerson().getKey(), selectedFriend, amount);
                         ((MyGroupActivity) getContext()).setNavController(R.id.navi_events);
                     }
                 }else if(!amount.matches("") && android.text.TextUtils.isDigitsOnly(amount) && Float.parseFloat(amount)>debt){
@@ -178,7 +178,7 @@ public class PayFragment extends Fragment {
         @Override
         public void onError(String error_tag, String error) {
             Toast.makeText(getContext(), error, Toast.LENGTH_LONG).show();
-            database.getDebtFromGroups(HomeActivity.getPersonId(), selectedFriend, groupCallBack);
+            database.getDebtFromGroups(database.getPerson().getKey(), selectedFriend, groupCallBack);
         }
     };
 

@@ -7,10 +7,10 @@ public class Expense {
 
     public Expense(){}
 
-    public Expense(String name, String type, int price) {
+    public Expense(String name, String type, String price) {
         this.name = name;
         this.type = type;
-        this.price_int = price;
+        this.price = price;
     }
 
     public Expense(String expense_name, String expense_type, String payer, int price) { //Grup Expense için

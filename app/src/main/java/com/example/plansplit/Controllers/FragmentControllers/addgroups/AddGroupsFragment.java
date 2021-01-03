@@ -68,8 +68,8 @@ public class AddGroupsFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
 
         final View root = inflater.inflate(R.layout.fragment_addgroups, container, false);
-        Database db = new Database(getContext());
-        person_id = db.getUserId();
+        Database db = Database.getInstance();
+        person_id = db.getPerson().getKey();
         intent = new Intent(getContext(), MyGroupActivity.class);
         ctrlNewGroup = false;
 
@@ -303,7 +303,6 @@ public class AddGroupsFragment extends Fragment {
             }
         });
 
-
         return root;
     }
 
@@ -392,7 +391,7 @@ public class AddGroupsFragment extends Fragment {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 removeFromGroup(person_id);
-                Toast.makeText(getContext(), person_name +" "+  getContext().getResources().getString(R.string.fromGroupDeleted), Toast.LENGTH_SHORT).show(); 
+                Toast.makeText(getContext(), person_name +" "+  getContext().getResources().getString(R.string.fromGroupDeleted), Toast.LENGTH_SHORT).show();
 
             }
         });

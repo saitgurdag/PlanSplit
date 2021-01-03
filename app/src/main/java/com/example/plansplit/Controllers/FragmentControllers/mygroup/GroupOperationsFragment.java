@@ -37,7 +37,7 @@ public class GroupOperationsFragment extends Fragment {
     ArrayList<Friend> group_members_allstar = new ArrayList<>();
 
     private static final Database database = Database.getInstance();
-    Database db;
+
     private String person_id;
 
     ArrayList<Integer> debtInInteger = new ArrayList();
@@ -58,8 +58,7 @@ public class GroupOperationsFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
 
         final View root = inflater.inflate(R.layout.fragment_group_operations, container, false);
-        db = new Database(getContext());
-        person_id = db.getUserId();
+        person_id = database.getPerson().getKey();
 
 
         extras = getArguments();

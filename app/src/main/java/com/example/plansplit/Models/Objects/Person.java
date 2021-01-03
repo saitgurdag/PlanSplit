@@ -2,6 +2,9 @@ package com.example.plansplit.Models.Objects;
 
 public class Person {
 
+    private String key;
+    private String image;
+    private long last_login;
     private String name;
     private String mail;
     private String person_id;
@@ -25,6 +28,26 @@ public class Person {
 
     public String getPerson_id() {
         return person_id;
+    }
+
+    public Person(String key, String name, String email, String image, long date){
+        this.key = key;
+        this.name = name;
+        this.mail = email;
+        this.image = image;
+        this.last_login = date;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public long getLastLogin() {
+        return last_login;
     }
 
     public void setPerson_id(String person_id) {

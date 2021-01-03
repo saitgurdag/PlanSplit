@@ -33,6 +33,7 @@ import com.example.plansplit.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Objects;
 
 import static android.R.layout.simple_spinner_item;
@@ -63,18 +64,15 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemSele
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_personal, container, false);
-        db = new Database(this.getContext(), this);
-        db.getBudget();
+        db = Database.getInstance();
+        db.getBudget(budgetCallBack);
         expenseList = new ArrayList<>();
-        expenseList.clear();
-        totExpense = 0;
-        expenseList = db.getExpenses();
-        totExpense = db.getTotExpense();
-        final HomeActivity home = (HomeActivity) getContext();
-        personstatus=root.findViewById(R.id.personalOperations_PersonBackGround);
+        db.getExpenses(expenseCallBack);
+        checkDate();
 
-        personPhoto=root.findViewById(R.id.personalOperations_imagePerson);
-        Picasso.with(getContext()).load(home.getPersonPhoto()).into(personPhoto);
+        personPhoto = root.findViewById(R.id.personalOperations_imagePerson);
+        personstatus = root.findViewById(R.id.personalOperations_PersonBackGround);
+        Picasso.with(getContext()).load(db.getPerson().getImage()).into(personPhoto);
 
 
         //country = new String[]{"Yiyecek", "Giyecek", "Kırtasiye", "Temizlik" , "Diğer"};
@@ -108,17 +106,12 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemSele
 
         update();
 
-        adapter = new ExpensesAdapter(this.getContext(), expenseList);
-        recyclerView.setAdapter(adapter);
-
         addExpense.setOnClickListener(this);
         progressText.setOnClickListener(this);
 
         filter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                System.out.println(home.getPersonPhoto());
-
                 PopupMenu popup = new PopupMenu(getContext(), filter);
                 popup.inflate(R.menu.filter_menu_personal);
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -163,6 +156,79 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemSele
         });
 
         return root;
+    }
+
+    final Database.BudgetCallBack budgetCallBack = new Database.BudgetCallBack() {
+        @Override
+        public void onBudgetRetrieveSuccess(int budget) {
+            Log.d(TAG, String.valueOf(budget));
+            checkBudget(budget);
+        }
+
+        @Override
+        public void onError(String error_tag, String error) {
+            Log.e(error_tag, error);
+            checkBudget(null);
+        }
+    };
+
+    final Database.ExpenseCallBack expenseCallBack = new Database.ExpenseCallBack() {
+        @Override
+        public void onExpenseRetrieveSuccess(ArrayList<Expense> expenses) {
+            expenseList.clear();
+            expenseList.addAll(expenses);
+            totExpense = 0;
+            for (Expense expense: expenseList){
+                totExpense += Integer.parseInt(expense.getPrice().split(" ")[0]);
+            }
+            update();
+            checkOverBudget();
+        }
+
+        @Override
+        public void onError(String error_tag, String error) {
+            Log.e(error_tag, error);
+        }
+    };
+
+    //check date of first expense element in order to find if we pass to next month
+    //if so delete all Notifications and create a monthly_expense notifications
+    private void checkDate(){
+        db.getLastLogin(new Database.LoginDateCallBack() {
+            @Override
+            public void onLoginDateRetrieveSuccess(long date) {
+                Calendar c = Calendar.getInstance();
+                int current_month = c.get(Calendar.MONTH);
+                c.setTimeInMillis(date);
+                int last_login_month = c.get(Calendar.MONTH);
+                if (current_month > last_login_month){
+                    db.deleteAllNotifications("personal", db.getPerson().getKey(), new Database.DatabaseCallBack() {
+                        @Override
+                        public void onSuccess(String success) {
+                            db.createNotification("personal",
+                                    db.getPerson().getKey(),
+                                    "monthly_expense",
+                                    db.getPerson().getImage(),
+                                    String.valueOf(totExpense),
+                                    new Database.DatabaseCallBack() {
+                                        @Override
+                                        public void onSuccess(String success) { Log.d(TAG, success); }
+                                        @Override
+                                        public void onError(String error_tag, String error) { Log.e(error_tag, error); }
+                            });
+                        }
+
+                        @Override
+                        public void onError(String error_tag, String error) { Log.e(error_tag, error); }
+                    });
+                }
+            }
+
+            @Override
+            public void onError(String error_tag, String error) {
+                Log.e(error_tag, error);
+            }
+        });
     }
 
     private void filterList(String status){
@@ -214,20 +280,19 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemSele
                     type = "Diğer";
                 }
 
-                db.addExpense(name, type, String.valueOf(p));
+                db.addExpense(name, type, String.valueOf(p), new Database.DatabaseCallBack() {
+                    @Override
+                    public void onSuccess(String success) {
+                        db.getExpenses(expenseCallBack);
+                    }
+
+                    @Override
+                    public void onError(String error_tag, String error) { }
+                });
             }
         }else if(v.getId()==progressText.getId()){
             addBudgetDialog();
         }
-    }
-
-    public void newExpense(ArrayList e, int p) {
-        expenseList = e;
-        totExpense = p;
-        adapter = new ExpensesAdapter(this.getContext(), expenseList);
-        adapter.notifyDataSetChanged();
-        recyclerView.setAdapter(adapter);
-        update();
     }
 
     private void addBudgetDialog() {
@@ -260,19 +325,55 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemSele
 
     }
 
-    public void checkBudget(String i){
-        if(i==null) {
+    public void checkBudget(Integer i){
+        if(i == null) {
             addBudgetDialog();
         }else{
-            budget = Integer.parseInt(i);
+            budget = i;
             update();
         }
     }
 
+    private void checkOverBudget(){
+        if (totExpense > budget){
+            db.checkNotificationExists("personal", db.getPerson().getKey(),
+                    "over_budget", new Database.DatabaseCallBack() {
+                @Override
+                public void onSuccess(String success) {
+                    db.changeNotification("personal", db.getPerson().getKey(),
+                            "over_budget", String.valueOf(budget - totExpense),
+                            new Database.DatabaseCallBack() {
+                        @Override
+                        public void onSuccess(String success) {
+                            Log.d(TAG, success);
+                        }
+
+                        @Override
+                        public void onError(String error_tag, String error) { Log.e(error_tag, error);}
+                    });
+                }
+
+                @Override
+                public void onError(String error_tag, String error) {
+                    Log.w(error_tag, error);
+                    db.createNotification("personal", db.getPerson().getKey(),
+                            "over_budget", db.getPerson().getImage(),
+                            String.valueOf(budget - totExpense), new Database.DatabaseCallBack() {
+                        @Override
+                        public void onSuccess(String success) { Log.d(TAG, success); }
+
+                        @Override
+                        public void onError(String error_tag, String error) { Log.e(error_tag, error); }
+                    });
+                }
+            });
+        }
+    }
+
     public void update(){
-        progressText.setText(String.valueOf(budget) + " TL");
+        progressText.setText(getString(R.string.budget, budget));
         progressBar.setMax(budget);
-        remainingbudget.setText((budget - totExpense)+ " TL");
+        remainingbudget.setText(getString(R.string.remaining_budget, (budget - totExpense)));
 
         if((budget - totExpense)<=0){
             control=true;
@@ -295,6 +396,7 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemSele
         }
 
         progressBar.setProgress(totExpense);
-
+        adapter = new ExpensesAdapter(this.getContext(), expenseList);
+        recyclerView.setAdapter(adapter);
     }
 }

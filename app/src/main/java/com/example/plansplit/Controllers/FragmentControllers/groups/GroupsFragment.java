@@ -56,10 +56,7 @@ public class GroupsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_groups, container, false);
 
-
-
-        final HomeActivity home = (HomeActivity) getContext();
-        person_id = home.getPersonId();
+        person_id = database.getPerson().getKey();
         groupsfilterBtn=root.findViewById(R.id.imageViewFilterGroup);
 
         recyclerView = root.findViewById(R.id.recyclerGroups);
@@ -67,7 +64,7 @@ public class GroupsFragment extends Fragment {
         setOnClickListener();
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
         personImage=root.findViewById(R.id.notification_image2);
-        Picasso.with(getContext()).load(home.getPersonPhoto()).into(personImage);
+        Picasso.with(getContext()).load(database.getPerson().getImage()).into(personImage);
         totDebt = root.findViewById(R.id.personal_sum_countTv);
         userBack = root.findViewById(R.id.back_circle);
 

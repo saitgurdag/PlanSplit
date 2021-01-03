@@ -129,7 +129,7 @@
         <item>temizlik</item>
         <item>diğer</item>
     </string-array>
-   
+
     <string name="total_dept" translatable="false">Toplam Borcunuz : </string>
     <string name="total_claimant" translatable="false">Toplam Alacağınız : </string>
 
@@ -142,4 +142,18 @@
     <string name="fromGroupDelete">adlı kişiyi gruptan çıkar</string>
     <string name="fromGroupDeleted">adlı kişiyi gruptan çıkarıldı</string>
 
+    <string name="remaining_budget">Kalan bütçe: %1$d TL</string>
+    <string name="budget">%1$d TL</string>
+
+    <!-- notifications -->
+    <!-- personal notifications -->
+    <string name="notification_over_budget">Aylık bütçenizi aştınız</string>
+    <string name="notification_budget_change">Bütçenizi değiştirdiniz</string>
+    <string name="notification_friend_add">%1$s ile arkadaş oldunuz</string>
+    <string name="notification_friend_remove">%1$s ile artık arkadaş değilsiniz</string>
+    <string name="notification_group_add">%1$s grubuna katıldınız</string>
+    <string name="notification_group_remove">%1$s grubundan ayrıldınız</string>
+    <string name="notification_monthly_expense">Bu aylık harcamanız:</string>
+    <!-- friend notifications -->
+    <string name="notification_friend_monthly_expense">Bu aylık harcamanız:</string>
 </resources>

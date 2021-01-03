@@ -39,7 +39,7 @@ import java.util.ArrayList;
 
 public class MyGroupActivity extends AppCompatActivity {
     private static final String TAG = "MyGroupActivity";
-    Database database;
+    Database database = Database.getInstance();
     public String person_id = "";
     private Friend friend;
     private Groups group;
@@ -136,9 +136,8 @@ public class MyGroupActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        database = new Database(getBaseContext());
         super.onCreate(savedInstanceState);
-        person_id = database.getUserId();
+        person_id = database.getPerson().getKey();
         setContentView(R.layout.activity_mygroup);
         intent = new Intent(MyGroupActivity.this, HomeActivity.class);
         TextView groupnameTv = findViewById(R.id.group_title_mygroupTv);
@@ -156,6 +155,7 @@ public class MyGroupActivity extends AppCompatActivity {
         menu = findViewById(R.id.mygroup_menuline_button);
         removeGroupBttn = findViewById(R.id.remove_group_button);
         add_expense_btn = findViewById(R.id.add_expense);
+        database = Database.getInstance();
 
 
         navView = findViewById(R.id.nav_view2);
@@ -274,9 +274,9 @@ public class MyGroupActivity extends AppCompatActivity {
             Picasso.with(getApplicationContext()).load(friend.getPerson_image()).into(groupPhotoIv);
             group_title = friend.getName();
             groupnameTv.setText(group_title);
-            System.out.println("arkadaş keyi: " + friend.getKey() + " personidsi " + database.getUserId());
+            System.out.println("arkadaş keyi: " + friend.getKey() + " personidsi " + database.getPerson().getKey());
             bundlelistfriends.putString("friend_key", friend.getKey());
-            bundlelistfriends.putString("person_key", database.getUserId());
+            bundlelistfriends.putString("person_key", database.getPerson().getKey());
             navController.navigate(R.id.navi_todo_list, bundlelistfriends);
             add_expense_btn.setVisibility(View.GONE);
             list_titleTv.setVisibility(View.VISIBLE);
@@ -337,7 +337,6 @@ public class MyGroupActivity extends AppCompatActivity {
 
                     Bundle bundlelistfriends = new Bundle();
                     bundlelistfriends.putString("friend_key", todolistfriend);
-                    bundlelistfriends.putString("person_key", person_id);
                     navController.navigate(R.id.navi_todo_list, bundlelistfriends);
                     add_expense_btn.setVisibility(View.GONE);
                     list_titleTv.setVisibility(View.VISIBLE);
@@ -346,7 +345,7 @@ public class MyGroupActivity extends AppCompatActivity {
                     if (control_list.equals("friend_list")) {
                         Bundle bundlelistfriends = new Bundle();
                         bundlelistfriends.putString("friend_key", friend.getKey());
-                        bundlelistfriends.putString("person_key", database.getUserId());
+                        bundlelistfriends.putString("person_key", database.getPerson().getKey());
                         navController.navigate(R.id.navi_todo_list, bundlelistfriends);
                         add_expense_btn.setVisibility(View.GONE);
                         list_titleTv.setVisibility(View.VISIBLE);

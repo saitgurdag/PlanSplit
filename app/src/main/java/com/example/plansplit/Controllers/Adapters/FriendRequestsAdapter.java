@@ -29,12 +29,11 @@ public class FriendRequestsAdapter extends RecyclerView.Adapter<FriendRequestsAd
     private ArrayList<FriendRequest> requests;
     private Context mCtx;
     private Database database = Database.getInstance();
-    private String person_id;
+    private String person_id = database.getPerson().getKey();
     private RecyclerView m_RecyclerView;
 
-    public FriendRequestsAdapter(Context mCtx, String person_id, RecyclerView m_RecyclerView){
+    public FriendRequestsAdapter(Context mCtx, RecyclerView m_RecyclerView){
         this.mCtx = mCtx;
-        this.person_id = person_id;
         this.m_RecyclerView = m_RecyclerView;
         loadRequests();
     }

@@ -54,7 +54,6 @@ public class AddExpenseFragment extends Fragment {
     Database db;
     Friend friend;
     Groups group;
-    Bundle extras;
     SharedPreferences mPrefs;
 
     @Override
@@ -62,8 +61,9 @@ public class AddExpenseFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         final View root = inflater.inflate(R.layout.fragment_expense, container, false);
         ctrlDate=false;
-        db = new Database(this.getContext());
+        db = Database.getInstance();
         mPrefs = getContext().getSharedPreferences("listbell", Context.MODE_PRIVATE);
+        final Bundle extras = getArguments();
 
         OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
             @Override
@@ -121,10 +121,9 @@ public class AddExpenseFragment extends Fragment {
         date=new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date());
         calenderBtn.setText(date);
 
-        extras = getArguments();
 
         if(extras != null) {
-            personId = extras.getString("person_id");
+            personId = db.getPerson().getKey();
             if (extras.keySet().contains("friend")) {
                 HomeActivity.navView.getMenu().getItem(1).setChecked(true);
                 ctrlFG=true;
@@ -321,8 +320,6 @@ public class AddExpenseFragment extends Fragment {
                         intent.putExtra("group", json);
                     }
                     getContext().startActivity(intent);
-
-
                 }
             }
         });

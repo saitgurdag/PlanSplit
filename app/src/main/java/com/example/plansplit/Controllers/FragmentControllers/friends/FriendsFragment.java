@@ -49,9 +49,9 @@ public class FriendsFragment extends Fragment {
         final HomeActivity home = (HomeActivity) getContext();
         totDebt = root.findViewById(R.id.personal_sum_countTv);
         userBack = root.findViewById(R.id.back_circle);
-        person_id = getArguments().get("person_id").toString();
+        person_id = database.getPerson().getKey();
         personImage=root.findViewById(R.id.notification_image2);
-        Picasso.with(getContext()).load(home.getPersonPhoto()).into(personImage);
+        Picasso.with(getContext()).load(database.getPerson().getImage()).into(personImage);
         filterBtn=root.findViewById(R.id.friend_filter);
 
         m_RecyclerView = root.findViewById(R.id.recycler_friends);
@@ -70,7 +70,6 @@ public class FriendsFragment extends Fragment {
                     public void onSuccess(String success) {
                         Log.i(TAG, success);
                         Toast.makeText(getContext(), success, Toast.LENGTH_SHORT).show();
-                        //m_Adapter.loadFriends();
                         m_Adapter = new FriendsAdapter(getContext(), person_id, m_RecyclerView, fragment);
                         add_friend_email_text.clearFocus();
                         add_friend_email_text.setText("");

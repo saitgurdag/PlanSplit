@@ -1,6 +1,7 @@
 package com.example.plansplit.Controllers.FragmentControllers.mygroup;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,23 +44,19 @@ public class EventsFragment extends Fragment {
     Groups group;
     Friend friend;
 
-    public static EventsFragment newInstance() {
-        return new EventsFragment();
-    }
-
     @Override
     public View onCreateView(@NonNull final LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_events, container, false);
         GroupEventsObjectList = new ArrayList<>();
-        db = new Database(this.getContext(), this);
+        db = Database.getInstance();
         myGroupActivity=(MyGroupActivity) getContext();
         userImage=root.findViewById(R.id.user_image_groupEvents);
         payButton=root.findViewById(R.id.pay_IButton);
         backCircle = root.findViewById(R.id.user_image_balance_groupEvents);
-        Picasso.with(getContext()).load(HomeActivity.getPersonPhoto()).into(userImage);
         userDeptText = root.findViewById(R.id.user_debt_groupEvents_text);
         userDeptText.setText(getString(R.string.total_dept)+String.valueOf(0)+"TL");
+        Picasso.with(getContext()).load(db.getPerson().getImage()).into(userImage);
         recyclerView=(RecyclerView) root.findViewById(R.id.RecyclerViewGroupEvents);
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this.getContext(),1);
@@ -78,15 +75,15 @@ public class EventsFragment extends Fragment {
             Gson gson = new Gson();
             String json = extras.getString("group");
             group = gson.fromJson(json, Groups.class);
-            db.getExpensesFromGroup(group.getKey());
+            db.getExpensesFromGroup(group.getKey(), transferCallBack);
             ArrayList<Friend> members = new ArrayList<>();
             db.getGroupMembersInfo(((MyGroupActivity) getContext()).getGroup().getGroup_members(),members, memberCallBack );
         }else if(extras != null && extras.keySet().contains("friend")){
             Gson gson = new Gson();
             String json = extras.getString("friend");
             friend = gson.fromJson(json, Friend.class);
-            db.getExpensesFromFriend(friend.getFriendshipsKey());
-            db.getDebtFromFriend(HomeActivity.getPersonId(), ((MyGroupActivity) getContext()).getFriend(), friendCallBack);
+            db.getExpensesFromFriend(friend.getFriendshipsKey(), transferCallBack);
+            db.getDebtFromFriend(db.getPerson().getKey(), ((MyGroupActivity) getContext()).getFriend(), friendCallBack);
         }
 
         adapter =new GroupEventsAdapter(GroupEventsObjectList);
@@ -95,6 +92,18 @@ public class EventsFragment extends Fragment {
         recyclerView.setAdapter(adapter);
         return root;
     }
+
+    public final Database.TransferCallBack transferCallBack = new Database.TransferCallBack() {
+        @Override
+        public void onTransferRetrieveSuccess(ArrayList<Transfers> transfers) {
+            setArray(transfers);
+        }
+
+        @Override
+        public void onError(String error_tag, String error) {
+            Log.e(error_tag, error);
+        }
+    };
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -136,9 +145,9 @@ public class EventsFragment extends Fragment {
         public void onGetMemberInfoRetrieveSuccess(ArrayList<Friend> members) {
             totDept=0;
             for (Friend f : members){
-                if(!HomeActivity.getPersonId().equals(f.getKey())) {
+                if(!db.getPerson().getKey().equals(f.getKey())) {
                     f.setFriendshipsKey(((MyGroupActivity)getContext()).getGroup().getKey());
-                    db.getDebtFromGroups(HomeActivity.getPersonId(), f, groupCallBack);
+                    db.getDebtFromGroups(db.getPerson().getKey(), f, groupCallBack);
                 }
             }
         }
