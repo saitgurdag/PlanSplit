@@ -3,7 +3,6 @@ package com.example.plansplit.Models.Objects;
 public class Expense {
 
     String name, type, addedBy, date, price, addedById;
-    int price_int;
 
     public Expense(){}
 
@@ -11,13 +10,6 @@ public class Expense {
         this.name = name;
         this.type = type;
         this.price = price;
-    }
-
-    public Expense(String expense_name, String expense_type, String payer, int price) { //Grup Expense için
-        this.name = expense_name;
-        this.type = expense_type;
-        this.addedBy = payer;
-        this.price_int = price;
     }
 
     public String getDate() {
@@ -44,10 +36,6 @@ public class Expense {
         this.addedById = addedById;
     }
 
-    public String getPrice_int() {
-        return String.valueOf(price_int);
-    }
-
     public String getName() {
         return name;
     }
@@ -70,9 +58,5 @@ public class Expense {
 
     public void setAddedBy(String addedBy) {
         this.addedBy = addedBy;
-    }
-
-    public void setPrice_int(int price_int) {
-        this.price_int = price_int;
     }
 }

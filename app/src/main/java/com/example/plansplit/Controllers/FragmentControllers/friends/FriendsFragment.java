@@ -36,7 +36,6 @@ public class FriendsFragment extends Fragment {
     public static ImageView filterBtn;
     private ImageView personImage;
     ImageView userBack;
-    Bundle extras;
     FriendsFragment fragment;
     TextView totDebt;
 
@@ -44,9 +43,10 @@ public class FriendsFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         final View root = inflater.inflate(R.layout.fragment_friends, container, false);
         fragment=this;
+        m_RecyclerView = root.findViewById(R.id.recycler_friends);
+
         Button add_friend_button = root.findViewById(R.id.friend_add_button);
         final EditText add_friend_email_text = root.findViewById(R.id.friends_add_email);
-        final HomeActivity home = (HomeActivity) getContext();
         totDebt = root.findViewById(R.id.personal_sum_countTv);
         userBack = root.findViewById(R.id.back_circle);
         person_id = database.getPerson().getKey();
@@ -54,10 +54,7 @@ public class FriendsFragment extends Fragment {
         Picasso.with(getContext()).load(database.getPerson().getImage()).into(personImage);
         filterBtn=root.findViewById(R.id.friend_filter);
 
-        m_RecyclerView = root.findViewById(R.id.recycler_friends);
-        m_RecyclerView.setHasFixedSize(true);
-        m_LayoutManager = new LinearLayoutManager(getActivity());
-        m_RecyclerView.setLayoutManager(m_LayoutManager);
+
 
         searchView=root.findViewById(R.id.searchViewFriends);
 
@@ -99,7 +96,11 @@ public class FriendsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        m_RecyclerView.setHasFixedSize(true);
+        m_LayoutManager = new LinearLayoutManager(getActivity());
+        m_RecyclerView.setLayoutManager(m_LayoutManager);
         m_Adapter = new FriendsAdapter(getContext(), person_id, m_RecyclerView, this);
+        m_RecyclerView.setAdapter(m_Adapter);
     }
 
     public void setTotalDebt(float debt){

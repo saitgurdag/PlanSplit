@@ -179,7 +179,7 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemSele
             expenseList.addAll(expenses);
             totExpense = 0;
             for (Expense expense: expenseList){
-                totExpense += Integer.parseInt(expense.getPrice().split(" ")[0]);
+                totExpense += Integer.parseInt(expense.getPrice());
             }
             update();
             checkOverBudget();
