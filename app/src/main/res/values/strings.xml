@@ -156,4 +156,6 @@
     <string name="notification_monthly_expense">Bu aylık harcamanız:</string>
     <!-- friend notifications -->
     <string name="notification_friend_monthly_expense">Bu aylık harcamanız:</string>
+    <string name="group_delete_alert">Grubu silmek istediğinizden emin misiniz?</string>
+    <string name="no">Hayır</string>
 </resources>

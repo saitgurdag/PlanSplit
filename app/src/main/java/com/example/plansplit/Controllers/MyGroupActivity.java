@@ -517,8 +517,8 @@ public class MyGroupActivity extends AppCompatActivity {
 
     private void showAlertForDeleteGroup(final Groups group) {
         final AlertDialog.Builder alert = new AlertDialog.Builder(this);
-        alert.setMessage("Grubu silmek istediğinizden emin misiniz?");
-        alert.setPositiveButton("Evet", new DialogInterface.OnClickListener() {
+        alert.setMessage(getResources().getString(R.string.group_delete_alert));
+        alert.setPositiveButton(getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 database.deleteGroup(group, new Database.DatabaseCallBack() {
@@ -535,7 +535,7 @@ public class MyGroupActivity extends AppCompatActivity {
                 });
             }
         });
-        alert.setNegativeButton("Hayır", new DialogInterface.OnClickListener() {
+        alert.setNegativeButton(getResources().getString(R.string.no), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
             }
