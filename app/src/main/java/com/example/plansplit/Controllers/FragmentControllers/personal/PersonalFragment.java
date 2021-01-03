@@ -107,19 +107,6 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemSele
         recyclerView.setLayoutManager(mLayoutManager);
 
         update();
-//Bergay
-      /*   Sacma
-        if((Locale.getDefault().toString().equals("en"))){
-            for(int i = 0 ; i<expenseList.size();i++){
-                if (expenseList.get(i).getExpense_type().equals("food")){
-                    System.out.println("DELİRDİM LAAAAAAAAAAAAN");
-                    expenseList.get(i).getExpense_type().replaceFirst("food","yiyecek");
-                }
-            }
-        }
-*/
-        //Bergay
-
 
         adapter = new ExpensesAdapter(this.getContext(), expenseList);
         recyclerView.setAdapter(adapter);
@@ -287,7 +274,7 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemSele
         progressBar.setMax(budget);
         remainingbudget.setText((budget - totExpense)+ " TL");
 
-        if((budget - totExpense)<0){
+        if((budget - totExpense)<=0){
             control=true;
             personstatus.setImageResource(R.drawable.circle_background_red);
             progressBar.getProgressDrawable().setColorFilter(
@@ -295,7 +282,7 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemSele
 
 
         }
-        if((budget - totExpense)>=0){
+        if((budget - totExpense)>0){
             personstatus.setImageResource(R.drawable.circle_background_green);
             if(control==true){
                 progressBar.setProgressDrawable(getResources().getDrawable(R.drawable.progressbar_custom));
