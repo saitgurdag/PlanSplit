@@ -64,13 +64,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     public static  BottomNavigationView navView;
 
     private ActionBarDrawerToggle toggle;
-
-
-
     FirebaseAuth mAuth;
     private static final Database database = Database.getInstance();
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

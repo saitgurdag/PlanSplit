@@ -2,8 +2,8 @@
 <resources>
     <string name="ask_need">Bitte Geben ein Bedarf ein</string>
     <string name="already_reserved">schon reserviert</string>
-    <string name="will_buy">eingekauft werden</string>
-    <string name="reserved">eingekauft werden</string>
+    <string name="will_buy">einkauft </string>
+    <string name="reserved">einkauft </string>
     <string name="remove_group">LÖSCHEN GRUPPE</string>
     <string name="add_friends_to_group">Addiere Freund</string>
     <string name="cancel">Ablehnen Bedarf</string>
@@ -134,10 +134,12 @@
     <string name="add_friend" translatable="false">Addiere Freund</string>
     <string name="add_new_group" translatable="false">ADDIERE NEUE GRUPPE</string>
     <string name="title_expenses" translatable="false">Kosten</string>
-    <string name="title_debts">schulden</string>
-    <string name="group_totalExpense">Gesamtes Kosten in Gruppe</string>
-    <string name="fromGroupDelete">diese Person von der Gruppe entfrenen</string>
-    <string name="fromGroupDeleted">diese Person von der Gruppe entfrenet</string>
+    <string name="title_debts" translatable="false">schulden</string>
+    <string name="group_totalExpense" translatable="false">Gesamtes Kosten in Gruppe</string>
+    <string name="fromGroupDelete" translatable="false">diese Person von der Gruppe entfrenen</string>
+    <string name="fromGroupDeleted" translatable="false">diese Person von der Gruppe entfrenet</string>
+    <string name="group_delete_alert" translatable="false">Möchten Sie die Gruppe wirklich löschen?</string>
+    <string name="no" translatable="false" >Nein</string>
 
     <string name="remaining_budget">%1$d TL</string>
     <string name="budget">%1$d TL</string>
