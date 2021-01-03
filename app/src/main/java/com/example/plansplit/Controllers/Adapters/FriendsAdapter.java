@@ -144,6 +144,8 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendsV
 
         @Override
         public void onError(String error_tag, String error) {
+            friends.clear();
+            friends.addAll(friendsbuffer);
             Log.e(TAG, error_tag + ": " + error);
             notifyDataSetChanged();
             m_RecyclerView.setAdapter(FriendsAdapter.this);
