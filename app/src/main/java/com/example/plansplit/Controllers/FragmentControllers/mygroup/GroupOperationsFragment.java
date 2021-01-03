@@ -24,6 +24,7 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.google.android.gms.common.util.JsonUtils;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -59,6 +60,7 @@ public class GroupOperationsFragment extends Fragment {
         final View root = inflater.inflate(R.layout.fragment_group_operations, container, false);
         db = new Database(getContext());
         person_id = db.getUserId();
+
 
         extras = getArguments();
         Gson gson = new Gson();
