@@ -87,11 +87,10 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/avenir"
                         android:gravity="center_horizontal"
-                        android:text="Toplam Borcunuz : 0 TL"
+                        android:text="@string/total_dept"
                         android:textColor="@color/red"
                         android:textSize="20dp"
-                        android:textStyle="normal"
-                        />
+                        android:textStyle="normal" />
 
                 </LinearLayout>
             </RelativeLayout>

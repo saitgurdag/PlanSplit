@@ -110,13 +110,19 @@
 
             <ProgressBar
                 android:id="@+id/progressBar"
-                android:layout_width="250dp"
                 style="@style/CircularDeterminateProgressBar"
+                android:layout_width="250dp"
                 android:layout_height="250dp"
+                android:endColor="#C2185B"
+                android:indeterminate="false"
+                android:indeterminateOnly="false"
+                android:indeterminateTintMode="src_in"
                 android:max="360"
                 android:minWidth="200dp"
-                android:minHeight="50dp" >
-            </ProgressBar>
+                android:minHeight="50dp"
+                android:progress="20"
+                android:progressDrawable="@drawable/progressbar_custom"
+                android:progressTintMode="multiply"></ProgressBar>
         </RelativeLayout>
 
         <ImageButton
