@@ -14,6 +14,7 @@ import com.example.plansplit.Controllers.Adapters.AddGroupsAdapter;
 import com.example.plansplit.Controllers.Adapters.GroupAdapter;
 import com.example.plansplit.Controllers.FragmentControllers.mygroup.EventsFragment;
 import com.example.plansplit.Controllers.FragmentControllers.personal.PersonalFragment;
+import com.example.plansplit.Controllers.HomeActivity;
 import com.example.plansplit.Models.Objects.Expense;
 import com.example.plansplit.Models.Objects.Friend;
 import com.example.plansplit.Models.Objects.FriendRequest;
@@ -2003,12 +2004,49 @@ public class Database {
                     DataSnapshot gmembers_snapshot = d.child("group_members");
                     for (DataSnapshot d2 : gmembers_snapshot.getChildren()) {
                         if (d2.getValue().equals(person_id)) {
-                            Groups group = d.getValue(Groups.class);
+                            final Groups group = d.getValue(Groups.class);
                             group.setGroupKey(d.getKey());
                             groupsArrayList.add(group);
+                            Database.GetMemberInfoCallBack infoCallBack = new GetMemberInfoCallBack() {
+                                @Override
+                                public void onGetMemberInfoRetrieveSuccess(ArrayList<Friend> members) {
+                                    Database.getDebtFromGroupCallBack debtCallBack = new getDebtFromGroupCallBack() {
+                                        @Override
+                                        public void onGetDebtFromGroupRetrieveSuccess(float debt) {
+                                            group.addDebt(debt);
+                                            groupAdapter.setTotDebt(0);
+                                            groupAdapter.notifyDataSetChanged();
+                                        }
+
+                                        @Override
+                                        public void onError(String error_tag, String error) {
+
+                                        }
+                                    };
+
+                                    for(Friend friend : members){
+                                        if(!HomeActivity.getPersonId().equals(friend.getKey())) {
+                                            friend.setFriendshipsKey(group.getKey());
+                                            getDebtFromGroups(HomeActivity.getPersonId(), friend, debtCallBack);
+                                        }
+                                    }
+                                }
+
+                                @Override
+                                public void onError(String error_tag, String error) {
+
+                                }
+                            };
+
+                            ArrayList<Friend> members = new ArrayList<>();
+                            getGroupMembersInfo(group.getGroup_members(),members,infoCallBack);
+
+
+
                         }
                     }
                 }
+                groupAdapter.setTotDebt(0);
                 groupAdapter.notifyDataSetChanged();
             }
 

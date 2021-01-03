@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -46,6 +47,8 @@ public class GroupsFragment extends Fragment {
     private String person_id;
     private String selectedFilter;
     private ImageView personImage;
+    private TextView totDebt;
+    private ImageView userBack;
 
 
     @Nullable
@@ -62,10 +65,12 @@ public class GroupsFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
         personImage=root.findViewById(R.id.notification_image2);
         Picasso.with(getContext()).load(database.getPerson().getImage()).into(personImage);
+        totDebt = root.findViewById(R.id.personal_sum_countTv);
+        userBack = root.findViewById(R.id.back_circle);
 
         groupsArrayList = new ArrayList<>();
 
-        groupAdapter = new GroupAdapter(this.getContext(), groupsArrayList, mListener);
+        groupAdapter = new GroupAdapter(this.getContext(), groupsArrayList, mListener, HomeActivity.getPersonId(), this);
         recyclerView.setAdapter(groupAdapter);
 
 
@@ -158,12 +163,23 @@ public class GroupsFragment extends Fragment {
                     filteredgrouparray.add(groups);
                 }
             }
-            groupAdapter = new GroupAdapter(getContext(), filteredgrouparray, mListener);
+            groupAdapter = new GroupAdapter(getContext(), filteredgrouparray, mListener, HomeActivity.getPersonId(), this);
             recyclerView.setAdapter(groupAdapter);
         } else {
-            groupAdapter = new GroupAdapter(getContext(), groupsArrayList, mListener);
+            groupAdapter = new GroupAdapter(getContext(), groupsArrayList, mListener, HomeActivity.getPersonId(), this);
             recyclerView.setAdapter(groupAdapter);
         }
+    }
+
+    public void setTotalDebt(float debt){
+        if(debt==0){
+            totDebt.setTextColor(getResources().getColor(R.color.brightGreen));
+            userBack.setImageResource(R.drawable.circle_background_green);
+        }else{
+            totDebt.setTextColor(getResources().getColor(R.color.red));
+            userBack.setImageResource(R.drawable.circle_background_red);
+        }
+        totDebt.setText(getResources().getString(R.string.total_dept)+ " " + debt + " TL");
     }
 
 

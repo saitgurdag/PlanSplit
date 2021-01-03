@@ -11,6 +11,19 @@ public class Groups implements Serializable {
     private String groupKey;
     private String groupImage;
     private String key;
+    private float totDebt;
+
+    public float getTotDebt() {
+        return totDebt;
+    }
+
+    public void setTotDebt(float totDebt) {
+        this.totDebt = totDebt;
+    }
+
+    public void addDebt(float f){
+        totDebt+=f;
+    }
 
     public HashMap<String, Expense> expenses = new HashMap<>();
 
