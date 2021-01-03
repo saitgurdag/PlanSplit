@@ -387,12 +387,12 @@ public class AddGroupsFragment extends Fragment {
 
     private void showAlert(final String person_id, final String person_name) {
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(getContext());
-        final CharSequence[] remove_action = {person_name + " adlı kişiyi gruptan çıkar"};
+        final CharSequence[] remove_action = {person_name + " "+ getContext().getResources().getString(R.string.fromGroupDelete)};
         mBuilder.setItems(remove_action, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 removeFromGroup(person_id);
-                Toast.makeText(getContext(), person_name + " adlı kişi gruptan çıkarıldı", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), person_name +" "+  getContext().getResources().getString(R.string.fromGroupDeleted), Toast.LENGTH_SHORT).show(); 
 
             }
         });
