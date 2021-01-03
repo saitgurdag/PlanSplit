@@ -142,7 +142,7 @@
     <string name="fromGroupDelete">adlı kişiyi gruptan çıkar</string>
     <string name="fromGroupDeleted">adlı kişiyi gruptan çıkarıldı</string>
 
-    <string name="remaining_budget">Kalan bütçe: %1$d TL</string>
+    <string name="remaining_budget">%1$d TL</string>
     <string name="budget">%1$d TL</string>
 
     <!-- notifications -->
