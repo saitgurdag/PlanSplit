@@ -123,20 +123,22 @@ public class AddGroupsFragment extends Fragment {
                     String selected_person_id = AddGroupsAdapter.addgroups_personList.get(position).getKey();
                     String person_name = AddGroupsAdapter.addgroups_personList.get(position).getName();
                     System.out.println("tıklanılan kişi: " + person_name);
-                    showAlert(selected_person_id, person_name);
+                    if(person_id.equals(group.getGroup_members().get(0)) || person_id.equals(selected_person_id)){
+                        showAlert(selected_person_id, person_name);
 
-                    alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                        @Override
-                        public void onDismiss(DialogInterface dialogInterface) {
-                            recyclerView = root.findViewById(R.id.recycler_addgroups);
-                            recyclerView.setHasFixedSize(true);
-                            RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getContext(), 1);
-                            recyclerView.setLayoutManager(mLayoutManager);
+                        alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                            @Override
+                            public void onDismiss(DialogInterface dialogInterface) {
+                                recyclerView = root.findViewById(R.id.recycler_addgroups);
+                                recyclerView.setHasFixedSize(true);
+                                RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getContext(), 1);
+                                recyclerView.setLayoutManager(mLayoutManager);
 
-                            adapter = new AddGroupsAdapter(getContext(), recyclerView, group_members, group_key);
-                            recyclerView.setAdapter(adapter);
-                        }
-                    });
+                                adapter = new AddGroupsAdapter(getContext(), recyclerView, group_members, group_key);
+                                recyclerView.setAdapter(adapter);
+                            }
+                        });
+                    }
                 }
             });
 
@@ -356,13 +358,18 @@ public class AddGroupsFragment extends Fragment {
         });
     }
 
-    public void removeFromGroup(String selected_person_id) {
+    public void removeFromGroup(final String selected_person_id) {
         database.removeFromGroup(selected_person_id, group, new Database.DatabaseCallBack() {
             @Override
             public void onSuccess(String success) {
                 Log.d(TAG, success);
                 Toast.makeText(getContext(), success, Toast.LENGTH_SHORT).show();
                 if(success.equals("Grup silindi")){
+                    Intent intent2 = new Intent(getContext(), HomeActivity.class);
+                    String key = "groups";
+                    intent2.putExtra("navigation", key);
+                    startActivity(intent2);
+                } else if (selected_person_id.equals(person_id)){
                     Intent intent2 = new Intent(getContext(), HomeActivity.class);
                     String key = "groups";
                     intent2.putExtra("navigation", key);
