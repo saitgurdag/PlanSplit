@@ -100,9 +100,7 @@ public class AddExpenseFragment extends Fragment {
                     intent.putExtra("group_to_list", json);
                     intent.putExtra("group_to_back", "back");
                     startActivity(intent);
-
                 }
-
             }
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), callback);
