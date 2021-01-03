@@ -208,6 +208,7 @@ public class AddGroupsFragment extends Fragment {
                             Gson gson = new Gson();
                             String json = gson.toJson(group);
                             intent.putExtra("group", json);
+                            intent.putExtra("group_update_back","back");
                             startActivity(intent);
                         }
 
