@@ -50,7 +50,7 @@
                             android:layout_width="50dp"
                             android:layout_height="50dp"
                             android:layout_gravity="center"
-                            app:srcCompat="@drawable/circle_background_red" />
+                            app:srcCompat="@drawable/circle_background_green" />
 
                         <androidx.cardview.widget.CardView
                             android:layout_width="35dp"
@@ -87,8 +87,8 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/avenir"
                         android:gravity="center_horizontal"
-                        android:text="@string/total_dept"
-                        android:textColor="@color/red"
+                        android:text="@string/total_dept_0"
+                        android:textColor="@color/green"
                         android:textSize="20dp"
                         android:textStyle="normal" />
 

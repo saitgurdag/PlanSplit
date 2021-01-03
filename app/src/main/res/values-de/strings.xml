@@ -128,6 +128,7 @@
         <item>reinigungsmittel</item>
         <item>andere</item>
     </string-array>
+    <string name="total_dept_0" translatable="false">Total Schuld : 0 TL</string>
     <string name="total_dept" translatable="false">Total Schuld : </string>
     <string name="total_claimant" translatable="false">Total benehmen : </string>
     <string name="add_friend" translatable="false">Addiere Freund</string>
@@ -137,4 +138,19 @@
     <string name="group_totalExpense">Gesamtes Kosten in Gruppe</string>
     <string name="fromGroupDelete">diese Person von der Gruppe entfrenen</string>
     <string name="fromGroupDeleted">diese Person von der Gruppe entfrenet</string>
+
+    <string name="remaining_budget">%1$d TL</string>
+    <string name="budget">%1$d TL</string>
+
+    <!-- notifications -->
+    <!-- personal notifications -->
+    <string name="notification_over_budget">Monatlich Budgetgrenze Übersteigt</string>
+    <string name="notification_budget_change">Sie Verändert Monatlich Budgetgrenze</string>
+    <string name="notification_friend_add"> Sie sind mit %1$s anfreunden </string>
+    <string name="notification_friend_remove">Sie sind nicht mehr Freund mit %1$s </string>
+    <string name="notification_group_add"> Sie zum Gruppe %1$s teilgenommen </string>
+    <string name="notification_group_remove"> Sie sind Gruppe %1$s verlassen</string>
+    <string name="notification_monthly_expense">Monatlich Kosten :</string>
+    <!-- friend notifications -->
+    <string name="notification_friend_monthly_expense">Monatlich Kosten :</string>
 </resources>

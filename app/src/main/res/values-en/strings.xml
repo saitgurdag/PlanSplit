@@ -129,6 +129,7 @@
         <item>others</item>
     </string-array>
     <string name="total_dept" translatable="false">Total dept amount: </string>
+    <string name="total_dept_0" translatable="false">Total dept amount: 0 TL</string>
     <string name="total_claimant" translatable="false">Total claim amount : </string>
     <string name="add_friend" translatable="false">Add Friend</string>
     <string name="add_new_group" translatable="false">ADD NEW GROUP</string>
@@ -137,4 +138,19 @@
     <string name="group_totalExpense">Group Total Expenses</string>
     <string name="fromGroupDelete">delete this person group </string>
     <string name="fromGroupDeleted">this person deleted from group</string>
+
+    <string name="remaining_budget">%1$d TL</string>
+    <string name="budget">%1$d TL</string>
+
+    <!-- notifications -->
+    <!-- personal notifications -->
+    <string name="notification_over_budget">You overpass your Budged</string>
+    <string name="notification_budget_change">You have changed your Budged</string>
+    <string name="notification_friend_add">You became Friend with %1$s</string>
+    <string name="notification_friend_remove">You are not Friend with %1$s anymore </string>
+    <string name="notification_group_add">You joined group %1$s </string>
+    <string name="notification_group_remove">You have left group %1$s</string>
+    <string name="notification_monthly_expense">Monthly Expense:</string>
+    <!-- friend notifications -->
+    <string name="notification_friend_monthly_expense">Monthly Expense:</string>
 </resources>
