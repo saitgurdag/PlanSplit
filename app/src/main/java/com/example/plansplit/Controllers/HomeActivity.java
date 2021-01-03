@@ -154,6 +154,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             navController.navigate(R.id.navigation_add_expense, bundle);
         }
         if(extras != null && (extras.keySet().contains("friend") || extras.keySet().contains("group"))) {
+            bundle = new Bundle();
             if (extras.keySet().contains("friend")) {
                 bundle.putString("friend", extras.getString("friend"));
             } else if (extras.keySet().contains("group")){
@@ -223,7 +224,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     //////BERKAY HEADER DAN DİL BAŞLA///////
 
     private  void showChangeLanguageDialog(){
-        final String[] listItems = {"Deutsch","Englisch","Türkçe"};
+        final String[] listItems = {"Deutsch","English","Türkçe"};
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(HomeActivity.this);
         mBuilder.setTitle("Choose Language Please");
         mBuilder.setSingleChoiceItems(listItems, -1, new DialogInterface.OnClickListener() {
