@@ -42,11 +42,10 @@ public class FriendsFragment extends Fragment {
         final View root = inflater.inflate(R.layout.fragment_friends, container, false);
         Button add_friend_button = root.findViewById(R.id.friend_add_button);
         final EditText add_friend_email_text = root.findViewById(R.id.friends_add_email);
-        final HomeActivity home = (HomeActivity) getContext();
 
-        person_id = getArguments().get("person_id").toString();
+        person_id = database.getPerson().getKey();
         personImage=root.findViewById(R.id.notification_image2);
-        Picasso.with(getContext()).load(home.getPersonPhoto()).into(personImage);
+        Picasso.with(getContext()).load(database.getPerson().getImage()).into(personImage);
 
 
         m_RecyclerView = root.findViewById(R.id.recycler_friends);
@@ -65,7 +64,6 @@ public class FriendsFragment extends Fragment {
                     public void onSuccess(String success) {
                         Log.i(TAG, success);
                         Toast.makeText(getContext(), success, Toast.LENGTH_SHORT).show();
-                        //m_Adapter.loadFriends();
                         m_Adapter = new FriendsAdapter(getContext(), person_id, m_RecyclerView);
                         add_friend_email_text.clearFocus();
                         add_friend_email_text.setText("");

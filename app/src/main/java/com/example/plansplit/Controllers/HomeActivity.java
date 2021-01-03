@@ -51,23 +51,13 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     GoogleSignInClient mGoogleSignInClient;
     private static final String TAG = "HomeActivity";
-    private String personId;
     private DrawerLayout drawerLayout;
     NavigationView navigationView;
     Bundle bundle;
     String navigation_key;
-    public static Uri personPhoto;
-    SharedPreferences mPrefs;
 
     FirebaseAuth mAuth;
     private static final Database database = Database.getInstance();
-    Database db = new Database();
-
-
-
-    public String getPersonId() {
-        return personId;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,8 +65,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
         BottomNavigationView navView = findViewById(R.id.nav_view);
         mAuth = FirebaseAuth.getInstance();
-        mPrefs = getSharedPreferences("userName", Context.MODE_PRIVATE);
-
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
@@ -108,8 +96,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         navView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener(){
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item){
-               bundle = new Bundle();
-                bundle.putString("person_id", personId);
                 navController.navigate(item.getItemId(), bundle);
                 return true;
             }
@@ -119,14 +105,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         //firebase'e ilk girişte mail isim soyisim kayıt yapılıyor.
         GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
         if (acct != null) {
-            personId = acct.getId();
+            String personId = acct.getId();
             String name = acct.getDisplayName();
             if (name == null){
                 name = "No name";
             }
-            SharedPreferences.Editor prefsEditor = mPrefs.edit();
-            prefsEditor.putString("userName", name);
-            prefsEditor.apply();
             String email = acct.getEmail();
 
             //todo:kod çökmesin diye bir süre daha soyisim çekicez
@@ -136,21 +119,17 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 surname = "No surname";
             }
 
-            personPhoto = acct.getPhotoUrl();
+            Uri personPhoto = acct.getPhotoUrl();
             setHeader(personPhoto,name,email);
             String image=personPhoto.toString();
+            long date = System.currentTimeMillis();
 
-
-
-
-            database.registerUser(personId, name, email, surname,image);
+            database.registerUser(personId, name, email, surname, image, date);
             Log.d(TAG, "user registered with this email: " + email + "\n" + "and this key: " + personId);
         }
 
         Bundle extras = getIntent().getExtras();
         if(extras != null && (extras.keySet().contains("friend") || extras.keySet().contains("group"))) {
-            bundle = new Bundle();
-            bundle.putString("person_id", personId);
             if (extras.keySet().contains("friend")) {
                 bundle.putString("friend", extras.getString("friend"));
             } else if (extras.keySet().contains("group")){
@@ -159,20 +138,18 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             navController.navigate(R.id.navigation_add_expense, bundle);
         }else if(extras != null && extras.keySet().contains("navigation")) {
             navigation_key = extras.getString("navigation");
-            bundle = new Bundle();
-            bundle.putString("person_id", personId);
             switch (navigation_key) {
                 case "personal":
-                    navController.navigate(R.id.navigation_personal, bundle);
+                    navController.navigate(R.id.navigation_personal);
                     break;
                 case "friends":
-                    navController.navigate(R.id.navigation_friends, bundle);
+                    navController.navigate(R.id.navigation_friends);
                     break;
                 case "groups":
-                    navController.navigate(R.id.navigation_groups, bundle);
+                    navController.navigate(R.id.navigation_groups);
                     break;
                 case "notifications":
-                    navController.navigate(R.id.navigation_notifications, bundle);
+                    navController.navigate(R.id.navigation_notifications);
                     break;
 
             }
@@ -203,9 +180,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 }
                 if (id==R.id.navigation_home){
                     drawerLayout.closeDrawer(GravityCompat.START);
-                    bundle = new Bundle();
-                    bundle.putString("person_id", personId);
-                    navController.navigate(R.id.navigation_personal, bundle);
+                    navController.navigate(R.id.navigation_personal);
                 }
                 return true;
             }
@@ -259,9 +234,5 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
 
-    }
-
-    public static Uri getPersonPhoto() {
-        return personPhoto;
     }
 }

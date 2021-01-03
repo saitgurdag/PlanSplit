@@ -108,5 +108,19 @@
     <string name="reserved">alacak</string>
     <string name="will_buy">alacak</string>
     <string name="ask_need">Lütfen bir ihtiyaç giriniz</string>
+    <string name="remaining_budget">Kalan bütçe: %1$d TL</string>
+    <string name="budget">%1$d TL</string>
+
+    <!-- notifications -->
+    <!-- personal notifications -->
+    <string name="notification_over_budget">Aylık bütçenizi aştınız</string>
+    <string name="notification_budget_change">Bütçenizi değiştirdiniz</string>
+    <string name="notification_friend_add">%1$s ile arkadaş oldunuz</string>
+    <string name="notification_friend_remove">%1$s ile artık arkadaş değilsiniz</string>
+    <string name="notification_group_add">%1$s grubuna katıldınız</string>
+    <string name="notification_group_remove">%1$s grubundan ayrıldınız</string>
+    <string name="notification_monthly_expense">Bu aylık harcamanız:</string>
+    <!-- friend notifications -->
+    <string name="notification_friend_monthly_expense">Bu aylık harcamanız:</string>
 
 </resources>

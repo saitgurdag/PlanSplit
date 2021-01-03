@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.plansplit.Models.Objects.Notification;
 import com.example.plansplit.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -51,7 +52,23 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
         holder.mainTextView.setText(notification.getMainText());
         holder.secondTextView.setText(notification.getSecondText());
         holder.clockTextView.setText(notification.getClock());
-        holder.imageView.setImageDrawable(mCtx.getResources().getDrawable(notification.getImage()));
+
+        switch (notification.getImage()){
+            case "seyehat":
+                holder.imageView.setImageDrawable(mCtx.getResources().getDrawable(R.drawable.ic_trip_radius));
+                break;
+            case "ev":
+                holder.imageView.setImageDrawable(mCtx.getResources().getDrawable(R.drawable.ic_home_black_radius));
+                break;
+            case "iş":
+                holder.imageView.setImageDrawable(mCtx.getResources().getDrawable(R.drawable.ic_suitcase_radius));
+                break;
+            case "diğer":
+                holder.imageView.setImageDrawable(mCtx.getResources().getDrawable(R.drawable.ic_other));
+                break;
+            default:
+                Picasso.with(mCtx).load(notification.getImage()).error(R.drawable.ic_other).into(holder.imageView);
+        }
     }
 
     @Override

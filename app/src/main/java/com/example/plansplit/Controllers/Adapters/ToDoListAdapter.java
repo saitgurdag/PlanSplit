@@ -39,7 +39,7 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ToDoLi
 
 
     public ToDoListAdapter(Context mContext, String key,RecyclerView m_RecyclerView, String operation) {
-        database = new Database(mContext);
+        database = Database.getInstance();
         this.mContext = mContext;
         this.m_RecyclerView=m_RecyclerView;
         this.key = key;
@@ -184,7 +184,7 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ToDoLi
                         }
                     });
                     dialog.show();
-                } if(toDo.getStatus().equals(reserved)&&(toDo.getResp_person().equals(database.getUserId()))){
+                } if(toDo.getStatus().equals(reserved)&&(toDo.getResp_person().equals(database.getPerson().getKey()))){
                     AlertDialog.Builder mBuilder = new AlertDialog.Builder(view.getRootView().getContext());
                     View cancel_resp_view = LayoutInflater.from(view.getRootView().getContext()).inflate(R.layout.dialog_cancel_req_resp, null);
                     TextView cancel_req_descTv = cancel_resp_view.findViewById(R.id.cancel_req_descriptionTv);
@@ -242,7 +242,7 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ToDoLi
 
                     dialog.show();
                 }
-                if(toDo.getStatus().equals(reserved)&&!(toDo.getResp_person().equals(database.getUserId()))){
+                if(toDo.getStatus().equals(reserved)&&!(toDo.getResp_person().equals(database.getPerson().getKey()))){
                     Toast.makeText(mContext,  toDo.getResp_person_name()+" "+mContext.getResources().getString(R.string.already_reserved), Toast.LENGTH_SHORT).show();
                 }
             }

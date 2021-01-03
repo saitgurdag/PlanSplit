@@ -1,6 +1,7 @@
 package com.example.plansplit.Controllers.FragmentControllers.mygroup;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,28 +39,24 @@ public class EventsFragment extends Fragment {
 
     //Berkay ekleme kısmı bitiş//
 
-    public static EventsFragment newInstance() {
-        return new EventsFragment();
-    }
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_events, container, false);
         GroupEventsObjectList = new ArrayList<>();
-        db = new Database(this.getContext(), this);
+        db = Database.getInstance();
         myGroupActivity=(MyGroupActivity) getContext();
         userImage=root.findViewById(R.id.user_image_groupEvents);
-        Picasso.with(getContext()).load(HomeActivity.getPersonPhoto()).into(userImage);
+        Picasso.with(getContext()).load(db.getPerson().getImage()).into(userImage);
         recyclerView=(RecyclerView) root.findViewById(R.id.RecyclerViewGroupEvents);
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this.getContext(),1);
         recyclerView.setLayoutManager(mLayoutManager);
 
         if(myGroupActivity.getType().equals("group")){
-            db.getExpensesFromGroup(myGroupActivity.getGroup().getGroupKey());
+            db.getExpensesFromGroup(myGroupActivity.getGroup().getGroupKey(), transferCallBack);
         }else if(myGroupActivity.getType().equals("friend")){
-            db.getExpensesFromFriend(myGroupActivity.getFriend().getFriendshipsKey());
+            db.getExpensesFromFriend(myGroupActivity.getFriend().getFriendshipsKey(), transferCallBack);
         }
 
         recyclerView = root.findViewById(R.id.RecyclerViewGroupEvents);
@@ -70,6 +67,19 @@ public class EventsFragment extends Fragment {
         recyclerView.setAdapter(adapter);
         return root;
     }
+
+    public final Database.TransferCallBack transferCallBack = new Database.TransferCallBack() {
+        @Override
+        public void onTransferRetrieveSuccess(ArrayList<Transfers> transfers) {
+            setArray(transfers);
+        }
+
+        @Override
+        public void onError(String error_tag, String error) {
+            Log.e(error_tag, error);
+        }
+    };
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);

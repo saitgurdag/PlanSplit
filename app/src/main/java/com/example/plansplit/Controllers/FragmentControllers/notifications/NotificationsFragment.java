@@ -19,11 +19,13 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.plansplit.Controllers.Adapters.NotificationsAdapter;
+import com.example.plansplit.Models.Database;
 import com.example.plansplit.Models.Objects.Notification;
 import com.example.plansplit.R;
 import com.example.plansplit.Controllers.FragmentControllers.notifications.friendRequests.FriendRequestsFragment;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class NotificationsFragment extends Fragment {
@@ -31,29 +33,35 @@ public class NotificationsFragment extends Fragment {
     private static final String TAG = "NotificationFragment";
     RecyclerView recyclerView;
     NotificationsAdapter adapter;
-    List<Notification> notificationList;
-    private String person_id;
+    ArrayList<Notification> notificationList;
+    private Database database;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_notifications, container, false);
-         person_id = getArguments().get("person_id").toString();
-
+        database = Database.getInstance();
+        notificationList = new ArrayList<>();
+        adapter = new NotificationsAdapter(this.getContext(), notificationList);
         recyclerView = root.findViewById(R.id.recyclerNotification);
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this.getContext(),1);
         recyclerView.setLayoutManager(mLayoutManager);
-
-        notificationList = new ArrayList<>();
-        notificationList.add(new Notification("Curie, İŞ grubuna harcama ekledi: Kartuş, 150 TL", "50 TL borçlusun", "20.10.2020", "20.50", R.drawable.denemeresim));
-        notificationList.add(new Notification("Curie, İŞ grubuna harcama ekledi: Kartuş, 150 TL", "50 TL borçlusun", "20.10.2020", "20.50", R.drawable.denemeresim));
-        notificationList.add(new Notification("Curie, İŞ grubuna harcama ekledi: Kartuş, 150 TL", "50 TL borçlusun", "20.10.2020", "20.50", R.drawable.denemeresim));
-
-        Log.d(TAG, "BURADA");
-
-        adapter = new NotificationsAdapter(this.getContext(), notificationList);
         recyclerView.setAdapter(adapter);
+
+        database.getPersonalNotifications(getContext(), new Database.NotificationCallBack() {
+            @Override
+            public void onNotificationsRetrieveSuccess(ArrayList<Notification> notifications) {
+                notificationList.addAll(notifications);
+                Collections.reverse(notificationList);
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onError(String error_tag, String error) {
+                Log.e(error_tag, error);
+            }
+        });
 
         adapter.setOnItemClickListener(new NotificationsAdapter.OnItemClickListener() {
             @Override
@@ -80,10 +88,7 @@ public class NotificationsFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item){
-        Bundle bundle = new Bundle();
-        bundle.putString("person_id", person_id);
         FriendRequestsFragment friendRequestsFragment = new FriendRequestsFragment();
-        friendRequestsFragment.setArguments(bundle);
         FragmentManager fragmentManager = getParentFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.nav_host_fragment, friendRequestsFragment);

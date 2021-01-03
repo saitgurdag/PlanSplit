@@ -1,5 +1,6 @@
 package com.example.plansplit.Controllers.Adapters;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,7 +61,7 @@ public class AddGroupsAdapter extends RecyclerView.Adapter<AddGroupsAdapter.AddG
 
         @Override
         public void onError(String error_tag, String error) {
-
+            Log.e(error_tag, error);
         }
 
 

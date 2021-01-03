@@ -50,19 +50,19 @@ public class ListFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
 
         final View root = inflater.inflate(R.layout.fragment_list, container, false);
-        database=new Database(getContext());
+        database = Database.getInstance();
 
 
         if(!getArguments().containsKey("group_title")){
             operation="friend";
             friendkey=getArguments().getString("friend_key");
-            personId=getArguments().getString("person_key");
+            personId = database.getPerson().getKey();
 
         }
         if(getArguments().containsKey("group_title")){
              operation="group";
              groupkey=getArguments().getString("group_title");
-             personId=database.getUserId();
+             personId=database.getPerson().getKey();
         }
 
         recyclerView = root.findViewById(R.id.req_list_recyclerView);

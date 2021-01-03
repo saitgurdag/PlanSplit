@@ -56,7 +56,7 @@ public class AddExpenseFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         final View root = inflater.inflate(R.layout.fragment_expense, container, false);
         ctrlDate=false;
-        db = new Database(this.getContext());
+        db = Database.getInstance();
         edittextexpensename=root.findViewById(R.id.editTextExpenseName);
         edittextexpenseamounth=root.findViewById(R.id.editTextExpenseAmounth);
         saveexpenseBtn=root.findViewById(R.id.saveExpenseButton);
@@ -71,7 +71,7 @@ public class AddExpenseFragment extends Fragment {
 
         Bundle extras = getArguments();
         if(extras != null) {
-            personId = extras.getString("person_id");
+            personId = db.getPerson().getKey();
             if (extras.keySet().contains("friend")) {
                 ctrlFG=true;
                 Gson gson = new Gson();

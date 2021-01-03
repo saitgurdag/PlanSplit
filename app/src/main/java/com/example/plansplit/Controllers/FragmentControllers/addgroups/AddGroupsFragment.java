@@ -48,9 +48,9 @@ public class AddGroupsFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
 
         final View root = inflater.inflate(R.layout.fragment_addgroups, container, false);
-        Database db = new Database(getContext());
+        Database db = Database.getInstance();
 
-        person_id = db.getUserId();
+        person_id = db.getPerson().getKey();
 
         recyclerView = root.findViewById(R.id.recycler_addgroups);
         recyclerView.setHasFixedSize(true);

@@ -2,6 +2,9 @@ package com.example.plansplit.Models.Objects;
 
 public class Person {
 
+    private String key;
+    private String image;
+    private long last_login;
     private String name;
     private String mail;
     private int cardView_shareMethodPersonPicture;
@@ -16,7 +19,27 @@ public class Person {
     private String groupDepth;
     private int backGroundPerson ;
 
-    public Person(int backGroundPerson,int cardView_shareMethodPersonPicture, String groupDepth) {           // Group Operations için kullandığım Contructor
+    public Person(String key, String name, String email, String image, long date){
+        this.key = key;
+        this.name = name;
+        this.mail = email;
+        this.image = image;
+        this.last_login = date;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public long getLastLogin() {
+        return last_login;
+    }
+
+    public Person(int backGroundPerson, int cardView_shareMethodPersonPicture, String groupDepth) {           // Group Operations için kullandığım Contructor
         this.backGroundPerson=backGroundPerson;
         this.cardView_shareMethodPersonPicture = cardView_shareMethodPersonPicture;
         this.groupDepth = groupDepth;

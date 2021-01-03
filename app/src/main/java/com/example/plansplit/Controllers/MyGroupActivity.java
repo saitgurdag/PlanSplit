@@ -30,7 +30,7 @@ import com.squareup.picasso.Picasso;
 
 public class MyGroupActivity extends AppCompatActivity {
     private static final String TAG = "MyGroupActivity";
-    Database database = Database.getInstance();
+    Database database;
     public String person_id = "";
     private Friend friend;
     private Groups group;
@@ -114,6 +114,7 @@ public class MyGroupActivity extends AppCompatActivity {
         ImageButton removeFriendBttn = findViewById(R.id.removeFriendButton);
         ImageButton menu = findViewById(R.id.mygroup_menuline_button);
         add_expense_btn = findViewById(R.id.add_expense);
+        database = Database.getInstance();
 
         BottomNavigationView navView = findViewById(R.id.nav_view2);
         navView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -216,7 +217,6 @@ public class MyGroupActivity extends AppCompatActivity {
 
                     Bundle bundlelistfriends = new Bundle();
                     bundlelistfriends.putString("friend_key", todolistfriend);
-                    bundlelistfriends.putString("person_key", person_id);
                     navController.navigate(R.id.navi_todo_list, bundlelistfriends);
                     add_expense_btn.setVisibility(View.GONE);
                     list_titleTv.setVisibility(View.VISIBLE);
