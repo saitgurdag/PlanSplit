@@ -70,7 +70,7 @@ public class FriendsFragment extends Fragment {
                     public void onSuccess(String success) {
                         Log.i(TAG, success);
                         Toast.makeText(getContext(), success, Toast.LENGTH_SHORT).show();
-                        m_Adapter = new FriendsAdapter(getContext(), person_id, m_RecyclerView);
+                        m_Adapter = new FriendsAdapter(getContext(), person_id, m_RecyclerView, fragment);
                         add_friend_email_text.clearFocus();
                         add_friend_email_text.setText("");
                         InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);

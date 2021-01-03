@@ -56,6 +56,7 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ToDoLi
 
 
     public ToDoListAdapter(Context mContext, String key,RecyclerView m_RecyclerView, String operation) {
+        this.mPrefs = mContext.getSharedPreferences("listbell", Context.MODE_PRIVATE);
         database = Database.getInstance();
         this.mContext = mContext;
         this.m_RecyclerView=m_RecyclerView;

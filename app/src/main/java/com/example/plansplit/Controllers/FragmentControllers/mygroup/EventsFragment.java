@@ -75,15 +75,15 @@ public class EventsFragment extends Fragment {
             Gson gson = new Gson();
             String json = extras.getString("group");
             group = gson.fromJson(json, Groups.class);
-            db.getExpensesFromGroup(group.getKey());
+            db.getExpensesFromGroup(group.getKey(), transferCallBack);
             ArrayList<Friend> members = new ArrayList<>();
             db.getGroupMembersInfo(((MyGroupActivity) getContext()).getGroup().getGroup_members(),members, memberCallBack );
         }else if(extras != null && extras.keySet().contains("friend")){
             Gson gson = new Gson();
             String json = extras.getString("friend");
             friend = gson.fromJson(json, Friend.class);
-            db.getExpensesFromFriend(friend.getFriendshipsKey());
-            db.getDebtFromFriend(HomeActivity.getPersonId(), ((MyGroupActivity) getContext()).getFriend(), friendCallBack);
+            db.getExpensesFromFriend(friend.getFriendshipsKey(), transferCallBack);
+            db.getDebtFromFriend(db.getPerson().getKey(), ((MyGroupActivity) getContext()).getFriend(), friendCallBack);
         }
 
         adapter =new GroupEventsAdapter(GroupEventsObjectList);
@@ -145,9 +145,9 @@ public class EventsFragment extends Fragment {
         public void onGetMemberInfoRetrieveSuccess(ArrayList<Friend> members) {
             totDept=0;
             for (Friend f : members){
-                if(!HomeActivity.getPersonId().equals(f.getKey())) {
+                if(!db.getPerson().getKey().equals(f.getKey())) {
                     f.setFriendshipsKey(((MyGroupActivity)getContext()).getGroup().getKey());
-                    db.getDebtFromGroups(HomeActivity.getPersonId(), f, groupCallBack);
+                    db.getDebtFromGroups(db.getPerson().getKey(), f, groupCallBack);
                 }
             }
         }

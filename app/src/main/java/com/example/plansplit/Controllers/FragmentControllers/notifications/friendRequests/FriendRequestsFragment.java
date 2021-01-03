@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.plansplit.Controllers.Adapters.FriendRequestsAdapter;
 import com.example.plansplit.Controllers.FragmentControllers.notifications.NotificationsFragment;
+import com.example.plansplit.Models.Database;
 import com.example.plansplit.R;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -58,7 +59,7 @@ public class FriendRequestsFragment extends Fragment{
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item){
         Bundle bundle = new Bundle();
-        bundle.putString("person_id", person_id);
+        bundle.putString("person_id", Database.getInstance().getPerson().getKey());
         NotificationsFragment notificationsFragment = new NotificationsFragment();
         notificationsFragment.setArguments(bundle);
         FragmentManager fragmentManager = getParentFragmentManager();

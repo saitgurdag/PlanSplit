@@ -70,7 +70,8 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemSele
         db.getExpenses(expenseCallBack);
         checkDate();
 
-        personPhoto=root.findViewById(R.id.personalOperations_imagePerson);
+        personPhoto = root.findViewById(R.id.personalOperations_imagePerson);
+        personstatus = root.findViewById(R.id.personalOperations_PersonBackGround);
         Picasso.with(getContext()).load(db.getPerson().getImage()).into(personPhoto);
 
 

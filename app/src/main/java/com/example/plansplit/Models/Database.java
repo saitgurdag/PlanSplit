@@ -63,7 +63,7 @@ public class Database {
     private static final DatabaseReference group_reference = database.getReference("groups");
 
     private static final String TAG = "DATABASE";
-    private Person person;
+    private static Person person;
 
     public Person getPerson(){ return person; }
 
@@ -812,7 +812,7 @@ public class Database {
      *
      * @param user_key unique key whose friends would be searched for
      * @param callBack the callBack to be called whenever an error occurs or task successfully end
-     * @see #getFriend(String, FriendCallBack, String, String)
+     * @see #getFriend(String, FriendCallBack, String)
      */
     public void getFriends(final String user_key, final FriendCallBack callBack) {
         if (user_key == null) {
@@ -847,7 +847,7 @@ public class Database {
                             ArrayList<String> friends = (ArrayList<String>) snapshot.getValue();
                             for (String key : friends) {
                                 if (!user_key.equals(key)) {
-                                    getFriend(key, callBack, friend_list_key, user_key);
+                                    getFriend(key, callBack, friend_list_key);
                                     return;
                                 }
                             }
@@ -879,7 +879,7 @@ public class Database {
      * @param callBack   the callBack to be called whenever an error occurs or task successfully end
      * @see Friend
      */
-    public void getFriend(final String friend_key, final FriendCallBack callBack, final String friendshipsKey, final String userId) {      //friendshipsKey arkadaşlığın bağlı olduğu friends klasındaki keyi tututyor.
+    public void getFriend(final String friend_key, final FriendCallBack callBack, final String friendshipsKey) {      //friendshipsKey arkadaşlığın bağlı olduğu friends klasındaki keyi tututyor.
         if (friend_key == null) {
             callBack.onError(KEY_NOT_FOUND, "aranan key null");
             return;
@@ -926,7 +926,7 @@ public class Database {
                 };
 
                 friend.setFriendshipsKey(friendshipsKey);
-                getDebtFromFriend(userId, friend, friendCallBack);
+                getDebtFromFriend(person.getKey(), friend, friendCallBack);
 
 
             }
@@ -1720,7 +1720,7 @@ public class Database {
         dbr.child("date").setValue(date);
 
         //borç bilgisi -----
-        final DatabaseReference dbDebts = friend_reference.child(friendshipKey).child("debts").child(userId);
+        final DatabaseReference dbDebts = friend_reference.child(friendshipKey).child("debts").child(person.getKey());
         dbDebts.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -1738,7 +1738,7 @@ public class Database {
         });
     }
 
-    public void addExpenseToGroups(String name, String type, String price, String groupsKey, String date) {
+    public void addExpenseToGroups(String name, String type, final String price, String groupsKey, String date, final ArrayList<String> groupMembers) {
         DatabaseReference dbRef = group_reference.child(groupsKey).child("expenses");
         String key = dbRef.push().getKey();
         DatabaseReference dbr = dbRef.child(key);
@@ -1750,9 +1750,9 @@ public class Database {
         dbr.child("date").setValue(date);
 
         //borç bilgisi -----
-        final DatabaseReference dbDebts = group_reference.child(groupsKey).child("debts").child(userId);
+        final DatabaseReference dbDebts = group_reference.child(groupsKey).child("debts").child(person.getKey());
         for (final String member : groupMembers) {
-            if (!member.equals(userId)) {
+            if (!member.equals(person.getKey())) {
                 dbDebts.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -1896,7 +1896,7 @@ public class Database {
                     if (price != null) {
                         int p = Integer.parseInt(price);
                         totExpense += p;
-                        expenses.add(new Expense(name, type, p));
+                        expenses.add(new Expense(name, type, price));
                     }
                 }
                 callBack.onExpenseRetrieveSuccess(expenses);
