@@ -36,6 +36,7 @@ import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
 
 @LargeTest
+@RunWith(AndroidJUnit4.class)
 public class ChangePersonalBudgetTest {
 
     @Rule
