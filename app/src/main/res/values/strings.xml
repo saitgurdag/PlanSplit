@@ -136,5 +136,6 @@
 
     <string name="add_new_group" translatable="false">YENİ GRUP EKLE</string>
     <string name="title_expenses" translatable="false">Harcamalar</string>
+    <string name="title_debts">borçlar</string>
 
 </resources>

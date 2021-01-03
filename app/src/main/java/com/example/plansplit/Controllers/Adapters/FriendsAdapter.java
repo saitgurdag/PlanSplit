@@ -4,9 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -33,22 +35,67 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendsV
     private Database database = Database.getInstance();
     private String person_id;
     private RecyclerView m_RecyclerView;
+    ArrayList<Friend> friendstofilter=new ArrayList<>();
     private ArrayList<Friend> friendsbuffer=new ArrayList<>();
     Friend friend;
     private Fragment fragment;
     private float totalDebt;
 
+
     public void setFriend(Friend friend) {
         this.friend = friend;
     }
 
-    public FriendsAdapter(Context mCtx, String person_id, final RecyclerView m_RecyclerView, Fragment fragment){
+    public FriendsAdapter(final Context mCtx, String person_id, final RecyclerView m_RecyclerView, final Fragment fragment){
         totalDebt=0f;
         this.fragment=fragment;
         this.mCtx = mCtx;
         this.person_id = person_id;
         this.m_RecyclerView = m_RecyclerView;
         loadFriends();
+        FriendsFragment.filterBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                PopupMenu popup = new PopupMenu(mCtx, FriendsFragment.filterBtn);
+                popup.inflate(R.menu.filter_menu_friends);
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem) {
+
+                        if(menuItem.getItemId()==R.id.filter_debts){
+
+                            for (Friend friend : friendsbuffer) {
+                                if (friend.getImage_background() == 2131230839) {
+                                    {
+                                        friendstofilter.add(friend);
+                                    }
+
+
+                                    friends.removeAll(friendstofilter);
+                                }
+
+
+                                notifyDataSetChanged();
+                                m_RecyclerView.setAdapter(FriendsAdapter.this);
+                            }
+                        }
+                        else{
+                            loadFriends();
+                            notifyDataSetChanged();
+                            m_RecyclerView.setAdapter(FriendsAdapter.this);
+                        }
+                        return false;
+                    }
+                });
+                        popup.show();
+
+            }
+
+        });
+
+
+
         FriendsFragment.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
@@ -78,6 +125,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendsV
     }
 
     public void loadFriends(){
+        totalDebt=0f;
         this.friendsbuffer = new ArrayList<>();
         database.getFriends(person_id, friendsCallBack);
     }

@@ -58,6 +58,7 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemSele
     EditText expenseName, price;
     String type;
     String selectedFilter;
+    Boolean control=false;
     Spinner spin;
 
 
@@ -134,7 +135,6 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemSele
                 System.out.println(home.getPersonPhoto());
 
                 PopupMenu popup = new PopupMenu(getContext(), filter);
-                //popup.getMenuInflater().inflate(R.menu.date_picker_menu,popup.getMenu());
                 popup.inflate(R.menu.filter_menu_personal);
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
@@ -290,14 +290,23 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemSele
         remainingbudget.setText((budget - totExpense)+ " TL");
 
         if((budget - totExpense)<0){
+            control=true;
             personstatus.setImageResource(R.drawable.circle_background_red);
             progressBar.getProgressDrawable().setColorFilter(
                     getResources().getColor(R.color.red), android.graphics.PorterDuff.Mode.SRC_IN);
+
+
         }
         if((budget - totExpense)>=0){
             personstatus.setImageResource(R.drawable.circle_background_green);
-            progressBar.getProgressDrawable().setColorFilter(
-                    getResources().getColor(R.color.blue), android.graphics.PorterDuff.Mode.SRC_IN);
+            if(control==true){
+                progressBar.setProgressDrawable(getResources().getDrawable(R.drawable.progressbar_custom));
+            }
+            control=false;
+
+
+        /*   progressBar.getIndeterminateDrawable().setColorFilter(
+                    getResources().getColor(R.color.blue), android.graphics.PorterDuff.Mode.SRC_IN);*/
         }
 
         progressBar.setProgress(totExpense);

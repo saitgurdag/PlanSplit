@@ -33,6 +33,7 @@ public class FriendsFragment extends Fragment {
     private RecyclerView.LayoutManager m_LayoutManager;
     private String person_id = "";
     public static SearchView searchView;
+    public static ImageView filterBtn;
     private ImageView personImage;
     ImageView userBack;
     Bundle extras;
@@ -51,7 +52,7 @@ public class FriendsFragment extends Fragment {
         person_id = getArguments().get("person_id").toString();
         personImage=root.findViewById(R.id.notification_image2);
         Picasso.with(getContext()).load(home.getPersonPhoto()).into(personImage);
-
+        filterBtn=root.findViewById(R.id.friend_filter);
 
         m_RecyclerView = root.findViewById(R.id.recycler_friends);
         m_RecyclerView.setHasFixedSize(true);
