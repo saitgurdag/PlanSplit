@@ -163,7 +163,7 @@ public class EventsFragment extends Fragment {
         public void onGetDebtFromGroupRetrieveSuccess(float debt) {
             totDept+=debt;
             userDeptText.setText(getString(R.string.personal_debt) + " : " +String.valueOf(totDept)+" TL");
-            if(debt>0){
+            if(totDept>0){
                 backCircle.setImageResource(R.drawable.circle_background_red);
                 userDeptText.setTextColor(getResources().getColor(R.color.red));
             }else{
