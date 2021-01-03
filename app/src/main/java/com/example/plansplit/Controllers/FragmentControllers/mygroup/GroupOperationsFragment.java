@@ -13,6 +13,10 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.plansplit.Controllers.Adapters.GroupOperationsAdapter;
+import com.example.plansplit.Models.Database;
+import com.example.plansplit.Models.Objects.Expense;
+import com.example.plansplit.Models.Objects.Friend;
+import com.example.plansplit.Models.Objects.Groups;
 import com.example.plansplit.Models.Objects.Person;
 import com.example.plansplit.R;
 import com.github.mikephil.charting.charts.PieChart;
@@ -20,22 +24,29 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
 public class GroupOperationsFragment extends Fragment {
-    //BERKAY EKLEME KISMI
 
     RecyclerView recyclerView;
     GroupOperationsAdapter adapter;
-    ArrayList<Person> groupOperationsPersonList;
+    ArrayList<Person> groupOperationsPersonList = new ArrayList<>();
+    ArrayList<Friend> group_members_allstar = new ArrayList<>();
 
-    ArrayList<Integer> depthInInteger = new ArrayList();
+    private static final Database database = Database.getInstance();
+    Database db;
+    private String person_id;
+
+    ArrayList<Integer> debtInInteger = new ArrayList();
     public static ArrayList<Integer> colourArrayInteger = new ArrayList<>();
 
-    int totalDepth;
+
     int background;
-    //BERKAY EKLEME END
+    Bundle extras;
+    Groups group;
+
 
     public static GroupOperationsFragment newInstance() {
         return new GroupOperationsFragment();
@@ -45,115 +56,137 @@ public class GroupOperationsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
-        //BERKAY EKLEME KISMI
+        final View root = inflater.inflate(R.layout.fragment_group_operations, container, false);
+        db = new Database(getContext());
+        person_id = db.getUserId();
 
-        View root = inflater.inflate(R.layout.fragment_group_operations,container,false);
-        recyclerView = (RecyclerView) root.findViewById(R.id.recyclerGroupOperations);
-        recyclerView.setHasFixedSize(true);
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this.getContext(),3);
-        recyclerView.setLayoutManager(mLayoutManager);
+        extras = getArguments();
+        Gson gson = new Gson();
+        String json = extras.getString("group");
+        group = gson.fromJson(json, Groups.class);
+        String groupkey = group.getKey();
+        System.out.println(groupkey);
 
-        groupOperationsPersonList = new ArrayList<>();
+        database.getSelectedGroup(person_id, groupkey, new Database.GroupCallBack() {
+            @Override
+            public void onGroupRetrieveSuccess(Groups selected_group) {
+                group = selected_group;
+            }
 
-        recyclerView = root.findViewById(R.id.recyclerGroupOperations);
-        recyclerView.setHasFixedSize(true);
-        adapter =new GroupOperationsAdapter(groupOperationsPersonList);
+            @Override
+            public void onError(String error_tag, String error) {
 
-        recyclerView.setAdapter(adapter);
-        yazdir(groupOperationsPersonList);
-        totalDepth(depthInInteger);
-
-        System.out.println("TOPLAM BORC : "+totalDepth);
-
-        //PİE CHART BAŞLA
-        PieChart pieChart = root.findViewById(R.id.pieChart);
-        ArrayList<PieEntry> depthOfPerson = new ArrayList<>();
-
-        for (int i = 0;i<groupOperationsPersonList.size();i++){               //Pie Chart girdileri
-            depthOfPerson.add(new PieEntry(depthInInteger.get(i),""));
-        }
+            }
+        });
 
 
-        //Pie Chard Daki RENK OLAYI BAŞLANGIÇ
-
-        ArrayList<Integer> colors = new ArrayList<Integer>();
-        for (int c : ColorTemplate.VORDIPLOM_COLORS)
-            colors.add(c);
-
-        for (int c : ColorTemplate.JOYFUL_COLORS)
-            colors.add(c);
-
-        for (int c : ColorTemplate.COLORFUL_COLORS)
-            colors.add(c);
-
-        for (int c : ColorTemplate.LIBERTY_COLORS)
-            colors.add(c);
-
-        for (int c : ColorTemplate.PASTEL_COLORS)
-            colors.add(c);
-
-        //PİE CHART TAKİ RENK OLAYI BİTİŞ
-
-        PieDataSet pieDataSet = new PieDataSet(depthOfPerson,"");
-
-        pieChart.setHoleRadius(65);
-        pieDataSet.setValueTextColor(Color.BLACK);
-
-
-        pieDataSet.setColors(colors);
-
-
-        for (int i = 0;i<pieDataSet.getColors().size();i++){   // Dilimlerin renklerini int olarak alıp bir arraye attımki kişilerin arka planı yapayım
-            int k = pieDataSet.getColors().get(i);
-            colourArrayInteger.add(k);
-        }
+        final ArrayList<Expense> group_expenses = new ArrayList<>(group.expenses.values());
 
 
 
-        pieDataSet.setValueTextSize(13f);
+        database.getGroupMembersInfo(group.getGroup_members(), group_members_allstar, new Database.GetMemberInfoCallBack() {
+            @Override
+            public void onGetMemberInfoRetrieveSuccess(ArrayList<Friend> members) {
+                System.out.println(members.size());
+                ArrayList<Friend> group_members = new ArrayList<>();
+                group_members.addAll(members);
 
-        PieData pieData = new PieData(pieDataSet);
-        pieChart.setData(pieData);
-        pieChart.getDescription().setEnabled(false);
-        pieChart.getLegend().setEnabled(false);          //Daire dilimi dışındaki şeyleri seildik description boxları
-        pieChart.setCenterText(totalDepth+" TL");
-        pieChart.setCenterTextSize(20f);
-        pieChart.animate();
-        //PİE CHART BİTİŞ
+                System.out.println("Group members size: "+group_members.size());
+                for(Friend friend: group_members){
+                    groupOperationsPersonList.add(new Person(friend.getKey(), friend.getPerson_image().toString()));
+                }
+                int totalDepth = 0;
+                ArrayList<String> addedByIdOldList = new ArrayList<>();
+                for (int i = 0; i < group_expenses.size(); i++) {
+                    String addedById = group_expenses.get(i).getAddedById();
+                    if (!addedByIdOldList.contains(addedById)) {
+                        int total_expense = 0;
+                        for (int j = 0; j < group_expenses.size(); j++) {
+                            if (group_expenses.get(j).getAddedById().equals(addedById)) {
+                                total_expense += Integer.parseInt(group_expenses.get(j).getPrice());
+                            }
+                        }
+                        for(Person person: groupOperationsPersonList){
+                            String person_id = person.getPerson_id();
+                            if(person_id.equals(addedById)){
+                                person.setTotal_expense(String.valueOf(total_expense));
+                            }
+                        }
+                        totalDepth += total_expense;
+                        addedByIdOldList.add(addedById);
+                    }
+                }
+
+                System.out.println(groupOperationsPersonList.size());
+
+                recyclerView = (RecyclerView) root.findViewById(R.id.recyclerGroupOperations);
+                recyclerView.setHasFixedSize(true);
+                RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getContext(), 3);
+                recyclerView.setLayoutManager(mLayoutManager);
+                adapter = new GroupOperationsAdapter(getContext(), groupOperationsPersonList);
+                recyclerView.setAdapter(adapter);
+
+
+                ArrayList<PieEntry> depthOfPerson = new ArrayList<>();
+
+                for (int i = 0; i < groupOperationsPersonList.size(); i++) {               //Pie Chart girdileri
+                    depthOfPerson.add(new PieEntry(Integer.parseInt(groupOperationsPersonList.get(i).getTotal_expense()), ""));
+                }
+
+
+                ArrayList<Integer> colors = new ArrayList<Integer>();
+                for (int c : ColorTemplate.VORDIPLOM_COLORS)
+                    colors.add(c);
+
+                for (int c : ColorTemplate.JOYFUL_COLORS)
+                    colors.add(c);
+
+                for (int c : ColorTemplate.COLORFUL_COLORS)
+                    colors.add(c);
+
+                for (int c : ColorTemplate.LIBERTY_COLORS)
+                    colors.add(c);
+
+                for (int c : ColorTemplate.PASTEL_COLORS)
+                    colors.add(c);
+
+                PieChart pieChart = root.findViewById(R.id.pieChart);
+                PieDataSet pieDataSet = new PieDataSet(depthOfPerson, "");
+
+                pieChart.setHoleRadius(65);
+                pieDataSet.setValueTextColor(Color.BLACK);
+
+
+                pieDataSet.setColors(colors);
+
+
+                for (int i = 0; i < pieDataSet.getColors().size(); i++) {   // Dilimlerin renklerini int olarak alıp bir arraye attımki kişilerin arka planı yapayım
+                    int k = pieDataSet.getColors().get(i);
+                    colourArrayInteger.add(k);
+                }
+
+
+                pieDataSet.setValueTextSize(13f);
+
+                PieData pieData = new PieData(pieDataSet);
+                pieChart.setData(pieData);
+                pieChart.getDescription().setEnabled(false);
+                pieChart.getLegend().setEnabled(false);          //Daire dilimi dışındaki şeyleri seildik description boxları
+                pieChart.setCenterText(totalDepth + " TL");
+                pieChart.setCenterTextSize(20f);
+                pieChart.invalidate();
+                pieChart.animate();
+
+
+            }
+
+            @Override
+            public void onError(String error_tag, String error) {
+
+            }
+        });
 
         return root;
 
-        //BERKAY EKLEME KISMI BİTİŞ
-    }
-
-    //Daire Grafiği başla
-    public ArrayList getAllValues(ArrayList<Person> l){       // Recycler View daki kişilerin borcunu depthinString Arrayine atıyor
-        ArrayList  <String> depthInString = new ArrayList<>();
-        for(int i = 0; i < l.size() ; i++ ){
-            depthInString.add(l.get(i).getGroupDepth());
-        }
-        return depthInString;
-    }
-
-    public void yazdir(ArrayList l){                           //Depth in string deki String olarak tutulan borcu int e çavirip k ya eşitliyor
-        for(int i =0 ; i<getAllValues(l).size() ; i++ ){
-            int k =  Integer.parseInt((String) getAllValues(l).get(i));
-
-            depthInInteger.add(k);                             //Artık int olan k değerlerini int olan bir array e attık
-        }
-    }
-    public int totalDepth(ArrayList depthInInteger){            //Toplam borç
-        for (int i =0 ; i<depthInInteger.size(); i++){
-            int t = (int) depthInInteger.get(i);
-            totalDepth = totalDepth +t;
-        }
-        return totalDepth;
-    }
-
-    //Daire Grafiği bitiş
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
     }
 }

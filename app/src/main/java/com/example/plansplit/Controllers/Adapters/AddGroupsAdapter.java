@@ -1,5 +1,7 @@
 package com.example.plansplit.Controllers.Adapters;
+
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.plansplit.Models.Database;
 import com.example.plansplit.Models.Objects.Friend;
+import com.example.plansplit.Models.Objects.Groups;
 import com.example.plansplit.R;
 import com.google.android.gms.common.util.JsonUtils;
 import com.squareup.picasso.Picasso;
@@ -22,34 +25,124 @@ import java.util.List;
 
 public class AddGroupsAdapter extends RecyclerView.Adapter<AddGroupsAdapter.AddGroupViewHolder> {
 
-    private List<Friend> addgroups_personList;
-    public static List<Friend> checked_personList = new ArrayList<>();
+    private static final String TAG = "AddGroupsAdapter";
+    public static ArrayList<Friend> addgroups_personList = new ArrayList<>();
+    private ArrayList<Friend> bufferList = new ArrayList<>();
+    public static ArrayList<Friend> checked_personList = new ArrayList<>();
     Context mCtx;
-    AddGroupsAdapter.OnItemClickListener nListener;
     private Database database = Database.getInstance();
-    private String person_id;
     private RecyclerView m_RecyclerView;
+    private String id0;
+    private String id1;
+    private String type;
+    private Groups group;
+    private static ClickListener clickListener;
 
-    public interface ItemClickListener{
-        void OnItemClick(View v, int position);
-    }
 
-    public interface OnItemClickListener{
-        void onItemClick(int position);
-    }
-
-    public void setOnItemClickListener(AddGroupsAdapter.OnItemClickListener listener){
-        nListener = listener;
-    }
-
-    public AddGroupsAdapter(Context mCtx, String person_id, RecyclerView m_RecyclerView, List<Friend> addgroups_personList){
+    public AddGroupsAdapter(Context mCtx, RecyclerView m_RecyclerView, String type, String... ids) {
         this.mCtx = mCtx;
-        this.person_id = person_id;
+        this.type = type;
         this.m_RecyclerView = m_RecyclerView;
         this.addgroups_personList = new ArrayList<>();
-        database.getFriends(person_id, friendsCallBack);
-        checked_personList = new ArrayList<>();
+        addgroups_personList.clear();
+        checked_personList.clear();
+        bufferList.clear();
+        this.id0 = ids[0];
+        switch (type) {
+            case "add_members":
+                this.id1 = ids[1];
+                database.getSelectedGroup(null, ids[0], groupCallBack2); // ids[0] groupkey, ids[1] user_key
+                break;
+            case "new_group":
+                database.getFriends(ids[0], friendsCallBack); // ids[0] user_key
+                break;
+            case "group_members":
+                database.getSelectedGroup(null, ids[0], groupCallBack); // ids[0] groupkey
+                break;
+        }
     }
+
+    private final Database.FriendCallBack friendsCallBack2 = new Database.FriendCallBack() {
+        @Override
+        public void onFriendRetrieveSuccess(Friend friend) {
+            boolean already_exists = false;
+            for (Friend friend_obj : bufferList) {
+                if (friend_obj.getKey().equals(friend.getKey())) {
+                    already_exists = true;
+                }
+            }
+            if (!already_exists) {
+                addgroups_personList.add(friend);
+                notifyDataSetChanged();
+                m_RecyclerView.setAdapter(AddGroupsAdapter.this);
+            }
+
+
+        }
+
+        @Override
+        public void onError(String error_tag, String error) {
+            Log.e(error_tag, error);
+        }
+    };
+
+    private final Database.GroupCallBack groupCallBack2 = new Database.GroupCallBack() {
+        @Override
+        public void onGroupRetrieveSuccess(Groups selected_group) {
+            group = selected_group;
+            ArrayList<Friend> members = new ArrayList<>();
+            database.getGroupMembersInfo(selected_group.getGroup_members(), members, MembersCallBack2);
+        }
+
+        @Override
+        public void onError(String error_tag, String error) {
+            Log.e(error_tag, error);
+        }
+    };
+
+    private final Database.GetMemberInfoCallBack MembersCallBack2 = new Database.GetMemberInfoCallBack() {
+        @Override
+        public void onGetMemberInfoRetrieveSuccess(ArrayList<Friend> members) {
+            bufferList.clear();
+            bufferList.addAll(members);
+            database.getFriends(id1, friendsCallBack2);
+        }
+
+        @Override
+        public void onError(String error_tag, String error) {
+            Log.e(error_tag, error);
+        }
+    };
+
+//***************
+
+    private final Database.GroupCallBack groupCallBack = new Database.GroupCallBack() {
+        @Override
+        public void onGroupRetrieveSuccess(Groups selected_group) {
+            group = selected_group;
+            ArrayList<Friend> members = new ArrayList<>();
+            database.getGroupMembersInfo(selected_group.getGroup_members(), members, MembersCallBack);
+        }
+
+        @Override
+        public void onError(String error_tag, String error) {
+            Log.e(error_tag, error);
+        }
+    };
+
+    private final Database.GetMemberInfoCallBack MembersCallBack = new Database.GetMemberInfoCallBack() {
+        @Override
+        public void onGetMemberInfoRetrieveSuccess(ArrayList<Friend> members) {
+            addgroups_personList.addAll(members);
+            notifyDataSetChanged();
+            m_RecyclerView.setAdapter(AddGroupsAdapter.this);
+        }
+
+        @Override
+        public void onError(String error_tag, String error) {
+            Log.e(error_tag, error);
+        }
+    };
 
     private Database.FriendCallBack friendsCallBack = new Database.FriendCallBack() {
         @Override
@@ -61,7 +154,7 @@ public class AddGroupsAdapter extends RecyclerView.Adapter<AddGroupsAdapter.AddG
 
         @Override
         public void onError(String error_tag, String error) {
-
+            Log.e(error_tag, error);
         }
 
 
@@ -71,7 +164,7 @@ public class AddGroupsAdapter extends RecyclerView.Adapter<AddGroupsAdapter.AddG
     @Override
     public AddGroupViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_addgroups_person, parent, false);
-        AddGroupsAdapter.AddGroupViewHolder fvh = new AddGroupsAdapter.AddGroupViewHolder(v, nListener);
+        AddGroupsAdapter.AddGroupViewHolder fvh = new AddGroupsAdapter.AddGroupViewHolder(v);
         return fvh;
     }
 
@@ -80,20 +173,7 @@ public class AddGroupsAdapter extends RecyclerView.Adapter<AddGroupsAdapter.AddG
         final Friend addgroups_person = addgroups_personList.get(position);
         holder.Name.setText(addgroups_person.getName());
         holder.Mail.setText(addgroups_person.getMail());
-        Picasso.with(mCtx).load(addgroups_person.getPerson_image()).into( holder.addFriendImage);
-        //holder.cardView_addgroups.setForeground(mCtx.getResources().getDrawable(R.drawable.denemeresim));
-
-        holder.setItemClickListener(new ItemClickListener() {
-            @Override
-            public void OnItemClick(View v, int position) {
-                CheckBox checkBox_selected_friends = (CheckBox) v;
-                if(checkBox_selected_friends.isChecked()){
-                    checked_personList.add(addgroups_personList.get(position));
-                }else{
-                    checked_personList.remove(addgroups_personList.get(position));
-                }
-            }
-        });
+        Picasso.with(mCtx).load(addgroups_person.getPerson_image()).into(holder.addFriendImage);
     }
 
     @Override
@@ -106,35 +186,61 @@ public class AddGroupsAdapter extends RecyclerView.Adapter<AddGroupsAdapter.AddG
         public TextView Mail;
         public ImageView addFriendImage;
         public CheckBox checkBox_selected_friends;
-        ItemClickListener itemClickListener;
 
-        public AddGroupViewHolder(@NonNull View itemView, final AddGroupsAdapter.OnItemClickListener nListener) {
+        public AddGroupViewHolder(@NonNull View itemView) {
             super(itemView);
             this.Name = (TextView) itemView.findViewById(R.id.textViewName);
             this.Mail = (TextView) itemView.findViewById(R.id.textViewMail);
             this.addFriendImage = (ImageView) itemView.findViewById(R.id.imageViewAddFriendToGroup);
             this.checkBox_selected_friends = (CheckBox) itemView.findViewById(R.id.checkBox_selected_friend);
-            checkBox_selected_friends.setOnClickListener(this);
 
-            itemView.findViewById(R.id.cardView_addgroupsPicture).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (nListener != null) {
-                        int position = getAdapterPosition();
-                        if (position != RecyclerView.NO_POSITION) {
-                            nListener.onItemClick(position);
+            switch (type) {
+                case "add_members":
+                    checkBox_selected_friends.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            CheckBox checkBox_selected_friends = (CheckBox) view;
+                            if (checkBox_selected_friends.isChecked()) {
+                                checked_personList.add(addgroups_personList.get(getAdapterPosition()));
+                            } else {
+                                checked_personList.remove(addgroups_personList.get(getAdapterPosition()));
+                            }
                         }
-                    }
-                }
-            });
-        }
-        public void setItemClickListener(ItemClickListener ic){
-            this.itemClickListener=ic;
+                    });
+                    break;
+                case "new_group":
+                    System.out.println();
+                    checkBox_selected_friends.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            CheckBox checkBox_selected_friends = (CheckBox) view;
+                            if (checkBox_selected_friends.isChecked()) {
+                                checked_personList.add(addgroups_personList.get(getAdapterPosition()));
+                            } else {
+                                checked_personList.remove(addgroups_personList.get(getAdapterPosition()));
+                            }
+                        }
+                    });
+                    break;
+                case "group_members":
+                    checkBox_selected_friends.setVisibility(View.INVISIBLE);
+                    itemView.setOnClickListener(this);
+                    break;
+            }
         }
 
         @Override
         public void onClick(View view) {
-            this.itemClickListener.OnItemClick(view, getLayoutPosition());
+            clickListener.onItemClick(getAdapterPosition(), view);
         }
     }
+
+    public void setOnItemClickListener(ClickListener clickListener) {
+        AddGroupsAdapter.clickListener = clickListener;
+    }
+
+    public interface ClickListener {
+        void onItemClick(int position, View v);
+    }
 }
+

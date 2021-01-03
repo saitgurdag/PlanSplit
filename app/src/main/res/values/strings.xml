@@ -30,6 +30,7 @@
     <string name="group_settings" translatable="false">Grup Ayarları</string>
     <string name="create_group" translatable="false">GRUBU OLUŞTUR</string>
     <string name="group_members" translatable="false">Grup Üyeleri</string>
+    <string name="add_friends_in_group" translatable="false">Gruba arkadaş ekle</string>
     <string name="please_give_group_name" translatable="false">Lütfen grup ismi giriniz</string>
     <string name="current_dept_status" translatable="false">Güncel Borç Bilgisi</string>
     <string name="enter_amount" translatable="false">Miktarı Girin</string>

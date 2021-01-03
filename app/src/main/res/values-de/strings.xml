@@ -32,6 +32,7 @@
     <string name="group_settings" translatable="false">Gruppeneinstellungen</string>
     <string name="create_group" translatable="false">GRUPPE ERSTELLEN</string>
     <string name="group_members" translatable="false">Gruppenmitglieder</string>
+    <string name="add_friends_in_group" translatable="false">Füge Freund zu Gruppe hinzu</string>
     <string name="please_give_group_name" translatable="false">Bitte geben Sie den Gruppennamen ein</string>
     <string name="current_dept_status" translatable="false">Momentan Schuld Information</string>
     <string name="enter_amount" translatable="false">Geben Sie Betrag</string>

@@ -19,8 +19,10 @@ import com.example.plansplit.Controllers.HomeActivity;
 import com.example.plansplit.Controllers.MyGroupActivity;
 import com.example.plansplit.Models.Database;
 import com.example.plansplit.Models.Objects.Friend;
+import com.example.plansplit.Models.Objects.Groups;
 import com.example.plansplit.Models.Objects.Transfers;
 import com.example.plansplit.R;
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
@@ -38,6 +40,8 @@ public class EventsFragment extends Fragment {
     ArrayList<Transfers>GroupEventsObjectList = new ArrayList<>();
     ImageView backCircle;
     float totDept;
+    Groups group;
+    Friend friend;
 
     public static EventsFragment newInstance() {
         return new EventsFragment();
@@ -67,12 +71,21 @@ public class EventsFragment extends Fragment {
             openPayFragment();
             }
         });
-        if(myGroupActivity.getType().equals("group")){
-            db.getExpensesFromGroup(myGroupActivity.getGroup().getGroupKey());      //mygroupp hatası olabilir
+
+        Bundle extras = getArguments();
+
+        if(extras != null && extras.keySet().contains("group")){
+            Gson gson = new Gson();
+            String json = extras.getString("group");
+            group = gson.fromJson(json, Groups.class);
+            db.getExpensesFromGroup(group.getKey());
             ArrayList<Friend> members = new ArrayList<>();
             db.getGroupMembersInfo(((MyGroupActivity) getContext()).getGroup().getGroup_members(),members, memberCallBack );
-        }else if(myGroupActivity.getType().equals("friend")){
-            db.getExpensesFromFriend(myGroupActivity.getFriend().getFriendshipsKey());      //mygroupp hatası olabilir
+        }else if(extras != null && extras.keySet().contains("friend")){
+            Gson gson = new Gson();
+            String json = extras.getString("friend");
+            friend = gson.fromJson(json, Friend.class);
+            db.getExpensesFromFriend(friend.getFriendshipsKey());
             db.getDebtFromFriend(HomeActivity.getPersonId(), ((MyGroupActivity) getContext()).getFriend(), friendCallBack);
         }
 
