@@ -10,7 +10,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.plansplit.Controllers.MainActivity;
 import com.example.plansplit.Models.Objects.Expense;
 import com.example.plansplit.R;
 import java.util.List;
@@ -49,8 +48,8 @@ public class ExpensesAdapter extends RecyclerView.Adapter<ExpensesAdapter.Expens
     public void onBindViewHolder(@NonNull ExpensesViewHolder holder, int position) {
 
         Expense expense = expensesList.get(position);
-        holder.price.setText(expense.getPrice());
-        holder.name.setText(expense.getExpense_name());
+        holder.price.setText(expense.getPrice_int());
+        holder.name.setText(expense.getName());
 
         String type = "";
 
@@ -116,7 +115,6 @@ public class ExpensesAdapter extends RecyclerView.Adapter<ExpensesAdapter.Expens
             }
             holder.type.setText(type);
         }
-
 
     }
 

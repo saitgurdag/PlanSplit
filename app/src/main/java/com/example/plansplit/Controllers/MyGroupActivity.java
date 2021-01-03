@@ -1,5 +1,6 @@
 package com.example.plansplit.Controllers;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -7,6 +8,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -15,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -36,7 +39,7 @@ import java.util.ArrayList;
 
 public class MyGroupActivity extends AppCompatActivity {
     private static final String TAG = "MyGroupActivity";
-    Database database ;
+    Database database;
     public String person_id = "";
     private Friend friend;
     private Groups group;
@@ -51,10 +54,14 @@ public class MyGroupActivity extends AppCompatActivity {
     int workPicture = R.drawable.ic_suitcase_radius;
     int tripPicture = R.drawable.ic_trip_radius;
     int otherPicture = R.drawable.ic_other;
-    String control_list="control";
+    ImageButton menu, listBttn, eventsBttn, groupOpBttn;
+    TextView list_titleTv, events_titleTv, group_op_titletV;
+    Button removeGroupBttn;
+    String control_list = "control";
     String todolistfriend = null;
     ArrayList<Friend> groupMembersInfos = new ArrayList<>();
     Bundle extras;
+    Bundle bundle = new Bundle();
     private ImageView add_expense_btn;
     NavController navController;
     private int naviIdPay;
@@ -83,13 +90,27 @@ public class MyGroupActivity extends AppCompatActivity {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 if (menuItem.getItemId() == R.id.mygroup_group_options) {
-                    AddGroupsFragment addGroupsFragment = new AddGroupsFragment();
-                    FragmentManager fragmentManager = getSupportFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.replace(R.id.fragment_place_mygroup, addGroupsFragment); // Başka aktivitedeki fragment'a erişemiyorum
-                    fragmentTransaction.addToBackStack(null);
-                    fragmentTransaction.commit();
-                    Toast.makeText(MyGroupActivity.this, "Grup Ayarları Seçildi", Toast.LENGTH_SHORT).show();
+                    bundle = new Bundle();
+                    System.out.println("Grup keyi buton click: " + group.getKey());
+                    Gson gson = new Gson();
+                    String json = gson.toJson(group);
+                    bundle.putString("group", json);
+                    navController.navigate(R.id.navi_group_operation, bundle);
+
+                    menu.setVisibility(View.INVISIBLE);
+                    listBttn.setVisibility(View.INVISIBLE);
+                    eventsBttn.setVisibility(View.INVISIBLE);
+                    groupOpBttn.setVisibility(View.INVISIBLE);
+                    list_titleTv.setVisibility(View.INVISIBLE);
+                    events_titleTv.setVisibility(View.INVISIBLE);
+                    group_op_titletV.setVisibility(View.INVISIBLE);
+                    add_expense_btn.setVisibility(View.INVISIBLE);
+                    removeGroupBttn.setVisibility(View.INVISIBLE);
+
+                    String group_admin_id = group.getGroup_members().get(0);
+                    if (person_id.equals(group_admin_id)) {
+                        removeGroupBttn.setVisibility(View.VISIBLE);
+                    }
                 }
                 if (menuItem.getItemId() == R.id.mygroup_table_export)
                     Toast.makeText(MyGroupActivity.this, "Tablo Olarak Çıkar Seçildi", Toast.LENGTH_SHORT).show();
@@ -118,26 +139,26 @@ public class MyGroupActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        database=new Database(getBaseContext());
+        database = new Database(getBaseContext());
         super.onCreate(savedInstanceState);
-        person_id=database.getUserId();
+        person_id = database.getUserId();
         setContentView(R.layout.activity_mygroup);
         intent = new Intent(MyGroupActivity.this, HomeActivity.class);
         TextView groupnameTv = findViewById(R.id.group_title_mygroupTv);
-        final TextView list_titleTv = findViewById(R.id.list_buttonTv);
-        final TextView events_titleTv = findViewById(R.id.events_buttonTv);
-        final TextView group_op_titletV = findViewById(R.id.group_op_buttonTv);
+        list_titleTv = findViewById(R.id.list_buttonTv);
+        events_titleTv = findViewById(R.id.events_buttonTv);
+        group_op_titletV = findViewById(R.id.group_op_buttonTv);
         final TextView remove_txt = findViewById(R.id.remove_friend);
         LinearLayout l = findViewById(R.id.remove_friend_linear);
         ImageView groupPhotoIv = findViewById(R.id.group_pictureIv);
-        ImageButton listBttn = findViewById(R.id.task_listButton);
-        ImageButton eventsBttn = findViewById(R.id.eventsButton);
-        ImageButton groupOpBttn = findViewById(R.id.groupOpButton);
+        listBttn = findViewById(R.id.task_listButton);
+        eventsBttn = findViewById(R.id.eventsButton);
+        groupOpBttn = findViewById(R.id.groupOpButton);
         ImageButton backBttn = findViewById(R.id.mygroup_back_button);
         ImageButton removeFriendBttn = findViewById(R.id.removeFriendButton);
-        ImageButton menu = findViewById(R.id.mygroup_menuline_button);
+        menu = findViewById(R.id.mygroup_menuline_button);
+        removeGroupBttn = findViewById(R.id.remove_group_button);
         add_expense_btn = findViewById(R.id.add_expense);
-
 
 
         navView = findViewById(R.id.nav_view2);
@@ -169,7 +190,6 @@ public class MyGroupActivity extends AppCompatActivity {
         });
 
 
-       
         extras = getIntent().getExtras();
         navController = Navigation.findNavController(this, R.id.fragment_place_mygroup);
 
@@ -178,38 +198,48 @@ public class MyGroupActivity extends AppCompatActivity {
 
         if (extras != null && extras.keySet().contains("group")) {
             navView.getMenu().getItem(2).setChecked(true);
-            if(extras.keySet().contains("group_back")){
-                control_list="group_list";
+            if (extras.keySet().contains("group_back")) {
+                control_list = "group_list";
             }
-            Gson gson = new Gson();
-            String json = extras.getString("group");
-            group = gson.fromJson(json, Groups.class);
-            group_title = group.getGroup_name();
-            String resid = group.getGroup_type();
-            if (resid.equals(group_type_option_home)) {
-                groupPhotoIv.setImageResource(homePicture);
-            } else if (resid.equals(group_type_option_work)) {
-                groupPhotoIv.setImageResource(workPicture);
-            } else if (resid.equals(group_type_option_trip)) {
-                groupPhotoIv.setImageResource(tripPicture);
-            } else if (resid.equals(group_type_option_other)) {
-                groupPhotoIv.setImageResource(otherPicture);
-            }
+            listBttn.setVisibility(View.VISIBLE);
+            eventsBttn.setVisibility(View.VISIBLE);
             groupOpBttn.setVisibility(View.VISIBLE);
+            list_titleTv.setVisibility(View.VISIBLE);
+            events_titleTv.setVisibility(View.VISIBLE);
+            group_op_titletV.setVisibility(View.VISIBLE);
             removeFriendBttn.setVisibility(View.INVISIBLE);
             l.setVisibility(View.INVISIBLE);
             menu.setVisibility(View.VISIBLE);
+
+            Gson gson = new Gson();
+            String json = extras.getString("group");
+            group = gson.fromJson(json, Groups.class);
+            setGroup(group);
+
+            String json2 = gson.toJson(group);
+            bundle.putString("group", json2);
+            navController.navigate(R.id.navi_events, bundle);
+
+            group_title = group.getGroup_name();
+            String resid = group.getGroup_type();
+            getGroupphoto(resid, groupPhotoIv);
+
             ctrlType = false;
-        } if (extras != null && extras.keySet().contains("friend")) {
+        }
+        if (extras != null && extras.keySet().contains("friend")) {
             navView.getMenu().getItem(1).setChecked(true);
-            if(extras.keySet().contains("friend_back")){
-                control_list="friend_list";
-                System.out.println("buraya kadar geldin lan");
+            if (extras.keySet().contains("friend_back")) {
+                control_list = "friend_list";
             }
             Gson gson = new Gson();
             String json = extras.getString("friend");
             friend = gson.fromJson(json, Friend.class);
             todolistfriend = friend.getKey();
+
+            String json2 = gson.toJson(friend);
+            bundle.putString("friend", json2);
+            navController.navigate(R.id.navi_events, bundle);
+
             System.out.println(todolistfriend);
             if (extras.keySet().contains("person_id")) {
                 person_id = extras.getString("person_id");
@@ -231,9 +261,9 @@ public class MyGroupActivity extends AppCompatActivity {
         group_op_titletV.setVisibility(View.GONE);
         remove_txt.setVisibility(View.GONE);
 
-        if(extras != null && extras.keySet().contains("friend_to_list")){
+        if (extras != null && extras.keySet().contains("friend_to_list")) {
             navView.getMenu().getItem(1).setChecked(true);
-            control_list="friend_list";
+            control_list = "friend_list";
             groupOpBttn.setVisibility(View.INVISIBLE);
             removeFriendBttn.setVisibility(View.VISIBLE);
             l.setVisibility(View.VISIBLE);
@@ -243,11 +273,11 @@ public class MyGroupActivity extends AppCompatActivity {
             String json = extras.getString("friend_to_list");
             friend = gson.fromJson(json, Friend.class);
             setFriend(friend);
-            ctrlType=true;
+            ctrlType = true;
             Picasso.with(getApplicationContext()).load(friend.getPerson_image()).into(groupPhotoIv);
             group_title = friend.getName();
             groupnameTv.setText(group_title);
-            System.out.println("arkadaş keyi: "+friend.getKey() +" personidsi "+database.getUserId());
+            System.out.println("arkadaş keyi: " + friend.getKey() + " personidsi " + database.getUserId());
             bundlelistfriends.putString("friend_key", friend.getKey());
             bundlelistfriends.putString("person_key", database.getUserId());
             navController.navigate(R.id.navi_todo_list, bundlelistfriends);
@@ -257,15 +287,15 @@ public class MyGroupActivity extends AppCompatActivity {
 
         }
 
-        if(extras != null && extras.keySet().contains("group_to_list")){
+        if (extras != null && extras.keySet().contains("group_to_list")) {
             navView.getMenu().getItem(2).setChecked(true);
-            control_list="group_list";
+            control_list = "group_list";
             Bundle bundlelistgroup = new Bundle();
             Gson gson = new Gson();
             String json = extras.getString("group_to_list");
             group = gson.fromJson(json, Groups.class);
             setGroup(group);
-            ctrlType=false;
+            ctrlType = false;
             group_title = group.getGroup_name();
             groupnameTv.setText(group_title);
             String resid = group.getGroup_type();
@@ -290,8 +320,8 @@ public class MyGroupActivity extends AppCompatActivity {
         listBttn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                      if (!ctrlType){
-                        group_op_titletV.setVisibility(View.GONE);
+                if (!ctrlType) {
+                    group_op_titletV.setVisibility(View.GONE);
                 }
 
                 if (extras != null && extras.keySet().contains("group")) {
@@ -299,7 +329,7 @@ public class MyGroupActivity extends AppCompatActivity {
                     Gson gson = new Gson();
                     String json = extras.getString("group");
                     group = gson.fromJson(json, Groups.class);
-                    bundlelistgroup.putString("group_title", group.getGroupKey());
+                    bundlelistgroup.putString("group_title", group.getKey());
                     navController.navigate(R.id.navi_todo_list, bundlelistgroup);
                     add_expense_btn.setVisibility(View.GONE);
                     list_titleTv.setVisibility(View.VISIBLE);
@@ -315,17 +345,16 @@ public class MyGroupActivity extends AppCompatActivity {
                     add_expense_btn.setVisibility(View.GONE);
                     list_titleTv.setVisibility(View.VISIBLE);
                     events_titleTv.setVisibility(View.GONE);
-                }
-               else{
-                  if (control_list.equals("friend_list")) {
-                      Bundle bundlelistfriends = new Bundle();
-                      bundlelistfriends.putString("friend_key", friend.getKey());
-                      bundlelistfriends.putString("person_key", database.getUserId());
-                      navController.navigate(R.id.navi_todo_list, bundlelistfriends);
-                      add_expense_btn.setVisibility(View.GONE);
-                      list_titleTv.setVisibility(View.VISIBLE);
-                      events_titleTv.setVisibility(View.GONE);
-                  }
+                } else {
+                    if (control_list.equals("friend_list")) {
+                        Bundle bundlelistfriends = new Bundle();
+                        bundlelistfriends.putString("friend_key", friend.getKey());
+                        bundlelistfriends.putString("person_key", database.getUserId());
+                        navController.navigate(R.id.navi_todo_list, bundlelistfriends);
+                        add_expense_btn.setVisibility(View.GONE);
+                        list_titleTv.setVisibility(View.VISIBLE);
+                        events_titleTv.setVisibility(View.GONE);
+                    }
 
                     if ((control_list.equals("group_list"))) {
                         Bundle bundlelistgroup = new Bundle();
@@ -344,13 +373,21 @@ public class MyGroupActivity extends AppCompatActivity {
         eventsBttn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("event butonuna basıldı");
-                navController.navigate(R.id.navi_events);
+                Gson gson = new Gson();
                 events_titleTv.setVisibility(View.VISIBLE);
                 list_titleTv.setVisibility(View.GONE);
                 add_expense_btn.setVisibility(View.VISIBLE);
-                if (!ctrlType)
+
+                if (ctrlType) {
+                    String json2 = gson.toJson(friend);
+                    bundle.putString("friend", json2);
+                    navController.navigate(R.id.navi_events, bundle);
+                } else if (!ctrlType){
                     group_op_titletV.setVisibility(View.GONE);
+                    String json = gson.toJson(group);
+                    bundle.putString("group", json);
+                    navController.navigate(R.id.navi_events, bundle);
+                }
             }
         });
 
@@ -358,7 +395,10 @@ public class MyGroupActivity extends AppCompatActivity {
             groupOpBttn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    navController.navigate(R.id.navi_operation);
+                    Gson gson = new Gson();
+                    String json = gson.toJson(group);
+                    bundle.putString("group", json);
+                    navController.navigate(R.id.navi_operation, bundle);
                     group_op_titletV.setVisibility(View.VISIBLE);
                     events_titleTv.setVisibility(View.GONE);
                     add_expense_btn.setVisibility(View.GONE);
@@ -374,7 +414,7 @@ public class MyGroupActivity extends AppCompatActivity {
                         public void onSuccess(String success) {
                             Log.i(TAG, success);
                             Toast.makeText(getBaseContext(), "Arkadaş silindi", Toast.LENGTH_SHORT).show();
-                           loadActivity("friends");
+                            loadActivity("friends");
                         }
 
                         @Override
@@ -385,6 +425,13 @@ public class MyGroupActivity extends AppCompatActivity {
                 }
             });
         }
+
+        removeGroupBttn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showAlertForDeleteGroup(group);
+            }
+        });
 
 
         backBttn.setOnClickListener(new View.OnClickListener() {
@@ -412,14 +459,15 @@ public class MyGroupActivity extends AppCompatActivity {
         });
 
     }
+
     private final Database.GetMemberInfoCallBack databaseCallBack = new Database.GetMemberInfoCallBack() {
         @Override
         public void onGetMemberInfoRetrieveSuccess(ArrayList<Friend> members) {
             Bundle bundle = new Bundle();
-            if(members.size()==1){
+            if (members.size() == 1) {
                 members.get(0).setFriendshipsKey(friend.getFriendshipsKey());
-            }else{
-                for (Friend member : members){
+            } else {
+                for (Friend member : members) {
                     member.setFriendshipsKey(group.getKey());
                 }
             }
@@ -438,34 +486,77 @@ public class MyGroupActivity extends AppCompatActivity {
     };
 
 
-    public void setNaviPay(int id){
+    public void setNaviPay(int id) {
         naviIdPay = id;
         ArrayList<Friend> members = new ArrayList<>();
-        if(!ctrlType) {
+        if (!ctrlType) {
             database.getGroupMembersInfo(group.getGroup_members(), members, databaseCallBack);
-        }else{
+        } else {
             ArrayList<String> f = new ArrayList<>();
             f.add(friend.getKey());
             database.getGroupMembersInfo(f, members, databaseCallBack);
         }
     }
 
-    public void setNavController(int i){
+    public void setNavController(int i) {
         navController.navigate(i);
         add_expense_btn.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void onBackPressed() {
-        if(control_list.equals("friend_list")){
+        if (control_list.equals("friend_list")) {
             loadActivity("friends");
+            finish();
         }
-        if(control_list.equals("group_list")) {
+        if (control_list.equals("group_list")) {
             loadActivity("groups");
-        }
-        else{
+            finish();
+        } else {
             super.onBackPressed();
+            finish();
         }
 
     }
+
+    private void showAlertForDeleteGroup(final Groups group) {
+        final AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setMessage("Grubu silmek istediğinizden emin misiniz?");
+        alert.setPositiveButton("Evet", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                database.deleteGroup(group, new Database.DatabaseCallBack() {
+                    @Override
+                    public void onSuccess(String success) {
+                        Log.i(TAG, success);
+                        loadActivity("groups");
+                    }
+
+                    @Override
+                    public void onError(String error_tag, String error) {
+                        Log.e(TAG, error_tag + ": " + error);
+                    }
+                });
+            }
+        });
+        alert.setNegativeButton("Hayır", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+            }
+        });
+        alert.create().show();
+    }
+
+    private void getGroupphoto(String resid, ImageView groupPhotoIv) {
+        if (resid.equals(group_type_option_home)) {
+            groupPhotoIv.setImageResource(homePicture);
+        } else if (resid.equals(group_type_option_work)) {
+            groupPhotoIv.setImageResource(workPicture);
+        } else if (resid.equals(group_type_option_trip)) {
+            groupPhotoIv.setImageResource(tripPicture);
+        } else if (resid.equals(group_type_option_other)) {
+            groupPhotoIv.setImageResource(otherPicture);
+        }
+    }
+
 }

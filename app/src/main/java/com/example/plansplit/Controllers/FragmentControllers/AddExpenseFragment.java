@@ -79,7 +79,7 @@ public class AddExpenseFragment extends Fragment {
                     String json = extras.getString("group");
                     group = gson.fromJson(json, Groups.class);
                     intent.putExtra("group", json);
-                    intent.putExtra("friend_back", "back");
+                    intent.putExtra("group_back", "back");
                     startActivity(intent);
                 }
                 if (extras.keySet().contains("friend_key_list")) {
@@ -88,7 +88,7 @@ public class AddExpenseFragment extends Fragment {
                     String json = extras.getString("friend_from_list");
                     friend = gson.fromJson(json, Friend.class);
                     intent.putExtra("friend_to_list", json);
-                    intent.putExtra("group_back", "back");
+                    intent.putExtra("friend_back", "back");
                     startActivity(intent);
 
                 }
@@ -98,6 +98,7 @@ public class AddExpenseFragment extends Fragment {
                     String json = extras.getString("group_from_list");
                     group = gson.fromJson(json, Groups.class);
                     intent.putExtra("group_to_list", json);
+                    intent.putExtra("group_to_back", "back");
                     startActivity(intent);
                 }
             }
@@ -268,7 +269,6 @@ public class AddExpenseFragment extends Fragment {
                         String description=extras.getString("description");
                         ctrlFG=true;
                         friend = gson.fromJson(json, Friend.class);
-                       // db.addExpenseToFriends(expensename, expenseType, expenseamounth, friendkey, date);
                         db.updateDoListFriend(friend.getKey(),todo_key,"delete",databaseCallBack );
                         intent.putExtra("friend", json);
                         getContext().startActivity(intent);
@@ -282,7 +282,6 @@ public class AddExpenseFragment extends Fragment {
                         String groupkey=extras.getString("group_key_list");
                         String todo_key=extras.getString("todo_key");
                         String description=extras.getString("description");
-                      //  db.addExpenseToGroups(expensename, expenseType, expenseamounth, groupkey, date, group.getGroup_members());;
                         db.updateDoListGroup(groupkey,todo_key,"delete",databaseCallBack );
                         intent.putExtra("group", json);
                         getContext().startActivity(intent);

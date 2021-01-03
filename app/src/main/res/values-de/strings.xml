@@ -19,6 +19,7 @@
     <string name="title_contact" translatable="false">Kontakt</string>
     <string name="title_rate" translatable="false">Bewerten</string>
     <string name="title_home" translatable="false">Startseite</string>
+    <string name="title_remaining_budget" translatable="false">Budget Übrig :</string>
     <string name="header_user_name" translatable="false">Albert Einstein</string>
     <string name="header_gmail" translatable="false"> albertenisten@gmail.com</string>
     <string name="header_profile_button" translatable="false">Profil</string>
@@ -31,6 +32,7 @@
     <string name="group_settings" translatable="false">Gruppeneinstellungen</string>
     <string name="create_group" translatable="false">GRUPPE ERSTELLEN</string>
     <string name="group_members" translatable="false">Gruppenmitglieder</string>
+    <string name="add_friends_in_group" translatable="false">Füge Freund zu Gruppe hinzu</string>
     <string name="please_give_group_name" translatable="false">Bitte geben Sie den Gruppennamen ein</string>
     <string name="current_dept_status" translatable="false">Momentan Schuld Information</string>
     <string name="enter_amount" translatable="false">Geben Sie Betrag</string>
@@ -130,5 +132,9 @@
     <string name="total_claimant" translatable="false">Total benehmen : </string>
     <string name="add_friend" translatable="false">Addiere Freund</string>
     <string name="add_new_group" translatable="false">ADDIERE NEUE GRUPPE</string>
-    <string name="title_expenses">Kosten</string>
+    <string name="title_expenses" translatable="false">Kosten</string>
+    <string name="title_debts">schulden</string>
+    <string name="group_totalExpense">Gesamtes Kosten in Gruppe</string>
+    <string name="fromGroupDelete">diese Person von der Gruppe entfrenen</string>
+    <string name="fromGroupDeleted">diese Person von der Gruppe entfrenet</string>
 </resources>

@@ -7,302 +7,307 @@
     android:layout_gravity="center"
     android:background="@color/white">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent">
 
-        <RelativeLayout
-            android:id="@+id/relativeLayoutGroups"
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="90dp">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <LinearLayout
+            <RelativeLayout
+                android:id="@+id/relativeLayoutGroups"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:id="@+id/GroupPicture_ImageView"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
-                    android:background="@drawable/ic_create_new_group_icon"
-                    android:elevation="5dp"
-                    android:padding="15dp"
-                    android:src="@drawable/ic_home_black_radius"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                android:layout_height="90dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center|left"
-                    android:orientation="vertical"
-                    android:paddingTop="5dp">
+                    android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/textHeaderMail"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="16dp"
+                    <ImageView
+                        android:id="@+id/GroupPicture_ImageView"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:layout_marginStart="16dp"
                         android:layout_marginTop="16dp"
-                        android:layout_toRightOf="@+id/GroupPicture_ImageView"
-                        android:fontFamily="@font/avenir"
-                        android:text="@string/group_title"
-                        android:textColor="@color/black"
-                        android:textSize="20sp" />
+                        android:background="@drawable/ic_create_new_group_icon"
+                        android:elevation="5dp"
+                        android:padding="15dp"
+                        android:src="@drawable/ic_home_black_radius"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                    <EditText
-                        android:id="@+id/editTextExpenseName"
-                        android:layout_width="270dp"
-                        android:layout_height="match_parent"
-                        android:layout_below="@+id/textHeaderMail"
-                        android:layout_marginLeft="15dp"
-                        android:layout_toRightOf="@+id/GroupPicture_ImageView"
-                        android:fontFamily="@font/avenir"
-                        android:hint="@string/write_group_name"
-                        android:inputType="textPersonName"
-                        android:maxLength="20" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center|left"
+                        android:orientation="vertical"
+                        android:paddingTop="5dp">
+
+                        <TextView
+                            android:id="@+id/textHeaderMail"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginTop="16dp"
+                            android:layout_toRightOf="@+id/GroupPicture_ImageView"
+                            android:fontFamily="@font/avenir"
+                            android:text="@string/group_title"
+                            android:textColor="@color/black"
+                            android:textSize="20sp" />
+
+                        <EditText
+                            android:id="@+id/editTextGroupName"
+                            android:layout_width="270dp"
+                            android:layout_height="match_parent"
+                            android:layout_below="@+id/textHeaderMail"
+                            android:layout_marginLeft="15dp"
+                            android:layout_toRightOf="@+id/GroupPicture_ImageView"
+                            android:fontFamily="@font/avenir"
+                            android:hint="@string/write_group_name"
+                            android:inputType="textPersonName"
+                            android:maxLength="20" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
-            </LinearLayout>
+            </RelativeLayout>
 
-        </RelativeLayout>
+            <LinearLayout
 
-        <LinearLayout
-
-            android:id="@+id/linearLayoutSelectionButtons"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <RadioGroup
-                android:id="@+id/rgroupButton2"
-                android:layout_width="match_parent"
-                android:layout_height="35dp"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:paddingHorizontal="50dp">
-
-                <androidx.appcompat.widget.AppCompatRadioButton
-                    android:id="@+id/rbuttonFood"
-                    android:layout_width="0dp"
-                    android:layout_height="30dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/radio_button_selector"
-                    android:button="@android:color/transparent"
-                    android:checked="true"
-                    android:elevation="5dp"
-                    android:fontFamily="@font/avenir"
-                    android:gravity="center"
-                    android:text="@string/home"
-                    android:textColor="@color/white" />
-
-                <androidx.appcompat.widget.AppCompatRadioButton
-                    android:id="@+id/rbuttonWear"
-                    android:layout_width="0dp"
-                    android:layout_height="30dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/radio_button_selector"
-                    android:button="@android:color/transparent"
-                    android:elevation="5dp"
-                    android:fontFamily="@font/avenir"
-                    android:gravity="center"
-                    android:text="@string/work"
-                    android:textColor="@color/black" />
-
-                <androidx.appcompat.widget.AppCompatRadioButton
-                    android:id="@+id/rbuttonStationery"
-                    android:layout_width="0dp"
-                    android:layout_height="30dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/radio_button_selector"
-                    android:button="@android:color/transparent"
-                    android:elevation="5dp"
-                    android:fontFamily="@font/avenir"
-                    android:gravity="center"
-                    android:text="@string/trip"
-                    android:textColor="@color/black" />
-
-                <androidx.appcompat.widget.AppCompatRadioButton
-                    android:id="@+id/rbuttonOther"
-                    android:layout_width="0dp"
-                    android:layout_height="30dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/radio_button_selector"
-                    android:button="@android:color/transparent"
-                    android:elevation="5dp"
-                    android:fontFamily="@font/avenir"
-                    android:gravity="center"
-                    android:text="@string/other"
-                    android:textColor="@color/black" />
-
-            </RadioGroup>
-        </LinearLayout>
-
-        <RelativeLayout
-            android:id="@+id/linearLayoutButtons"
-            android:layout_width="match_parent"
-            android:layout_height="65dp"
-            android:layout_below="@+id/linearLayoutSelectionButtons"
-            android:layout_marginTop="10dp"
-            android:layout_gravity="center_vertical"
-            android:background="@drawable/order_status_background">
-
-            <RelativeLayout
+                android:id="@+id/linearLayoutSelectionButtons"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingStart="8dp"
-                android:gravity="center_vertical">
+                android:layout_marginTop="15dp"
+                android:gravity="center"
+                android:orientation="horizontal">
 
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                <RadioGroup
+                    android:id="@+id/rgroupButton2"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
                     android:gravity="center"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentTop="true">
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="50dp">
 
-                    <TextView
-                        android:id="@+id/textViewGroupMembers"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:layout_marginLeft="8dp"
+                    <androidx.appcompat.widget.AppCompatRadioButton
+                        android:id="@+id/rbuttonFood"
+                        android:layout_width="0dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/radio_button_selector"
+                        android:button="@android:color/transparent"
+                        android:checked="true"
+                        android:elevation="5dp"
                         android:fontFamily="@font/avenir"
-                        android:text="Grup Üyeleri"
-                        android:textSize="25sp" />
+                        android:gravity="center"
+                        android:text="@string/home"
+                        android:textColor="@color/white" />
 
-                </RelativeLayout>
+                    <androidx.appcompat.widget.AppCompatRadioButton
+                        android:id="@+id/rbuttonWear"
+                        android:layout_width="0dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/radio_button_selector"
+                        android:button="@android:color/transparent"
+                        android:elevation="5dp"
+                        android:fontFamily="@font/avenir"
+                        android:gravity="center"
+                        android:text="@string/work"
+                        android:textColor="@color/black" />
 
+                    <androidx.appcompat.widget.AppCompatRadioButton
+                        android:id="@+id/rbuttonStationery"
+                        android:layout_width="0dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/radio_button_selector"
+                        android:button="@android:color/transparent"
+                        android:elevation="5dp"
+                        android:fontFamily="@font/avenir"
+                        android:gravity="center"
+                        android:text="@string/trip"
+                        android:textColor="@color/black" />
+
+                    <androidx.appcompat.widget.AppCompatRadioButton
+                        android:id="@+id/rbuttonOther"
+                        android:layout_width="0dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/radio_button_selector"
+                        android:button="@android:color/transparent"
+                        android:elevation="5dp"
+                        android:fontFamily="@font/avenir"
+                        android:gravity="center"
+                        android:text="@string/other"
+                        android:textColor="@color/black" />
+
+                </RadioGroup>
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/linearLayoutButtons"
+                android:layout_width="match_parent"
+                android:layout_height="65dp"
+                android:layout_below="@+id/linearLayoutSelectionButtons"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/order_status_background">
 
                 <RelativeLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingEnd="10dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentBottom="true"
-                    android:gravity="center">
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingStart="8dp">
 
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/add_new_person"
+                    <RelativeLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:visibility="invisible"
-                        app:cardCornerRadius="5dp"
-                        app:cardElevation="3dp"
-                        app:cardUseCompatPadding="true">
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentBottom="true"
+                        android:gravity="center">
 
-                        <RelativeLayout
+                        <TextView
+                            android:id="@+id/textViewGroupMembers"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content">
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dp"
+                            android:fontFamily="@font/avenir"
+                            android:gravity="center"
+                            android:text="Grup Üyeleri"
+                            android:textSize="25sp" />
 
-                            <LinearLayout
+                    </RelativeLayout>
+
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentBottom="true"
+                        android:gravity="center"
+                        android:paddingEnd="10dp">
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/add_new_person"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:visibility="invisible"
+                            app:cardCornerRadius="5dp"
+                            app:cardElevation="3dp"
+                            app:cardUseCompatPadding="true">
+
+                            <RelativeLayout
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:padding="5dp"
-                                android:paddingHorizontal="5dp">
+                                android:layout_height="wrap_content">
 
-                                <ImageView
-                                    android:id="@+id/cardView_addgroupsPicture"
-                                    android:layout_width="30dp"
-                                    android:layout_height="30dp"
-                                    android:background="@drawable/ic_rectangle"
-                                    android:padding="5dp"
-                                    android:src="@drawable/addgroups_addfriendicon"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toTopOf="parent" />
-
-                                <TextView
-                                    android:id="@+id/textViewName"
+                                <LinearLayout
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:layout_toRightOf="@+id/cardView_addgroupsPicture"
-                                    android:fontFamily="@font/avenir"
-                                    android:gravity="center"
-                                    android:paddingLeft="10dp"
-                                    android:text="@string/add_friends_to_group"
-                                    android:textColor="@color/black"
-                                    android:textSize="15sp" />
+                                    android:orientation="horizontal"
+                                    android:padding="5dp"
+                                    android:paddingHorizontal="5dp">
+
+                                    <ImageView
+                                        android:id="@+id/cardView_addgroupsPicture"
+                                        android:layout_width="30dp"
+                                        android:layout_height="30dp"
+                                        android:background="@drawable/ic_rectangle"
+                                        android:padding="5dp"
+                                        android:src="@drawable/addgroups_addfriendicon"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent" />
+
+                                    <TextView
+                                        android:id="@+id/textViewName"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:layout_toRightOf="@+id/cardView_addgroupsPicture"
+                                        android:fontFamily="@font/avenir"
+                                        android:gravity="center"
+                                        android:paddingLeft="10dp"
+                                        android:text="@string/add_friends_to_group"
+                                        android:textColor="@color/black"
+                                        android:textSize="15sp" />
 
 
-                            </LinearLayout>
+                                </LinearLayout>
 
-                        </RelativeLayout>
-                    </androidx.cardview.widget.CardView>
+                            </RelativeLayout>
+                        </androidx.cardview.widget.CardView>
+
+                    </RelativeLayout>
+
 
                 </RelativeLayout>
-
 
             </RelativeLayout>
 
-        </RelativeLayout>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_addgroups"
-            android:layout_width="match_parent"
-            android:layout_height="250dp"
-            android:layout_gravity="center"
-            android:paddingHorizontal="8dp"
-            tools:listitem="@layout/item_addgroups_person" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_addgroups"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:layout_gravity="center"
+                android:paddingHorizontal="8dp"
+                tools:listitem="@layout/item_addgroups_person" />
 
 
-        <RelativeLayout
-            android:id="@+id/relativeLayout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center">
+            <RelativeLayout
+                android:id="@+id/relativeLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center">
 
-            <Button
-                android:id="@+id/buttonMakeGroup"
-                android:layout_width="310dp"
-                android:layout_height="34dp"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/button_smooth_corner"
-                android:elevation="2dp"
-                android:fontFamily="@font/avenir"
-                android:shadowColor="#EFEDED"
-                android:text="@string/create_group"
-                android:textColor="@color/grey"
-                android:textSize="15sp"
-                android:textStyle="bold" />
+                <Button
+                    android:id="@+id/buttonMakeGroup"
+                    android:layout_width="310dp"
+                    android:layout_height="34dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginBottom="16dp"
+                    android:background="@drawable/button_smooth_corner"
+                    android:elevation="2dp"
+                    android:fontFamily="@font/avenir"
+                    android:shadowColor="#EFEDED"
+                    android:text="@string/create_group"
+                    android:textColor="@color/grey"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
 
-            <Button
-                android:id="@+id/buttonRemoveGroup"
-                android:layout_width="310dp"
-                android:layout_height="34dp"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/button_smooth_corner"
-                android:elevation="2dp"
-                android:fontFamily="@font/avenir"
-                android:shadowColor="#EFEDED"
-                android:text="@string/remove_group"
-                android:textColor="@color/white"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                android:visibility="invisible" />
-        </RelativeLayout>
+                <Button
+                    android:id="@+id/buttonSaveGroup"
+                    android:layout_width="310dp"
+                    android:layout_height="34dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginBottom="16dp"
+                    android:background="@drawable/button_smooth_corner"
+                    android:elevation="2dp"
+                    android:fontFamily="@font/avenir"
+                    android:shadowColor="#EFEDED"
+                    android:text="@string/save"
+                    android:textColor="@color/grey"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:visibility="invisible" />
+            </RelativeLayout>
 
-    </LinearLayout>
-
+        </LinearLayout>
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
 
 

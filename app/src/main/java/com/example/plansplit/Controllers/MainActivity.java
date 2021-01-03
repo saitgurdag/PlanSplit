@@ -167,6 +167,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         loadLocale();
     }
+
     //BERGAY DİL DİALOG END
 
     private void signIn() {

@@ -3,6 +3,7 @@ package com.example.plansplit.Models.Objects;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Groups implements Serializable {
     private String group_name;
@@ -11,14 +12,16 @@ public class Groups implements Serializable {
     private String groupImage;
     private String key;
 
+    public HashMap<String, Expense> expenses = new HashMap<>();
+
     ArrayList<String> group_members = new ArrayList<String>();
-    ArrayList<Expense> group_expenses = new ArrayList<Expense>();
     ArrayList<ToDoList> group_todo_list = new ArrayList<ToDoList>();
     ArrayList<GroupNotification> group_notifications = new ArrayList<GroupNotification>();
 
     public Groups() {
-        
+
     }
+
     public Groups(String group_name, String group_type) {
         this.group_name = group_name;
         this.group_type = group_type;
@@ -32,8 +35,12 @@ public class Groups implements Serializable {
         this.groupKey = groupKey;
     }
 
-    public void addFriend(String friendKey){
+    public void addFriend(String friendKey) {
         group_members.add(friendKey);
+    }
+
+    public void removeFriend(String friendKey){
+        group_members.remove(friendKey);
     }
 
     public ArrayList<String> getGroup_members() {
@@ -42,14 +49,6 @@ public class Groups implements Serializable {
 
     public void setGroup_members(ArrayList<String> group_members) {
         this.group_members = group_members;
-    }
-
-    public ArrayList<Expense> getGroup_expenses() {
-        return group_expenses;
-    }
-
-    public void setGroup_expenses(ArrayList<Expense> group_expenses) {
-        this.group_expenses = group_expenses;
     }
 
     public ArrayList<ToDoList> getGroup_todo_list() {

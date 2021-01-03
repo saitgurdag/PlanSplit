@@ -32,12 +32,12 @@
             android:orientation="horizontal">
 
             <RelativeLayout
-                android:layout_width="288dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1">
+                android:layout_width="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_height="wrap_content">
 
                 <LinearLayout
-                    android:layout_width="293dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:orientation="horizontal">
 
@@ -46,7 +46,7 @@
                         android:layout_height="match_parent">
 
                         <ImageView
-                            android:id="@+id/imageView2"
+                            android:id="@+id/back_circle"
                             android:layout_width="50dp"
                             android:layout_height="50dp"
                             android:layout_gravity="center"
@@ -67,86 +67,19 @@
                         </androidx.cardview.widget.CardView>
                     </FrameLayout>
 
-                    <LinearLayout
-                        android:layout_width="126dp"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/personal_debtTv"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="left"
-                            android:fontFamily="@font/avenir"
-                            android:paddingLeft="20dp"
-                            android:text="@string/personal_debt"
-                            android:textColor="@color/red"
-                            android:textSize="20dp" />
-
-                        <TextView
-                            android:id="@+id/personal_dueTv"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="left"
-                            android:fontFamily="@font/avenir"
-                            android:paddingLeft="20dp"
-                            android:text="@string/personal_due"
-                            android:textColor="@color/group_border_green"
-                            android:textSize="20dp" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="110dp"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/debtTv"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="left"
-                            android:text="20 TL"
-                            android:textColor="@color/red"
-                            android:textSize="20dp" />
-
-                        <TextView
-                            android:id="@+id/dueTv"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="left"
-                            android:text="10 TL"
-                            android:textColor="@color/group_border_green"
-                            android:textSize="20dp" />
-
-
-                    </LinearLayout>
-
                 </LinearLayout>
             </RelativeLayout>
 
             <RelativeLayout
-                android:layout_width="107dp"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/personal_sumTv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/avenir"
-                        android:gravity="center_horizontal"
-                        android:text="@string/total"
-                        android:textColor="@color/black"
-                        android:textSize="20dp"
-                        android:textStyle="normal" />
+                    android:orientation="vertical"
+                    android:paddingEnd="10dp">
 
                     <TextView
                         android:id="@+id/personal_sum_countTv"
@@ -154,7 +87,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/avenir"
                         android:gravity="center_horizontal"
-                        android:text="10 TL"
+                        android:text="@string/total_dept"
                         android:textColor="@color/red"
                         android:textSize="20dp"
                         android:textStyle="normal" />
