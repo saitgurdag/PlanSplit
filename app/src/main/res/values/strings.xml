@@ -146,6 +146,7 @@
     <string name="fromGroupDeleted">adlı kişiyi gruptan çıkarıldı</string>
     <string name="successfullyAdded" translatable="false">Başarıyla eklendi</string>
     <string name="changes_saved_successfully" translatable="false">Değişiklikler başarıyla kaydedildi</string>
+    <string name="wrong_entry" translatable="false">Hatalı Girdi</string>
 
     <string name="remaining_budget">%1$d TL</string>
     <string name="budget">%1$d TL</string>
