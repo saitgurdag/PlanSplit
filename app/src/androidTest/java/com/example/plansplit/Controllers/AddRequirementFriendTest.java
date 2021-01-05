@@ -36,7 +36,7 @@ import static org.hamcrest.Matchers.is;
  * Tested on PIXEL 4 XL API 30
  */
 @LargeTest
-public class AddRequirementsFriend {
+public class AddRequirementFriendTest {
 
     @Rule
     public ActivityScenarioRule<MainActivity> mActivityTestRule = new ActivityScenarioRule<>(MainActivity.class);

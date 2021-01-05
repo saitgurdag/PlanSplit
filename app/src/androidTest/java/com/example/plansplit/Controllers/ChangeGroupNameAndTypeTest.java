@@ -34,9 +34,11 @@ import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
-
+/**
+ * Works with this scenario: selects the most upper place group
+ * Tested on PIXEL 2  API 21
+ */
 @LargeTest
-@RunWith(AndroidJUnit4.class)
 public class ChangeGroupNameAndTypeTest {
 
     @Rule
@@ -44,9 +46,6 @@ public class ChangeGroupNameAndTypeTest {
 
     @Test
     public void changeGroupNameAndTypeTest() {
-        // Added a sleep statement to match the app's execution delay.
-        // The recommended way to handle such scenarios is to use Espresso idling resources:
-        // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
         try {
             Thread.sleep(3000);
         } catch (InterruptedException e) {
@@ -54,7 +53,7 @@ public class ChangeGroupNameAndTypeTest {
         }
 
         ViewInteraction bottomNavigationItemView = onView(
-                allOf(withId(R.id.navigation_groups), withContentDescription("Groups"),
+                allOf(withId(R.id.navigation_groups),
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.nav_view),
@@ -70,11 +69,8 @@ public class ChangeGroupNameAndTypeTest {
                                 0)));
         recyclerView.perform(actionOnItemAtPosition(0, click()));
 
-        // Added a sleep statement to match the app's execution delay.
-        // The recommended way to handle such scenarios is to use Espresso idling resources:
-        // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
         try {
-            Thread.sleep(700);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -91,7 +87,7 @@ public class ChangeGroupNameAndTypeTest {
         appCompatImageButton.perform(click());
 
         ViewInteraction appCompatTextView = onView(
-                allOf(withId(android.R.id.title), withText("Grup Settings"),
+                allOf(withId(android.R.id.title),
                         childAtPosition(
                                 childAtPosition(
                                         withClassName(is("com.android.internal.view.menu.ListMenuItemView")),
@@ -101,7 +97,7 @@ public class ChangeGroupNameAndTypeTest {
         appCompatTextView.perform(click());
 
         try {
-            Thread.sleep(700);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -115,9 +111,8 @@ public class ChangeGroupNameAndTypeTest {
                                 1),
                         isDisplayed()));
         appCompatEditText.perform(replaceText("beispiel"));
-
         try {
-            Thread.sleep(700);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -133,13 +128,12 @@ public class ChangeGroupNameAndTypeTest {
         appCompatEditText2.perform(closeSoftKeyboard());
 
         try {
-            Thread.sleep(700);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
         ViewInteraction appCompatRadioButton = onView(
-                allOf(withId(R.id.rbuttonStationery), withText("Travel"),
+                allOf(withId(R.id.rbuttonStationery),
                         childAtPosition(
                                 allOf(withId(R.id.rgroupButton2),
                                         childAtPosition(
@@ -149,13 +143,13 @@ public class ChangeGroupNameAndTypeTest {
         appCompatRadioButton.perform(scrollTo(), click());
 
         try {
-            Thread.sleep(700);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
         ViewInteraction appCompatButton = onView(
-                allOf(withId(R.id.buttonSaveGroup), withText("Save"),
+                allOf(withId(R.id.buttonSaveGroup),
                         childAtPosition(
                                 allOf(withId(R.id.relativeLayout),
                                         childAtPosition(
@@ -164,11 +158,8 @@ public class ChangeGroupNameAndTypeTest {
                                 1)));
         appCompatButton.perform(scrollTo(), click());
 
-        // Added a sleep statement to match the app's execution delay.
-        // The recommended way to handle such scenarios is to use Espresso idling resources:
-        // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
         try {
-            Thread.sleep(700);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -190,9 +181,14 @@ public class ChangeGroupNameAndTypeTest {
                                 1),
                         isDisplayed()));
         appCompatImageButton2.perform(click());
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         ViewInteraction appCompatTextView2 = onView(
-                allOf(withId(android.R.id.title), withText("Grup Settings"),
+                allOf(withId(android.R.id.title),
                         childAtPosition(
                                 childAtPosition(
                                         withClassName(is("com.android.internal.view.menu.ListMenuItemView")),
@@ -200,9 +196,14 @@ public class ChangeGroupNameAndTypeTest {
                                 0),
                         isDisplayed()));
         appCompatTextView2.perform(click());
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         ViewInteraction radioButton = onView(
-                allOf(withId(R.id.rbuttonStationery), withText("Travel"),
+                allOf(withId(R.id.rbuttonStationery),
                         withParent(allOf(withId(R.id.rgroupButton2),
                                 withParent(withId(R.id.linearLayoutSelectionButtons)))),
                         isDisplayed()));
