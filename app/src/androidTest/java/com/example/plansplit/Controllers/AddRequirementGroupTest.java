@@ -37,7 +37,7 @@ import static org.hamcrest.Matchers.is;
  * Tested on PIXEL 4 XL API 30
  */
 @LargeTest
-public class AddRequirementGroup {
+public class AddRequirementGroupTest {
 
     @Rule
     public ActivityScenarioRule<MainActivity> mActivityTestRule = new ActivityScenarioRule<>(MainActivity.class);

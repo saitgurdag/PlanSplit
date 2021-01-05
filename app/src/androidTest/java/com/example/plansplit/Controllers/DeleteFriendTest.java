@@ -35,7 +35,6 @@ import static org.hamcrest.Matchers.is;
  * Tested on PIXEL 4 XL API 30
  */
 @LargeTest
-@RunWith(AndroidJUnit4.class)
 public class DeleteFriendTest {
 
     @Rule
