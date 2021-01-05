@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="log_out_from_app" translatable="false">You have logged out of the application!</string>
     <string name="ask_need">Please Enter a Requirament</string>
     <string name="already_reserved">already reserved</string>
     <string name="will_buy">will buy</string>
@@ -144,6 +145,7 @@
 
     <string name="remaining_budget">%1$d TL</string>
     <string name="budget">%1$d TL</string>
+    <string name="monthly_saving">Saving in last month: %1$d TL</string>
 
     <!-- notifications -->
     <!-- personal notifications -->

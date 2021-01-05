@@ -34,15 +34,12 @@ public class FriendRequestsFragment extends Fragment{
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState){
         final View root = inflater.inflate(R.layout.fragment_friend_requests, container, false);
-        Log.d(TAG, "BURADA");
-
         m_RecyclerView = root.findViewById(R.id.recycler_friends_requests);
         m_RecyclerView.setHasFixedSize(true);
         m_LayoutManager = new LinearLayoutManager(getActivity());
         m_RecyclerView.setLayoutManager(m_LayoutManager);
         m_Adapter = new FriendRequestsAdapter(this.getContext(), m_RecyclerView);
         m_RecyclerView.setAdapter(m_Adapter);
-
         return root;
     }
 
@@ -65,12 +62,6 @@ public class FriendRequestsFragment extends Fragment{
         FragmentManager fragmentManager = getParentFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.nav_host_fragment, notificationsFragment);
-        /*fixme:
-           bir fragmenttan bildirimlere, ordan da isteklere geçildikten sonra
-            geri tuşuna basılınca bildirimlere değil önceki fragmenta döndürüyor -arda
-         */
-        // belki geri tuşu overridelanabilir ama geri tuşunu değiştirmek
-        // tavsiye edilen tasarım normlarının dışında sayılıyor genelde
         fragmentTransaction.addToBackStack(TAG);
         fragmentTransaction.commit();
         return super.onOptionsItemSelected(item);

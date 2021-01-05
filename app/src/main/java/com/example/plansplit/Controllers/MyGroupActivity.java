@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -19,14 +18,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import com.example.plansplit.Controllers.Adapters.GroupAdapter;
-import com.example.plansplit.Controllers.FragmentControllers.addgroups.AddGroupsFragment;
-import com.example.plansplit.Controllers.FragmentControllers.groups.GroupsFragment;
 import com.example.plansplit.Models.Database;
 import com.example.plansplit.Models.Objects.Friend;
 import com.example.plansplit.Models.Objects.Groups;
@@ -45,11 +39,11 @@ public class MyGroupActivity extends AppCompatActivity {
     private Groups group;
     public static BottomNavigationView navView;
     Intent intent;
-    boolean ctrlType = false;             //eğer friend'den geliyorsa true, gruptan geliyorsa false
-    private String group_type_option_home = "ev";
-    private String group_type_option_work = "iş";
-    private String group_type_option_trip = "seyahat";
-    private String group_type_option_other = "diğer";
+    boolean ctrlType = false;             //true if it comes from friend, false if it comes from group
+    private final String group_type_option_home = "ev";
+    private final String group_type_option_work = "iş";
+    private final String group_type_option_trip = "seyahat";
+    private final String group_type_option_other = "diğer";
     int homePicture = R.drawable.ic_home_black_radius;
     int workPicture = R.drawable.ic_suitcase_radius;
     int tripPicture = R.drawable.ic_trip_radius;
@@ -57,9 +51,8 @@ public class MyGroupActivity extends AppCompatActivity {
     ImageButton menu, listBttn, eventsBttn, groupOpBttn;
     TextView list_titleTv, events_titleTv, group_op_titletV;
     Button removeGroupBttn;
-    String control_list = "control";
+    String control_list = "control"; //Checks whether you have come from the todolist screen. It can be group_list and friend_list.
     String todolistfriend = null;
-    ArrayList<Friend> groupMembersInfos = new ArrayList<>();
     Bundle extras;
     Bundle bundle = new Bundle();
     private ImageView add_expense_btn;
@@ -157,7 +150,7 @@ public class MyGroupActivity extends AppCompatActivity {
         add_expense_btn = findViewById(R.id.add_expense);
         database = Database.getInstance();
 
-
+//The navigation bottom tab in home activity is updated
         navView = findViewById(R.id.nav_view2);
         navView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -192,7 +185,7 @@ public class MyGroupActivity extends AppCompatActivity {
 
         String group_title = "Group title";
 
-
+   //actions for groups screen
         if (extras != null && extras.keySet().contains("group")) {
             navView.getMenu().getItem(2).setChecked(true);
             if (extras.keySet().contains("group_back")) {
@@ -223,6 +216,7 @@ public class MyGroupActivity extends AppCompatActivity {
 
             ctrlType = false;
         }
+           //actions for friend screen
         if (extras != null && extras.keySet().contains("friend")) {
             navView.getMenu().getItem(1).setChecked(true);
             if (extras.keySet().contains("friend_back")) {
@@ -241,7 +235,6 @@ public class MyGroupActivity extends AppCompatActivity {
             if (extras.keySet().contains("person_id")) {
                 person_id = extras.getString("person_id");
             }
-            // groupPhotoIv.setImageResource(friend.getPerson_image());
             Picasso.with(getApplicationContext()).load(friend.getPerson_image()).into(groupPhotoIv);
             group_title = friend.getName();
             System.out.println("friend" + friend.getName());
@@ -258,6 +251,7 @@ public class MyGroupActivity extends AppCompatActivity {
         group_op_titletV.setVisibility(View.GONE);
         remove_txt.setVisibility(View.GONE);
 
+        // information from friends todolist screen received
         if (extras != null && extras.keySet().contains("friend_to_list")) {
             navView.getMenu().getItem(1).setChecked(true);
             control_list = "friend_list";
@@ -283,7 +277,7 @@ public class MyGroupActivity extends AppCompatActivity {
             events_titleTv.setVisibility(View.GONE);
 
         }
-
+        // information from groups todolist screen received
         if (extras != null && extras.keySet().contains("group_to_list")) {
             navView.getMenu().getItem(2).setChecked(true);
             control_list = "group_list";
@@ -313,7 +307,7 @@ public class MyGroupActivity extends AppCompatActivity {
 
 
         }
-
+        //Switch to todolist screen
         listBttn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -365,7 +359,7 @@ public class MyGroupActivity extends AppCompatActivity {
             }
 
         });
-
+     // Switches to the event page
         eventsBttn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -481,7 +475,7 @@ public class MyGroupActivity extends AppCompatActivity {
         }
     };
 
-
+//switch to share fragment
     public void setNaviPay(int id) {
         naviIdPay = id;
         ArrayList<Friend> members = new ArrayList<>();

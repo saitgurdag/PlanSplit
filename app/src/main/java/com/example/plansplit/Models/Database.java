@@ -1,20 +1,12 @@
 package com.example.plansplit.Models;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.util.Log;
-import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 
 import com.example.plansplit.Controllers.Adapters.AddGroupsAdapter;
 import com.example.plansplit.Controllers.Adapters.GroupAdapter;
-import com.example.plansplit.Controllers.FragmentControllers.mygroup.EventsFragment;
-import com.example.plansplit.Controllers.FragmentControllers.personal.PersonalFragment;
-import com.example.plansplit.Controllers.HomeActivity;
 import com.example.plansplit.Models.Objects.Expense;
 import com.example.plansplit.Models.Objects.Friend;
 import com.example.plansplit.Models.Objects.FriendRequest;
@@ -24,8 +16,6 @@ import com.example.plansplit.Models.Objects.Person;
 import com.example.plansplit.Models.Objects.ToDoList;
 import com.example.plansplit.Models.Objects.Transfers;
 import com.example.plansplit.R;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -36,10 +26,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-
-import javax.security.auth.callback.Callback;
 
 public class Database {
 
@@ -47,7 +33,6 @@ public class Database {
     private static final String DATABASE_ERROR = "DATABASE_ERROR";
     private static final String KEY_NOT_FOUND = "KEY_NOT_FOUND";
     private static final String FRIEND_LIST_EMPTY = "FRIEND_LIST_EMPTY";
-    private static final String GROUP_LIST_EMPTY = "GROUP_LIST_EMPTY";
     private static final String VALUE_NOT_FOUND = "VALUE_NOT_FOUND";
     private static final String USER_AND_TARGET_KEY_SAME = "USER_AND_TARGET_KEY_SAME";
     private static final String ALREADY_FRIENDS = "ALREADY_FRIENDS";
@@ -77,6 +62,36 @@ public class Database {
         private static final Database INSTANCE = new Database();
     }
 
+    /**
+     * Creates a child with "key" under user reference. No controls are made, so before use it
+     * parameters should be checked
+     *
+     * @param key       Google ID
+     * @param name      display name of google account
+     * @param email     current email of google account
+     * @param image     profile photo of google account
+     * @param date      last login date (millis from EPOCH 01.01.1970 00:00)
+     */
+    public void registerUser(String key, String name, String email, String image, long date) {
+        user_reference.child(key).child("name").setValue(name);
+        user_reference.child(key).child("email").setValue(email);
+        user_reference.child(key).child("image").setValue(image);
+        user_reference.child(key).child("last_login").setValue(date);
+        createPerson(key, name, email, image, System.currentTimeMillis());
+    }
+
+    /**
+     *  Creates a static Person object to fast access to user's info
+     * @param key       Google ID, also used in database
+     * @param name      display name of google account
+     * @param email     current email of google account
+     * @param image     profile photo of google account
+     * @param date      last login date (millis from EPOCH 01.01.1970 00:00)
+     */
+    private void createPerson(String key, String name, String email, String image, long date){
+        person = new Person(key, name, email, image, date);
+    }
+
     public interface ExpenseCallBack {
         void onExpenseRetrieveSuccess(ArrayList<Expense> expenses);
         void onError(String error_tag, String error);
@@ -85,28 +100,6 @@ public class Database {
     public interface BudgetCallBack {
         void onBudgetRetrieveSuccess(int budget);
         void onError(String error_tag, String error);
-    }
-
-    /**
-     * Creates a child with "key" under user reference. No controls are made, so before use it
-     * parameters should be checked
-     *
-     * @param key     Google ID
-     * @param name    display name of google account
-     * @param email   current email of google account
-     * @param surname surname of google account
-     */
-    public void registerUser(String key, String name, String email, String surname,String image, long date) {
-        user_reference.child(key).child("name").setValue(name);
-        user_reference.child(key).child("email").setValue(email);
-        user_reference.child(key).child("surname").setValue(surname);
-        user_reference.child(key).child("image").setValue(image);
-        user_reference.child(key).child("last_login").setValue(date);
-        createPerson(key, name, email, image, System.currentTimeMillis());
-    }
-
-    private void createPerson(String key, String name, String email, String image, long date){
-        this.person = new Person(key, name, email, image, date);
     }
 
     /**
@@ -130,7 +123,6 @@ public class Database {
      */
     public interface FriendRequestCallBack {
         void onFriendRequestRetrieveSuccess(FriendRequest friend_request);
-
         void onError(String error_tag, String error);
     }
 
@@ -139,25 +131,41 @@ public class Database {
      */
     public interface DatabaseCallBack {
         void onSuccess(String success);
-
         void onError(String error_tag, String error);
     }
 
     public interface GetMemberInfoCallBack {
         void onGetMemberInfoRetrieveSuccess(ArrayList<Friend> members);
-
         void onError(String error_tag, String error);
     }
 
     public interface getDebtFromFriendCallBack {
         void onGetDebtFromFriendRetrieveSuccess(float debt);
-
         void onError(String error_tag, String error);
     }
 
     public interface getDebtFromGroupCallBack {
         void onGetDebtFromGroupRetrieveSuccess(float debt);
+        void onError(String error_tag, String error);
+    }
 
+    public interface GroupCallBack {
+        void onGroupRetrieveSuccess(Groups selected_group);
+        void onError(String error_tag, String error);
+    }
+
+    public interface NotificationCallBack {
+        void onNotificationsRetrieveSuccess(ArrayList<Notification> notifications);
+        void onError(String error_tag, String error);
+    }
+
+    public interface TransferCallBack {
+        void onTransferRetrieveSuccess(ArrayList<Transfers> transfers);
+        void onError(String error_tag, String error);
+    }
+
+    public interface LoginDateCallBack {
+        void onLoginDateRetrieveSuccess(long date);
         void onError(String error_tag, String error);
     }
 
@@ -199,6 +207,9 @@ public class Database {
         void removeFromFriendList(String key, ArrayList<String> friends);
     }
 
+    /**
+     * A private handler for adding new ToDos
+     */
     @SuppressWarnings("unused")
     private interface ToDoListHandler {
         void handler(String key);
@@ -218,26 +229,46 @@ public class Database {
         void onGroupEvent(String type, String whom, String image, String info);
     }
 
+    @SuppressWarnings("unused")
     private interface MemberInfoHandler {
         void handler(Friend friend);
     }
 
-    /*
-     *   -personal
-     *       bütçe aşımı
-     *       bütçe değişimi
-     *       arkadaş olma
-     *       arkadaş silme
-     *       gruba eklenme
-     *       gruptan çıkma
-     *       ay sonu aylık harcama
-     *
-     *
-     *   -friend
-     *
-     *   -group
+    /**
+     *  Returns user's last login as long
+     * @param callBack callback for returning last login
+     */
+    public void getLastLogin(final LoginDateCallBack callBack){
+        user_reference.child(person.getKey()).child("last_login").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (!snapshot.exists()){
+                    callBack.onError(VALUE_NOT_FOUND, "son giriş bulunamadı");
+                    return;
+                }
+                long date = (long) snapshot.getValue();
+                callBack.onLoginDateRetrieveSuccess(date);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                callBack.onError(DATABASE_ERROR, error.getMessage());
+            }
+        });
+    }
+
+    /**
+     * Listener interface for notification handling
      */
     private final DatabaseNotificationListener notificationListener = new DatabaseNotificationListener() {
+        /**
+         * Creates a Notification, with current time (in millis as long)
+         * @param type  type of event, types can be found in Notification's Constructor
+         * @param whom  id of the user, whom the event will be saved
+         * @param image related image of info
+         * @param info  info, can be name or amount of expense etc.
+         * @see Notification
+         */
         @Override
         public void onPersonalEvent(String type, String whom, String image, String info) {
             long date = System.currentTimeMillis();
@@ -249,18 +280,15 @@ public class Database {
         }
 
         @Override
-        public void onFriendEvent(String type, String whom, String image, String info) {
-            long date = System.currentTimeMillis();
-
-        }
+        public void onFriendEvent(String type, String whom, String image, String info) { }
 
         @Override
-        public void onGroupEvent(String type, String whom, String image, String info) {
-            long date = System.currentTimeMillis();
-
-        }
+        public void onGroupEvent(String type, String whom, String image, String info) { }
     };
 
+    /**
+     * interface method for notification creation outside of Database
+     */
     public void createNotification(@NotNull String prime_type,
                                    String whom,
                                    String type,
@@ -284,6 +312,9 @@ public class Database {
         callBack.onSuccess("notification oluşturuldu");
     }
 
+    /**
+     * Would be used for for example updating "over_budget" notification.
+     */
     public void changeNotification(String key_type, String key, final String searched_type, final String info, final DatabaseCallBack callBack){
         final DatabaseReference ref;
         switch (key_type){
@@ -340,6 +371,14 @@ public class Database {
         });
     }
 
+    /**
+     *  checks if given type of notification exists in given reference. <b>
+     *  For Example "over_budget" notification. If already exists, it should be updated, not re-sent
+     * @param key_type  personal, friend or group
+     * @param key   user_key, friendship_key or group_key
+     * @param searched_type searched type for this specific "key_type"
+     * @param callBack  standard callBAck, if found onSuccess, else calls onError
+     */
     public void checkNotificationExists(String key_type, String key, final String searched_type, final DatabaseCallBack callBack){
         DatabaseReference ref;
         switch (key_type){
@@ -383,6 +422,10 @@ public class Database {
         });
     }
 
+    /**
+     * deletes all notifications from given keys reference. <b>
+     * For Example monthly resetting.
+     */
     public void deleteAllNotifications(String key_type, String key, DatabaseCallBack callBack){
         switch (key_type){
             case "personal":
@@ -401,11 +444,12 @@ public class Database {
         callBack.onSuccess("notifications removed");
     }
 
-    public interface NotificationCallBack {
-        void onNotificationsRetrieveSuccess(ArrayList<Notification> notifications);
-        void onError(String error_tag, String error);
-    }
-
+    /**
+     * Returns all personal notification of user as ArrayList
+     * @param context needed for notification creation, in order to get res data from app for
+     *                specific info
+     * @param callBack returns ArrayList of Notifications on onSuccess
+     */
     public void getPersonalNotifications(final Context context, final NotificationCallBack callBack){
         user_reference.child(person.getKey()).child("notifications").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -435,30 +479,14 @@ public class Database {
         });
     }
 
-    public interface LoginDateCallBack {
-        void onLoginDateRetrieveSuccess(long date);
-        void onError(String error_tag, String error);
+    public void deleteAllPersonalExpenses(DatabaseCallBack callBack){
+        user_reference.child(person.getKey()).child("expenses").setValue(null);
+        callBack.onSuccess("harcamalar silindi");
     }
 
-    public void getLastLogin(final LoginDateCallBack callBack){
-        user_reference.child(person.getKey()).child("last_login").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (!snapshot.exists()){
-                    callBack.onError(VALUE_NOT_FOUND, "son giriş bulunamadı");
-                    return;
-                }
-                long date = (long) snapshot.getValue();
-                callBack.onLoginDateRetrieveSuccess(date);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                callBack.onError(DATABASE_ERROR, error.getMessage());
-            }
-        });
-    }
-
+    /**
+     * Updates are made for the friends section that will take place in the todolist.
+     */
     public void updateDoListFriend(final String friend_key, final String toDo_key, final String operation, final DatabaseCallBack callBack) {
         final ToDoListHandler handler = new ToDoListHandler() {
             @Override
@@ -474,9 +502,9 @@ public class Database {
                 } else if (operation.equals("delete")) {
                     friend_reference.child(key).child("todos").child(toDo_key).setValue(null);
                 }
-
             }
         };
+        //The information of the user making the transaction is taken.
         user_reference.child(person.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull final DataSnapshot snapshot_user) {
@@ -526,7 +554,10 @@ public class Database {
         });
     }
 
-    public void updateDoListGroup(@NonNull final String group_key, @NonNull final String toDo_key, final String operation, final DatabaseCallBack callBack){
+    /**
+     * Updates are made for the groups section that will take place in the todolist.
+     */
+    public void updateToDoListGroup(@NonNull final String group_key, @NonNull final String toDo_key, final String operation, final DatabaseCallBack callBack){
         if(operation.equals("save")){
             group_reference.child(group_key).child("todos").child(toDo_key).child("resp_person_name").setValue(person.getName());
             group_reference.child(group_key).child("todos").child(toDo_key).child("resp_person").setValue(person.getKey());
@@ -541,18 +572,20 @@ public class Database {
         callBack.onSuccess("group todo list updatelendi: " + operation);
     }
 
-    public void gettoDoListFriend(final String friend_key, final ToDoListCallBack callBack){
+    /**
+     * Information on todolists present in the friends section is obtained.
+     */
+    public void getToDoListFriend(final String friend_key, final ToDoListCallBack callBack){
         user_reference.child(person.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull final DataSnapshot snapshot_user) {
-
                 if (!snapshot_user.exists()) {
                     callBack.onError(KEY_NOT_FOUND, person.getKey() + " ile ilişkili kullanıcı bulunamadı");
                     return;
                 }
                 @SuppressWarnings("unchecked")
                 ArrayList<String> friend_list_keys = (ArrayList<String>)
-                        snapshot_user.child("friends").getValue();            //kullanıcı arkadaş listeleri Mli olanlar
+                        snapshot_user.child("friends").getValue();
                 if (friend_list_keys == null) {
                     callBack.onError(FRIEND_LIST_EMPTY, "Arkadaş listesi boş");
                     return;
@@ -562,17 +595,15 @@ public class Database {
                     friend_reference.child(friend_list_key).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull final DataSnapshot snapshot_friend) {
-
                             if (!snapshot_friend.exists()) {
                                 callBack.onError(VALUE_NOT_FOUND, "friends snapshot'ında todo yok");
                                 return;
                             }
                             @SuppressWarnings("unchecked")
                             ArrayList<String> friends = (ArrayList<String>) snapshot_friend.child("friends").getValue();
-
                             for (String key : friends) {
                                 if (friend_key.equals(key)) {
-                                    //ArrayList<ToDoList> todolists = new ArrayList<>();
+
                                     @SuppressWarnings("unchecked")
                                     HashMap<String, String> todos = (HashMap<String, String>) snapshot_friend.child("todos").getValue();
                                     if (todos == null) {
@@ -581,19 +612,11 @@ public class Database {
                                     }
                                     for (final String key2 : todos.keySet()) {
                                         final DataSnapshot snapshotTodo = snapshot_friend.child("todos").child(key2);
-                                        final DataSnapshot snapshot_friendget = snapshot_friend.child("friends").child(friend_key);
-                                        //description, status, who_added, resp_person_name, key
-
                                         final String description = snapshotTodo.child("description").getValue().toString();
                                         final String status = snapshotTodo.child("status").getValue().toString();
                                         final String resp_person_name = snapshotTodo.child("resp_person_name").getValue().toString();
                                         final String who_added = snapshotTodo.child("who_added").getValue().toString();
                                         final String resp_person = snapshotTodo.child("resp_person").getValue().toString();
-                                        //if(snapshotTodo.child("who_added").getValue().toString().equals(userId)){
-                                        //    who_added=snapshot_user.child("name").getValue().toString();
-                                        //    todolists.add(new ToDoList(description, who_added, key2));
-                                        //}
-
                                         user_reference.child(who_added).addListenerForSingleValueEvent(new ValueEventListener() {
                                             @Override
                                             public void onDataChange(@NonNull DataSnapshot snapshot_users_friend) {
@@ -602,8 +625,6 @@ public class Database {
                                                     return;
                                                 }
                                                 String who_added_name = snapshot_users_friend.child("name").getValue().toString();
-
-                                                //ArrayList<ToDoList> todolists = new ArrayList<>();
                                                 ToDoList todo;
                                                 if (status.equals("waiting")) {
                                                     todo = new ToDoList(description, who_added_name, resp_person_name, key2, who_added);
@@ -611,15 +632,6 @@ public class Database {
                                                     todo = new ToDoList(description, who_added_name, resp_person_name, resp_person, key2, status, who_added);
                                                 }
                                                 callBack.onToDoListRetrieveSuccess(todo);
-                                                //todolists.add(todo);
-                                                //callBack.onToDoListRetrieveSuccess(todolists);
-
-                                               /* snapshot_users_friend.child("name").getValue().toString();
-                                                ArrayList<ToDoList> todolists2 = new ArrayList<>();
-                                                 todolists2.add(new ToDoList(description, who_added, resp_person_name,key2));
-                                                     todolists2.addAll(todolists);
-                                                todolists2.get(todolists2.size()).setWho_Added(snapshot_users_friend.child("name").getValue().toString());
-                                                */
                                             }
 
                                             @Override
@@ -649,7 +661,10 @@ public class Database {
 
     }
 
-    public void addtoDoListFriend(final String friend_key, final ToDoList todo, final DatabaseCallBack callBack) {
+    /**
+     * Todos additions are made in the friends section.
+     */
+    public void addToDoListFriend(final String friend_key, final ToDoList todo, final DatabaseCallBack callBack) {
         final ToDoListHandler handler = new ToDoListHandler() {
             @Override
             public void handler(String key) {
@@ -661,7 +676,7 @@ public class Database {
                 databaseReference.child("who_added").setValue(todo.getWho_added());
             }
         };
-
+    //The information of the user who wants to add the requirement is retrieved.
         user_reference.child(person.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -672,7 +687,7 @@ public class Database {
                 }
                 @SuppressWarnings("unchecked")
                 ArrayList<String> friend_list_keys = (ArrayList<String>)
-                        snapshot.child("friends").getValue();            //kullanıcı arkadaş listeleri Mli olanlar
+                        snapshot.child("friends").getValue();
                 if (friend_list_keys == null) {
                     callBack.onError(FRIEND_LIST_EMPTY, "Arkadaş listesi boş");
                     return;
@@ -712,7 +727,10 @@ public class Database {
         });
     }
 
-    public void addtoDoListGroup(final String group_key, final ToDoList todo, final DatabaseCallBack callBack) {
+    /**
+     * Todos additions are made in the groups section.
+     */
+    public void addToDoListGroup(final String group_key, final ToDoList todo, final DatabaseCallBack callBack) {
         final ToDoListHandler handler = new ToDoListHandler() {
             @Override
             public void handler(String group_key) {
@@ -724,7 +742,7 @@ public class Database {
                 todo_ref.child("who_added").setValue(todo.getWho_added());
             }
         };
-
+        //The information of the group to which the needs will be added is taken.
         group_reference.child(group_key).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull final DataSnapshot snapshot) {
@@ -743,7 +761,10 @@ public class Database {
         });
     }
 
-    public void gettoDoListGroup(final String group_key, final ToDoListCallBack callBack) {
+    /**
+     * Information on todolists present in the groups section is obtained.
+     */
+    public void getToDoListGroup(final String group_key, final ToDoListCallBack callBack) {
         group_reference.child(group_key).child("todos").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull final DataSnapshot snapshot) {
@@ -759,14 +780,12 @@ public class Database {
                 }
                 for (final String key2 : todos.keySet()) {
                     final DataSnapshot snapshotTodo = snapshot.child(key2);
-                    //description, status, who_added, resp_person_name, key
-
                     final String description = snapshotTodo.child("description").getValue().toString();
                     final String status = snapshotTodo.child("status").getValue().toString();
                     final String resp_person_name = snapshotTodo.child("resp_person_name").getValue().toString();
                     final String who_added = snapshotTodo.child("who_added").getValue().toString();
                     final String resp_person = snapshotTodo.child("resp_person").getValue().toString();
-
+                    //The information of the user who wants to add the requirement is retrieved.
                     user_reference.child(who_added).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot_users) {
@@ -775,7 +794,6 @@ public class Database {
                                 return;
                             }
                             String who_added_name = snapshot_users.child("name").getValue().toString();
-
                             ToDoList todo;
                             if (status.equals("waiting")) {
                                 todo = new ToDoList(description, who_added_name, resp_person_name, key2, who_added);
@@ -783,7 +801,6 @@ public class Database {
                                 todo = new ToDoList(description, who_added_name, resp_person_name, resp_person, key2, status, who_added);
                             }
                             callBack.onToDoListRetrieveSuccess(todo);
-
                         }
 
                         @Override
@@ -813,7 +830,7 @@ public class Database {
      *
      * @param user_key unique key whose friends would be searched for
      * @param callBack the callBack to be called whenever an error occurs or task successfully end
-     * @see #getFriend(String, FriendCallBack, String)
+     * @see #getFriend(String, String, FriendCallBack)
      */
     public void getFriends(final String user_key, final FriendCallBack callBack) {
         if (user_key == null) {
@@ -848,7 +865,7 @@ public class Database {
                             ArrayList<String> friends = (ArrayList<String>) snapshot.getValue();
                             for (String key : friends) {
                                 if (!user_key.equals(key)) {
-                                    getFriend(key, callBack, friend_list_key);
+                                    getFriend(key, friend_list_key, callBack);
                                     return;
                                 }
                             }
@@ -877,10 +894,11 @@ public class Database {
      * {@value KEY_NOT_FOUND} <p>
      *
      * @param friend_key key which would be searched and then constructed as a Friend
+     * @param friendshipsKey key which holds all the information between friends
      * @param callBack   the callBack to be called whenever an error occurs or task successfully end
      * @see Friend
      */
-    public void getFriend(final String friend_key, final FriendCallBack callBack, final String friendshipsKey) {      //friendshipsKey arkadaşlığın bağlı olduğu friends klasındaki keyi tututyor.
+    public void getFriend(final String friend_key, final String friendshipsKey, final FriendCallBack callBack) {      //friendshipsKey arkadaşlığın bağlı olduğu friends klasındaki keyi tututyor.
         if (friend_key == null) {
             callBack.onError(KEY_NOT_FOUND, "aranan key null");
             return;
@@ -893,11 +911,6 @@ public class Database {
                     callBack.onError(KEY_NOT_FOUND, friend_key + " ile ilişkili kullanıcı bulunamadı");
                     return;
                 }
-                /*fixme: kayıt sırasında resim almadığımızdan
-                            rastgele resim koydum.
-                            borçların database'de tutulma yöntemi geçici,
-                            acilen değişmeli
-                */
                 if (!snapshot.child("image").exists()) {
                     photo = "photo yok";
                 } else {
@@ -925,11 +938,8 @@ public class Database {
 
                     }
                 };
-
                 friend.setFriendshipsKey(friendshipsKey);
                 getDebtFromFriend(person.getKey(), friend, friendCallBack);
-
-
             }
 
             @Override
@@ -1008,10 +1018,6 @@ public class Database {
                     callBack.onError(KEY_NOT_FOUND, request_key + " ile ilişkili kullanıcı bulunamadı");
                     return;
                 }
-                /*fixme: kayıt sırasında resim almadığımızdan
-                            rastgele resim koydum.
-                */
-                //int photo = R.drawable.denemeresim;
                 String image = snapshot.child("image").getValue().toString();
                 String name = snapshot.child("name").getValue().toString();
                 if (name == null) {
@@ -1156,7 +1162,7 @@ public class Database {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (!snapshot.exists()) {
-                    //fixme: although it is not an error message in order to use  this method
+                    // although it is not an error message in order to use  this method
                     // in sendFriendRequest, it must send friend_key as error
                     callBack.onError(VALUE_NOT_FOUND, friend_key);
                     return;
@@ -1606,7 +1612,7 @@ public class Database {
                 callBack.onSuccess("Arkadaş silindi");
                 final String user_name = snapshot.child("name").getValue().toString();
                 final String user_foto = snapshot.child("image").getValue().toString();
-                getFriend(friend_key, new FriendCallBack() {
+                getFriend(friend_key, friend_list_key, new FriendCallBack() {
                     @Override
                     public void onFriendRetrieveSuccess(Friend friend) {
                         notificationListener.onPersonalEvent("friend_remove",
@@ -1623,7 +1629,7 @@ public class Database {
                     public void onError(String error_tag, String error) {
                         Log.e(error_tag, error);
                     }
-                }, friend_list_key);
+                });
 
             }
 
@@ -1652,6 +1658,35 @@ public class Database {
                 }
                 handler.removeFromFriendList(friend_key, friends);
                 //no success will be send as it would be send in user_key's snapshot
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                callBack.onError(DATABASE_ERROR, error.getMessage());
+            }
+        });
+    }
+
+    /**
+     *  saves last month's saving. (budget - total expense)
+     * @param saving    last month's saving
+     */
+    public void setLastMonthSaving(int saving){
+        user_reference.child(person.getKey()).child("last_month_saving").setValue(saving);
+    }
+
+    /**
+     * Returns last month's saving with callback
+     */
+    public void getLastMonthSaving(final BudgetCallBack callBack){
+        user_reference.child(person.getKey()).child("last_month_saving").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (!snapshot.exists()){
+                    callBack.onError(VALUE_NOT_FOUND, "önceki ay tasarrufu bulunamadı");
+                    return;
+                }
+                callBack.onBudgetRetrieveSuccess((Integer) snapshot.getValue());
             }
 
             @Override
@@ -1710,7 +1745,6 @@ public class Database {
     }
 
     public void addExpenseToFriends(String name, String type, final String price, String friendshipKey, String date) {
-
         DatabaseReference dbRef = friend_reference.child(friendshipKey).child("expenses");
         String key = dbRef.push().getKey();
         DatabaseReference dbr = dbRef.child(key);
@@ -1720,7 +1754,7 @@ public class Database {
         dbr.child("addedBy").setValue(person.getName());
         dbr.child("date").setValue(date);
 
-        //borç bilgisi -----
+        //debt info
         final DatabaseReference dbDebts = friend_reference.child(friendshipKey).child("debts").child(person.getKey());
         dbDebts.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -1750,7 +1784,7 @@ public class Database {
         dbr.child("addedById").setValue(person.getKey());
         dbr.child("date").setValue(date);
 
-        //borç bilgisi -----
+        //debt info
         final DatabaseReference dbDebts = group_reference.child(groupsKey).child("debts").child(person.getKey());
         for (final String member : groupMembers) {
             if (!member.equals(person.getKey())) {
@@ -1785,13 +1819,6 @@ public class Database {
                 });
             }
         }
-
-
-    }
-
-    public interface TransferCallBack {
-        void onTransferRetrieveSuccess(ArrayList<Transfers> transfers);
-        void onError(String error_tag, String error);
     }
 
     public void getExpensesFromFriend(String friendshipKey, final TransferCallBack callBack){
@@ -1825,9 +1852,6 @@ public class Database {
                     }
                 }
                 callBack.onTransferRetrieveSuccess(expenses);
-//                if(fragment!=null){
-//                    ((EventsFragment) fragment).setArray(expenses);
-//                }
             }
 
             @Override
@@ -1867,9 +1891,6 @@ public class Database {
                     }
                 }
                 callBack.onTransferRetrieveSuccess(expenses);
-//                if(fragment!=null){
-//                    ((EventsFragment) fragment).setArray(expenses);
-//                }
             }
 
             @Override
@@ -1910,11 +1931,15 @@ public class Database {
         });
     }
 
-    public void createNewGroup(final String person_id, List<Friend> checked_personList, final String group_type,
-                               @NotNull final EditText groupName_EditText, final DatabaseCallBack callBack) {
-        if (!groupName_EditText.getText().toString().isEmpty()) {
+    /**
+    *   This method is called to create a new group. Used in AddgGroupsFragment
+    *   Group information is kept in the database both within the group and the user.
+    */
+    public void createNewGroup(final String person_id, ArrayList<Friend> checked_personList, final String group_type,
+                               @NotNull final String groupName, final DatabaseCallBack callBack) {
+        if (!groupName.isEmpty()) {
             if (checked_personList.size() > 0) {
-                final String group_name = groupName_EditText.getText().toString().trim();
+                final String group_name = groupName.trim();
                 Groups group = new Groups(group_name, group_type);
                 group.addFriend(person_id);
                 for (Friend friend : checked_personList) {
@@ -1925,7 +1950,6 @@ public class Database {
                 assert group_key != null;
                 group.setKey(group_key);
                 group_reference.child(group_key).setValue(group);
-                //System.out.println(group.getKey()); check group_key;
 
                 final DatabaseReference cur_user_ref = user_reference.child(person_id);
                 cur_user_ref.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -1943,7 +1967,7 @@ public class Database {
                         }
                         cur_user_ref.child("groups").setValue(current_users_groups);
                         notificationListener.onPersonalEvent("group_add", person_id, group_type,
-                                groupName_EditText.getText().toString());
+                                groupName);
 
                     }
 
@@ -1976,7 +2000,7 @@ public class Database {
                             }
                             user_ref.child("groups").setValue(users_groups);
                             notificationListener.onPersonalEvent("group_add", friendKey, group_type,
-                                    groupName_EditText.getText().toString());
+                                    groupName);
                         }
 
                         @Override
@@ -1994,12 +2018,14 @@ public class Database {
         }
     }
 
+    /**
+    *   Pulls the data of all groups from the database. Updates GroupsFragment
+    */
     public void getAllGroups(final String person_id, final ArrayList<Groups> groupsArrayList, final GroupAdapter groupAdapter) {
         group_reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 groupsArrayList.clear();
-
                 for (final DataSnapshot d : snapshot.getChildren()) {
                     DataSnapshot gmembers_snapshot = d.child("group_members");
                     for (DataSnapshot d2 : gmembers_snapshot.getChildren()) {
@@ -2023,7 +2049,6 @@ public class Database {
 
                                         }
                                     };
-
                                     for(Friend friend : members){
                                         if(!getPerson().getKey().equals(friend.getKey())) {
                                             friend.setFriendshipsKey(group.getKey());
@@ -2037,12 +2062,8 @@ public class Database {
 
                                 }
                             };
-
                             ArrayList<Friend> members = new ArrayList<>();
                             getGroupMembersInfo(group.getGroup_members(),members,infoCallBack);
-
-
-
                         }
                     }
                 }
@@ -2057,6 +2078,9 @@ public class Database {
         });
     }
 
+     /**
+     *  It calls the group members whose keys are kept in the database as a friend object.
+     */
     public void getGroupMembersInfo(final ArrayList<String> groupMembers, final ArrayList<Friend> members, final GetMemberInfoCallBack callBack) {
 
         DatabaseReference dbRef = user_reference;
@@ -2089,9 +2113,8 @@ public class Database {
         dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                float credit = 0;         // kullanıcının diğer kullanıcıdan alması gereken para miktarı
-                float debt = 0;           // kullanıcının borcu
-
+                float credit = 0;         //the amount of money the user must receive from the other user
+                float debt = 0;
                 for (DataSnapshot ds : snapshot.getChildren()) {
                     if (ds.getKey().equals(userId)) {
                         credit += Float.parseFloat((String) ds.getValue());
@@ -2104,7 +2127,6 @@ public class Database {
                     debt = 0;
                 }
                 callBack.onGetDebtFromFriendRetrieveSuccess(debt);
-
             }
 
             @Override
@@ -2129,7 +2151,7 @@ public class Database {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             if (!(snapshot.getValue() == null)) {
-                                Float m = Float.parseFloat(snapshot.getValue().toString());           //benim ondan alacağım
+                                Float m = Float.parseFloat(snapshot.getValue().toString());//what user will take
                                 if (m == Float.parseFloat(newDebt)) {
                                     friend_reference.child(friend.getFriendshipsKey()).child("debts").child(friend.getKey())
                                             .setValue("0");
@@ -2174,8 +2196,9 @@ public class Database {
                                     } else {
                                         for (DataSnapshot dds : s.getChildren()) {
                                             if (dds.getKey().equals(friend.getKey())) {
-                                                float credit = 0;         // kullanıcının diğer kullanıcıdan alması gereken para miktarı
-                                                float debt = 0;           // kullanıcının borcu
+                                                //the amount of money the user must receive from the other user
+                                                float credit = 0;
+                                                float debt = 0;
                                                 debt += Float.parseFloat(ds.getValue().toString());
                                                 credit += Float.parseFloat(dds.getValue().toString());
                                                 debt = debt - credit;
@@ -2190,7 +2213,7 @@ public class Database {
 
                                 @Override
                                 public void onCancelled(@NonNull DatabaseError error) {
-                                    callBack.onError("Hata : ", "gruptan borç çekme hatası");
+                                    callBack.onError(DATABASE_ERROR, error.getMessage());
                                 }
                             });
                         }
@@ -2200,7 +2223,7 @@ public class Database {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                callBack.onError("Hata : ", "Bu kişi henüz hiç harcama yapmamış");
+                callBack.onError(DATABASE_ERROR, error.getMessage());
             }
         });
     }
@@ -2256,13 +2279,7 @@ public class Database {
         });
     }
 
-    public interface GroupCallBack {
-        void onGroupRetrieveSuccess(Groups selected_group);
-
-        void onError(String error_tag, String error);
-    }
-
-    public void getSelectedGroup(final String person_id, final String groupId, final GroupCallBack callBack) {
+    public void getSelectedGroup(final String groupId, final GroupCallBack callBack) {
         group_reference.child(groupId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -2281,9 +2298,9 @@ public class Database {
         });
     }
 
-    public void updateGroup(String group_key, String group_type, @NotNull EditText groupName_EditText, final DatabaseCallBack callBack) {
-        if (!groupName_EditText.getText().toString().isEmpty()) {
-            final String group_name = groupName_EditText.getText().toString().trim();
+    public void updateGroup(String group_key, String group_type, @NotNull String groupName, final DatabaseCallBack callBack) {
+        if (!groupName.isEmpty()) {
+            final String group_name = groupName.trim();
             group_reference.child(group_key).child("group_name").setValue(group_name);
             group_reference.child(group_key).child("group_type").setValue(group_type);
             callBack.onSuccess("Değişikliler başarıyla kaydedildi");
@@ -2331,14 +2348,10 @@ public class Database {
                     }
                 });
             }
-
             final ArrayList<String> friend_keys = new ArrayList<>();
             for (Friend friend : checked_personList) {
                 friend_keys.add(friend.getKey());
             }
-            Log.d(TAG, "size: " + friend_keys.size());
-
-
             final DatabaseReference group_ref = group_reference.child(groupKey).child("group_members");
             group_ref.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -2360,6 +2373,11 @@ public class Database {
         }
     }
 
+    /**
+    *  It is used to delete friends from the group.
+    *  Checks the number of group members.
+    *  If there is only one person left in the group, the group is deleted
+    */
     public void removeFromGroup(final String selected_person_id, final Groups group, final DatabaseCallBack callBack) {
         if (selected_person_id == null) {
             callBack.onError(KEY_NOT_FOUND, "silinecek key null");
@@ -2375,6 +2393,7 @@ public class Database {
                     callBack.onError(VALUE_NOT_FOUND, "Burası boş");
                     return;
                 }
+                @SuppressWarnings("unchecked")
                 ArrayList<String> current_users_groups = (ArrayList<String>) snapshot.getValue();
                 if (current_users_groups.contains(group_key)) {
                     current_users_groups.remove(group_key);
@@ -2383,6 +2402,7 @@ public class Database {
                     return;
                 }
                 user_groups_ref.setValue(current_users_groups);
+                notificationListener.onPersonalEvent("group_remove", selected_person_id, group.getGroup_type(), group.getGroup_name());
             }
 
             @Override
@@ -2395,7 +2415,7 @@ public class Database {
         if (group_members_size <= 2) {
             group_reference.child(group_key).setValue(null);
             group.removeFriend(selected_person_id);
-            String last_person_key = group.getGroup_members().get(0);
+            final String last_person_key = group.getGroup_members().get(0);
             final DatabaseReference l_user_groups_ref = user_reference.child(last_person_key).child("groups");
             l_user_groups_ref.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -2404,6 +2424,7 @@ public class Database {
                         callBack.onError(VALUE_NOT_FOUND, "Burası boş");
                         return;
                     }
+                    @SuppressWarnings("unchecked")
                     ArrayList<String> current_users_groups = (ArrayList<String>) snapshot.getValue();
                     if (current_users_groups.contains(group_key)) {
                         current_users_groups.remove(group_key);
@@ -2413,6 +2434,7 @@ public class Database {
                     }
                     l_user_groups_ref.setValue(current_users_groups);
                     callBack.onSuccess("Grup silindi");
+                    notificationListener.onPersonalEvent("group_remove", last_person_key, group.getGroup_type(), group.getGroup_name());
                 }
 
                 @Override
@@ -2450,10 +2472,12 @@ public class Database {
         final String group_key = group.getKey();
         final ArrayList<String> group_members_id = group.getGroup_members();
         for (String friend_id : group_members_id) {
+            final String friend_id_final = friend_id;
             final DatabaseReference user_groups_ref = user_reference.child(friend_id).child("groups");
             user_groups_ref.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    @SuppressWarnings("unchecked")
                     ArrayList<String> current_users_groups = (ArrayList<String>) snapshot.getValue();
                     if (current_users_groups.contains(group_key)) {
                         current_users_groups.remove(group_key);
@@ -2461,6 +2485,7 @@ public class Database {
                         callBack.onError(ALREADY_REMOVED_FROM_GROUP, "Bu gruptan zaten silinmiş");
                     }
                     user_groups_ref.setValue(current_users_groups);
+                    notificationListener.onPersonalEvent("group_remove", friend_id_final, group.getGroup_type(), group.getGroup_name());
                 }
 
                 @Override
@@ -2469,53 +2494,7 @@ public class Database {
                 }
             });
         }
-
         group_reference.child(group_key).setValue(null);
         callBack.onSuccess("Grup başarıyla silindi");
     }
-
-    public void getUser(final String friend_key, final FriendCallBack callBack) {
-        if (friend_key == null) {
-            callBack.onError(KEY_NOT_FOUND, "aranan key null");
-            return;
-        }
-        user_reference.child(friend_key).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                String photo;
-                if (!snapshot.exists()) {
-                    callBack.onError(KEY_NOT_FOUND, friend_key + " ile ilişkili kullanıcı bulunamadı");
-                    return;
-                }
-                /*fixme: kayıt sırasında resim almadığımızdan
-                            rastgele resim koydum.
-                            borçların database'de tutulma yöntemi geçici,
-                            acilen değişmeli
-                */
-                if (!snapshot.child("image").exists()) {
-                    photo = "photo yok";
-                } else {
-                    photo = snapshot.child("image").getValue().toString();
-                }
-
-                String name = snapshot.child("name").getValue().toString();
-                if (name.equals("No name")) {
-                    //if there was one name when user login "No name" would be used, in such case
-                    //using email as name would be better to show user to recognize the person
-                    name = snapshot.child("email").getValue().toString();
-                }
-                int amount = 0;
-                Friend friend = new Friend(photo, name, amount, friend_key);
-                callBack.onFriendRetrieveSuccess(friend);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                callBack.onError(DATABASE_ERROR, error.getMessage());
-            }
-        });
-    }
-
-
-
 }

@@ -54,6 +54,7 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemSele
     ImageView filter;
     ImageView personstatus;
     ImageView personPhoto;
+    TextView monthlySaving;
     EditText expenseName, price;
     String type;
     String selectedFilter;
@@ -65,10 +66,12 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemSele
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_personal, container, false);
         db = Database.getInstance();
-        db.getBudget(budgetCallBack);
+
+        monthlySaving = root.findViewById(R.id.monthly_saving);
+        monthlySaving.setText(getString(R.string.monthly_saving, 0));
+
         expenseList = new ArrayList<>();
-        db.getExpenses(expenseCallBack);
-        checkDate();
+        db.getBudget(budgetCallBack);
 
         personPhoto = root.findViewById(R.id.personalOperations_imagePerson);
         personstatus = root.findViewById(R.id.personalOperations_PersonBackGround);
@@ -82,7 +85,7 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemSele
                 getResources().getStringArray(R.array.expensePersonalItems)[3],
                 getResources().getStringArray(R.array.expensePersonalItems)[4]};
 
-        spin = (Spinner) root.findViewById(R.id.spinner);
+        spin = root.findViewById(R.id.spinner);
         spin.setOnItemSelectedListener(this);
         ArrayAdapter aa = new ArrayAdapter(this.getContext(), simple_spinner_item, country);
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -99,7 +102,7 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemSele
 
 
 
-        recyclerView = (RecyclerView) root.findViewById(R.id.recycler_expense);
+        recyclerView = root.findViewById(R.id.recycler_expense);
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this.getContext(),1);
         recyclerView.setLayoutManager(mLayoutManager);
@@ -162,12 +165,23 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemSele
         @Override
         public void onBudgetRetrieveSuccess(int budget) {
             Log.d(TAG, String.valueOf(budget));
+            db.getExpenses(expenseCallBack);
+            db.getLastMonthSaving(new Database.BudgetCallBack() {
+                @Override
+                public void onBudgetRetrieveSuccess(int saving) {
+                    monthlySaving.setText(getString(R.string.monthly_saving, saving));
+                }
+
+                @Override
+                public void onError(String error_tag, String error){Log.e(error_tag, error);}
+            });
             checkBudget(budget);
         }
 
         @Override
         public void onError(String error_tag, String error) {
             Log.e(error_tag, error);
+            db.getExpenses(expenseCallBack);
             checkBudget(null);
         }
     };
@@ -183,6 +197,7 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemSele
             }
             update();
             checkOverBudget();
+            checkDate();
         }
 
         @Override
@@ -198,6 +213,9 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemSele
             @Override
             public void onLoginDateRetrieveSuccess(long date) {
                 Calendar c = Calendar.getInstance();
+                if (date > c.getTimeInMillis()){
+                    return;
+                }
                 int current_month = c.get(Calendar.MONTH);
                 c.setTimeInMillis(date);
                 int last_login_month = c.get(Calendar.MONTH);
@@ -205,16 +223,29 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemSele
                     db.deleteAllNotifications("personal", db.getPerson().getKey(), new Database.DatabaseCallBack() {
                         @Override
                         public void onSuccess(String success) {
-                            db.createNotification("personal",
-                                    db.getPerson().getKey(),
-                                    "monthly_expense",
-                                    db.getPerson().getImage(),
-                                    String.valueOf(totExpense),
-                                    new Database.DatabaseCallBack() {
-                                        @Override
-                                        public void onSuccess(String success) { Log.d(TAG, success); }
-                                        @Override
-                                        public void onError(String error_tag, String error) { Log.e(error_tag, error); }
+                            db.deleteAllPersonalExpenses(new Database.DatabaseCallBack() {
+                                @Override
+                                public void onSuccess(String success) {
+                                    db.createNotification("personal",
+                                            db.getPerson().getKey(),
+                                            "monthly_expense",
+                                            db.getPerson().getImage(),
+                                            String.valueOf(totExpense),
+                                            new Database.DatabaseCallBack() {
+                                                @Override
+                                                public void onSuccess(String success) {
+                                                    Log.d(TAG, success);
+                                                    db.setLastMonthSaving(budget - totExpense);
+                                                }
+                                                @Override
+                                                public void onError(String error_tag, String error) { Log.e(error_tag, error); }
+                                            });
+                                }
+
+                                @Override
+                                public void onError(String error_tag, String error) {
+                                    Log.e(error_tag, error);
+                                }
                             });
                         }
 
@@ -234,12 +265,11 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemSele
     private void filterList(String status){
         if(!status.equals(getResources().getString(R.string.title_all))) {
             selectedFilter = status;
-            ArrayList filteredList = new ArrayList<>();
+            ArrayList<Expense> filteredList = new ArrayList<>();
             for (Expense expense : expenseList) {
                 if (expense.getType().toLowerCase().contains(status)) {
                     filteredList.add(expense);
                 }
-
             }
             adapter = new ExpensesAdapter(this.getContext(), filteredList);
             recyclerView.setAdapter(adapter);
@@ -296,7 +326,6 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemSele
     }
 
     private void addBudgetDialog() {
-
         @SuppressLint("InflateParams") final View DialogView = LayoutInflater.from(this.getContext()).inflate(R.layout.dialog_add_budget, null);
         final Dialog dialog = new Dialog(this.getContext(), R.style.DialogAddBudget);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -380,8 +409,6 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemSele
             personstatus.setImageResource(R.drawable.circle_background_red);
             progressBar.getProgressDrawable().setColorFilter(
                     getResources().getColor(R.color.red), android.graphics.PorterDuff.Mode.SRC_IN);
-
-
         }
         if((budget - totExpense)>0){
             personstatus.setImageResource(R.drawable.circle_background_green);
@@ -389,10 +416,6 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemSele
                 progressBar.setProgressDrawable(getResources().getDrawable(R.drawable.progressbar_custom));
             }
             control=false;
-
-
-        /*   progressBar.getIndeterminateDrawable().setColorFilter(
-                    getResources().getColor(R.color.blue), android.graphics.PorterDuff.Mode.SRC_IN);*/
         }
 
         progressBar.setProgress(totExpense);

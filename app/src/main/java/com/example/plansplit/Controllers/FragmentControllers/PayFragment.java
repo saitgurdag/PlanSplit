@@ -19,7 +19,6 @@ import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
-import com.example.plansplit.Controllers.HomeActivity;
 import com.example.plansplit.Controllers.MyGroupActivity;
 import com.example.plansplit.Models.Database;
 import com.example.plansplit.Models.Objects.Friend;

@@ -4,16 +4,17 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
-import android.os.LocaleList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.plansplit.Models.Objects.Expense;
 import com.example.plansplit.R;
+
 import java.util.List;
 import java.util.Locale;
 
@@ -54,19 +55,12 @@ public class ExpensesAdapter extends RecyclerView.Adapter<ExpensesAdapter.Expens
         holder.name.setText(expense.getName());
 
         String type = "";
-        String currentLang = Locale.getDefault().getLanguage();
-        //System.out.println("TEL GERCEK DİLİ "+Lo);
 
         SharedPreferences prefs = mCtx.getSharedPreferences("LanguageSettings", Activity.MODE_PRIVATE);
-        String selected_language = prefs.getString("My_Lang", "");
-        System.out.println("seçilen dil: " + selected_language);
+        String selected_language = prefs.getString("My_Lang", "en");
 
-        System.out.println(Locale.getDefault().getDisplayLanguage()+ "TELİN ACILIS DİLİ BU");   //System.out.println(Locale.getDefault().getDisplayLanguage()+ "TELİN ACILIS DİLİ BU");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             if(selected_language.equals("en") ){   //Eger kullanıcı ingilizce kullanıyorsa   SDK 24 DEN BÜUYÜK OLUNCA CURR LANG İ HEP EN SANIYO
-                System.out.println(Build.VERSION.SDK_INT +"SDK BU");
-                System.out.println("DİL SDK BÜYÜK İNG");
-                System.out.println(Locale.getDefault().getLanguage());
                 if (expense.getType().toLowerCase().equals("yiyecek")){
                     type = "food";
                 }else if(expense.getType().toLowerCase().equals("giyecek")){
@@ -79,7 +73,6 @@ public class ExpensesAdapter extends RecyclerView.Adapter<ExpensesAdapter.Expens
                     type = "others";
                 }
             }else if(selected_language.equals("de")){  //Eger Kullanıcı almanca kullanıyosa
-                System.out.println("DİL SDK BÜYÜK ALM");
                 System.out.println(Locale.getDefault().getLanguage());
                 if (expense.getType().toLowerCase().equals("yiyecek")){
                     type = "nahrung";
@@ -97,8 +90,7 @@ public class ExpensesAdapter extends RecyclerView.Adapter<ExpensesAdapter.Expens
             }
             holder.type.setText(type);
         }else {
-            if(selected_language.equals("en")){   //Eger kullanıcı ingilizce kullanıyorsa
-                System.out.println("DİL SDK KUCUK ENG");
+            if(selected_language.equals("en")){   //Eger kullanıcı ingilizce kullanıyorsaa
                 if (expense.getType().toLowerCase().equals("yiyecek")){
                     type = "food";
                 }else if(expense.getType().toLowerCase().equals("giyecek")){
@@ -111,7 +103,6 @@ public class ExpensesAdapter extends RecyclerView.Adapter<ExpensesAdapter.Expens
                     type = "others";
                 }
             }else if(selected_language.equals("de")){  //Eger Kullanıcı almanca kullanıyosa
-                System.out.println("DİL SDK KUCUK ALM");
                 if (expense.getType().toLowerCase().equals("yiyecek")){
                     type = "nahrung";
                 }else if(expense.getType().toLowerCase().equals("giyecek")){

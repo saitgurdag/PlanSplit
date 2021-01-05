@@ -1,6 +1,5 @@
 package com.example.plansplit.Controllers.Adapters;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -16,19 +15,10 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.fragment.app.ListFragment;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.plansplit.Controllers.FragmentControllers.AddExpenseFragment;
-import com.example.plansplit.Controllers.FragmentControllers.friends.FriendsFragment;
 import com.example.plansplit.Controllers.FragmentControllers.groups.GroupsFragment;
 import com.example.plansplit.Controllers.HomeActivity;
-import com.example.plansplit.Controllers.MyGroupActivity;
 import com.example.plansplit.Models.Database;
 import com.example.plansplit.Models.Objects.Friend;
 import com.example.plansplit.Models.Objects.Groups;
@@ -46,16 +36,16 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ToDoLi
     private RecyclerView m_RecyclerView;
     private String operation;
     SharedPreferences mPrefs;
-    ItemTouchHelper.SimpleCallback itemtouchhelpercallback;
+
 
 
     public ToDoListAdapter(Context mContext, String key,RecyclerView m_RecyclerView, String operation) {
-        this.mPrefs = mContext.getSharedPreferences("listbell", Context.MODE_PRIVATE);
+        this.mPrefs = mContext.getSharedPreferences("listbell", Context.MODE_PRIVATE); //Information of the warning icon on the groups page is given.
         database = Database.getInstance();
         this.mContext = mContext;
         this.m_RecyclerView=m_RecyclerView;
         this.key = key;
-        this.operation=operation;
+        this.operation=operation;   //Indicates for which part the todolist will be processed
         if(operation.equals("friend")){
             loadTodosFriend();
         }else{
@@ -65,11 +55,11 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ToDoLi
 
     public void loadTodosFriend(){
             this.toDoList = new ArrayList<>();
-            database.gettoDoListFriend(key, todolistCallBack);
+            database.getToDoListFriend(key, todolistCallBack);
     }
     public void loadTodosGroup(){
         this.toDoList = new ArrayList<>();
-        database.gettoDoListGroup(key, todolistCallBack);
+        database.getToDoListGroup(key, todolistCallBack);
     }
 
     private Database.ToDoListCallBack todolistCallBack = new Database.ToDoListCallBack() {
@@ -152,11 +142,7 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ToDoLi
         holder.toDo_Card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
-
                 if(toDo.getStatus().equals(waiting)){
-
                     AlertDialog.Builder mBuilder = new AlertDialog.Builder(view.getRootView().getContext());
                     View take_resp_view = LayoutInflater.from(view.getRootView().getContext()).inflate(R.layout.dialog_take_resp, null);
                     TextView take_req_descTv = take_resp_view.findViewById(R.id.take_req_descriptionTv);
@@ -176,14 +162,15 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ToDoLi
                     final AlertDialog dialog = mBuilder.create();
 
                     mSave.setOnClickListener(new View.OnClickListener() {
+                           //users indicate that they will get the requirement they chose from the list.
                         @Override
                         public void onClick(View view) {
                             if(operation.equals("friend")){
                                 database.updateDoListFriend(key, toDoList.get(holder.getAdapterPosition()).getKey(), "save",databaseCallBack);
                             }else{
-                                database.updateDoListGroup(key, toDoList.get(holder.getAdapterPosition()).getKey(),"save",databaseCallBack);
+                                database.updateToDoListGroup(key, toDoList.get(holder.getAdapterPosition()).getKey(),"save",databaseCallBack);
                                 SharedPreferences.Editor prefsEditor = mPrefs.edit();
-                                prefsEditor.putBoolean("listbell", true);
+                                prefsEditor.putBoolean("listbell", true); //indicates that the user has a need to buy.
                                 prefsEditor.putString("listbell_key", key);
                                 prefsEditor.apply();
                             }
@@ -195,7 +182,7 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ToDoLi
                         @Override
                         public void onClick(View view) {
                             SharedPreferences.Editor prefsEditor = mPrefs.edit();
-                            prefsEditor.putBoolean("listbell", false);
+                            prefsEditor.putBoolean("listbell", false); //indicates that there is no need for the user to buy.
                             prefsEditor.putString("listbell_key", key);
                             prefsEditor.apply();
                             dialog.dismiss();
@@ -203,6 +190,7 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ToDoLi
                     });
                     dialog.show();
                 } if(toDo.getStatus().equals(reserved)&&(toDo.getResp_person().equals(database.getPerson().getKey()))){
+                     //users choose the action for the requirements that they will claim.
                     AlertDialog.Builder mBuilder = new AlertDialog.Builder(view.getRootView().getContext());
                     View cancel_resp_view = LayoutInflater.from(view.getRootView().getContext()).inflate(R.layout.dialog_cancel_req_resp, null);
                     TextView cancel_req_descTv = cancel_resp_view.findViewById(R.id.cancel_req_descriptionTv);
@@ -232,23 +220,22 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ToDoLi
                     });
 
                     mSave.setOnClickListener(new View.OnClickListener() {
+                        //users chose to pay for the needs they stated they would receive.
                         @Override
                         public void onClick(View view) {
                             Groups groups2=null;
                             Friend friend2=null;
                             dialog.dismiss();
-                            MyGroupActivity myGroupActivity=new MyGroupActivity();
                             Intent intent = new Intent(view.getContext(), HomeActivity.class);
                             if(operation.equals("group")) {
 
-
+                           // The information of the group to which todolist will be added is sent via intent.
                                 intent.putExtra("group_key_list", key);
                                 intent.putExtra("description", toDo.getDescription());
                                 intent.putExtra("todo_key", toDo.getKey());
                                 for (Groups groups : GroupsFragment.groupsArrayList) {
                                     if (groups.getGroupKey().equals(key)) {
                                         groups2 = groups;
-
                                     }
                                 }
                                 Gson gson = new Gson();
@@ -257,14 +244,13 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ToDoLi
                                 intent.putExtra("group_from_list", json);
                             }
                             else{
-
+                               // The information of the friend to which todolist will be added is sent via intent.
                                 intent.putExtra("description", toDo.getDescription());
                                 intent.putExtra("todo_key", toDo.getKey());
                                 for (Friend friend : FriendsAdapter.friends) {
                                     if (friend.getKey().equals(key)) {
                                         friend2=friend;
-                                    intent.putExtra("friend_key_list", friend.getFriendshipsKey());
-
+                                        intent.putExtra("friend_key_list", friend.getFriendshipsKey());
                                     }
                                 }
                                 Gson gson = new Gson();
@@ -272,21 +258,20 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ToDoLi
                                 System.out.println(json);
                                 intent.putExtra("friend_from_list", json);
                             }
-
                           mContext.startActivity(intent);
-
                         }
                     });
 
                     mBack.setOnClickListener(new View.OnClickListener() {
+                           // users stop receiving the need they have stated they will receive.
                         @Override
                         public void onClick(View view) {
                             if(operation.equals("friend")){
                                 database.updateDoListFriend(key, toDoList.get(holder.getAdapterPosition()).getKey(), "cancel",databaseCallBack);
                             }else{
-                                database.updateDoListGroup(key, toDoList.get(holder.getAdapterPosition()).getKey(),"cancel",databaseCallBack);
+                                database.updateToDoListGroup(key, toDoList.get(holder.getAdapterPosition()).getKey(),"cancel",databaseCallBack);
                                 SharedPreferences.Editor prefsEditor = mPrefs.edit();
-                                prefsEditor.putBoolean("listbell", false);
+                                prefsEditor.putBoolean("listbell", false); //indicates that there is no need for the user to buy.
                                 prefsEditor.putString("listbell_key", key);
                                 prefsEditor.apply();
                                 dialog.dismiss();
@@ -298,6 +283,7 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ToDoLi
                     dialog.show();
                 }
                 if(toDo.getStatus().equals(reserved)&&!(toDo.getResp_person().equals(database.getPerson().getKey()))){
+                      //Reservation cannot be made for a previously reserved requirement.
                     Toast.makeText(mContext,  toDo.getResp_person_name()+" "+mContext.getResources().getString(R.string.already_reserved), Toast.LENGTH_SHORT).show();
                 }
             }

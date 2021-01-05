@@ -27,6 +27,7 @@ import com.example.plansplit.Controllers.FragmentControllers.notifications.frien
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class NotificationsFragment extends Fragment {
@@ -53,6 +54,7 @@ public class NotificationsFragment extends Fragment {
         database.getPersonalNotifications(getContext(), new Database.NotificationCallBack() {
             @Override
             public void onNotificationsRetrieveSuccess(ArrayList<Notification> notifications) {
+                Collections.sort(notifications, Notification.getComparator());
                 notificationList.addAll(notifications);
                 Collections.reverse(notificationList);
                 adapter.notifyDataSetChanged();
@@ -93,12 +95,6 @@ public class NotificationsFragment extends Fragment {
         FragmentManager fragmentManager = getParentFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.nav_host_fragment, friendRequestsFragment);
-        /*fixme:
-           bir fragmenttan bildirimlere, ordan da isteklere geçildikten sonra
-            geri tuşuna basılınca bildirimlere değil önceki fragmenta döndürüyor -arda
-         */
-        // belki geri tuşu overridelanabilir ama geri tuşunu değiştirmek
-        // tavsiye edilen tasarım normlarının dışında sayılıyor genelde
         fragmentTransaction.addToBackStack(TAG);
         fragmentTransaction.commit();
         return super.onOptionsItemSelected(item);

@@ -1,4 +1,5 @@
 <resources>
+    <string name="log_out_from_app" translatable="false">Uygulamadan başarıyla çıkış yapıldı!</string>
     <string name="ask_need">Lütfen bir ihtiyaç giriniz</string>
     <string name="already_reserved">önceden rezerve yaptı</string>
     <string name="will_buy">alacak</string>
@@ -145,6 +146,7 @@
 
     <string name="remaining_budget">%1$d TL</string>
     <string name="budget">%1$d TL</string>
+    <string name="monthly_saving">Önceki ayki tasarruf: %1$d TL</string>
 
     <!-- notifications -->
     <!-- personal notifications -->

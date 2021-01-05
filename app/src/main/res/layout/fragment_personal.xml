@@ -74,11 +74,11 @@
                     android:textSize="24sp" />
 
                 <TextView
-                    android:id="@+id/textView5"
+                    android:id="@+id/monthly_saving"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/avenir"
-                    android:text="Ekim Ayı Tasarrufu"
+                    android:text="@string/monthly_saving"
                     android:textColor="@color/grey"
                     android:textSize="14sp" />
             </LinearLayout>
