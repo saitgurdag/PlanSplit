@@ -93,7 +93,6 @@ public class AddGroupsFragment extends Fragment {
 
         extras = getArguments();
         if (extras != null && extras.keySet().contains("group")) {
-            System.out.println("BURAYA GELDİM EXTRAS " + extras.getString("group"));
             Gson gson = new Gson();
             String json = extras.getString("group");
             group = gson.fromJson(json, Groups.class);
@@ -122,7 +121,6 @@ public class AddGroupsFragment extends Fragment {
                 public void onItemClick(int position, View v) {
                     String selected_person_id = AddGroupsAdapter.addgroups_personList.get(position).getKey();
                     String person_name = AddGroupsAdapter.addgroups_personList.get(position).getName();
-                    System.out.println("tıklanılan kişi: " + person_name);
                     if(person_id.equals(group.getGroup_members().get(0)) || person_id.equals(selected_person_id)){
                         showAlert(selected_person_id, person_name);
 
@@ -177,7 +175,6 @@ public class AddGroupsFragment extends Fragment {
                     save_button.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            System.out.println("Checklenen insan sayısı: " + AddGroupsAdapter.checked_personList.size());
                             addUserToGroup(group, AddGroupsAdapter.checked_personList);
 
                             dialog.dismiss();
@@ -262,7 +259,6 @@ public class AddGroupsFragment extends Fragment {
                         rbuttonOther.setTextColor(Color.BLACK);
                         group_type = "ev";
                         groupPicture.setImageResource(homePicture);
-                        System.out.println("Ev butonu tıklandı");
                         break;
                     case R.id.rbuttonWear:
                         rbuttonHouse.setTextColor(Color.BLACK);
@@ -271,7 +267,6 @@ public class AddGroupsFragment extends Fragment {
                         rbuttonOther.setTextColor(Color.BLACK);
                         group_type = "iş";
                         groupPicture.setImageResource(workPicture);
-                        System.out.println("iş butonu tıklandı");
                         break;
                     case R.id.rbuttonStationery:
                         rbuttonHouse.setTextColor(Color.BLACK);
@@ -280,7 +275,6 @@ public class AddGroupsFragment extends Fragment {
                         rbuttonOther.setTextColor(Color.BLACK);
                         group_type = "seyahat";
                         groupPicture.setImageResource(tripPicture);
-                        System.out.println("seyahat butonu tıklandı");
                         break;
                     case R.id.rbuttonOther:
                         rbuttonHouse.setTextColor(Color.BLACK);
@@ -289,7 +283,6 @@ public class AddGroupsFragment extends Fragment {
                         rbuttonOther.setTextColor(Color.WHITE);
                         group_type = "diğer";
                         groupPicture.setImageResource(otherPicture);
-                        System.out.println("Diğer butonu tıklandı");
                         break;
                 }
             }

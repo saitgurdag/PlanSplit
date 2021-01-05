@@ -92,7 +92,6 @@ public class MyGroupActivity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem menuItem) {
                 if (menuItem.getItemId() == R.id.mygroup_group_options) {
                     bundle = new Bundle();
-                    System.out.println("Grup keyi buton click: " + group.getKey());
                     Gson gson = new Gson();
                     String json = gson.toJson(group);
                     bundle.putString("group", json);
@@ -242,7 +241,6 @@ public class MyGroupActivity extends AppCompatActivity {
             if (extras.keySet().contains("person_id")) {
                 person_id = extras.getString("person_id");
             }
-            // groupPhotoIv.setImageResource(friend.getPerson_image());
             groupPhotoIv.setBackground(null);
             groupPhotoIv.setPadding(0,0,0,0);
             Picasso.with(getApplicationContext()).load(friend.getPerson_image()).into(groupPhotoIv);
@@ -277,7 +275,6 @@ public class MyGroupActivity extends AppCompatActivity {
             Picasso.with(getApplicationContext()).load(friend.getPerson_image()).into(groupPhotoIv);
             group_title = friend.getName();
             groupnameTv.setText(group_title);
-            System.out.println("arkadaş keyi: " + friend.getKey() + " personidsi " + database.getPerson().getKey());
             bundlelistfriends.putString("friend_key", friend.getKey());
             bundlelistfriends.putString("person_key", database.getPerson().getKey());
             navController.navigate(R.id.navi_todo_list, bundlelistfriends);
