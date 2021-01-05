@@ -135,6 +135,7 @@
     <string name="add_friend" translatable="false">Add Friend</string>
     <string name="add_new_group" translatable="false">ADD NEW GROUP</string>
     <string name="title_expenses" translatable="false">Expenses</string>
+    <string name="friend_removed" translatable="false">Friend deleted</string>
 
     <string name="title_debts" translatable="false">debts</string>
     <string name="group_totalExpense" translatable="false" >Group Total Expenses</string>
@@ -142,6 +143,8 @@
     <string name="fromGroupDeleted" translatable="false" >this person deleted from group</string>
     <string name="group_delete_alert" translatable="false">Are you sure you want to delete the group?</string>
     <string name="no" translatable="false" >No</string>
+    <string name="successfullyAdded" translatable="false">Successfully Added</string>
+    <string name="changes_saved_successfully" translatable="false">The changes have been saved successfully</string>
 
     <string name="remaining_budget">%1$d TL</string>
     <string name="budget">%1$d TL</string>

@@ -141,6 +141,10 @@
     <string name="fromGroupDeleted" translatable="false">diese Person von der Gruppe entfrenet</string>
     <string name="group_delete_alert" translatable="false">Möchten Sie die Gruppe wirklich löschen?</string>
     <string name="no" translatable="false" >Nein</string>
+    <string name="friend_removed" translatable="false">Freund gelöscht</string>
+    <string name="successfullyAdded" translatable="false">Erfolgreich hinzugefügt</string>
+    <string name="changes_saved_successfully" translatable="false">Die Änderungen wurden erfolgreich gespeichert</string>
+
 
     <string name="remaining_budget">%1$d TL</string>
     <string name="budget">%1$d TL</string>

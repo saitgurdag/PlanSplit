@@ -18,7 +18,7 @@
         android:clickable="true"
         android:focusable="true"
         android:orientation="vertical"
-        app:cardCornerRadius="12dp">
+        app:cardCornerRadius="12.5dp">
 
         <RelativeLayout
             android:id="@+id/friend_background_layout"
