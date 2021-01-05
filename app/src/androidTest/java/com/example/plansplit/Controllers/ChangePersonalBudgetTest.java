@@ -52,7 +52,7 @@ public class ChangePersonalBudgetTest {
         }
 
         ViewInteraction appCompatTextView = onView(
-                allOf(withId(R.id.progress_text), withText("0 TL"),
+                allOf(withId(R.id.progress_text),
                         childAtPosition(
                                 childAtPosition(
                                         withClassName(is("android.widget.ScrollView")),

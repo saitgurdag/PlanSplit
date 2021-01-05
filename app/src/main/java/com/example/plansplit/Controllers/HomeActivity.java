@@ -309,7 +309,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         String text=adapterView.getItemAtPosition(i).toString();
         AddExpenseFragment.sharemethod=text;
-        //Toast.makeText(adapterView.getContext(),text,Toast.LENGTH_SHORT).show();
     }
 
     @Override

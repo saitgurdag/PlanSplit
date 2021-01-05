@@ -199,6 +199,9 @@ public class Database {
         void removeFromFriendList(String key, ArrayList<String> friends);
     }
 
+    /**
+     * A private handler for adding new ToDos
+     */
     @SuppressWarnings("unused")
     private interface ToDoListHandler {
         void handler(String key);
@@ -458,7 +461,7 @@ public class Database {
             }
         });
     }
-
+       //Updates are made for the friends section that will take place in the todolist.
     public void updateDoListFriend(final String friend_key, final String toDo_key, final String operation, final DatabaseCallBack callBack) {
         final ToDoListHandler handler = new ToDoListHandler() {
             @Override
@@ -477,6 +480,7 @@ public class Database {
 
             }
         };
+        //The information of the user making the transaction is taken.
         user_reference.child(person.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull final DataSnapshot snapshot_user) {
@@ -487,7 +491,7 @@ public class Database {
                 }
                 @SuppressWarnings("unchecked")
                 ArrayList<String> friend_list_keys = (ArrayList<String>)
-                        snapshot_user.child("friends").getValue();            //kullanıcı arkadaş listeleri Mli olanlar
+                        snapshot_user.child("friends").getValue();
                 if (friend_list_keys == null) {
                     callBack.onError(FRIEND_LIST_EMPTY, "Arkadaş listesi boş");
                     return;
@@ -525,7 +529,7 @@ public class Database {
             }
         });
     }
-
+    //Updates are made for the groups section that will take place in the todolist.
     public void updateDoListGroup(@NonNull final String group_key, @NonNull final String toDo_key, final String operation, final DatabaseCallBack callBack){
         if(operation.equals("save")){
             group_reference.child(group_key).child("todos").child(toDo_key).child("resp_person_name").setValue(person.getName());
@@ -541,6 +545,7 @@ public class Database {
         callBack.onSuccess("group todo list updatelendi: " + operation);
     }
 
+    //Information on todolists present in the friends section is obtained.
     public void gettoDoListFriend(final String friend_key, final ToDoListCallBack callBack){
         user_reference.child(person.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -581,7 +586,6 @@ public class Database {
                                     }
                                     for (final String key2 : todos.keySet()) {
                                         final DataSnapshot snapshotTodo = snapshot_friend.child("todos").child(key2);
-                                        final DataSnapshot snapshot_friendget = snapshot_friend.child("friends").child(friend_key);
                                         //description, status, who_added, resp_person_name, key
 
                                         final String description = snapshotTodo.child("description").getValue().toString();
@@ -589,11 +593,8 @@ public class Database {
                                         final String resp_person_name = snapshotTodo.child("resp_person_name").getValue().toString();
                                         final String who_added = snapshotTodo.child("who_added").getValue().toString();
                                         final String resp_person = snapshotTodo.child("resp_person").getValue().toString();
-                                        //if(snapshotTodo.child("who_added").getValue().toString().equals(userId)){
-                                        //    who_added=snapshot_user.child("name").getValue().toString();
-                                        //    todolists.add(new ToDoList(description, who_added, key2));
-                                        //}
 
+                                        //The information of the person adding the requirement is obtained.
                                         user_reference.child(who_added).addListenerForSingleValueEvent(new ValueEventListener() {
                                             @Override
                                             public void onDataChange(@NonNull DataSnapshot snapshot_users_friend) {
@@ -603,7 +604,6 @@ public class Database {
                                                 }
                                                 String who_added_name = snapshot_users_friend.child("name").getValue().toString();
 
-                                                //ArrayList<ToDoList> todolists = new ArrayList<>();
                                                 ToDoList todo;
                                                 if (status.equals("waiting")) {
                                                     todo = new ToDoList(description, who_added_name, resp_person_name, key2, who_added);
@@ -611,15 +611,6 @@ public class Database {
                                                     todo = new ToDoList(description, who_added_name, resp_person_name, resp_person, key2, status, who_added);
                                                 }
                                                 callBack.onToDoListRetrieveSuccess(todo);
-                                                //todolists.add(todo);
-                                                //callBack.onToDoListRetrieveSuccess(todolists);
-
-                                               /* snapshot_users_friend.child("name").getValue().toString();
-                                                ArrayList<ToDoList> todolists2 = new ArrayList<>();
-                                                 todolists2.add(new ToDoList(description, who_added, resp_person_name,key2));
-                                                     todolists2.addAll(todolists);
-                                                todolists2.get(todolists2.size()).setWho_Added(snapshot_users_friend.child("name").getValue().toString());
-                                                */
                                             }
 
                                             @Override
@@ -648,7 +639,7 @@ public class Database {
         });
 
     }
-
+    //Todos additions are made in the friends section.
     public void addtoDoListFriend(final String friend_key, final ToDoList todo, final DatabaseCallBack callBack) {
         final ToDoListHandler handler = new ToDoListHandler() {
             @Override
@@ -661,7 +652,7 @@ public class Database {
                 databaseReference.child("who_added").setValue(todo.getWho_added());
             }
         };
-
+//The information of the user who wants to add the requirement is retrieved.
         user_reference.child(person.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -672,7 +663,7 @@ public class Database {
                 }
                 @SuppressWarnings("unchecked")
                 ArrayList<String> friend_list_keys = (ArrayList<String>)
-                        snapshot.child("friends").getValue();            //kullanıcı arkadaş listeleri Mli olanlar
+                        snapshot.child("friends").getValue();
                 if (friend_list_keys == null) {
                     callBack.onError(FRIEND_LIST_EMPTY, "Arkadaş listesi boş");
                     return;
@@ -711,7 +702,7 @@ public class Database {
             }
         });
     }
-
+    //Todos additions are made in the groups section.
     public void addtoDoListGroup(final String group_key, final ToDoList todo, final DatabaseCallBack callBack) {
         final ToDoListHandler handler = new ToDoListHandler() {
             @Override
@@ -724,7 +715,7 @@ public class Database {
                 todo_ref.child("who_added").setValue(todo.getWho_added());
             }
         };
-
+             //The information of the group to which the needs will be added is taken.
         group_reference.child(group_key).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull final DataSnapshot snapshot) {
@@ -742,7 +733,7 @@ public class Database {
             }
         });
     }
-
+    //Information on todolists present in the groups section is obtained.
     public void gettoDoListGroup(final String group_key, final ToDoListCallBack callBack) {
         group_reference.child(group_key).child("todos").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -767,6 +758,7 @@ public class Database {
                     final String who_added = snapshotTodo.child("who_added").getValue().toString();
                     final String resp_person = snapshotTodo.child("resp_person").getValue().toString();
 
+                    //The information of the user who wants to add the requirement is retrieved.
                     user_reference.child(who_added).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot_users) {

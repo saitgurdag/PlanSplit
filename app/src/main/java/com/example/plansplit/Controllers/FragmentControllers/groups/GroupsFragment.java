@@ -73,8 +73,6 @@ public class GroupsFragment extends Fragment {
         groupAdapter = new GroupAdapter(this.getContext(), groupsArrayList, mListener, database.getPerson().getKey(), this);
         recyclerView.setAdapter(groupAdapter);
 
-
-
         groupsfilterBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

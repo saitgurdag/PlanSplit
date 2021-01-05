@@ -156,13 +156,10 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ToDoLi
 
 
                 if(toDo.getStatus().equals(waiting)){
-
                     AlertDialog.Builder mBuilder = new AlertDialog.Builder(view.getRootView().getContext());
                     View take_resp_view = LayoutInflater.from(view.getRootView().getContext()).inflate(R.layout.dialog_take_resp, null);
                     TextView take_req_descTv = take_resp_view.findViewById(R.id.take_req_descriptionTv);
-                    TextView req_question = take_resp_view.findViewById(R.id.req_questionTv);
                     TextView take_recommender = take_resp_view.findViewById(R.id.take_recommender_personTv);
-                    TextView take_order_status = take_resp_view.findViewById(R.id.take_order_status_personTv);
                     ImageView take_resp_descIV = take_resp_view.findViewById(R.id.take_desc_symbolIV);
                     ImageView take_order_status_icon = take_resp_view.findViewById(R.id.take_order_status_icon);
                     take_req_descTv.setText(toDo.getDescription());
@@ -178,6 +175,7 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ToDoLi
                     mSave.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+                            //users indicate that they will get the requirement they chose from the list.
                             if(operation.equals("friend")){
                                 database.updateDoListFriend(key, toDoList.get(holder.getAdapterPosition()).getKey(), "save",databaseCallBack);
                             }else{
@@ -203,10 +201,10 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ToDoLi
                     });
                     dialog.show();
                 } if(toDo.getStatus().equals(reserved)&&(toDo.getResp_person().equals(database.getPerson().getKey()))){
+                    //users choose the action for the requirements that they will claim.
                     AlertDialog.Builder mBuilder = new AlertDialog.Builder(view.getRootView().getContext());
                     View cancel_resp_view = LayoutInflater.from(view.getRootView().getContext()).inflate(R.layout.dialog_cancel_req_resp, null);
                     TextView cancel_req_descTv = cancel_resp_view.findViewById(R.id.cancel_req_descriptionTv);
-                    TextView cancel_req_question = cancel_resp_view.findViewById(R.id.cancel_req_questionTv);
                     TextView cancel_recommender = cancel_resp_view.findViewById(R.id.cancel_recommender_personTv);
                     TextView cancel_order_status = cancel_resp_view.findViewById(R.id.cancel_order_status_personTv);
                     ImageView cancel_resp_descIV = cancel_resp_view.findViewById(R.id.cancel_desc_symbolIV);
@@ -234,6 +232,7 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ToDoLi
                     mSave.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+                            //users chose to pay for the needs they stated they would receive.
                             Groups groups2=null;
                             Friend friend2=null;
                             dialog.dismiss();
@@ -281,6 +280,7 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ToDoLi
                     mBack.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+                           // users stop receiving the need they have stated they will receive.
                             if(operation.equals("friend")){
                                 database.updateDoListFriend(key, toDoList.get(holder.getAdapterPosition()).getKey(), "cancel",databaseCallBack);
                             }else{
@@ -298,6 +298,7 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ToDoLi
                     dialog.show();
                 }
                 if(toDo.getStatus().equals(reserved)&&!(toDo.getResp_person().equals(database.getPerson().getKey()))){
+                    //Reservation cannot be made for a previously reserved requirement.
                     Toast.makeText(mContext,  toDo.getResp_person_name()+" "+mContext.getResources().getString(R.string.already_reserved), Toast.LENGTH_SHORT).show();
                 }
             }
