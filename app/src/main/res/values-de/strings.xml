@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="log_out_from_app" translatable="false">Sie haben sich von App abgemeldet!</string>
     <string name="ask_need">Bitte Geben ein Bedarf ein</string>
     <string name="already_reserved">schon reserviert</string>
     <string name="will_buy">einkauft </string>
@@ -140,9 +141,14 @@
     <string name="fromGroupDeleted" translatable="false">diese Person von der Gruppe entfrenet</string>
     <string name="group_delete_alert" translatable="false">Möchten Sie die Gruppe wirklich löschen?</string>
     <string name="no" translatable="false" >Nein</string>
+    <string name="friend_removed" translatable="false">Freund gelöscht</string>
+    <string name="successfullyAdded" translatable="false">Erfolgreich hinzugefügt</string>
+    <string name="changes_saved_successfully" translatable="false">Die Änderungen wurden erfolgreich gespeichert</string>
+
 
     <string name="remaining_budget">%1$d TL</string>
     <string name="budget">%1$d TL</string>
+    <string name="monthly_saving">Einsparung im Vormonat: %1$d TL</string>
 
     <!-- notifications -->
     <!-- personal notifications -->

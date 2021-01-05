@@ -2,7 +2,6 @@ package com.example.plansplit.Controllers.Adapters;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,17 +14,9 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.plansplit.Controllers.FragmentControllers.groups.GroupsFragment;
-import com.example.plansplit.Controllers.HomeActivity;
-import com.example.plansplit.Controllers.MyGroupActivity;
-import com.example.plansplit.Models.Database;
-import com.example.plansplit.Models.Objects.Friend;
 import com.example.plansplit.Models.Objects.Groups;
 import com.example.plansplit.R;
-import com.google.android.gms.common.util.JsonUtils;
-import com.google.firebase.database.DataSnapshot;
 
-import java.security.acl.Group;
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 
 public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {

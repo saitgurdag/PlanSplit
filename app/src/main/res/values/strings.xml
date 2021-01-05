@@ -1,4 +1,5 @@
 <resources>
+    <string name="log_out_from_app" translatable="false">Uygulamadan başarıyla çıkış yapıldı!</string>
     <string name="ask_need">Lütfen bir ihtiyaç giriniz</string>
     <string name="already_reserved">önceden rezerve yaptı</string>
     <string name="will_buy">alacak</string>
@@ -102,9 +103,9 @@
     <string name="remove_friend" translatable="false">Sil</string>
     <string name="pay" translatable="false">Ödeme yap</string>
     <string name="home" translatable="false">Ev</string>
-    <string name="trip" translatable="false">seyahat</string>
-    <string name="work" translatable="false">iş</string>
-    <string name="other" translatable="false">diğer</string>
+    <string name="trip" translatable="false">Seyahat</string>
+    <string name="work" translatable="false">İş</string>
+    <string name="other" translatable="false">Diğer</string>
     <string name="title_wear" translatable="false">giyecek</string>
     <string name="title_food" translatable="false">yiyecek</string>
     <string name="title_others" translatable="false">diğer</string>
@@ -135,6 +136,7 @@
     <string name="total_claimant" translatable="false">Toplam Alacağınız : </string>
 
     <string name="add_friend" translatable="false">Arkadaş Ekle</string>
+    <string name="friend_removed" translatable="false">Arkadaş silindi</string>
 
     <string name="add_new_group" translatable="false">YENİ GRUP EKLE</string>
     <string name="title_expenses" translatable="false">Harcamalar</string>
@@ -142,9 +144,12 @@
     <string name="group_totalExpense">Grup Harcama Toplamları</string>
     <string name="fromGroupDelete">adlı kişiyi gruptan çıkar</string>
     <string name="fromGroupDeleted">adlı kişiyi gruptan çıkarıldı</string>
+    <string name="successfullyAdded" translatable="false">Başarıyla eklendi</string>
+    <string name="changes_saved_successfully" translatable="false">Değişiklikler başarıyla kaydedildi</string>
 
     <string name="remaining_budget">%1$d TL</string>
     <string name="budget">%1$d TL</string>
+    <string name="monthly_saving">Önceki ayki tasarruf: %1$d TL</string>
 
     <!-- notifications -->
     <!-- personal notifications -->

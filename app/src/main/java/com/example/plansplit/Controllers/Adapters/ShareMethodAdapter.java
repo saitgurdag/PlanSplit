@@ -67,8 +67,8 @@ public class ShareMethodAdapter extends RecyclerView.Adapter<ShareMethodAdapter.
         public Button checkButton;
         public ShareMethodViewHolder(@NonNull View itemView, final ShareMethodAdapter.OnItemClickListener kListener) {
             super(itemView);
-            this.Name = (TextView) itemView.findViewById(R.id.textView_share_method_name);
-            this.cardview_shareMethod = (CardView) itemView.findViewById(R.id.cardView_share_method_picture);
+            this.Name = itemView.findViewById(R.id.textView_share_method_name);
+            this.cardview_shareMethod = itemView.findViewById(R.id.cardView_share_method_picture);
             this.checkButton = (CheckBox)itemView.findViewById(R.id.checkbox_share_method) ;
 
             itemView.findViewById(R.id.cardView_share_method_picture).setOnClickListener(new View.OnClickListener() {

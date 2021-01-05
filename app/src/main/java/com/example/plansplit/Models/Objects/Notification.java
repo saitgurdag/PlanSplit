@@ -7,10 +7,22 @@ import com.example.plansplit.R;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Calendar;
+import java.util.Comparator;
 
-public class Notification {
+public class Notification{
 
-    private String mainText, secondText, date, clock, image;
+    private final String mainText;
+    private final String secondText;
+    private final String date;
+    private final String clock;
+    private final String image;
+    private final long millis; //saving only for easier comparision
+    private static final Comparator<Notification> comparator = new Comparator<Notification>() {
+        @Override
+        public int compare(Notification o1, Notification o2) {
+            return Long.compare(o1.millis, o2.millis);
+        }
+    };
 
     public Notification(Context context, @NotNull String type, long date, String image, String info){
         switch (type){
@@ -42,11 +54,11 @@ public class Notification {
                 this.mainText = context.getResources().getString(R.string.notification_monthly_expense);
                 this.secondText = info;
                 break;
-            //todo more
             default:
                 this.mainText = "";
                 this.secondText = "";
         }
+        this.millis = date;
         Calendar c = Calendar.getInstance();
         c.setTimeInMillis(date);
         String minute;
@@ -80,4 +92,7 @@ public class Notification {
         return date;
     }
 
+    public static Comparator<Notification> getComparator() {
+        return comparator;
+    }
 }

@@ -10,18 +10,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.plansplit.Models.Database;
 import com.example.plansplit.Models.Objects.Friend;
 import com.example.plansplit.Models.Objects.Groups;
 import com.example.plansplit.R;
-import com.google.android.gms.common.util.JsonUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class AddGroupsAdapter extends RecyclerView.Adapter<AddGroupsAdapter.AddGroupViewHolder> {
 
@@ -38,7 +35,12 @@ public class AddGroupsAdapter extends RecyclerView.Adapter<AddGroupsAdapter.AddG
     private Groups group;
     private static ClickListener clickListener;
 
-
+    /**
+    *   Three different recycler views are controlled in this adapter.
+    *   In the case of "add_members", recyclerview is controlled in the add new friend dialog in the group settings.
+    *   In case of "new_group", controlled recyclerview in new group creation screen
+    *   In the case of "group_members", recyclerview is controlled in group settings page. Group members are listed.
+    */
     public AddGroupsAdapter(Context mCtx, RecyclerView m_RecyclerView, String type, String... ids) {
         this.mCtx = mCtx;
         this.type = type;
@@ -51,13 +53,13 @@ public class AddGroupsAdapter extends RecyclerView.Adapter<AddGroupsAdapter.AddG
         switch (type) {
             case "add_members":
                 this.id1 = ids[1];
-                database.getSelectedGroup(null, ids[0], groupCallBack2); // ids[0] groupkey, ids[1] user_key
+                database.getSelectedGroup(ids[0], groupCallBack2); // ids[0] groupkey, ids[1] user_key
                 break;
             case "new_group":
                 database.getFriends(ids[0], friendsCallBack); // ids[0] user_key
                 break;
             case "group_members":
-                database.getSelectedGroup(null, ids[0], groupCallBack); // ids[0] groupkey
+                database.getSelectedGroup(ids[0], groupCallBack); // ids[0] groupkey
                 break;
         }
     }
@@ -76,8 +78,6 @@ public class AddGroupsAdapter extends RecyclerView.Adapter<AddGroupsAdapter.AddG
                 notifyDataSetChanged();
                 m_RecyclerView.setAdapter(AddGroupsAdapter.this);
             }
-
-
         }
 
         @Override

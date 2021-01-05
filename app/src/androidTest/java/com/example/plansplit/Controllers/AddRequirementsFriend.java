@@ -8,8 +8,6 @@ import android.view.ViewParent;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.filters.LargeTest;
-import androidx.test.rule.ActivityTestRule;
-import androidx.test.runner.AndroidJUnit4;
 
 import com.example.plansplit.R;
 
@@ -19,7 +17,6 @@ import org.hamcrest.TypeSafeMatcher;
 import org.hamcrest.core.IsInstanceOf;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -28,19 +25,21 @@ import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
-import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
 
+/**
+ * Works with this scenario: selects the most upper place friend, which has empty todolist
+ * Tested on PIXEL 4 XL API 30
+ */
 @LargeTest
-@RunWith(AndroidJUnit4.class)
 public class AddRequirementsFriend {
 
     @Rule
-    public ActivityScenarioRule<MainActivity> mActivityTestRule = new ActivityScenarioRule<MainActivity>(MainActivity.class);
+    public ActivityScenarioRule<MainActivity> mActivityTestRule = new ActivityScenarioRule<>(MainActivity.class);
 
     @Test
     public void addRequirementsFriend() {
@@ -51,7 +50,7 @@ public class AddRequirementsFriend {
         }
 
         ViewInteraction bottomNavigationItemView = onView(
-                allOf(withId(R.id.navigation_friends), withContentDescription("Friends"),
+                allOf(withId(R.id.navigation_friends),
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.nav_view),
@@ -124,7 +123,7 @@ public class AddRequirementsFriend {
         appCompatEditText.perform(replaceText("su"), closeSoftKeyboard());
 
         ViewInteraction appCompatButton2 = onView(
-                allOf(withId(R.id.dialog_list_save_button), withText("Save"),
+                allOf(withId(R.id.dialog_list_save_button),
                         childAtPosition(
                                 childAtPosition(
                                         withClassName(is("android.widget.LinearLayout")),

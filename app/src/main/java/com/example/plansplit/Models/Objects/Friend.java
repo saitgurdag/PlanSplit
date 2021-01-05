@@ -42,10 +42,8 @@ public class Friend{
         this.name = name;
         this.key = key;
 
-        //todo: ileride birim eklenirse değişmesi lazım
         this.amount = amount + " TL";
 
-        //fixme: firebasede borç pozitif mi negatif mi karar vermek lazım
         //eğer kullanıcı arkadaşa borçlu ise
         if(amount <= 0){
             this.layout_background = R.drawable.itemview_bg_border_red;

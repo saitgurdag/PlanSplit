@@ -8,7 +8,6 @@ import android.view.ViewParent;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.filters.LargeTest;
-import androidx.test.runner.AndroidJUnit4;
 
 import com.example.plansplit.R;
 
@@ -18,7 +17,6 @@ import org.hamcrest.TypeSafeMatcher;
 import org.hamcrest.core.IsInstanceOf;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -28,19 +26,21 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
-import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
 
+/**
+ * Works with this scenario: selects the most upper place group, which has empty todolist
+ * Tested on PIXEL 4 XL API 30
+ */
 @LargeTest
-@RunWith(AndroidJUnit4.class)
 public class AddRequirementGroup {
 
     @Rule
-    public ActivityScenarioRule<MainActivity> mActivityTestRule = new ActivityScenarioRule<MainActivity>(MainActivity.class);
+    public ActivityScenarioRule<MainActivity> mActivityTestRule = new ActivityScenarioRule<>(MainActivity.class);
 
     @Test
     public void addRequirementGroup() {
@@ -51,7 +51,7 @@ public class AddRequirementGroup {
         }
 
         ViewInteraction bottomNavigationItemView = onView(
-                allOf(withId(R.id.navigation_groups), withContentDescription("Groups"),
+                allOf(withId(R.id.navigation_groups),
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.nav_view),
@@ -71,7 +71,7 @@ public class AddRequirementGroup {
         // The recommended way to handle such scenarios is to use Espresso idling resources:
         // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
         try {
-            Thread.sleep(700);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -109,7 +109,7 @@ public class AddRequirementGroup {
         appCompatEditText.perform(replaceText("su"), closeSoftKeyboard());
 
         ViewInteraction appCompatButton2 = onView(
-                allOf(withId(R.id.dialog_list_save_button), withText("Save"),
+                allOf(withId(R.id.dialog_list_save_button),
                         childAtPosition(
                                 childAtPosition(
                                         withClassName(is("android.widget.LinearLayout")),
