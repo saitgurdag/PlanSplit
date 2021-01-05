@@ -276,6 +276,8 @@ public class MyGroupActivity extends AppCompatActivity {
             add_expense_btn.setVisibility(View.GONE);
             list_titleTv.setVisibility(View.VISIBLE);
             events_titleTv.setVisibility(View.GONE);
+            groupPhotoIv.setBackground(null);
+            groupPhotoIv.setPadding(0,0,0,0);
 
         }
         // information from groups todolist screen received

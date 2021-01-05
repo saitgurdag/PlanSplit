@@ -206,12 +206,9 @@ public class AddExpenseFragment extends Fragment {
 
                         if(Locale.getDefault().toString().equals("de")){
                             expensePicture.setImageResource(expensePictureResourceID);
-                            System.out.println("DİLİBULDUUUUUU   ALMANCA");
                         }else if (Locale.getDefault().toString().equals("en")){
-                            System.out.println("DİLİBULDUUUUUU   ENGL");
                             expensePicture.setImageResource(expensePictureResourceID);
                         }else{
-                            System.out.println("DİLİBULDUUUUUU   TR");
                             expensePicture.setImageResource(expensePictureResourceID);
                         }
                         expenseType=selectedtext;
@@ -248,7 +245,7 @@ public class AddExpenseFragment extends Fragment {
                 Intent intent = new Intent(getContext(), MyGroupActivity.class);
                 if(!android.text.TextUtils.isDigitsOnly(expenseamounth) || expenseamounth.trim().isEmpty()
                         || expensename.trim().isEmpty()){
-                    Toast.makeText(getContext(), "Hatalı girdi", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), getResources().getString(R.string.wrong_entry), Toast.LENGTH_LONG).show();
                 } else{
                     if(expenseType==null){
                         expenseType="Diğer";

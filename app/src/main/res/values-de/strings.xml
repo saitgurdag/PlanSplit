@@ -129,6 +129,7 @@
         <item>reinigungsmittel</item>
         <item>andere</item>
     </string-array>
+    <string name="wrong_entry" translatable="false">Falscher Eingang</string>
     <string name="total_dept_0" translatable="false">Total Schuld : 0 TL</string>
     <string name="total_dept" translatable="false">Total Schuld : </string>
     <string name="total_claimant" translatable="false">Total benehmen : </string>
@@ -144,7 +145,6 @@
     <string name="friend_removed" translatable="false">Freund gelöscht</string>
     <string name="successfullyAdded" translatable="false">Erfolgreich hinzugefügt</string>
     <string name="changes_saved_successfully" translatable="false">Die Änderungen wurden erfolgreich gespeichert</string>
-
 
     <string name="remaining_budget">%1$d TL</string>
     <string name="budget">%1$d TL</string>
