@@ -2474,48 +2474,5 @@ public class Database {
         callBack.onSuccess("Grup başarıyla silindi");
     }
 
-    public void getUser(final String friend_key, final FriendCallBack callBack) {
-        if (friend_key == null) {
-            callBack.onError(KEY_NOT_FOUND, "aranan key null");
-            return;
-        }
-        user_reference.child(friend_key).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                String photo;
-                if (!snapshot.exists()) {
-                    callBack.onError(KEY_NOT_FOUND, friend_key + " ile ilişkili kullanıcı bulunamadı");
-                    return;
-                }
-                /*fixme: kayıt sırasında resim almadığımızdan
-                            rastgele resim koydum.
-                            borçların database'de tutulma yöntemi geçici,
-                            acilen değişmeli
-                */
-                if (!snapshot.child("image").exists()) {
-                    photo = "photo yok";
-                } else {
-                    photo = snapshot.child("image").getValue().toString();
-                }
-
-                String name = snapshot.child("name").getValue().toString();
-                if (name.equals("No name")) {
-                    //if there was one name when user login "No name" would be used, in such case
-                    //using email as name would be better to show user to recognize the person
-                    name = snapshot.child("email").getValue().toString();
-                }
-                int amount = 0;
-                Friend friend = new Friend(photo, name, amount, friend_key);
-                callBack.onFriendRetrieveSuccess(friend);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                callBack.onError(DATABASE_ERROR, error.getMessage());
-            }
-        });
-    }
-
-
 
 }

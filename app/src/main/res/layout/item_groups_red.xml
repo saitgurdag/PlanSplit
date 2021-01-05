@@ -71,10 +71,11 @@
 
                     <ImageView
                         android:id="@+id/imageIv_extra"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
                         android:layout_centerVertical="true"
-                        android:src="@drawable/debt_remind"
+                        android:layout_centerHorizontal="true"
+                        android:src="@drawable/liste_hatrlatma"
                         android:visibility="invisible" />
 
                 </RelativeLayout>

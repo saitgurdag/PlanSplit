@@ -2,6 +2,7 @@ package com.example.plansplit.Controllers;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuInflater;
@@ -242,6 +243,8 @@ public class MyGroupActivity extends AppCompatActivity {
                 person_id = extras.getString("person_id");
             }
             // groupPhotoIv.setImageResource(friend.getPerson_image());
+            groupPhotoIv.setBackground(null);
+            groupPhotoIv.setPadding(0,0,0,0);
             Picasso.with(getApplicationContext()).load(friend.getPerson_image()).into(groupPhotoIv);
             group_title = friend.getName();
             System.out.println("friend" + friend.getName());
@@ -409,7 +412,7 @@ public class MyGroupActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(String success) {
                             Log.i(TAG, success);
-                            Toast.makeText(getBaseContext(), "Arkadaş silindi", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getBaseContext(), getResources().getString(R.string.friend_removed), Toast.LENGTH_SHORT).show();
                             loadActivity("friends");
                         }
 
@@ -540,7 +543,13 @@ public class MyGroupActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialogInterface, int i) {
             }
         });
-        alert.create().show();
+        AlertDialog dialog = alert.create();
+        dialog.show();
+        Button n = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+        if(n != null) {
+            n.setTextColor(Color.RED);
+        }
+
     }
 
     private void getGroupphoto(String resid, ImageView groupPhotoIv) {
