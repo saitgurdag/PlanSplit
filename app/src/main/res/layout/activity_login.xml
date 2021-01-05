@@ -12,10 +12,10 @@
         android:layout_height="match_parent">
 
         <LinearLayout
-
             android:id="@+id/linearLayoutLogin"
             android:layout_width="match_parent"
-            android:layout_height="240dp"
+            android:paddingTop="65dp"
+            android:layout_height="310dp"
             android:gravity="center"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -23,29 +23,29 @@
                 android:id="@+id/loginLayout"
                 android:layout_width="180dp"
                 android:layout_height="match_parent"
-                android:gravity="center"
-                >
-
-                <ImageView
-
+                android:gravity="center">
+                <RelativeLayout
                     android:id="@+id/imageView3"
-                    android:layout_width="88dp"
-                    android:layout_height="87dp"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="5dp"
-                    android:scaleType="fitXY"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/logo" />
+                    android:layout_width="100dp"
+                    android:layout_height="100dp">
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/walletloginicon" />
+                </RelativeLayout>
+
 
                 <ImageView
 
                     android:id="@+id/imageView4"
                     android:layout_width="match_parent"
-                    android:layout_height="27dp"
+                    android:layout_height="50dp"
                     android:layout_below="@+id/imageView3"
-                    android:layout_marginTop="16dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:srcCompat="@drawable/planandsplit" />
@@ -79,6 +79,7 @@
 
         <RelativeLayout
             android:id="@+id/loginPictureLayout"
+            android:paddingTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/linearLayoutLogin">
