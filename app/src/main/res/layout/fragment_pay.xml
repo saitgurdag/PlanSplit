@@ -126,6 +126,7 @@
                 android:layout_toRightOf="@id/moneyTypeImage"
                 android:layout_width="170dp"
                 android:hint="@string/enter_amount"
+                android:inputType="numberDecimal|numberSigned"
                 android:layout_height="wrap_content">
             </EditText>
         </RelativeLayout>

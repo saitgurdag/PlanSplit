@@ -149,6 +149,7 @@
     <string name="remaining_budget">%1$d TL</string>
     <string name="budget">%1$d TL</string>
     <string name="monthly_saving">Einsparung im Vormonat: %1$d TL</string>
+    <string name="you_have_entered_more_money_than_you_owe" translatable="false">Sie haben mehr Geld eingegeben, als Sie schulden!</string>
 
     <!-- notifications -->
     <!-- personal notifications -->
