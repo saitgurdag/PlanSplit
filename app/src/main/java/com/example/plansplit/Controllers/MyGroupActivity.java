@@ -243,6 +243,8 @@ public class MyGroupActivity extends AppCompatActivity {
             l.setVisibility(View.VISIBLE);
             menu.setVisibility(View.INVISIBLE);
             ctrlType = true;
+            groupPhotoIv.setBackground(null);
+            groupPhotoIv.setPadding(0,0,0,0);
         }
 
         list_titleTv.setVisibility(View.GONE);
