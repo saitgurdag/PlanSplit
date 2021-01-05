@@ -307,6 +307,11 @@ public class AddGroupsFragment extends Fragment {
                 @Override
                 public void onError(String error_tag, String error) {
                     Log.e(TAG, error_tag + ": " + error);
+                    if(error.equals("Lütfen arkadaş seçiniz")){
+                        Toast.makeText(getContext(), getResources().getString(R.string.select_friends), Toast.LENGTH_SHORT).show();
+                    }else if(error.equals("Lütfen grup ismi giriniz")){
+                        Toast.makeText(getContext(), getResources().getString(R.string.please_give_group_name), Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
         }
@@ -322,6 +327,7 @@ public class AddGroupsFragment extends Fragment {
             @Override
             public void onError(String error_tag, String error) {
                 Log.e(TAG, error_tag + ": " + error);
+                Toast.makeText(getContext(), getResources().getString(R.string.successfullyAdded), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -331,11 +337,13 @@ public class AddGroupsFragment extends Fragment {
             @Override
             public void onSuccess(String success) {
                 Log.d(TAG, success);
+                Toast.makeText(getContext(), getResources().getString(R.string.changes_saved_successfully), Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onError(String error_tag, String error) {
                 Log.e(TAG, error_tag + ": " + error);
+                Toast.makeText(getContext(), getResources().getString(R.string.please_give_group_name), Toast.LENGTH_SHORT).show();
             }
         });
     }
