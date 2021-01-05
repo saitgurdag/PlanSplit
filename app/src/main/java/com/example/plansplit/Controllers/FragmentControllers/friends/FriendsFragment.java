@@ -20,7 +20,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.plansplit.Controllers.Adapters.FriendsAdapter;
-import com.example.plansplit.Controllers.HomeActivity;
 import com.example.plansplit.Models.Database;
 import com.example.plansplit.R;
 import com.squareup.picasso.Picasso;

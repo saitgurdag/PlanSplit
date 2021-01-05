@@ -30,29 +30,6 @@
             android:elevation="5dp"
             android:background="@drawable/order_status_background">
 
-            <TextView
-                android:id="@+id/textDateGroupEvents"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:paddingHorizontal="25dp"
-                android:fontFamily="@font/avenir"
-                android:textSize="20sp"
-                android:gravity="center|left"
-                android:text="Kasım 2020" />
-
-            <ImageButton
-
-                android:id="@+id/friend_filter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:background="@android:color/transparent"
-                android:foregroundGravity="center_vertical"
-                android:paddingRight="25dp"
-                android:src="@drawable/ic_filtreleme" />
-
         </RelativeLayout>
 
         <RelativeLayout

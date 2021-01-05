@@ -41,7 +41,6 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendsV
     private Fragment fragment;
     private float totalDebt;
 
-
     public void setFriend(Friend friend) {
         this.friend = friend;
     }
@@ -70,12 +69,8 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendsV
                                     {
                                         friendstofilter.add(friend);
                                     }
-
-
                                     friends.removeAll(friendstofilter);
                                 }
-
-
                                 notifyDataSetChanged();
                                 m_RecyclerView.setAdapter(FriendsAdapter.this);
                             }
@@ -88,14 +83,11 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendsV
                         return false;
                     }
                 });
-                        popup.show();
-
+                popup.show();
             }
 
         });
-
-
-
+        
         FriendsFragment.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
@@ -173,7 +165,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendsV
         ((FriendsFragment)fragment).setTotalDebt(totalDebt);
 
         holder.friend_name.setText(friend.getName());
-        holder.friend_amount.setText(friend.getAmount());
+        holder.friend_amount.setText(friend.getAmount() + " TL");
         holder.friend_amount.setTextColor(ContextCompat.
                 getColor(holder.itemView.getContext(), friend.getColor()));
         holder.friend_amount_text.setText(friend.getAmount_text());
@@ -181,9 +173,6 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendsV
                 getColor(holder.itemView.getContext(), friend.getColor()));
         holder.friend_layout.setBackgroundResource(friend.getLayout_background());
         holder.friend_image_balance.setImageResource(friend.getImage_background());
-
-
-
     }
 
     @Override

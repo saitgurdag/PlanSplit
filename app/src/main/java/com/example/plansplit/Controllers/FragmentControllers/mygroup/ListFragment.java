@@ -1,7 +1,6 @@
 package com.example.plansplit.Controllers.FragmentControllers.mygroup;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,48 +13,32 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.example.plansplit.Controllers.Adapters.ToDoListAdapter;
-import com.example.plansplit.Controllers.FragmentControllers.AddExpenseFragment;
-import com.example.plansplit.Controllers.FragmentControllers.addgroups.AddGroupsFragment;
-import com.example.plansplit.Controllers.HomeActivity;
 import com.example.plansplit.Models.Database;
-import com.example.plansplit.Models.Objects.Groups;
-import com.example.plansplit.Models.Objects.Person;
 import com.example.plansplit.Models.Objects.ToDoList;
 import com.example.plansplit.R;
-
-import java.util.ArrayList;
 
 public class ListFragment extends Fragment {
     private static final String TAG = "MyGroupListFragment";
     private static  Database database;
     private RecyclerView recyclerView;
-    private ArrayList<ToDoList> toDoList;
-    private ArrayList<Groups> theGroup;
-    private ArrayList<Person> resp_person;
     private ToDoListAdapter toDoListAdapter;
     private Button add_new_reqBt;
     private String personId;
     private String friendkey;
     private String groupkey;
-    private String operation;
+    private String operation;   //Indicates for which part the todolist will be processed
     RecyclerView.LayoutManager layoutManager;
-
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-
         final View root = inflater.inflate(R.layout.fragment_list, container, false);
         database = Database.getInstance();
-
 
         if(!getArguments().containsKey("group_title")){
             operation="friend";
@@ -89,7 +72,7 @@ public class ListFragment extends Fragment {
                     if (operation.equals("friend")) {
                         database.updateDoListFriend(friendkey, ToDoListAdapter.toDoList.get(viewHolder.getAdapterPosition()).getKey(), "delete", databaseCallBack);
                     } else {
-                        database.updateDoListGroup(groupkey, ToDoListAdapter.toDoList.get(viewHolder.getAdapterPosition()).getKey(), "delete", databaseCallBack);
+                        database.updateToDoListGroup(groupkey, ToDoListAdapter.toDoList.get(viewHolder.getAdapterPosition()).getKey(), "delete", databaseCallBack);
                     }
                 }
                 toDoListAdapter.notifyDataSetChanged();
@@ -99,8 +82,6 @@ public class ListFragment extends Fragment {
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
-
-
         add_new_reqBt = root.findViewById(R.id.add_new_req_button);
 
         add_new_reqBt.setOnClickListener(new View.OnClickListener() {
@@ -108,9 +89,9 @@ public class ListFragment extends Fragment {
             public void onClick(View view) {
                 final AlertDialog.Builder mBuilder = new AlertDialog.Builder(root.getContext());
                 final View dialog_add_req_view = getLayoutInflater().inflate(R.layout.dialog_add_req, null);
-                final EditText add_req_desc = (EditText) dialog_add_req_view.findViewById(R.id.add_req_descETv);
-                final Button mBack = (Button) dialog_add_req_view.findViewById(R.id.dialog_list_back_button);
-                final Button mSave = (Button) dialog_add_req_view.findViewById(R.id.dialog_list_save_button);
+                final EditText add_req_desc = dialog_add_req_view.findViewById(R.id.add_req_descETv);
+                final Button mBack = dialog_add_req_view.findViewById(R.id.dialog_list_back_button);
+                final Button mSave = dialog_add_req_view.findViewById(R.id.dialog_list_save_button);
 
                 mBuilder.setView(dialog_add_req_view);
                 final AlertDialog dialog = mBuilder.create();
@@ -122,13 +103,12 @@ public class ListFragment extends Fragment {
                             String text = add_req_desc.getText().toString();
                             ToDoList toDoList=new ToDoList(text,personId);
                             if(operation.equals("friend")){
-                                database.addtoDoListFriend(friendkey, toDoList, databaseCallBack);
+                                database.addToDoListFriend(friendkey, toDoList, databaseCallBack);
                             }
                             if(operation.equals("group")){
-                                Toast.makeText(getContext(), "Gruba ekleme yapılacak", Toast.LENGTH_SHORT).show();
                                 System.out.println("grup keyi"+groupkey);
                                 System.out.println("personid"+personId);
-                                database.addtoDoListGroup(groupkey, toDoList, databaseCallBack);
+                                database.addToDoListGroup(groupkey, toDoList, databaseCallBack);
                             }
                             dialog.dismiss();
                         } else {
@@ -149,7 +129,7 @@ public class ListFragment extends Fragment {
 
         return root;
     }
-
+//user interface is refreshed
     private void updateUI(String operation) {
         if (operation.equals("friend")) {
             toDoListAdapter = new ToDoListAdapter(getContext(), friendkey, recyclerView, operation);
@@ -158,7 +138,6 @@ public class ListFragment extends Fragment {
             toDoListAdapter = new ToDoListAdapter(getContext(), groupkey, recyclerView, operation);
         }
     }
-
 
     private final Database.DatabaseCallBack databaseCallBack = new Database.DatabaseCallBack() {
         @Override
@@ -183,9 +162,4 @@ public class ListFragment extends Fragment {
         super.onResume();
         updateUI(operation);
     }
-
-
-
-
-
 }

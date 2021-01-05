@@ -33,7 +33,6 @@ import com.example.plansplit.Controllers.FragmentControllers.ShareMethod.ShareMe
 import com.google.gson.Gson;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
@@ -149,14 +148,6 @@ public class AddExpenseFragment extends Fragment {
                 }
             }
         }
-
-        calenderBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showDatePicker();
-
-            }
-        });
 
         expensetypeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -285,7 +276,7 @@ public class AddExpenseFragment extends Fragment {
                         String groupkey=extras.getString("group_key_list");
                         String todo_key=extras.getString("todo_key");
                         String description=extras.getString("description");
-                        db.updateDoListGroup(groupkey,todo_key,"delete",databaseCallBack );
+                        db.updateToDoListGroup(groupkey,todo_key,"delete",databaseCallBack );
                         SharedPreferences.Editor prefsEditor = mPrefs.edit();
                         prefsEditor.putBoolean("listbell", false);
                         prefsEditor.putString("listbell_key", groupkey);
@@ -323,89 +314,11 @@ public class AddExpenseFragment extends Fragment {
                 }
             }
         });
-
         return root;
-
-    }
-
-    public void openShareMethodDialog() {//// aynı oldu
-        ShareMethodFriendsFragment shareDialogFriend = new ShareMethodFriendsFragment();
-        shareDialogFriend.show(getParentFragmentManager(), "friend share method dialog");
-
-
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-    }
-
-    public void openPayerDialog(AddExpenseFragment activity) {
-
-        dialog = new Dialog(getContext(), R.style.Theme_AppCompat_DayNight_Dialog_MinWidth);
-        dialog.setCancelable(false);
-        dialog.setContentView(R.layout.dialog_recycler_select_payer);
-
-
-        Button btndialog = (Button) dialog.findViewById(R.id.buttonExitPayerSelection);
-        btndialog.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
-
-    }
-
-
-
-    public String getPayer_name() {
-        return payer_name;
-    }
-
-    public void setPayer_name(String payer_name) {
-        this.payer_name = payer_name;
-    }
-
-    public void showDatePicker() {
-
-
-        dialog = new Dialog(getContext(), R.style.Theme_AppCompat_DayNight_Dialog_MinWidth);
-        dialog.setCancelable(false);
-        dialog.setContentView(R.layout.dialog_datepicker_layout);
-        final DatePicker dp = (DatePicker) dialog.findViewById(R.id.dp_group_expense);
-        dpmenuBtn = dialog.findViewById(R.id.dpMenuButton);
-        dpokBtn = dialog.findViewById(R.id.dpOKButton);
-        dpexitBtn = dialog.findViewById(R.id.dpExitButton);
-        dpokBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ctrlDate=true;
-                startYear = dp.getYear();
-                startMonth = dp.getMonth() + 1;
-                startDay = dp.getDayOfMonth();
-                date = startDay + "/" + startMonth + "/" + startYear;
-                calenderBtn.setText(date);
-                dialog.dismiss();
-            }
-        });
-
-
-        dpexitBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
-        dpmenuBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-
-        dialog.show();
     }
 }

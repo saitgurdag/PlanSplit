@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,9 +22,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -33,7 +29,6 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.plansplit.Controllers.FragmentControllers.AddExpenseFragment;
 import com.example.plansplit.Models.Database;
-import com.example.plansplit.Models.Objects.Groups;
 import com.example.plansplit.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -44,12 +39,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Transaction;
-import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import java.util.Locale;
 
@@ -62,6 +52,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     Bundle bundle;
     String navigation_key;
     public static  BottomNavigationView navView;
+    NavController navController;
 
     private ActionBarDrawerToggle toggle;
     FirebaseAuth mAuth;
@@ -92,7 +83,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 R.id.navigation_personal, R.id.navigation_friends, R.id.navigation_groups, R.id.navigation_notifications,R.id.navigation_add_expense)
 
                 .build();
-        final NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
         navView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener(){
@@ -104,7 +95,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         });
         navigationView=findViewById(R.id.nav_draw_view);
 
-        //firebase'e ilk girişte mail isim soyisim kayıt yapılıyor.
+        //At the first login to firebase, user is with name, email, photo, and google_id registered.
         GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
         if (acct != null) {
             String personId = acct.getId();
@@ -113,24 +104,17 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 name = "No name";
             }
             String email = acct.getEmail();
-
-            //todo:kod çökmesin diye bir süre daha soyisim çekicez
-            // ama uygulama içi kullanım en kısa zamanda sıfırlanmalı
-            String surname = acct.getFamilyName();
-            if (surname == null){
-                surname = "No surname";
-            }
-
             Uri personPhoto = acct.getPhotoUrl();
             setHeader(personPhoto,name,email);
             String image=personPhoto.toString();
             long date = System.currentTimeMillis();
 
-            database.registerUser(personId, name, email, surname, image, date);
+            database.registerUser(personId, name, email, image, date);
             Log.d(TAG, "user registered with this email: " + email + "\n" + "and this key: " + personId);
         }
 
         Bundle extras = getIntent().getExtras();
+        //For those coming from the group todolist page, data retrieval and forwarding is done.
         if(extras != null && (extras.keySet().contains("group_key_list"))){
             bundle = new Bundle();
             bundle.putString("description", extras.getString("description"));
@@ -139,6 +123,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             bundle.putString("group_key_list", extras.getString("group_key_list"));
             navController.navigate(R.id.navigation_add_expense, bundle);
         }
+           //For those coming from the friend todolist page, data retrieval and forwarding is done.
         if(extras != null && (extras.keySet().contains("friend_key_list"))){
             bundle = new Bundle();
             bundle.putString("description", extras.getString("description"));
@@ -148,6 +133,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             System.out.println("arkadaş keyi "+extras.getString("friend_key_list"));
             navController.navigate(R.id.navigation_add_expense, bundle);
         }
+         //For those coming from the friend and group page, data retrieval and forwarding is done.
         if(extras != null && (extras.keySet().contains("friend") || extras.keySet().contains("group"))) {
             bundle = new Bundle();
             if (extras.keySet().contains("friend")) {
@@ -175,35 +161,26 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             }
         }
 
-
-
-
         //----------------------------------------------------------------------
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 int id=menuItem.getItemId();
-
-
-
                 //it's possible to do more actions on several items, if there is a large amount of items I prefer switch(){case} instead of if()
                 if(id == R.id.navigation_language){
                     showChangeLanguageDialog();
                     loadLocale();
-
                 }
 
                 if (id==R.id.navigation_logout){
                     if (id == R.id.navigation_logout) {
-                      
                         Log.d(TAG, "SignOut yapıldı");
                         signOut();
 
                         Intent intent = new Intent(HomeActivity.this, MainActivity.class);
                         startActivity(intent);
                         finish();
-
                     }
                 }
                 if (id==R.id.navigation_home){
@@ -213,10 +190,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 return true;
             }
         });
-
     }
 
-    //////BERKAY HEADER DAN DİL BAŞLA///////
 
     private  void showChangeLanguageDialog(){
         final String[] listItems = {"Deutsch","English","Türkçe"};
@@ -229,20 +204,19 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 if(i == 0){
                     //Deutsch
                     setLocale("de");
-                    recreate();
                 }
                 else if(i == 1){
-                    //Englisch
+                    //English
                     setLocale("en");
-                    recreate();
                 }
                 else if(i == 2){
                     //Türkce
                     setLocale("tr-rTR");
-                    recreate();
                 }
                 dialogInterface.dismiss();
                 drawerLayout.close();
+                Intent intent = new Intent(HomeActivity.this, HomeActivity.class);
+                startActivity(intent);
             }
 
         });
@@ -267,7 +241,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         String language = prefs.getString("My_Lang","");
         setLocale(language);
     }
-//////BERKAY HEADER DAN DİL BİTİŞ///////
 
     private void setHeader(Uri personphoto,String name,String email) {
         View header = navigationView.getHeaderView(0);
@@ -286,7 +259,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 .addOnCompleteListener(this, new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        Toast.makeText(HomeActivity.this, "Uygulamadan başarıyla çıkış yapıldı!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(HomeActivity.this, getResources().getString(R.string.log_out_from_app), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -309,7 +282,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         String text=adapterView.getItemAtPosition(i).toString();
         AddExpenseFragment.sharemethod=text;
-        //Toast.makeText(adapterView.getContext(),text,Toast.LENGTH_SHORT).show();
     }
 
     @Override

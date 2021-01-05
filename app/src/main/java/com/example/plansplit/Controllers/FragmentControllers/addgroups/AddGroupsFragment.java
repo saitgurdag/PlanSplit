@@ -36,14 +36,12 @@ import com.example.plansplit.R;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class AddGroupsFragment extends Fragment {
 
     private static final String TAG = "AddGroupsFragment";
-    private ArrayList<Friend> addgroups_personList;
     RecyclerView recyclerView;
-    AddGroupsAdapter adapter, adapter2;
+    AddGroupsAdapter adapter;
     private static final Database database = Database.getInstance();
     private String person_id;
     Button buttonMakeGroup, buttonSaveGroup;
@@ -62,7 +60,7 @@ public class AddGroupsFragment extends Fragment {
     final private String group_members = "group_members";
     Dialog dialog;
     AlertDialog alertDialog;
-    boolean ctrlNewGroup = false;
+    boolean ctrlNewGroup = false;   //  True if it is on the new group creation screen, otherwise false.
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -88,8 +86,7 @@ public class AddGroupsFragment extends Fragment {
 
         groupPicture = root.findViewById(R.id.GroupPicture_ImageView);
         buttonMakeGroup = root.findViewById(R.id.buttonMakeGroup);
-        groupName_EditText = root.findViewById(R.id.editTextGroupName);
-        rgroupButton = (RadioGroup) root.findViewById(R.id.rgroupButton2);
+        rgroupButton = root.findViewById(R.id.rgroupButton2);
 
         extras = getArguments();
         if (extras != null && extras.keySet().contains("group")) {
@@ -196,9 +193,9 @@ public class AddGroupsFragment extends Fragment {
             buttonSaveGroup.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    updateGroup(group_key, group_type, group_name_edittext);
+                    updateGroup(group_key, group_type, group_name_edittext.getText().toString());
 
-                    database.getSelectedGroup(person_id, group_key, new Database.GroupCallBack() {
+                    database.getSelectedGroup(group_key, new Database.GroupCallBack() {
                         @Override
                         public void onGroupRetrieveSuccess(Groups selected_group) {
                             group = selected_group;
@@ -287,20 +284,17 @@ public class AddGroupsFragment extends Fragment {
                 }
             }
         });
-
-
         buttonMakeGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 createNewGroup();
             }
         });
-
         return root;
     }
 
     public void createNewGroup() {
-        database.createNewGroup(person_id, AddGroupsAdapter.checked_personList, group_type, groupName_EditText, new Database.DatabaseCallBack() {
+        database.createNewGroup(person_id, AddGroupsAdapter.checked_personList, group_type, groupName_EditText.getText().toString(), new Database.DatabaseCallBack() {
             @Override
             public void onSuccess(String success) {
                 Log.d(TAG, success);
@@ -312,11 +306,6 @@ public class AddGroupsFragment extends Fragment {
             @Override
             public void onError(String error_tag, String error) {
                 Log.e(TAG, error_tag + ": " + error);
-                if(error.equals("Lütfen arkadaş seçiniz")){
-                    Toast.makeText(getContext(), getResources().getString(R.string.select_friends), Toast.LENGTH_SHORT).show();
-                }else if(error.equals("Lütfen grup ismi giriniz")){
-                    Toast.makeText(getContext(), getResources().getString(R.string.please_give_group_name), Toast.LENGTH_SHORT).show();
-                }
             }
         });
     }
@@ -326,30 +315,25 @@ public class AddGroupsFragment extends Fragment {
             @Override
             public void onSuccess(String success) {
                 Log.d(TAG, success);
-                Toast.makeText(getContext(), getResources().getString(R.string.successfullyAdded), Toast.LENGTH_SHORT).show();
-
             }
 
             @Override
             public void onError(String error_tag, String error) {
                 Log.e(TAG, error_tag + ": " + error);
-                Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    public void updateGroup(String group_key, String group_type, EditText group_name_edittext) {
-        database.updateGroup(group_key, group_type, group_name_edittext, new Database.DatabaseCallBack() {
+    public void updateGroup(String group_key, String group_type, String group_name) {
+        database.updateGroup(group_key, group_type, group_name, new Database.DatabaseCallBack() {
             @Override
             public void onSuccess(String success) {
                 Log.d(TAG, success);
-                Toast.makeText(getContext(), getResources().getString(R.string.changes_saved_successfully), Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onError(String error_tag, String error) {
                 Log.e(TAG, error_tag + ": " + error);
-                Toast.makeText(getContext(), getResources().getString(R.string.please_give_group_name), Toast.LENGTH_SHORT).show();
             }
         });
     }
