@@ -214,7 +214,6 @@ public class AddExpenseFragment extends Fragment {
                             System.out.println("DİLİBULDUUUUUU   TR");
                             expensePicture.setImageResource(expensePictureResourceID);
                         }
-                        //expensePicture.setImageResource(expensePictureResourceID);
                         expenseType=selectedtext;
                     }
 
@@ -247,8 +246,8 @@ public class AddExpenseFragment extends Fragment {
                 expensename=edittextexpensename.getText().toString();
                 expenseamounth=edittextexpenseamounth.getText().toString();
                 Intent intent = new Intent(getContext(), MyGroupActivity.class);
-                if(!android.text.TextUtils.isDigitsOnly(expenseamounth) || expenseamounth.matches("")
-                        || expensename.matches("")){
+                if(!android.text.TextUtils.isDigitsOnly(expenseamounth) || expenseamounth.trim().isEmpty()
+                        || expensename.trim().isEmpty()){
                     Toast.makeText(getContext(), "Hatalı girdi", Toast.LENGTH_LONG).show();
                 } else{
                     if(expenseType==null){

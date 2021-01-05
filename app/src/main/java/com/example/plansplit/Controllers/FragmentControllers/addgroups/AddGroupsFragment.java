@@ -45,7 +45,7 @@ public class AddGroupsFragment extends Fragment {
     private static final Database database = Database.getInstance();
     private String person_id;
     Button buttonMakeGroup, buttonSaveGroup;
-    EditText groupName_EditText, group_name_edittext;
+    EditText group_name_edittext;
     RadioGroup rgroupButton;
     AppCompatRadioButton rbuttonHouse, rbuttonWork, rbuttonTrip, rbuttonOther;
     private String group_type = "ev";
@@ -295,20 +295,22 @@ public class AddGroupsFragment extends Fragment {
     }
 
     public void createNewGroup() {
-        database.createNewGroup(person_id, AddGroupsAdapter.checked_personList, group_type, groupName_EditText.getText().toString(), new Database.DatabaseCallBack() {
-            @Override
-            public void onSuccess(String success) {
-                Log.d(TAG, success);
-                GroupsFragment GroupsFragment = new GroupsFragment();
-                FragmentManager fragmentManager = getFragmentManager();
-                fragmentManager.beginTransaction().replace(R.id.nav_host_fragment, GroupsFragment).addToBackStack(null).commit();
-            }
+        if(!group_name_edittext.getText().toString().trim().isEmpty()){
+            database.createNewGroup(person_id, AddGroupsAdapter.checked_personList, group_type, group_name_edittext.getText().toString(), new Database.DatabaseCallBack() {
+                @Override
+                public void onSuccess(String success) {
+                    Log.d(TAG, success);
+                    GroupsFragment GroupsFragment = new GroupsFragment();
+                    FragmentManager fragmentManager = getFragmentManager();
+                    fragmentManager.beginTransaction().replace(R.id.nav_host_fragment, GroupsFragment).addToBackStack(null).commit();
+                }
 
-            @Override
-            public void onError(String error_tag, String error) {
-                Log.e(TAG, error_tag + ": " + error);
-            }
-        });
+                @Override
+                public void onError(String error_tag, String error) {
+                    Log.e(TAG, error_tag + ": " + error);
+                }
+            });
+        }
     }
 
     public void addUserToGroup(final Groups group, final ArrayList<Friend> checked_personList) {

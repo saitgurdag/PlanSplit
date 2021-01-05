@@ -293,7 +293,7 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemSele
     @Override
     public void onClick(View v) {
         if(v.getId()==addExpense.getId()){
-            if(!price.getText().toString().matches("") && !expenseName.getText().toString().matches("")) {
+            if(!price.getText().toString().trim().isEmpty() && !expenseName.getText().toString().trim().isEmpty()) {
                 String name = String.valueOf(expenseName.getText());
                 int p = Integer.parseInt(String.valueOf(price.getText()));
 
