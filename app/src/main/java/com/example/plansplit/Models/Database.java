@@ -2234,13 +2234,9 @@ public class Database {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (ctrlFirst[0]) {
-                    System.out.println("dogruuuu2");
                     for (DataSnapshot ds : snapshot.getChildren()) {
-                        if (ds.getKey().equals(userId)) {
-                            System.out.println("dogruuu3");
-                            System.out.println("hesapppp : " + ds.getValue().toString());
+                        if (ds.getKey().equals(userId)) { ;
                             final String newDebt = String.valueOf(Float.parseFloat(ds.getValue().toString()) - Float.parseFloat(amount));
-                            System.out.println("hesap 2 2 : " + newDebt);
                             group_reference.child(friend.getFriendshipsKey()).child("debts").child(friend.getKey()).child(userId)
                                     .setValue(newDebt);
                             group_reference.child(friend.getFriendshipsKey()).child("debts").child(userId)
@@ -2250,7 +2246,7 @@ public class Database {
                                             for (DataSnapshot d : snapshot.getChildren()) {
                                                 if (d.getKey().equals(friend.getKey())) {
                                                     System.out.println("eşitlendi");
-                                                    Float m = Float.parseFloat(d.getValue().toString());           //benim ondan alacağım
+                                                    Float m = Float.parseFloat(d.getValue().toString());
                                                     if (m == Float.parseFloat(newDebt)) {
                                                         group_reference.child(friend.getFriendshipsKey()).child("debts").child(friend.getKey()).child(userId)
                                                                 .setValue("0");

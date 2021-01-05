@@ -492,8 +492,21 @@ public class MyGroupActivity extends AppCompatActivity {
     }
 
     public void setNavController(int i) {
-        navController.navigate(i);
+        Gson gson = new Gson();
+        events_titleTv.setVisibility(View.VISIBLE);
+        list_titleTv.setVisibility(View.GONE);
         add_expense_btn.setVisibility(View.VISIBLE);
+
+        if (ctrlType) {
+            String json2 = gson.toJson(friend);
+            bundle.putString("friend", json2);
+            navController.navigate(i, bundle);
+        } else if (!ctrlType){
+            group_op_titletV.setVisibility(View.GONE);
+            String json = gson.toJson(group);
+            bundle.putString("group", json);
+            navController.navigate(i, bundle);
+        }
     }
 
     @Override

@@ -129,6 +129,7 @@
         <item>cleaning</item>
         <item>others</item>
     </string-array>
+    <string name="you_have_entered_more_money_than_you_owe" translatable="false">You have entered more money than you owe!</string>
     <string name="total_dept" translatable="false">Total dept amount: </string>
     <string name="wrong_entry" translatable="false">Wrong Entry</string>
     <string name="total_dept_0" translatable="false">Total dept amount: 0 TL</string>

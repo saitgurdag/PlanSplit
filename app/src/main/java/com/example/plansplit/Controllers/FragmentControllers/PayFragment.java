@@ -132,19 +132,18 @@ public class PayFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 String amount = payEdit.getText().toString();
-                if(!amount.matches("") && android.text.TextUtils.isDigitsOnly(amount) && Float.parseFloat(amount)<=debt) {
+                if(!amount.matches("") && Float.parseFloat(amount)<=debt) {
                     if(ctrlFriend){
                         database.payToFriend(database.getPerson().getKey(), selectedFriend, amount);
                         ((MyGroupActivity) getContext()).setNavController(R.id.navi_events);
                     }else{
-                        System.out.println("dogruuuuuu");
                         database.payToGroupsMember(database.getPerson().getKey(), selectedFriend, amount);
                         ((MyGroupActivity) getContext()).setNavController(R.id.navi_events);
                     }
-                }else if(!amount.matches("") && android.text.TextUtils.isDigitsOnly(amount) && Float.parseFloat(amount)>debt){
-                    Toast.makeText(getContext(), "Borcunuzdan fazla para miktarı girdiniz!", Toast.LENGTH_LONG).show();
+                }else if(!amount.matches("") && Float.parseFloat(amount)>debt){
+                    Toast.makeText(getContext(), getResources().getString(R.string.you_have_entered_more_money_than_you_owe), Toast.LENGTH_LONG).show();
                 }else{
-                    Toast.makeText(getContext(), "Hatalı girdi", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), getResources().getString(R.string.wrong_entry), Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -155,7 +154,6 @@ public class PayFragment extends Fragment {
     final Database.getDebtFromFriendCallBack callBack = new Database.getDebtFromFriendCallBack() {
         @Override
         public void onGetDebtFromFriendRetrieveSuccess(float debt) {
-            System.out.println("borçlar "+debt);
             setDebt(debt);
             debtTxt.setText(getResources().getString(R.string.personal_debt) + " : " + String.valueOf(debt) + " TL");
         }
@@ -169,7 +167,6 @@ public class PayFragment extends Fragment {
     final Database.getDebtFromGroupCallBack groupCallBack = new Database.getDebtFromGroupCallBack() {
         @Override
         public void onGetDebtFromGroupRetrieveSuccess(float debt) {
-            System.out.println("borçlar "+debt);
             setDebt(debt);
             debtTxt.setText(getResources().getString(R.string.personal_debt) + " : " + (debt) + " TL");
         }

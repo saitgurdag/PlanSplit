@@ -154,6 +154,7 @@
 
     <!-- notifications -->
     <!-- personal notifications -->
+    <string name="you_have_entered_more_money_than_you_owe" translatable="false">Borcunuzdan fazla para miktarı girdiniz!</string>
     <string name="notification_over_budget">Aylık bütçenizi aştınız</string>
     <string name="notification_budget_change">Bütçenizi değiştirdiniz</string>
     <string name="notification_friend_add">%1$s ile arkadaş oldunuz</string>

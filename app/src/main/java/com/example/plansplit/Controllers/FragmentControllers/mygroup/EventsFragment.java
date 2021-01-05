@@ -43,6 +43,7 @@ public class EventsFragment extends Fragment {
     float totDept;
     Groups group;
     Friend friend;
+    Bundle extras;
 
     @Override
     public View onCreateView(@NonNull final LayoutInflater inflater, @Nullable ViewGroup container,
@@ -69,8 +70,14 @@ public class EventsFragment extends Fragment {
             }
         });
 
-        Bundle extras = getArguments();
+        extras = getArguments();
 
+        return root;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         if(extras != null && extras.keySet().contains("group")){
             Gson gson = new Gson();
             String json = extras.getString("group");
@@ -90,7 +97,7 @@ public class EventsFragment extends Fragment {
         adapter.notifyDataSetChanged();
 
         recyclerView.setAdapter(adapter);
-        return root;
+
     }
 
     public final Database.TransferCallBack transferCallBack = new Database.TransferCallBack() {
