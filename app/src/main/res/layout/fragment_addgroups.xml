@@ -185,7 +185,7 @@
                             android:layout_marginLeft="8dp"
                             android:fontFamily="@font/avenir"
                             android:gravity="center"
-                            android:text="Grup Üyeleri"
+                            android:text="@string/group_members"
                             android:textSize="25sp" />
 
                     </RelativeLayout>

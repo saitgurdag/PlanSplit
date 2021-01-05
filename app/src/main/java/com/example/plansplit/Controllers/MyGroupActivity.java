@@ -503,6 +503,10 @@ public class MyGroupActivity extends AppCompatActivity {
         if (control_list.equals("group_list")) {
             loadActivity("groups");
             finish();
+        }
+            if (extras.containsKey("group_update_back")) {
+                loadActivity("groups");
+                finish();
         } else {
             super.onBackPressed();
             finish();
