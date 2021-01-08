@@ -3,9 +3,6 @@ package com.example.plansplit.Models.Objects;
 import com.example.plansplit.R;
 
 public class Transfers {   //bu clasın amacı kişiler arasındaki para alışverişi gruba item ekleyince paragirdisiyle borç borçlu durumu belirlenip hesaplanması
-
-    //Berkay Group Eventsteki Attributelar//
-
     //item_groupevents_object icin
 
     private int type;
@@ -16,7 +13,7 @@ public class Transfers {   //bu clasın amacı kişiler arasındaki para alışv
     private int groupEvents_object_depthStatus;
     private int groupEvents_object_image;
     private int object_payOrPayed;
-    private int color;  //genel kullanabilirim galiba
+    private int color;
 
     //item_groupevents_payments için
 
@@ -34,7 +31,7 @@ public class Transfers {   //bu clasın amacı kişiler arasındaki para alışv
         this.groupEvents_object_payAmounth = groupEvents_object_payAmounth;
         this.groupEvents_object_depthAmount = groupEvents_object_depthAmount;
 
-        //eğer kullanıcı değilde beaşkabirisi item eklediyse kullanıcı borçlu olur mantığı burda equals sen olayı yaptım ama ilerde user id == ise şeklinde yapılabilir
+        //eğer kullanıcı değilde beaşka birisi item eklediyse kullanıcı borçlu olur mantığı burda equals sen olayı yaptım ama ilerde user id == ise şeklinde yapılabilir
         if (!groupEvents_object_payerName.equals("Sen")) {       //equals kullanmak burda yanlış olabilir
             this.color = R.color.red;
             this.groupEvents_object_depthStatus = R.string.group_events_object_depth_status_owes;  //Borçlusun
